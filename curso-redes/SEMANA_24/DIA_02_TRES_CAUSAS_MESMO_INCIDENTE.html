@@ -1,0 +1,482 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 24 · Dia 2 — Missão Final: Três Causas, Mesmo Incidente | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_MISSAO_FINAL_ACESSO_EXTERNO_FORA.html'>← Semana 24, Dia 1</a><a href='#'>Semana 24 — Missão Final</a><a href='DIA_03_CORRIGIR_EM_ORDEM_VALIDAR_PASSO.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Continua o Chamado #2400 (Dia 1):</b> DNS já confirmado funcionando ontem. Hoje a
+investigação avança pra dentro da rede da empresa — e revela algo que nenhum chamado anterior do curso
+preparou você diretamente pra esperar: não é UMA causa, são TRÊS, simultâneas e independentes.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: reconhecer que incidentes reais raramente têm uma causa
+única.</b> Você ganha a disciplina de continuar investigando mesmo depois de achar UM problema — porque
+corrigir só esse um pode não resolver nada, se existirem outros ao mesmo tempo.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 24 · Dia 2 — Missão Final Júnior | Fecha a Fase 2</div>
+  <h1>Três Causas, Mesmo Incidente</h1>
+  <p>encontrar um problema não é o mesmo que encontrar o problema — pode haver mais de um ao mesmo tempo</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S24D02_TRES_CAUSAS_MESMO_INCIDENTE.png' alt='Prancha em seis quadros sobre descobrir três causas simultâneas e independentes para o mesmo incidente de acesso externo: NAT desatualizado, VLAN não liberada no trunk, e AllowedIPs da VPN desatualizado'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. Continuando a investigação</h2>
+  <div class='box'>Com DNS confirmado ontem, hoje o teste é conectividade direto no IP público: nc -zv
+  203.0.113.10 443 — de fora da empresa. O resultado é timeout. Isso empurra a investigação pra dentro do
+  <span class="hint" data-tip="Técnica que traduz um IP público em um IP interno específico, permitindo que tráfego externo alcance um servidor dentro da rede privada." onclick="openGlossary(0)">NAT/port-forward</span>
+  do firewall — e é aqui que a primeira causa aparece. Só que não é a única.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> se você já encontrou UM problema real (NAT apontando pro IP antigo) mas ainda não
+    testou as outras camadas, por que não parar a investigação ali e já ir corrigir?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque encontrar UM problema real não prova que ele é o ÚNICO problema. Nesta migração de VLAN
+      específica, várias configurações dependiam do endereçamento antigo — o NAT é uma delas, mas o
+      <span class="hint" data-tip="Link entre switches ou entre switch e firewall configurado para carregar múltiplas VLANs, usando tagging 802.1Q." onclick="openGlossary(1)">trunk</span>
+      de VLANs e as regras de VPN também podem depender da mesma coisa. Corrigir só o NAT e testar de novo é
+      a única forma de saber se esse era o único problema — e, se não for, você vai precisar continuar
+      investigando de qualquer jeito. Investigar tudo antes de corrigir é mais eficiente.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você confirma três fatos, nesta ordem: (1) a regra de NAT no firewall aponta
+  pra 10.20.10.50, o IP antigo, não pro novo 10.20.30.50; (2) o trunk entre o switch e o firewall não inclui a
+  VLAN 30 na lista de VLANs permitidas; (3) a configuração AllowedIPs do peer VPN dos parceiros ainda lista só
+  10.20.10.0/24, não a nova subnet. O que esses três fatos, juntos, revelam sobre a causa deste incidente?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Existem TRÊS causas independentes, todas decorrentes da mesma migração de VLAN incompleta: NAT desatualizado, trunk sem a VLAN nova liberada, e AllowedIPs da VPN ainda restrito à subnet antiga. Cada uma sozinha já seria suficiente pra bloquear o acesso — corrigir só uma delas não resolveria o incidente completamente, porque as outras duas continuariam bloqueando.')"><b>A</b> Existem três causas independentes, todas decorrentes da mesma migração incompleta — cada uma sozinha já bloquearia o acesso, corrigir só uma não resolve o incidente inteiro</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Os três fatos apontam pra três configurações DIFERENTES (NAT, trunk de VLAN, AllowedIPs de VPN) — não é a mesma regra de firewall gerando três sintomas, são três problemas de configuração genuinamente distintos.')"><b>B</b> É uma única causa (a migração de VLAN), só que ela gerou três sintomas diferentes numa mesma regra de firewall</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A ordem em que os fatos foram descobertos não determina qual é mais grave — os três são independentes e cada um sozinho já seria suficiente pra causar o incidente completo; não existe uma hierarquia de gravidade entre eles baseada na ordem de descoberta.')"><b>C</b> Só a primeira causa (NAT) é real; as outras duas são coincidências sem relação com o incidente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reverter a migração de VLAN inteira é uma ação muito mais drástica do que necessário — as três causas específicas identificadas podem ser corrigidas individualmente, sem precisar desfazer toda a reorganização de infraestrutura.')"><b>D</b> A solução mais simples é reverter a migração de VLAN inteira, voltando tudo pro estado anterior</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 02 TRES CAUSAS MESMO INCIDENTE é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Causa</th><th>Evidência</th><th>Semana de origem</th></tr></thead><tbody>
+    <tr><td>1. NAT desatualizado</td><td>Regra aponta pro IP antigo (10.20.10.50)</td><td>17</td></tr>
+    <tr><td>2. VLAN não liberada no trunk</td><td>VLAN 30 ausente do allowed vlan</td><td>20</td></tr>
+    <tr><td>3. AllowedIPs da VPN desatualizado</td><td>Só permite a subnet antiga</td><td>18</td></tr>
+  </tbody></table>
+  <pre>--- teste 2: conectividade direto no IP público, de fora ---
+$ nc -zv -w3 203.0.113.10 443
+nc: connect to 203.0.113.10 port 443 (tcp) failed: Connection timed out
+❌ falha confirmada — investigar o caminho depois do IP público
+
+--- causa 1: NAT/port-forward no firewall ---
+$ show nat rules
+public 203.0.113.10:443 -> 10.20.10.50:443     ← IP ANTIGO, servidor não está mais aqui
+
+--- causa 2: trunk entre switch e firewall ---
+$ show interfaces trunk
+Port      Vlans allowed
+Gi0/1     10,20                                 ← VLAN 30 (nova) não está na lista
+
+--- causa 3: configuração VPN (WireGuard) ---
+$ cat /etc/wireguard/wg0.conf | grep -A2 "\[Peer\]"
+[Peer]
+PublicKey = parceiros_pubkey
+AllowedIPs = 10.20.10.0/24                       ← só a subnet antiga, falta 10.20.30.0/24
+
+--- resumo do dia ---
+3 causas confirmadas, independentes, todas decorrentes da migração de VLAN incompleta.
+Nenhuma correção aplicada ainda — isso é trabalho de amanhã, na ordem certa.</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra um colega querendo corrigir o NAT imediatamente, assim que
+  encontra essa primeira causa, sem terminar de checar o trunk e a VPN</h2>
+  <p>Um colega quer agir assim que encontra o primeiro problema real, achando que investigar mais é perda de
+  tempo.</p>
+  <div class='box question'>Por que terminar de investigar TODAS as causas antes de corrigir qualquer uma é
+  mais eficiente do que corrigir e testar uma de cada vez?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Se você corrigir o NAT e testar, o acesso ainda vai falhar (por causa do trunk e da VPN) — parecendo que a correção do NAT não funcionou, quando na verdade funcionou parcialmente. Mapear todas as causas primeiro evita essa confusão: você sabe de antemão que precisa das três correções, e consegue planejar e comunicar isso com clareza, em vez de parecer que está tentando correções aleatórias que não resolvem nada.')"><b>A</b> Corrigir e testar uma causa de cada vez, sem saber que existem outras, faz parecer que a correção não funcionou — mapear tudo primeiro permite planejar as três correções com clareza desde o início</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Corrigir o NAT não tem nenhum risco de quebrar o trunk ou a configuração de VPN — são configurações completamente independentes; o problema de corrigir cedo demais não é de risco técnico, é de clareza de diagnóstico e comunicação.')"><b>B</b> Corrigir o NAT primeiro poderia quebrar a configuração de trunk ou VPN, por isso é arriscado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não existe uma exigência formal de aprovação de gerência entre a descoberta e a correção de cada causa — a decisão de mapear tudo antes de agir é uma escolha técnica de eficiência e clareza de diagnóstico, não um requisito burocrático.')"><b>C</b> É uma exigência de compliance, não uma decisão técnica — sempre é preciso esperar aprovação formal antes de cada correção</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 02 TRES CAUSAS MESMO INCIDENTE é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se as três causas vêm da mesma migração, não é só UM erro raiz, replicado três vezes?"</h2>
+  <p>Um colega quer simplificar o relatório dizendo que houve só um erro (a migração malfeita), em vez de
+  três.</p>
+  <div class='box question'>Por que é tecnicamente mais preciso descrever isso como três causas
+  independentes, mesmo todas tendo a mesma origem (a migração de VLAN)?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A migração é o evento que DESENCADEOU o problema, mas cada uma das três configurações (NAT, trunk, VPN) precisava ser atualizada separadamente, por pessoas ou processos possivelmente diferentes, e cada uma falhou de forma independente. Tratar como um erro só esconde que existem três pontos de configuração distintos que precisam de correção E de processo pra não se repetir no futuro.')"><b>A</b> A migração desencadeou o problema, mas cada configuração (NAT, trunk, VPN) precisava ser atualizada separadamente e falhou de forma independente — tratar como uma causa só esconde os três pontos reais que precisam de correção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'NAT, trunk e VPN não são a mesma configuração com nomes diferentes — são três sistemas de configuração genuinamente distintos, cada um com sua própria sintaxe e propósito, mesmo dependendo do mesmo endereçamento de rede.')"><b>B</b> Na verdade são a mesma configuração, só com sintaxe diferente em três lugares — corrigir um deveria corrigir os outros automaticamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe uma regra de que só se conta como causa separada acima de um número mínimo de dispositivos afetados — a distinção entre causa e sintoma é sobre qual configuração específica precisa ser corrigida, não sobre quantos equipamentos estão envolvidos.')"><b>C</b> Só conta como três causas separadas se envolver mais de dois dispositivos de rede diferentes</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 02 TRES CAUSAS MESMO INCIDENTE é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Depois de encontrar uma causa real, continue verificando as outras camadas relacionadas antes de corrigir.</li>
+    <li>Documente cada causa encontrada individualmente, com a evidência específica de cada uma.</li>
+    <li>Resista à tentação de corrigir assim que encontrar o primeiro problema — mapeie tudo primeiro.</li>
+    <li>Reconheça que uma mesma mudança de infraestrutura (como uma migração) pode gerar múltiplas causas independentes.</li>
+    <li>Prepare um plano de correção cobrindo TODAS as causas encontradas antes de começar a aplicar qualquer uma.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa topologia de laboratório simulando o cenário (switch, firewall, duas VLANs), configure deliberadamente as três causas: NAT desatualizado, VLAN fora do trunk, AllowedIPs restrito.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ambiente de teste reproduzindo o incidente completo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Investigue e confirme cada uma das três causas separadamente, com a evidência específica de cada uma.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> três causas documentadas individualmente, com comando e saída de cada confirmação.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você encontrar só duas causas e achar que terminou, este é o ponto onde o chat com o Sênior-IA vai te lembrar de verificar todas as camadas relacionadas à migração.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Monte um plano de correção listando as três ações necessárias, sem aplicar nenhuma ainda.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> plano de três passos, pronto pra execução no dia seguinte.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Três causas independentes confirmadas: NAT, trunk de VLAN, e AllowedIPs da VPN.</li>
+    <li>Todas decorrem da mesma migração, mas são configurações tecnicamente distintas.</li>
+    <li>Nenhuma correção foi aplicada ainda — só investigação e documentação completas.</li>
+    <li>Encontrar uma causa não encerra a investigação — outras podem existir ao mesmo tempo.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Nenhuma mudança foi feita hoje, mantendo o mesmo princípio do Dia 1: investigar
+  completamente antes de agir. O risco de corrigir causas parcialmente, sem visão do quadro completo, é
+  reportar "resolvido" prematuramente pros parceiros externos, só pra descobrirem que o acesso continua
+  falhando por outro motivo.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "múltiplas causas simultâneas" é a lição mais
+  avançada de todo o curso júnior — a maioria dos chamados anteriores tinha uma causa só, de propósito, pra
+  ensinar cada conceito isoladamente. Incidentes reais nem sempre são assim, e reconhecer isso agora prepara
+  você pro Pleno. O Anki vai fixar essa virada de chave.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, confirmamos três causas
+  independentes — NAT, trunk de VLAN, e AllowedIPs da VPN — todas decorrentes da mesma migração incompleta. O
+  ponto central do caso é este: encontrar um problema não é o mesmo que encontrar o problema — pode haver
+  mais de um ao mesmo tempo.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de reconhecer e mapear múltiplas causas independentes num único
+  incidente, sem parar na primeira encontrada. Amanhã você corrige as três, na ordem certa, validando cada
+  passo antes de seguir pro próximo.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 24, Dia 2 de ~250 — Missão Final Júnior (Dia 2 de
+5). Mesmo padrão: glossário com analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot
+reservado pro Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["NAT/port-forward (revisão, Semana 17)","Técnica que traduz um IP público em um IP interno específico, permitindo que tráfego externo alcance um servidor dentro da rede privada.",
+   "É a recepção de um prédio redirecionando uma entrega pro apartamento certo, traduzindo o endereço da rua pro número interno correto."],
+  ["Trunk (revisão, Semana 20)","Link entre switches ou entre switch e firewall configurado para carregar múltiplas VLANs, usando tagging 802.1Q.",
+   "É o elevador de serviço que atende vários andares — se um andar novo não for adicionado à lista de paradas, ninguém consegue chegar até ele por ali."],
+  ["AllowedIPs (revisão, Semana 18)","Campo de configuração WireGuard que define quais sub-redes são roteadas ou aceitas através de um peer específico.",
+   "É a área de cobertura autorizada de um correspondente — se o bairro novo não estiver na lista, a correspondência pra lá nunca é entregue por essa rota."],
+  ["Causas independentes (vs. causa única replicada)","Múltiplos problemas de configuração distintos que existem simultaneamente, cada um capaz de causar a falha sozinho, mesmo compartilhando uma origem comum.",
+   "É três portas trancadas separadamente no mesmo prédio, cada uma por um motivo técnico diferente — mesmo que todas tenham sido trancadas durante a mesma reforma."],
+  ["Migração incompleta (padrão de incidente)","Situação onde uma mudança de infraestrutura (como mover um servidor de VLAN) deixa configurações dependentes não atualizadas em múltiplos lugares.",
+   "É mudar de endereço e esquecer de avisar várias pessoas diferentes — o correio, o banco, a escola — cada uma dessas atualizações pendentes causa um problema separado."],
+  ["Investigação completa antes de correção","Prática de mapear todas as causas relacionadas a um incidente antes de aplicar qualquer correção, evitando conclusões prematuras de resolvido.",
+   "É o médico terminar todos os exames relevantes antes de prescrever qualquer tratamento, em vez de tratar o primeiro sintoma encontrado e já liberar o paciente."],
+  ["Análise de causa raiz (Root Cause Analysis)","Metodologia estruturada de investigação que busca identificar TODAS as causas reais de um problema, não só a mais óbvia ou a primeira encontrada.",
+   "É a investigação forense completa de um acidente — não para na primeira pista encontrada, busca entender toda a cadeia real de eventos."],
+  ["Plano de correção multi-etapa","Documento que lista todas as ações de correção necessárias, preparado ANTES de iniciar qualquer execução, cobrindo todas as causas mapeadas.",
+   "É a lista de compras completa feita antes de sair de casa, não uma lista que vai sendo escrita aos poucos no meio do mercado."],
+  ["Comunicação prematura de resolução (risco)","Risco de informar que um incidente foi resolvido antes de confirmar que TODAS as causas relacionadas foram corrigidas.",
+   "É declarar a ponte reaberta depois de consertar só um dos três pilares rachados — o tráfego ainda não deveria passar."],
+  ["Preparação para o Pleno (contexto)","Reconhecimento de que múltiplas causas simultâneas são mais comuns em ambientes reais do que os cenários de causa única usados pra ensinar cada conceito isoladamente.",
+   "É a diferença entre o exercício de treino, com uma variável só, e o jogo real, onde várias coisas acontecem ao mesmo tempo."]
+];
+
+const sceneStripIdx = [0,1,2,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

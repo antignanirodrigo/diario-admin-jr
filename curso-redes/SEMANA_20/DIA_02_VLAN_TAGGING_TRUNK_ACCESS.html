@@ -1,0 +1,481 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 20 · Dia 2 — Tagging 802.1Q: Trunk e Access | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_VLAN_CONCEITO.html'>← Semana 20, Dia 1</a><a href='#'>Semana 20</a><a href='DIA_03_VLAN_INTERFACE_LINUX.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 1 (conceito de VLAN):</b> Você já sabe que VLANs isolam tráfego
+dentro de um switch. Hoje você aprende como essa identidade de VLAN sobrevive quando um pacote precisa
+atravessar o cabo entre dois switches diferentes — e por que confundir porta trunk com porta access é um dos
+erros mais comuns de quem está começando.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: distinguir porta access de porta trunk.</b> Você ganha o
+mecanismo real por trás do isolamento entre switches: a tag 802.1Q, que viaja dentro do próprio pacote só nos
+links certos, e nunca chega a um dispositivo final que não deveria vê-la.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 20 · Dia 2 | Nível Júnior — Redes</div>
+  <h1>Tagging 802.1Q: Trunk e Access</h1>
+  <p>a tag de VLAN viaja entre switches — mas nunca deveria chegar ao dispositivo final</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S20D02_VLAN_TAGGING_TRUNK_ACCESS.png' alt='Prancha em seis quadros sobre a diferença entre porta access e porta trunk, e como o tagging 802.1Q carrega múltiplas VLANs num único link entre switches'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2002: "Configurei a porta entre os dois switches como access na VLAN 10, e agora
+  só o tráfego da VLAN 10 passa entre eles — a VLAN 20 simplesmente sumiu do outro switch." O erro é claro: uma
+  porta que precisa carregar VÁRIAS VLANs entre switches deveria ser configurada como
+  <span class="hint" data-tip="Modo de porta que carrega tráfego de múltiplas VLANs simultaneamente, identificando cada pacote com uma tag 802.1Q." onclick="openGlossary(1)">trunk</span>,
+  não como
+  <span class="hint" data-tip="Modo de porta que pertence a uma única VLAN, entregando tráfego sem tag pro dispositivo final conectado." onclick="openGlossary(0)">access</span>.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é a diferença fundamental entre o que uma porta access entrega pro
+    dispositivo final e o que uma porta trunk entrega entre dois switches?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Uma porta access pertence a UMA VLAN só, e entrega o tráfego SEM tag pro dispositivo final — o notebook
+      ou servidor conectado nem sabe que VLAN existe, ele só vê tráfego normal. Uma porta trunk carrega VÁRIAS
+      VLANs ao mesmo tempo, e cada pacote leva uma
+      <span class="hint" data-tip="Cabeçalho adicional inserido num pacote Ethernet pelo padrão IEEE 802.1Q, identificando a qual VLAN ele pertence." onclick="openGlossary(2)">tag 802.1Q</span>
+      identificando de qual VLAN ele é — assim o switch do outro lado sabe pra qual VLAN encaminhar cada pacote
+      que chega por aquele único cabo físico.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Dois switches precisam trocar tráfego de VLAN 10 e VLAN 20 simultaneamente,
+  através de um único cabo conectando os dois. Qual configuração de porta, nos dois lados desse cabo, resolve
+  isso corretamente?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Configurar a porta como trunk, permitindo VLAN 10 e VLAN 20, nos dois lados do cabo entre os switches. O modo trunk usa tagging 802.1Q pra identificar cada pacote com sua VLAN de origem, permitindo que um único link físico carregue o tráfego de múltiplas VLANs ao mesmo tempo, sem misturar ou perder nenhuma.')"><b>A</b> Configurar a porta como trunk, permitindo VLAN 10 e VLAN 20, nos dois lados do cabo entre os switches</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Uma porta access pertence a uma única VLAN — configurar como access na VLAN 10 é exatamente o erro do chamado #2002, que fez a VLAN 20 desaparecer do outro switch.')"><b>B</b> Configurar a porta como access na VLAN 10, já que é a VLAN mais usada entre os dois switches</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Usar dois cabos físicos separados resolveria o problema de forma mais cara e menos escalável — a solução padrão da indústria pra esse cenário é justamente uma única porta trunk carregando várias VLANs, sem precisar de cabeamento duplicado.')"><b>C</b> Usar dois cabos físicos diferentes, um exclusivo pra cada VLAN, evitando qualquer configuração de trunk</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Desativar VLANs nos dois switches eliminaria todo o isolamento e organização de rede que motivou a segmentação em primeiro lugar — não é uma solução, é abandonar o design original.')"><b>D</b> Desativar VLANs completamente nos dois switches, fazendo tudo virar uma única rede plana</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 02 VLAN TAGGING TRUNK ACCESS é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Tipo de porta</th><th>Comportamento</th></tr></thead><tbody>
+    <tr><td>Access</td><td>Pertence a uma única VLAN; entrega tráfego sem tag ao dispositivo final.</td></tr>
+    <tr><td>Trunk</td><td>Carrega múltiplas VLANs; cada pacote leva uma tag 802.1Q identificando sua origem.</td></tr>
+  </tbody></table>
+  <pre>--- estrutura correta do chamado #2002 ---
+Switch A                              Switch B
+├── Porta 3 (access, VLAN 10) ─── notebook financeiro
+├── Porta 7 (access, VLAN 20) ─── notebook estagiário
+└── Porta 24 (TRUNK, VLAN 10+20) ═══ Porta 24 (TRUNK, VLAN 10+20)
+                                       ├── Porta 3 (access, VLAN 10) ─── servidor financeiro
+                                       └── Porta 7 (access, VLAN 20) ─── servidor estagiários
+
+$ show interfaces trunk
+Port      Mode         Vlans allowed
+Gi0/24    trunk        10,20
+
+--- erro do chamado: porta 24 configurada como access ---
+$ show interfaces trunk
+Port      Mode         Vlans allowed
+Gi0/24    access       10          ← só VLAN 10 passa, VLAN 20 nunca atravessa o link</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje mostra o sênior explicando que um notebook conectado numa porta
+  trunk por engano recebe tráfego confuso e com tags visíveis</h2>
+  <p>Um colega conecta acidentalmente um notebook comum numa porta configurada como trunk, em vez de access.</p>
+  <div class='box question'>Por que conectar um dispositivo final comum numa porta trunk normalmente causa
+  problemas de conectividade?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Um dispositivo final comum não sabe interpretar tags 802.1Q — ele espera receber tráfego Ethernet normal, sem nenhuma marcação extra. Numa porta trunk, o tráfego chega COM tags de VLAN, o que o sistema operacional do notebook não consegue processar, resultando em falha de comunicação ou comportamento inesperado.')"><b>A</b> Dispositivos finais comuns não sabem interpretar tags 802.1Q — eles esperam tráfego sem marcação, e uma porta trunk entrega justamente tráfego com tags</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A velocidade da porta (trunk ou access) não é reduzida por padrão só por causa do modo configurado — o problema de conectar um dispositivo final numa porta trunk é de interpretação de protocolo, não de velocidade de link.')"><b>B</b> Não há problema real — a porta trunk simplesmente funciona mais lenta nesse caso, mas a conectividade básica continua normal</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O problema de conectar um dispositivo final numa porta trunk não tem relação com o comprimento do cabo de rede — acontece independente da distância, porque é uma questão de como o tráfego é marcado, não de sinal elétrico.')"><b>C</b> Só ocorre se o cabo de rede for mais longo que 50 metros, por atenuação de sinal</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 02 VLAN TAGGING TRUNK ACCESS é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Uma porta trunk carrega TODAS as VLANs do switch automaticamente?"</h2>
+  <p>Um colega acha que configurar uma porta como trunk já libera automaticamente todas as VLANs existentes
+  no switch, sem precisar especificar quais.</p>
+  <div class='box question'>Por que geralmente é uma boa prática especificar explicitamente quais VLANs uma
+  porta trunk deve carregar, em vez de liberar todas por padrão?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Especificar explicitamente as VLANs permitidas numa porta trunk (como VLAN 10,20 e não todas as 4094 possíveis) segue o princípio de menor privilégio: só o tráfego que realmente precisa atravessar aquele link é permitido. Deixar tudo liberado por padrão aumenta desnecessariamente a superfície de tráfego que passa por cada trunk, incluindo VLANs sensíveis que não deveriam estar ali.')"><b>A</b> Especificar as VLANs permitidas segue o princípio de menor privilégio — só o tráfego necessário atravessa aquele link específico, reduzindo exposição desnecessária</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe limitação de switches antigos exigindo listagem manual como regra geral — a prática de especificar VLANs permitidas é uma recomendação de segurança e organização, válida independente da idade do equipamento.')"><b>B</b> É só uma limitação de switches antigos; equipamentos modernos não precisam mais dessa especificação manual</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A velocidade de encaminhamento de pacotes num trunk não depende da quantidade de VLANs listadas explicitamente — a especificação de VLANs é uma questão de controle de acesso, não de performance de switching.')"><b>C</b> Não faz diferença nenhuma na prática — só afeta a velocidade de processamento do switch, não o comportamento de rede</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 02 VLAN TAGGING TRUNK ACCESS é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique se a porta conecta um dispositivo final (access) ou outro switch/equipamento que precisa de múltiplas VLANs (trunk).</li>
+    <li>Configure porta access sempre associada a UMA VLAN específica.</li>
+    <li>Configure porta trunk especificando explicitamente quais VLANs são permitidas naquele link.</li>
+    <li>Confirme a configuração dos dois lados de um link trunk — eles precisam concordar sobre quais VLANs estão sendo carregadas.</li>
+    <li>Nunca conecte um dispositivo final comum diretamente numa porta configurada como trunk.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em ambiente de laboratório (switches gerenciáveis de teste ou simulador) e confirme nomes de dispositivos e portas antes de cada mudança.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Configure a porta de conexão entre dois switches de laboratório como access, numa única VLAN, e teste tráfego de uma segunda VLAN.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> tráfego da segunda VLAN não atravessa o link entre os switches.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Reconfigure essa mesma porta como trunk, permitindo as duas VLANs, nos dois lados do link.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> tráfego das duas VLANs agora atravessa o link normalmente.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se os dois switches não concordarem sobre as VLANs permitidas no trunk, este é o ponto onde o chat com o Sênior-IA vai te ajudar a comparar as duas configurações lado a lado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Confirme com show interfaces trunk (ou equivalente) quais VLANs estão realmente passando pelo link.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista mostrando as VLANs corretas permitidas naquele trunk.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Documente a diferença de comportamento entre a configuração access e a trunk no mesmo link.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório claro mostrando o efeito de cada modo de porta.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Porta access pertence a uma VLAN só; porta trunk carrega múltiplas VLANs com tagging 802.1Q.</li>
+    <li>Um link entre switches que precisa carregar várias VLANs deve ser configurado como trunk, não access.</li>
+    <li>Dispositivos finais comuns não interpretam tags 802.1Q — nunca devem ficar numa porta trunk.</li>
+    <li>Especificar VLANs permitidas explicitamente num trunk é boa prática de segurança.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Reconfigurar o modo de uma porta (access/trunk) é reversível e rápido num switch
+  gerenciável, mas produz impacto imediato: um link mal configurado entre switches pode isolar VLANs inteiras
+  (como no chamado #2002) ou, no sentido oposto, expor tráfego que deveria ficar restrito a uma VLAN específica.
+  Sempre confirme os dois lados do link antes e depois da mudança.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "access entrega sem tag; trunk entrega com tag"
+  é a distinção mais cobrada em qualquer certificação básica de redes — vale memorizar essa frase exata. O Anki
+  vai reforçar essa distinção.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a correção foi configurar a porta
+  entre os dois switches como trunk, permitindo VLAN 10 e VLAN 20 simultaneamente. O ponto central do caso é
+  este: a tag de VLAN viaja entre switches — mas nunca deveria chegar ao dispositivo final.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de configurar corretamente portas access e trunk, entendendo o
+  papel do tagging 802.1Q. Amanhã você configura VLANs diretamente numa interface Linux, usando subinterfaces
+  taggeadas — a mesma lógica do switch, agora dentro do sistema operacional.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 20, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Porta access","Modo de porta que pertence a uma única VLAN, entregando tráfego sem tag pro dispositivo final conectado.",
+   "É uma porta de apartamento comum — dá acesso só àquele apartamento específico, sem marcação nenhuma visível pra quem mora ali."],
+  ["Porta trunk","Modo de porta que carrega tráfego de múltiplas VLANs simultaneamente, identificando cada pacote com uma tag 802.1Q.",
+   "É o elevador de serviço do prédio, que atende vários andares diferentes ao mesmo tempo, com uma etiqueta em cada encomenda dizendo pra qual andar ela vai."],
+  ["Tag 802.1Q","Cabeçalho adicional inserido num pacote Ethernet pelo padrão IEEE 802.1Q, identificando a qual VLAN ele pertence.",
+   "É a etiqueta de destino colada numa encomenda antes dela entrar no elevador de serviço — sem ela, ninguém saberia pra qual andar entregar."],
+  ["Link entre switches (uplink)","Cabo físico que conecta dois switches, frequentemente configurado como trunk quando precisa carregar múltiplas VLANs.",
+   "É o corredor de conexão entre dois prédios diferentes — precisa ser largo o suficiente pra carregar entregas de vários andares ao mesmo tempo."],
+  ["show interfaces trunk (comando de referência)","Comando comum em switches gerenciáveis pra listar quais portas estão em modo trunk e quais VLANs cada uma permite.",
+   "É consultar a lista de elevadores de serviço do prédio e quais andares cada um está autorizado a atender."],
+  ["VLANs permitidas (allowed vlans)","Lista explícita de VLANs que uma porta trunk está autorizada a carregar, restringindo o tráfego permitido naquele link.",
+   "É a lista de andares que aquele elevador de serviço específico está autorizado a parar — não abre em qualquer andar por padrão."],
+  ["Dispositivo final (vs. equipamento de rede)","Computador, servidor ou impressora conectado numa porta access, que não interpreta tags de VLAN.",
+   "É o morador comum do apartamento — ele só sabe usar a porta normal da sua unidade, não sabe operar o elevador de serviço com etiquetas."],
+  ["Princípio de menor privilégio (aplicado a trunk)","Prática de permitir apenas o necessário — nesse contexto, listar só as VLANs que realmente precisam atravessar um trunk específico.",
+   "É dar a chave só das áreas que a pessoa realmente precisa acessar, não a chave mestra do prédio inteiro por padrão."],
+  ["Native VLAN (menção)","VLAN cujo tráfego trafega sem tag numa porta trunk, tratada como padrão quando nenhuma tag está presente — tema aprofundado em estudos avançados.",
+   "É o andar padrão que o elevador de serviço assume quando a encomenda chega sem nenhuma etiqueta de destino."],
+  ["Segmentação escalável (trunk vs. cabeamento duplicado)","Capacidade de carregar várias VLANs num único link físico, evitando a necessidade de um cabo dedicado por VLAN entre switches.",
+   "É usar um único elevador de serviço eficiente em vez de construir um elevador separado pra cada andar do prédio."],
+  ["Concordância entre lados do trunk","Necessidade de que ambos os switches conectados por um link trunk tenham a mesma configuração de VLANs permitidas.",
+   "É os dois lados do elevador de serviço concordando sobre quais andares ele atende — se um lado discorda, a entrega falha em algum ponto."],
+  ["Erro de modo de porta (access no lugar de trunk)","Configuração incorreta onde um link que precisa carregar múltiplas VLANs é definido como access, restringindo-o a uma única VLAN.",
+   "É configurar o elevador de serviço pra atender só um andar, quando várias encomendas de andares diferentes precisavam passar por ele."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,497 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 16 · Dia 5 — Missão Integradora: DNS, DHCP, Firewall e SSH | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.milestone{width:min(1180px,92vw);margin:24px auto 0;background:linear-gradient(135deg,#0d1f2a,#0d2a24);border:2px solid var(--cyan);border-radius:8px;padding:24px 28px;text-align:center}
+.milestone h2{margin:0 0 8px;font-size:24px;color:var(--cyan)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_DIAGNOSTICO_CAMADAS.html'>← Semana 16, Dia 4</a><a href='#'>Semana 16</a><a href='../SEMANA_17/DIA_01_NAT_CONCEITO.html'>Semana 17, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com as Semanas 13 a 16 inteiras:</b> Modelo TCP/IP e camadas, DNS e DHCP,
+firewall stateful e nftables, chaves SSH e diagnóstico formal — quatro semanas de fundamentos de rede, cada
+peça isolada. Hoje elas se juntam: um único incidente onde a causa está espalhada entre as quatro.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: resolver um incidente de causa composta, sozinho.</b> Você
+ganha a prova de que sabe combinar DNS + DHCP + firewall + SSH numa investigação só, corrigindo cada causa na
+ordem certa e validando o resultado final de ponta a ponta.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 16 · Dia 5 | Missão Integradora — Fecha os Fundamentos de Rede</div>
+  <h1>Missão Integradora: DNS, DHCP, Firewall e SSH</h1>
+  <p>em incidente real, pare só quando a cadeia inteira estiver explicada e validada</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S16D05_MISSAO_INTEGRADORA_FASE2.png' alt='Prancha em seis quadros sobre um incidente com causa composta envolvendo DNS desatualizado, DHCP com IP novo, firewall bloqueando por ordem de regra, e SSH validando o acesso final'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket #INC-5127: "não consigo acessar srv-app-01." "Vou seguir as camadas até o fim, sem
+  chutar." Quatro suspeitos no quadro: DNS (consulta falha ou aponta IP errado?), DHCP (lease renovado mudou
+  o IP do servidor?), Firewall (regra existe, mas ordem bloqueia?), SSH (chave e config validam o acesso final?).</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que o painel 4 da prancha de hoje avisa "se você corrige só DNS e para, o
+    firewall ainda bloqueia — feche todas as camadas"?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Um incidente com
+      <span class="hint" data-tip="Situação em que múltiplos fatores, cada um verdadeiro, contribuem juntos para o sintoma observado." onclick="openGlossary(0)">causa composta</span>
+      tem MAIS de uma causa real ao mesmo tempo. Corrigir só uma (ex: DNS) resolve só parte do problema — as
+      outras (DHCP, firewall) continuam ativas, e o sintoma final ("não acessa") persiste até TODAS serem
+      corrigidas e validadas juntas.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>dig srv-app-01.intra.example A retorna 192.168.10.50. journalctl mostra que o
+  lease DHCP foi renovado e o servidor agora tem 192.168.10.80. ss -tlnp confirma sshd escutando. nft -a list
+  mostra uma regra permitindo o IP de gestão, mas SEM regra pra porta 22 no geral. Qual é a leitura correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Há pelo menos duas causas contribuindo: o DNS está desatualizado (aponta pro IP antigo, 192.168.10.50, enquanto o servidor real tem 192.168.10.80 após a renovação DHCP), E potencialmente a ordem/presença das regras de firewall precisa ser conferida também. É uma causa composta — corrigir só uma não resolve o acesso completo.')"><b>A</b> Causa composta: DNS desatualizado (aponta pro IP antigo) somado a uma configuração de firewall que precisa ser conferida — corrigir só uma não resolve tudo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'sshd já foi confirmado escutando (ss -tlnp) — o problema não é o serviço SSH estar parado; a evidência aponta pra outras causas (DNS desatualizado, firewall).')"><b>B</b> O problema é só que o sshd não está rodando — basta reiniciar o serviço</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A chave SSH não é mencionada como causa na evidência apresentada — os problemas identificados são DNS desatualizado e configuração de firewall, não geração de chave.')"><b>C</b> O problema é só a chave SSH, que precisa ser gerada novamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A evidência não aponta pra DHCP como causa isolada — o DHCP funcionou corretamente (renovou o lease com um IP novo válido); o problema é que o DNS não foi atualizado para refletir essa mudança.')"><b>D</b> O problema é só o DHCP, que precisa ter seu escopo reconfigurado do zero</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 05 MISSAO INTEGRADORA FASE2 é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Camada</th><th>Ferramenta</th><th>O que descobriu</th></tr></thead><tbody>
+    <tr><td>DNS</td><td><code>dig srv-app-01.intra.example A +short</code></td><td>Aponta IP antigo (stale).</td></tr>
+    <tr><td>DHCP</td><td><code>journalctl -u NetworkManager | grep DHCPACK</code></td><td>Lease renovado com IP novo.</td></tr>
+    <tr><td>Firewall</td><td><code>nft -a list chain inet filter input</code></td><td>Ordem/presença da regra precisa ser conferida.</td></tr>
+    <tr><td>SSH</td><td><code>ssh srv-app-01</code></td><td>Validação final do acesso, usando alias/config.</td></tr>
+  </tbody></table>
+  <pre>$ dig srv-app-01.intra.example A +short
+192.168.10.50
+
+$ journalctl -u NetworkManager --since "today" | grep DHCPACK
+bound to 192.168.10.80 -- renewal in 1800 seconds
+
+$ ss -tlnp | grep ':22'
+LISTEN  0  128  0.0.0.0:22  0.0.0.0:*  users:(("sshd",pid=918,fd=3))
+
+$ sudo nft -a list chain inet filter input
+ip saddr 192.168.10.20 tcp dport 22 accept   # handle 8
+
+--- correção, na ordem ---
+$ sudoedit /etc/dns/zones/intra.example.zone
+srv-app-01  300  IN  A  192.168.10.80
+$ sudo rndc reload intra.example
+
+$ sudo nft insert rule inet filter input position 0 \
+    ip saddr 192.168.10.20 tcp dport 22 accept
+
+$ ssh srv-app-01
+adminjr@srv-app-01:~$</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 Você corrigiu o registro DNS e testou dig de novo, confirmando o IP correto</h2>
+  <p>Um colega já quer fechar o incidente, satisfeito com o DNS corrigido.</p>
+  <div class='box question'>Por que fechar o incidente aqui, sem confirmar SSH funcionando de ponta a ponta,
+  é prematuro?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'DNS corrigido é só uma das causas potencialmente envolvidas — a validação real do ticket (não consigo acessar) só está completa quando o usuário original consegue de fato conectar via SSH. Corrigir DNS sem testar o acesso final pode deixar outra causa (firewall, por exemplo) ainda bloqueando, mesmo com o DNS certo.')"><b>A</b> DNS corrigido resolve só uma causa — a validação real do ticket exige confirmar que o acesso SSH funciona de ponta a ponta, não só que o DNS aponta certo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'DNS corrigido não é garantia de que o acesso completo funciona — ainda existem outras camadas (firewall, SSH) que precisam ser confirmadas separadamente antes de considerar o incidente resolvido.')"><b>B</b> Não é prematuro — DNS corrigido já garante automaticamente que todo o resto funciona</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A questão não é sobre gastar tempo — é sobre garantir que o sintoma original relatado no ticket (não conseguir acessar) foi realmente resolvido, testando o acesso completo, não só uma parte da cadeia.')"><b>C</b> É prematuro só porque o ticket ainda tem tempo de SLA sobrando</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 05 MISSAO INTEGRADORA FASE2 é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Metodologia formal (observe → isole → corrija → valide) é só burocracia pra incidentes
+  simples?"</h2>
+  <p>Um colega acha que, pra um problema "óbvio", pode pular direto pra correção.</p>
+  <div class='box question'>Por que seguir a metodologia mesmo em incidentes que parecem simples é uma
+  prática correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Um incidente que parece simples pode ter causa composta, como o de hoje — assumir uma única causa óbvia e corrigir só ela deixa as outras intactas, e o sintoma volta ou nunca é totalmente resolvido. A metodologia existe justamente para capturar causas que não são óbvias à primeira vista, mesmo quando a primeira suspeita parece certa.')"><b>A</b> Um incidente "óbvio" pode esconder causa composta — pular a metodologia arrisca corrigir só parte do problema, deixando outras causas intactas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Metodologia formal não é burocracia sem função — ela existe justamente pra capturar causas não óbvias, mesmo em casos que parecem simples à primeira vista, como mostrado nesta própria aula.')"><b>B</b> É verdade, metodologia formal só serve para incidentes complexos, incidentes simples não precisam dela</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A metodologia não depende do tamanho da equipe — ela é sobre garantir uma investigação completa e confiável, independente de quantas pessoas estão trabalhando no incidente.')"><b>C</b> Só é necessária se a equipe for grande; sozinho, dá pra pular etapas com segurança</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 05 MISSAO INTEGRADORA FASE2 é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de "não consigo acessar", mapeie os suspeitos possíveis: DNS, DHCP, firewall, SSH.</li>
+    <li>Colete evidência de cada um, sem assumir que só uma causa existe.</li>
+    <li>Corrija cada causa confirmada, na ordem que faz sentido (fonte de verdade primeiro).</li>
+    <li>Valide o resultado final de ponta a ponta — o acesso real funcionando, não só cada correção isolada.</li>
+    <li>Documente a cadeia completa de causas, mesmo que sejam múltiplas.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — a Missão Integradora completa</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Em VM de laboratório, simule o cenário: DNS apontando pra um IP antigo, servidor com IP novo via DHCP.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> dig retorna IP diferente do IP real da interface do servidor.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Configure um firewall com regra restritiva de SSH, mas sem regra geral de accept, e teste o acesso.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> acesso via IP antigo falha por DNS; acesso via IP real pode falhar por firewall.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Investigue cada camada separadamente (DNS, DHCP, firewall) antes de aplicar qualquer correção.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> duas ou mais causas identificadas e documentadas.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se depois de corrigir DNS e firewall o acesso ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar SSH (chave, config) como uma terceira causa possível.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Corrija cada causa confirmada, na ordem certa, e teste após cada correção.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> progresso incremental visível a cada correção.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Valide o acesso final com ssh alias, e documente a cadeia completa de causas — reproduzindo o painel 6 da prancha de hoje.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório de incidente com causa composta, metodologia Observe → Isole → Corrija → Valide.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Todas as camadas suspeitas (DNS, DHCP, firewall, SSH) foram investigadas, não só a primeira óbvia.</li>
+    <li>Cada causa confirmada foi corrigida na ordem correta.</li>
+    <li>O acesso final foi validado de ponta a ponta, não apenas cada correção isolada.</li>
+    <li>A documentação registrou a cadeia completa de causas compostas.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Cada correção de hoje (DNS, firewall) tem seu próprio rollback já ensinado nas
+  semanas anteriores — backup de zona DNS, backup de ruleset nftables. O cuidado real de hoje é não parar na
+  primeira causa encontrada; feche o incidente só quando a cadeia inteira estiver explicada e validada.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> hoje não é um conceito novo — é a integração das
+  quatro semanas (13-16) num único fluxo. O Anki vai reforçar o método completo como uma unidade só, igual fez
+  com a Missão Final da Fase 1.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a leitura certa foi <b>causa
+  composta: DNS desatualizado + firewall a conferir</b>, exigindo correção de ambos. O ponto central do caso é
+  este: em incidente real, pare só quando a cadeia inteira estiver explicada e validada.</div>
+</section>
+
+<div class="milestone">
+  <h2>🏁 FUNDAMENTOS DE REDE CONCLUÍDOS (Semanas 13-16)</h2>
+  <p style="color:var(--muted);max-width:760px;margin:0 auto">TCP/IP e camadas, DNS e DHCP, firewall stateful
+  e nftables, chaves SSH e diagnóstico formal — a base completa de rede está pronta. A partir da Semana 17,
+  a Fase 2 avança para NAT, VPN, análise de pacotes com tcpdump, VLAN, NFS e Samba, fechando com a Missão
+  Final Júnior na Semana 24.</p>
+</div>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje — e nas últimas 4 semanas</h2>
+  <div class='box validation'>Capacidade de resolver um incidente de causa composta, combinando DNS, DHCP,
+  firewall e SSH numa investigação só. Isso fecha o bloco de fundamentos de rede. Amanhã começa a Semana 17
+  com NAT — o que acontece quando vários dispositivos internos compartilham um único IP público, e por que
+  esquecer a regra de firewall junto com a de NAT é um erro clássico.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 16, Dia 5 de ~250 — fecha os fundamentos de rede (Semanas 13-16). Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Causa composta","Situação em que múltiplos fatores, cada um verdadeiro, contribuem juntos para o sintoma observado num incidente.",
+   "É um atraso de voo causado por clima ruim E manutenção atrasada ao mesmo tempo — resolver só um dos dois ainda deixa o voo atrasado."],
+  ["DNS desatualizado (stale)","Registro DNS que ainda aponta para um endereço antigo, não refletindo uma mudança real já ocorrida no destino.",
+   "É uma placa de endereço que não foi atualizada depois da mudança — quem segue a placa antiga chega no lugar errado."],
+  ["Lease renovado com IP novo","Situação em que a renovação de um contrato DHCP resultou num endereço IP diferente do anterior para o mesmo dispositivo.",
+   "É a pessoa se mudar de apartamento dentro do mesmo condomínio — o nome continua o mesmo, mas o número da porta mudou."],
+  ["Regra de firewall a conferir","Necessidade de verificar não só se uma regra existe, mas se sua ordem e condição realmente cobrem o tráfego esperado.",
+   "É checar não só se o nome está na lista de convidados, mas também em que ordem os seguranças checam essa lista."],
+  ["Metodologia Observe → Isole → Corrija → Valide","Sequência formal de investigação de incidentes: observar a evidência, isolar as causas possíveis, corrigir cada uma, e validar o resultado final.",
+   "É o protocolo do médico: observar sintomas, isolar hipóteses com exames, tratar a causa certa, e confirmar que o paciente melhorou de verdade."],
+  ["dig +short","Opção do dig que reduz a saída para apenas o valor essencial da resposta DNS, sem detalhes completos.",
+   "É pedir só o resultado final da conta, sem precisar ver toda a planilha de cálculo por trás."],
+  ["rndc reload (recarregar zona DNS)","Comando que recarrega a configuração de um servidor DNS após uma alteração na zona, sem reiniciar o serviço inteiro.",
+   "É atualizar o cardápio afixado na parede sem fechar o restaurante inteiro pra fazer isso."],
+  ["Fechamento prematuro de incidente","Erro de considerar um chamado resolvido antes de validar completamente que o sintoma original foi eliminado.",
+   "É dar alta ao paciente só porque um exame deu normal, sem confirmar que todos os sintomas realmente sumiram."],
+  ["Investigação multi-camada","Abordagem de diagnóstico que considera simultaneamente várias camadas ou sistemas possíveis, em vez de focar numa única suspeita.",
+   "É o detetive investigando várias pistas em paralelo, em vez de fixar numa única teoria antes de reunir toda a evidência."],
+  ["Validação de ponta a ponta","Confirmar que o resultado final desejado (como acesso funcionando) realmente acontece, não apenas que cada correção individual está certa.",
+   "É testar a viagem inteira, do início ao fim, não só verificar se cada trecho do caminho está aberto separadamente."],
+  ["Ticket com múltiplas causas raiz","Registro de incidente que documenta explicitamente mais de uma causa contribuindo para o mesmo sintoma relatado.",
+   "É o relatório de acidente listando todos os fatores que contribuíram, não só apontar um culpado único e simples."],
+  ["Fundamentos de rede consolidados","Conjunto de habilidades básicas de diagnóstico e configuração de rede (TCP/IP, DNS, DHCP, firewall, SSH) integradas num método coerente.",
+   "É ter todas as ferramentas básicas da caixa organizadas e sabendo usar cada uma no momento certo, não apenas conhecê-las isoladamente."]
+];
+
+const sceneStripIdx = [0,1,3,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

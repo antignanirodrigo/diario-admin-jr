@@ -1,0 +1,484 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 24 · Dia 3 — Missão Final: Corrigir em Ordem, Validar Passo a Passo | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_TRES_CAUSAS_MESMO_INCIDENTE.html'>← Semana 24, Dia 2</a><a href='#'>Semana 24 — Missão Final</a><a href='DIA_04_VALIDACAO_PONTA_A_PONTA.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Continua o Chamado #2400 (Dia 2):</b> As três causas já estão mapeadas e
+documentadas. Hoje é dia de corrigir — mas não as três de qualquer jeito. A ORDEM importa, porque uma das
+causas é pré-requisito físico das outras duas, e corrigir fora de ordem vai te enganar sobre se cada correção
+realmente funcionou.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: corrigir com validação entre cada passo, não só no
+final.</b> Você ganha a disciplina que separa um sistemista júnior de alguém que só copia comandos: entender
+QUAL correção depende de QUAL outra, e confirmar cada uma isoladamente antes de seguir pra próxima.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 24 · Dia 3 — Missão Final Júnior | Fecha a Fase 2</div>
+  <h1>Corrigir em Ordem, Validar Passo a Passo</h1>
+  <p>a ordem de correção não é arbitrária quando uma causa é pré-requisito físico das outras</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S24D03_CORRIGIR_EM_ORDEM_VALIDAR_PASSO.png' alt='Prancha em seis quadros sobre corrigir três causas de um incidente em ordem de dependência, validando cada correção separadamente antes de seguir para a próxima'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. Planejando a ordem certa</h2>
+  <div class='box'>As três causas do Dia 2: (1) trunk sem VLAN 30 liberada, (2) NAT apontando pro IP antigo,
+  (3) AllowedIPs da VPN restrito à subnet antiga. Antes de corrigir qualquer uma, pergunte: alguma delas é
+  pré-requisito FÍSICO das outras? Sim — sem a VLAN 30 liberada no
+  <span class="hint" data-tip="Link entre switches ou entre switch e firewall configurado para carregar múltiplas VLANs, usando tagging 802.1Q." onclick="openGlossary(0)">trunk</span>,
+  nenhum tráfego (nem via NAT, nem via VPN) consegue fisicamente alcançar o servidor, não importa o que mais
+  esteja configurado corretamente.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> se você corrigisse o NAT primeiro, ANTES do trunk, o que você observaria ao
+    testar — e por que isso poderia te confundir?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Mesmo com o NAT corretamente apontando pro IP novo (10.20.30.50), o teste de conectividade externa
+      (nc -zv 203.0.113.10 443) continuaria falhando — porque o tráfego, mesmo redirecionado corretamente
+      pelo NAT, ainda não consegue fisicamente atravessar o trunk até a VLAN 30. Isso poderia te fazer
+      concluir, ERRADAMENTE, que a correção do NAT "não funcionou" — quando na verdade ela funcionou
+      perfeitamente, só que ainda dependia de outra correção (o trunk) que ainda não tinha sido aplicada.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é a ordem correta de correção, e por quê essa ordem específica evita
+  confusão durante a validação?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Trunk primeiro (pré-requisito físico de tudo), depois NAT (redireciona corretamente o tráfego direto), depois VPN (ajusta o caminho específico dos parceiros via túnel). Essa ordem garante que cada validação intermediária reflita exatamente o efeito daquela correção específica — sem outras causas ainda pendentes mascarando o resultado.')"><b>A</b> Trunk (VLAN 30 liberada) → NAT (IP correto) → VPN (AllowedIPs atualizado) — do pré-requisito físico até o mais específico</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Corrigir NAT antes do trunk é exatamente o cenário do recall — o teste continuaria falhando mesmo com o NAT corrigido corretamente, porque o trunk ainda bloqueia fisicamente o tráfego até a VLAN 30, mascarando o sucesso da correção do NAT.')"><b>B</b> NAT primeiro, já que foi a primeira causa encontrada no Dia 2, depois trunk, depois VPN</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Não existe relação entre ordem alfabética dos nomes das configurações e dependência técnica real entre elas — a ordem correta é definida por qual configuração é pré-requisito físico de qual, não por convenção alfabética.')"><b>C</b> Ordem alfabética das três configurações, já que não faz diferença técnica real qual vem primeiro</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aplicar as três de uma vez, sem validar cada uma separadamente, é exatamente o problema descrito no Dia 2 — se o teste final falhar, você não saberia qual das três correções (se alguma) teve um erro de digitação ou configuração.')"><b>D</b> Aplicar as três correções simultaneamente, de uma vez, testando só no final</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 03 CORRIGIR EM ORDEM VALIDAR PASSO é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Passo</th><th>Correção</th><th>Validação imediata</th></tr></thead><tbody>
+    <tr><td>1</td><td>Liberar VLAN 30 no trunk</td><td>Conectividade interna até o servidor, de dentro do firewall</td></tr>
+    <tr><td>2</td><td>Corrigir NAT pro IP novo</td><td>nc -zv externo na porta 443</td></tr>
+    <tr><td>3</td><td>Atualizar AllowedIPs da VPN</td><td>Ping do túnel WireGuard até o servidor</td></tr>
+  </tbody></table>
+  <pre>--- passo 1: liberar VLAN 30 no trunk ---
+$ switchport trunk allowed vlan add 30
+$ show interfaces trunk
+Port      Vlans allowed
+Gi0/1     10,20,30                              ← corrigido
+
+$ ping -c 3 10.20.30.50   # do próprio firewall, testando alcance interno
+3 packets transmitted, 3 received, 0% packet loss   ✅ passo 1 validado
+
+--- passo 2: corrigir NAT ---
+$ nat rule edit 443 --target 10.20.30.50:443
+$ show nat rules
+public 203.0.113.10:443 -> 10.20.30.50:443       ← corrigido
+
+$ nc -zv -w3 203.0.113.10 443    # de fora da empresa
+Connection to 203.0.113.10 443 port [tcp/https] succeeded!   ✅ passo 2 validado
+
+--- passo 3: atualizar AllowedIPs da VPN ---
+$ sed -i 's/10.20.10.0\/24/10.20.10.0\/24, 10.20.30.0\/24/' /etc/wireguard/wg0.conf
+$ systemctl reload wg-quick@wg0
+
+--- (validação completa do passo 3 fica pro Dia 4, ponta a ponta) ---</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra um colega, num incidente parecido no passado, que corrigiu o
+  NAT antes do trunk, concluiu que "o NAT não resolveu nada", e passou uma hora inteira reconferindo a mesma
+  regra de NAT sem necessidade</h2>
+  <p>Esse é exatamente o cenário do recall de hoje, mas mostrando o custo real em tempo perdido.</p>
+  <div class='box question'>Por que esse colega perdeu uma hora reconferindo a regra de NAT, mesmo ela
+  estando correta desde o início daquela tentativa?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Como o trunk ainda não tinha sido corrigido, o teste de conectividade continuava falhando mesmo com o NAT certo — e sem saber da dependência entre as duas correções, o colega interpretou esse teste falho como prova de que o NAT estava errado, quando na real ele nunca tinha sido a causa restante do teste falhar.')"><b>A</b> Sem corrigir o trunk primeiro, o teste de conectividade continuava falhando mesmo com o NAT certo — o colega interpretou esse teste falho como prova de erro no NAT, quando o NAT já estava correto</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A regra de NAT em si não precisa de tempo de propagação — ela tem efeito imediato assim que aplicada; o atraso na resolução foi causado pela ordem de correção incorreta, não por um tempo de propagação técnico.')"><b>B</b> Regras de NAT sempre levam cerca de uma hora pra propagar, então o tempo perdido era simplesmente inevitável</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não existe exigência de reiniciar o firewall inteiro depois de cada mudança de NAT — mudanças de NAT geralmente têm efeito imediato; o atraso não foi causado por falta de reinício, foi causado pela dependência não resolvida do trunk.')"><b>C</b> É necessário sempre reiniciar o firewall inteiro depois de qualquer mudança de NAT, e ele esqueceu desse passo</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 03 CORRIGIR EM ORDEM VALIDAR PASSO é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Validar depois de cada correção não é mais lento do que corrigir tudo e testar só uma vez no
+  final?"</h2>
+  <p>Um colega acha que validar três vezes (uma por correção) é claramente mais trabalho do que validar uma
+  vez só no final.</p>
+  <div class='box question'>Por que validar após CADA correção, mesmo levando mais passos, tende a ser mais
+  rápido no total do que corrigir tudo e testar só uma vez?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Se você corrigir as três de uma vez e o teste final ainda falhar, não tem como saber qual das três correções (se alguma) tem um erro — precisaria reconferir todas de novo do zero. Validando uma de cada vez, se algo der errado, você já sabe EXATAMENTE em qual das três correções o problema está, sem precisar reinvestigar as outras duas que já foram confirmadas corretas.')"><b>A</b> Testar uma correção de cada vez isola exatamente onde está um eventual erro — testar só no final, se falhar, exige reconferir as três correções do zero, sem saber qual delas falhou</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Ferramentas de rede (nc, ping, ss) não ficam mais lentas com o uso repetido — o tempo total menor de validar em etapas vem de isolar erros rapidamente, não de as ferramentas ficarem mais rápidas com a prática.')"><b>B</b> Não é mais rápido de verdade — só parece mais rápido porque o administrador fica mais treinado a cada teste repetido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Validar após cada correção não depende do tamanho da equipe de plantão — o mesmo princípio de isolar erros rapidamente vale tanto pra um administrador sozinho quanto pra uma equipe grande.')"><b>C</b> Só é mais rápido se a equipe de plantão tiver mais de duas pessoas disponíveis simultaneamente</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 03 CORRIGIR EM ORDEM VALIDAR PASSO é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de corrigir, identifique se alguma causa é pré-requisito físico/lógico das outras.</li>
+    <li>Corrija a causa de pré-requisito primeiro (aqui, o trunk).</li>
+    <li>Valide essa correção especificamente, isoladamente, antes de seguir pra próxima.</li>
+    <li>Repita: corrija a próxima causa, valide especificamente, só então avance.</li>
+    <li>Nunca aplique múltiplas correções de uma vez só, mesmo que pareça mais rápido no primeiro momento.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Na topologia de laboratório do Dia 2, corrija primeiro o trunk (libere a VLAN 30), e valide com ping interno do firewall até o servidor.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ping bem-sucedido, confirmando alcance físico restaurado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Corrija o NAT (aponte pro IP novo), e valide com nc -zv de fora da rede simulada.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida na porta esperada.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a ordem que você escolheu não funcionar como esperado, este é o ponto onde o chat com o Sênior-IA vai te ajudar a reidentificar a dependência entre as correções.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Atualize o AllowedIPs da VPN, incluindo a nova subnet.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> configuração aplicada sem erro de sintaxe (testparm equivalente ou reload sem falha).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Documente cada correção e sua validação específica, seguindo o formato do exemplo da seção 5.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> log com três correções, cada uma com sua validação isolada registrada.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Trunk corrigido e validado primeiro — pré-requisito físico das outras duas correções.</li>
+    <li>NAT corrigido e validado com conectividade externa direta bem-sucedida.</li>
+    <li>AllowedIPs da VPN atualizado, aplicado sem erro de configuração.</li>
+    <li>Cada correção foi validada isoladamente, evitando confusão sobre qual funcionou.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Cada correção aplicada hoje é reversível individualmente, se necessário — reverter
+  o trunk, o NAT ou o AllowedIPs de volta ao estado anterior não afeta as outras duas correções, já que são
+  configurações independentes. Isso reforça por que corrigir e validar uma de cada vez também facilita
+  reverter só a correção específica que causar algum problema inesperado.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "identificar dependência antes de definir
+  ordem de correção" é uma habilidade de nível Pleno que você já está praticando aqui — vale reforçar esse
+  raciocínio além deste incidente específico. O Anki vai fixar esse padrão de pensamento.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a ordem certa foi trunk → NAT → VPN,
+  do pré-requisito físico até o mais específico, validando cada passo isoladamente. O ponto central do caso é
+  este: a ordem de correção não é arbitrária quando uma causa é pré-requisito físico das outras.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de identificar dependências entre correções e validar cada uma
+  isoladamente, evitando conclusões erradas. Amanhã você faz a validação final — não do ponto de vista do
+  servidor, mas literalmente como um parceiro externo real faria, ponta a ponta.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 24, Dia 3 de ~250 — Missão Final Júnior (Dia 3 de
+5). Mesmo padrão: glossário com analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot
+reservado pro Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Trunk (revisão, Semana 20)","Link entre switches ou entre switch e firewall configurado para carregar múltiplas VLANs, usando tagging 802.1Q.",
+   "É o elevador de serviço que atende vários andares — sem um andar na lista de paradas, nada consegue chegar até ele, não importa mais nada."],
+  ["Pré-requisito físico (dependência de correção)","Configuração que precisa estar correta antes de qualquer outra correção relacionada ter efeito observável.",
+   "É consertar a fundação antes de pintar as paredes — pintar primeiro não tem efeito nenhum se a fundação ainda estiver rachada."],
+  ["Validação isolada (por correção)","Prática de testar especificamente o efeito de UMA correção, antes de aplicar a próxima, em vez de testar tudo junto no final.",
+   "É provar cada ingrediente de uma receita separadamente antes de misturar tudo — se algo estiver errado, você sabe exatamente qual ingrediente foi."],
+  ["Conclusão prematura de erro (mascaramento de causa)","Interpretar um teste que ainda falha, por causa de uma dependência não resolvida, como prova de que a correção mais recente estava errada.",
+   "É achar que o remédio não funcionou porque o sintoma continua, sem perceber que existe outra causa ainda não tratada ao mesmo tempo."],
+  ["Reversibilidade individual de correções","Capacidade de desfazer uma correção específica sem afetar as outras, quando cada uma é uma configuração tecnicamente independente.",
+   "É poder trocar de volta só uma peça específica de uma máquina, sem precisar desmontar as outras peças que já estavam funcionando bem."],
+  ["Ordem de dependência (vs. ordem de descoberta)","Sequência de correção baseada em qual configuração depende de qual, em vez da ordem em que as causas foram encontradas durante a investigação.",
+   "É a ordem de montagem de um móvel seguir o manual técnico, não a ordem em que você separou as peças da caixa."],
+  ["Isolamento de erro por etapa","Técnica de testar uma mudança de cada vez pra saber exatamente onde está um problema, caso ele apareça, sem precisar reconferir tudo do zero.",
+   "É acender uma luz de cada vez numa casa nova, em vez de ligar o disjuntor geral de uma vez — se uma lâmpada não acender, você já sabe exatamente qual circuito checar."],
+  ["Raciocínio de nível Pleno (contexto)","Capacidade de identificar dependências técnicas entre múltiplas correções e planejar a ordem de execução de acordo, não só executar comandos isolados.",
+   "É a diferença entre seguir uma receita passo a passo e entender por que cada passo precisa vir naquela ordem específica — o segundo nível de domínio é o que se espera do Pleno."],
+  ["sed -i (edição em linha, menção)","Comando que edita um arquivo de configuração diretamente, substituindo texto sem precisar abrir um editor interativo.",
+   "É corrigir uma palavra específica num documento impresso já formatado, sem precisar reescrever a página inteira."],
+  ["Documentação de correção (causa + ação + validação)","Registro de cada correção aplicada, junto com a validação específica que confirmou seu efeito, formando a base do relatório final.",
+   "É o registro de manutenção detalhado de cada peça trocada num carro, junto com o teste que confirmou que aquela troca específica funcionou."]
+];
+
+const sceneStripIdx = [0,1,2,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

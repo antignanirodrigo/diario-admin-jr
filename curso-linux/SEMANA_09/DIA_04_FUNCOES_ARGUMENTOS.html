@@ -1,0 +1,547 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 9 · Dia 4 — Funções: Reuso Sem Repetir Código | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_LOOPS_DRYRUN.html'>← Dia 3</a><a href='#'>Semana 9</a><a href='DIA_05_SET_E_TRATAMENTO_ERRO.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com toda a semana:</b> shebang, condicionais e loops te deram os blocos
+básicos. Hoje você aprende a organizar isso em algo maior sem se perder — funções, pra escrever a mesma
+lógica uma vez e reutilizar quantas vezes precisar.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: escrever funções reutilizáveis com argumentos.</b> Você
+ganha o hábito de encapsular lógica repetida numa função só, chamada com parâmetros diferentes.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 9 · Dia 4 | Nível Júnior</div>
+  <h1>Funções: Reuso Sem Repetir Código</h1>
+  <p>código duplicado multiplica erro — função bem feita concentra a regra em um lugar</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S09D04_FUNCOES_ARGUMENTOS.png' alt='Prancha em seis quadros sobre funções e argumentos'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você precisa verificar se o nginx está ativo em três servidores diferentes
+  (<code>srv01</code>, <code>srv02</code>, <code>srv03</code>). Seu script tem o mesmo bloco de código
+  copiado e colado três vezes, mudando só o hostname — e um bug nesse bloco agora existe em três lugares ao
+  mesmo tempo.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Quinta-feira, Semana 9</span>
+    Ontem você aprendeu a simular antes de executar um loop destrutivo. Hoje o problema é outro: não é sobre
+    segurança, é sobre organização — e a lição vem de um bug que apareceu três vezes ao mesmo tempo, no
+    mesmo dia, por um motivo bem específico.<br><br>
+    Precisava verificar se o nginx estava ativo em três servidores diferentes — <code>srv01</code>,
+    <code>srv02</code>, <code>srv03</code>. Sem pensar muito, copiei o bloco de verificação, colei três
+    vezes, e troquei só o hostname em cada cópia. Funcionou. Um mês depois, precisei ajustar o comando —
+    trocar <code>systemctl status</code> por uma checagem mais detalhada. Corrigi o primeiro bloco, testei,
+    funcionou. Só que esqueci que existiam mais dois blocos idênticos, meses depois de eu já ter esquecido
+    que os tinha copiado. Um dos outros dois continuou com a versão antiga, e um chamado de "falso positivo"
+    apareceu semanas depois porque a checagem desatualizada dizia que o serviço estava OK quando não
+    estava.<br><br>
+    Um sênior mais experiente me mostrou o problema de raiz: eu tinha três cópias da mesma lógica, e um bug
+    (ou uma correção) precisava agora ser lembrado em três lugares — e eu só lembrei de um. A solução era
+    encapsular aquela lógica numa <b>função</b>, recebendo o que varia (host, serviço) como argumento:
+    <code>verificar_servico() { ... }</code>, chamada três vezes com valores diferentes. Uma única definição,
+    corrigida uma única vez, usada em qualquer quantidade de lugares.<br><br>
+    Hoje você pratica exatamente essa refatoração: identificar código duplicado, encapsular numa função com
+    argumentos posicionais (<code>$1</code>, <code>$2</code>), e proteger tudo com <code>local</code> e
+    aspas — porque uma função mal protegida herda os mesmos riscos que uma variável solta.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>verificar_servico() { ... }</code></td><td>Define a função uma vez, encapsulando a lógica reutilizável.</td></tr>
+    <tr><td><code>local host="$1"</code></td><td>local mantém a variável restrita à função, evitando conflito com variáveis de fora.</td></tr>
+    <tr><td><code>verificar_servico srv01 nginx</code></td><td>Chama a função passando argumentos — a mesma lógica, valores diferentes.</td></tr>
+  </tbody></table>
+  <pre>verificar_servico() {
+  local host="$1"
+  local svc="$2"
+  ssh "$host" systemctl status "$svc"
+}
+
+verificar_servico srv01 nginx
+verificar_servico srv02 sshd
+verificar_servico srv03 cron</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> escreva um script com um bloco de lógica repetido duas vezes, com pequena variação — reproduza a duplicação da história.</div></div>
+      <div class="lab-cmd">$ cat > teste.sh << 'EOF'
+#!/bin/bash
+echo "verificando app.log"
+[ -f app.log ] && echo "existe" || echo "faltando"
+echo "verificando erro.log"
+[ -f erro.log ] && echo "existe" || echo "faltando"
+EOF
+$ chmod +x teste.sh
+$ ./teste.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> script funcionando, mas com duplicação visível — o mesmo padrão de checagem repetido duas vezes.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver a duplicação com os próprios olhos, num exemplo pequeno, é o que fixa por que ela é um problema — não é abstrato, é o mesmo bloco copiado, pronto pra divergir silenciosamente.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> achar que duplicação "não faz mal" em blocos pequenos — foi exatamente um bloco pequeno, copiado três vezes, que causou o falso positivo da história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> refatore criando uma função que recebe o que varia como argumento.</div></div>
+      <div class="lab-cmd">$ cat > teste2.sh << 'EOF'
+#!/bin/bash
+verificar_arquivo() {
+  local arq="$1"
+  echo "verificando $arq"
+  [ -f "$arq" ] && echo "existe" || echo "faltando"
+}
+verificar_arquivo app.log
+verificar_arquivo erro.log
+EOF
+$ chmod +x teste2.sh && ./teste2.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> uma função só, chamada duas vezes com argumentos diferentes, produzindo o mesmo resultado do script duplicado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a refatoração exata que teria evitado o bug da história — agora existe um único lugar pra corrigir, não três.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o local antes da variável dentro da função — sem ele, a variável vaza pro escopo externo, podendo conflitar com outra variável de mesmo nome no resto do script.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> teste a função com um argumento que tenha espaço, confirmando que as aspas protegem corretamente.</div></div>
+      <div class="lab-cmd">$ touch "log com espaco.log"
+$ ./teste2.sh; verificar_arquivo() { local arq="$1"; [ -f "$arq" ] && echo "existe: $arq"; }; verificar_arquivo "log com espaco.log"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "existe: log com espaco.log" — o argumento com espaço tratado como um único valor, sem quebrar.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é exatamente a armadilha que a Questão 3 vai testar — argumento com espaço, sem aspas dentro da função, quebraria em dois valores separados.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> proteger com aspas só na chamada da função e esquecer de proteger também dentro dela — as aspas precisam estar nos dois lugares.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma função não se comportar como esperado com múltiplos argumentos, este é o ponto onde o chat com o Sênior-IA vai ajudar a debugar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione uma terceira chamada da mesma função, confirmando que o reuso funciona sem duplicar código.</div></div>
+      <div class="lab-cmd">$ echo 'verificar_arquivo config.conf' >> teste2.sh
+$ ./teste2.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> três chamadas funcionando, uma única definição de função — nenhum código novo copiado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> adicionar uma terceira chamada sem duplicar nada é a prova final de que a refatoração cumpriu o objetivo — reuso de verdade, não só organização cosmética.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> voltar ao hábito de copiar e colar "só dessa vez, é rápido" — é exatamente esse atalho que gerou o problema original da história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente função criada, argumentos usados, resultado das três chamadas.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Função: verificar_arquivo(arq)
+Chamadas: app.log, erro.log, config.conf
+Resultado: as três reportam existe/faltando corretamente, sem código duplicado</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> documentar a função e suas chamadas é o que permite outra pessoa (ou você, meses depois) entender rapidamente o que ela faz, sem precisar ler o código inteiro de novo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "criei uma função", sem listar os argumentos esperados — sem isso, reusar a função depois exige reler o código pra descobrir a assinatura.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> dentro de uma função, o que representam <code>$1</code>, <code>$2</code> e
+    <code>"$@"</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Primeiro argumento posicional passado para uma função ou script." onclick="openGlossary(0)">$1</span> é o primeiro
+      argumento passado na chamada, <span class="hint" data-tip="Segundo argumento posicional passado para uma função ou script." onclick="openGlossary(1)">$2</span> o segundo, e
+      <span class="hint" data-tip="Representa todos os argumentos passados, preservando cada um como item separado quando usado entre aspas." onclick="openGlossary(2)">"$@"</span> representa
+      TODOS os argumentos, preservados individualmente — cada chamada da função pode passar valores
+      diferentes pros mesmos parâmetros.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você tem o mesmo bloco de verificação copiado três vezes, mudando só o hostname.
+  Qual é a refatoração correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Manter os três blocos copiados perpetua o problema — qualquer correção futura precisa ser aplicada em três lugares, aumentando o risco de esquecer um deles.')"><b>A</b> Manter os três blocos copiados, já que cada um já está funcionando individualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Criar uma função verificar_servico() { host=$1; svc=$2; ssh $host systemctl status $svc; } e chamá-la três vezes com argumentos diferentes (verificar_servico srv01 nginx, etc) concentra a lógica num só lugar — qualquer correção futura acontece uma vez só.')"><b>B</b> Criar uma função verificar_servico() que recebe host e serviço como argumentos, e chamá-la três vezes com valores diferentes</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar os três servidores manualmente, fora do script, abandona a automação e volta ao trabalho repetitivo que o script deveria eliminar.')"><b>C</b> Rodar cada verificação manualmente fora do script, sem usar automação nenhuma</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Criar três scripts separados idênticos, cada um hardcoded pra um servidor, ainda tem o mesmo problema de duplicação — só mudou de lugar, continua em três arquivos em vez de três blocos.')"><b>D</b> Criar três scripts separados, um pra cada servidor, cada um com o hostname fixo no código</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Criar funções no Bash é como salvar uma receita no livro de culinária: você escreve o passo a passo uma única vez e chama a função pelo nome sempre que precisar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 As três chamadas retornam [OK] pra cada servidor — como isso confirma que a função funciona?</h2>
+  <p>Cada chamada de <code>verificar_servico</code> retorna o status esperado, e o log
+  (<code>verif.log</code>) registra os três resultados com timestamps.</p>
+  <div class='box question'>O que essa validação confirma sobre a refatoração?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Confirma que a mesma lógica, escrita uma única vez, produz resultados corretos e consistentes pra parâmetros diferentes — exatamente o objetivo de uma função: reutilizar código sem duplicar, sem perder confiabilidade em nenhuma das chamadas.')"><b>A</b> Confirma que a mesma lógica, escrita uma vez, funciona corretamente com parâmetros diferentes, sem precisar duplicar código</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não é coincidência — é exatamente o comportamento esperado de uma função bem escrita, reutilizando a mesma lógica testada pra cada chamada com argumentos diferentes.')"><b>B</b> É coincidência, os três servidores por acaso estavam com o mesmo status</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A função não precisa ser reescrita pra cada servidor — é justamente o oposto: a mesma definição de função atende qualquer host e serviço passados como argumento.')"><b>C</b> A função só funciona porque foi escrita de novo internamente pra cada servidor</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> As variáveis especiais '$1', '$2' e '$@' são as encomendas na esteira: recebem os parâmetros passados na chamada do script de forma ordenada.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se eu chamar a função sem aspas nos argumentos, não faz diferença?"</h2>
+  <p>Um colega chama <code>verificar_servico srv01 "app worker"</code> (nome de serviço com espaço) mas
+  esquece as aspas dentro da função ao usar <code>$svc</code>.</p>
+  <div class='box question'>Isso causa algum problema?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Sim — sem aspas ao redor de $svc dentro da função, o valor app worker (com espaço) seria dividido em dois argumentos separados (app e worker) ao ser usado em outro comando, quebrando a chamada. Aspas dentro da função protegem os argumentos recebidos do mesmo jeito que protegem qualquer outra variável.')"><b>A</b> Sim — sem aspas, "app worker" seria dividido em dois argumentos separados dentro da função, quebrando o comando que usa $svc</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Passar o argumento com aspas na chamada não protege automaticamente o uso dele dentro da função — as aspas precisam estar em AMBOS os lugares: na chamada e no uso interno da variável.')"><b>B</b> Não, já que o argumento foi passado com aspas na chamada da função, isso já basta</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O uso de local não protege contra a quebra de palavra por espaço — local só restringe o escopo da variável à função, não previne word splitting sem aspas.')"><b>C</b> Não, porque local já protege automaticamente contra esse tipo de problema</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A variável '$#' é o contador de passageiros na catraca: valida se o usuário informou o número exato de argumentos necessários antes de rodar o código.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique blocos de código repetidos com pequenas variações.</li>
+    <li>Encapsule a lógica numa função, usando $1, $2 pra receber os valores que variam.</li>
+    <li>Use local nas variáveis internas da função, evitando conflito externo.</li>
+    <li>Sempre coloque aspas nos argumentos, tanto na chamada quanto dentro da função.</li>
+    <li>Teste a função com múltiplas chamadas antes de confiar nela em produção.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Crie uma biblioteca compartilhada de funções (ex.: <code>lib_verificacoes.sh</code>) que
+  outros scripts da equipe podem importar com <code>source</code>. Isso evita reescrever a mesma função em
+  scripts diferentes, e garante que uma correção feita na biblioteca beneficia todo mundo que a usa.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A lógica repetida foi encapsulada numa função só.</li>
+    <li>Argumentos foram usados corretamente, com local e aspas.</li>
+    <li>A função foi testada com múltiplos valores diferentes.</li>
+    <li>O script ficou menor e mais fácil de manter que a versão duplicada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Refatorar código duplicado em função não é destrutivo — não existe rollback
+  necessário, além de manter o script original como referência até confirmar que a versão nova funciona
+  igual ou melhor.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "código duplicado multiplica erro" conecta com
+  o princípio de "uma fonte de verdade" que já apareceu em UUID no fstab (Semana 6) — centralizar em vez de
+  espalhar. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>criar uma
+  função verificar_servico() que recebe host e serviço como argumentos</b>, chamada três vezes com valores
+  diferentes. O ponto central do caso é este: código duplicado multiplica erro — função bem feita concentra
+  a regra em um lugar.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de escrever código reutilizável e organizado com funções. Amanhã
+  fecha a Semana 9: set -e e tratamento de erro — a diferença entre um script que falha silenciosamente e um
+  que falha alto, protegendo você de um desastre maior.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 9, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["$1, $2 (argumentos posicionais)","Primeiro, segundo (e assim por diante) argumento passado para uma função ou script.",
+   "É o primeiro e segundo ingrediente que você entrega pro cozinheiro seguir a receita."],
+  ["local (variável)","Palavra-chave que restringe uma variável ao escopo da função, evitando conflito com variáveis externas.",
+   "É a ferramenta que só existe dentro daquela oficina específica, sem interferir no resto da casa."],
+  ["\"$@\" (todos os argumentos)","Representa todos os argumentos passados, preservando cada um como item separado quando usado entre aspas.",
+   "É receber a lista inteira de itens, cada um mantendo sua própria identidade, não misturados numa string só."],
+  ["Função (bash)","Um bloco de código nomeado que encapsula uma lógica reutilizável, podendo receber argumentos.",
+   "É uma receita escrita uma vez, guardada, e usada sempre que precisar — sem reescrever do zero cada vez."],
+  ["Refatoração","Reorganizar código existente para melhorar sua estrutura, sem mudar o comportamento externo.",
+   "É reorganizar a caixa de ferramentas pra ficar mais fácil de usar, sem trocar nenhuma ferramenta por outra."],
+  ["Duplicação de código","Repetir o mesmo bloco de lógica em múltiplos lugares do script, em vez de reutilizá-lo.",
+   "É copiar a mesma página do manual em três lugares diferentes — corrigir um erro nela exige lembrar de mudar todos os três."],
+  ["Escopo de variável","O contexto (função, script inteiro) onde uma variável é visível e pode ser usada.",
+   "É a área onde uma regra específica se aplica — dentro da sala, ou no prédio inteiro."],
+  ["Chamada de função","O ato de executar uma função já definida, passando os argumentos necessários.",
+   "É acionar a receita já escrita, informando os ingredientes específicos daquela vez."],
+  ["Consistência entre chamadas","Garantir que a mesma função produza resultados corretos e confiáveis, não importa quais argumentos receba.",
+   "É a mesma máquina de café produzir um café de qualidade consistente, seja para expresso ou para um café mais longo."],
+  ["Manutenibilidade","Facilidade de entender, corrigir e expandir um código no futuro, sem introduzir novos erros.",
+   "É a diferença entre um manual bem organizado e uma pilha de anotações soltas — um é fácil de consultar depois, o outro não."],
+  ["Argumento com espaço (em função)","Um valor passado como argumento que contém espaço, exigindo aspas tanto na chamada quanto no uso interno.",
+   "É entregar um pacote com etiqueta de nome composto — se cortar a etiqueta no espaço, perde a identificação completa."],
+  ["Fonte única de verdade (single source)","Ter a lógica escrita em um único lugar, referenciada de todos os pontos que precisam dela.",
+   "É ter uma única cópia oficial do manual, que todo mundo consulta, em vez de várias cópias que podem ficar desatualizadas de formas diferentes."]
+];
+
+const sceneStripIdx = [0,2,3,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

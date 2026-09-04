@@ -1,0 +1,564 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 10 · Dia 2 — Healthcheck: Não Perder Falhas | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_BACKUP_TAR_RSYNC.html'>← Dia 1</a><a href='#'>Semana 10</a><a href='DIA_03_CRON_PATH.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> o backup só declarava sucesso se cada etapa realmente
+passasse. Hoje o mesmo princípio aparece num contexto diferente: um script de monitoramento que checa VÁRIAS
+coisas só é confiável se ele lembrar de TODAS as falhas, não só da última checagem feita.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: escrever healthchecks que não escondem falha antiga atrás
+de um teste recente que passou.</b> Você ganha o hábito de contar falhas ao longo de todo o script, não só
+confiar no código de saída do último comando.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 10 · Dia 2 | Nível Júnior</div>
+  <h1>Healthcheck: Não Perder Falhas</h1>
+  <p>healthcheck bom não esconde falha antiga só porque o último teste passou</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S10D02_HEALTHCHECK.png' alt='Prancha em seis quadros sobre healthcheck e código de saída'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Seu <code>healthcheck.sh</code> verifica disco, serviço e processo, imprimindo cada
+  resultado — mas o disco está em 97% de uso (FALHA) e o script ainda termina com <code>echo $?</code>
+  mostrando <code>0</code> (sucesso), porque o código de saída reflete só o ÚLTIMO comando checado.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Terça-feira, Semana 10</span>
+    Ontem você escreveu um backup que só declarava sucesso se cada etapa realmente passasse. Hoje o mesmo
+    princípio aparece disfarçado de outro jeito, num contexto que engana até quem já sabe da lição.<br><br>
+    Escrevi um <code>healthcheck.sh</code> que checava três coisas — disco, serviço, processo — imprimindo
+    o resultado de cada um. Parecia completo. Um dia o disco chegou a 97% de uso, uma falha real, séria. O
+    script imprimiu "DISCO: FALHA" na tela, exatamente como devia. Só que o sistema de monitoramento que
+    lia o <code>exit code</code> desse script nunca disparou o alerta. Rodei manualmente, testei
+    <code>echo $?</code> logo depois — 0. Sucesso. Com o disco em 97%.<br><br>
+    O bug era mais sutil do que parecia. <code>$?</code> guarda o código de saída do ÚLTIMO comando
+    executado, sempre — cada novo comando SOBRESCREVE o valor anterior. O disco tinha sido checado primeiro
+    (falhou), mas o serviço e o processo, checados depois, passaram. O <code>$?</code> final refletia só o
+    processo — a falha do disco tinha sido "engolida" silenciosamente por checagens seguintes bem-sucedidas.
+    O texto na tela mostrava a verdade, mas o código de saída, que é o que o monitoramento realmente
+    lê, mentia.<br><br>
+    A correção não foi reordenar os checks — isso só move o problema pra outra falha em posição diferente.
+    Foi usar um <b>contador de falhas</b>: uma variável que acumula cada checagem que falhar, ao longo do
+    script inteiro, e só no final decide o código de saída — <code>[ "$FALHAS" -eq 0 ] || exit 2</code>.
+    Nenhuma falha intermediária se perde, não importa a ordem. Hoje você escreve exatamente esse healthcheck,
+    testando de propósito falhas em posições diferentes até confiar que nenhuma delas escapa.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>FALHAS=0</code></td><td>Contador inicializado em zero, antes de qualquer verificação.</td></tr>
+    <tr><td><code>check_disco || FALHAS=$((FALHAS+1))</code></td><td>Se a checagem falhar, incrementa o contador — nunca é sobrescrito pela checagem seguinte.</td></tr>
+    <tr><td><code>[ "$FALHAS" -eq 0 ] || exit 2</code></td><td>Só retorna sucesso se NENHUMA checagem falhou, não importa a ordem.</td></tr>
+  </tbody></table>
+  <pre>--- sem contador, bug do último comando ---
+$ df -h /
+/dev/vda1  40G  39G  1G  97%  /
+$ ./healthcheck.sh
+DISCO: FALHA
+SERVIÇO: OK
+PROCESSO: OK
+$ echo $?
+0   # engoliu a falha do disco!
+
+--- com contador de falhas ---
+FALHAS=0
+check_disco || FALHAS=$((FALHAS+1))
+check_servico || FALHAS=$((FALHAS+1))
+[ "$FALHAS" -eq 0 ] || exit 2
+
+$ ./healthcheck.sh
+DISCO: FALHA
+SERVIÇO: OK
+PROCESSO: OK
+$ echo $?
+2   # alerta gerado corretamente</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> escreva um script com três checks fictícios, sem contador ainda, e force o primeiro a falhar — reproduza o bug da história.</div></div>
+      <div class="lab-cmd">$ cat > check.sh << 'EOF'
+#!/bin/bash
+check1() { echo "CHECK1: FALHA"; return 1; }
+check2() { echo "CHECK2: OK"; return 0; }
+check3() { echo "CHECK3: OK"; return 0; }
+check1
+check2
+check3
+EOF
+$ chmod +x check.sh
+$ ./check.sh; echo "exit code: $?"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "CHECK1: FALHA" aparece na tela, mas exit code final é 0 — a falha foi engolida, exatamente como na história.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir esse bug de propósito, com um exemplo mínimo, é o que torna concreto por que "aparece na tela" não é a mesma coisa que "reflete no exit code".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar visualmente na saída de texto do script e nunca checar o $? de verdade — é exatamente essa lacuna que faz um sistema de monitoramento nunca disparar o alerta.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione um contador de falhas e repita o teste com a mesma falha no primeiro check.</div></div>
+      <div class="lab-cmd">$ cat > check.sh << 'EOF'
+#!/bin/bash
+FALHAS=0
+check1() { echo "CHECK1: FALHA"; return 1; }
+check2() { echo "CHECK2: OK"; return 0; }
+check3() { echo "CHECK3: OK"; return 0; }
+check1 || FALHAS=$((FALHAS+1))
+check2 || FALHAS=$((FALHAS+1))
+check3 || FALHAS=$((FALHAS+1))
+[ "$FALHAS" -eq 0 ] || exit 2
+EOF
+$ chmod +x check.sh
+$ ./check.sh; echo "exit code: $?"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> exit code agora é 2 — a falha do primeiro check não se perdeu mais.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse é o contador exato que teria feito o alerta disparar de verdade na história — cada falha soma, independente de checks seguintes terem passado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar && em vez de || no encadeamento — && incrementaria o contador quando o check tivesse SUCESSO, invertendo toda a lógica.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> teste com a falha no segundo e no terceiro check também, confirmando que o contador funciona em qualquer posição.</div></div>
+      <div class="lab-cmd">$ sed -i 's/check1() { echo "CHECK1: FALHA"; return 1; }/check1() { echo "CHECK1: OK"; return 0; }/; s/check2() { echo "CHECK2: OK"; return 0; }/check2() { echo "CHECK2: FALHA"; return 1; }/' check.sh
+$ ./check.sh; echo "exit code: $?"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> exit code 2 de novo, mesmo com a falha agora no meio (não mais na primeira posição).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> testar a falha em posições diferentes é o que prova que a correção é estrutural, não um acaso que só funciona pro cenário específico testado antes.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só um cenário de falha (sempre na mesma posição) e assumir que está tudo resolvido — o bug original só apareceu porque a falha não era a última checagem.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se um healthcheck real não capturar uma falha esperada, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a lógica.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> teste também o caso onde todos os checks passam, confirmando que exit 0 continua funcionando corretamente.</div></div>
+      <div class="lab-cmd">$ sed -i 's/return 1/return 0/g; s/FALHA/OK/g' check.sh
+$ ./check.sh; echo "exit code: $?"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> exit code 0 — quando tudo está realmente saudável, o script confirma isso corretamente, sem falso alarme.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> confirmar o caso totalmente saudável é o que garante que a correção não introduziu um novo problema, tipo alertar mesmo quando está tudo bem.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só cenários de falha e nunca confirmar o caso saudável — um healthcheck que sempre alerta é tão inútil quanto um que nunca alerta.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente cenários testados (falha em cada posição, tudo OK), exit codes obtidos em cada um.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Falha no check1 (primeiro): exit 2, capturado
+Falha no check2 (meio): exit 2, capturado
+Todos OK: exit 0, correto
+Contador de falhas confirmado independente de ordem</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse registro com múltiplos cenários é a prova de que o healthcheck é confiável em qualquer situação, não só no caso que aconteceu de ser testado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só um cenário — sem os múltiplos casos testados, fica impossível provar depois que a correção realmente cobre qualquer ordem de falha.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que <code>echo $?</code> no final de um script com vários checks só reflete
+    o resultado do ÚLTIMO comando?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Variável especial que guarda o código de saída do comando mais recente executado." onclick="openGlossary(0)">$?</span> sempre é
+      SOBRESCRITO a cada novo comando — se o disco falhou primeiro mas o processo (checado por último) passou,
+      <code>$?</code> no final mostra o resultado do processo, "engolindo" a falha do disco que aconteceu
+      antes. É preciso um
+      <span class="hint" data-tip="Variável que acumula quantas verificações falharam ao longo de um script." onclick="openGlossary(1)">contador de falhas</span> pra
+      não perder esse histórico.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Seu healthcheck mostra DISCO: FALHA mas termina com exit code 0, porque o
+  disco foi checado primeiro e os checks seguintes passaram. Qual é a correção correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reordenar os checks só move o problema — se o disco for checado por último, ele resolve esse caso específico, mas qualquer OUTRA falha que não seja a última ainda seria engolida pelo mesmo bug estrutural.')"><b>A</b> Reordenar os checks pra colocar o disco por último, garantindo que ele seja o resultado final</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Usar um contador de falhas (FALHAS=0; check_disco || FALHAS=$((FALHAS+1)); ...) que acumula cada falha ao longo do script, e só retornar sucesso (exit 0) se FALHAS for zero no final, garante que nenhuma falha intermediária seja esquecida, não importa a ordem dos checks.')"><b>B</b> Usar um contador de falhas que soma cada check que falhar, e só retornar sucesso no final se o contador for zero</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Remover a checagem de disco elimina justamente a informação mais crítica que o healthcheck deveria capturar, sem resolver o problema estrutural do código de saída.')"><b>C</b> Remover a checagem de disco do script, já que ela está causando o problema</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar o script duas vezes seguidas não corrige o bug de lógica — o problema é estrutural (só o último $? importa), repetir a execução não muda isso.')"><b>D</b> Rodar o script duas vezes seguidas e comparar os dois resultados manualmente</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O script de Healthcheck é o termômetro inteligente da UTI: checa se o serviço web responde código 200 e se o banco aceita conexões a cada 60 segundos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Com o contador implementado, o exit code agora é 2 mesmo com o disco checado primeiro — o que isso prova?</h2>
+  <p>O mesmo cenário (disco em falha, checado primeiro) agora resulta em <code>exit 2</code>, gerando um
+  alerta real de monitoramento.</p>
+  <div class='box question'>O que essa correção demonstra sobre a confiabilidade do healthcheck?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Demonstra que o healthcheck agora é confiável independente da ORDEM das checagens — qualquer falha, em qualquer posição do script, é capturada pelo contador e reflete corretamente no código de saída final, gerando alerta real de monitoramento.')"><b>A</b> Demonstra que o resultado final agora é confiável independente da ordem das checagens, capturando qualquer falha que aconteça</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O exit code 2 não é aleatório — ele reflete diretamente o contador de falhas acumulado, um resultado determinístico e correto baseado no estado real do sistema checado.')"><b>B</b> Demonstra que o script agora gera resultados aleatórios, sem relação com o estado real do sistema</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Adicionar um contador de falhas não deixa o script mais lento de forma perceptível — é uma operação aritmética simples, o ganho de confiabilidade não tem custo real de performance nesse caso.')"><b>C</b> Demonstra que o script ficou mais lento por causa da variável extra sendo somada</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A saída estruturada em código de saída (exit 0 saudável, exit 2 crítico) é a luz verde e vermelha para os sistemas de monitoramento como Zabbix e Prometheus.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "exit 2 e exit 1 significam níveis diferentes de gravidade, tipo um sistema de pontuação?"</h2>
+  <p>Um colega assume que <code>exit 2</code> significa "mais grave" que <code>exit 1</code>, como se fosse
+  uma escala numérica de severidade padronizada.</p>
+  <div class='box question'>Essa suposição está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta como regra geral — códigos de saída diferentes de zero (1, 2, 3...) não têm um significado universal de gravidade crescente no bash; o que cada número significa é definido pelo autor de CADA script ou ferramenta específica (por exemplo, muitas ferramentas de monitoramento usam convenções como 0=OK, 1=warning, 2=critical, mas isso é convenção da ferramenta, não regra do shell).')"><b>A</b> Não como regra universal — o significado de cada código diferente de zero é definido por quem escreveu o script ou ferramenta específica, não por uma escala padrão do bash</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe uma escala numérica universal automática no bash — cada script ou ferramenta define o que cada código específico significa, dentro da própria documentação ou convenção adotada.')"><b>B</b> Sim — o bash sempre trata números maiores como erros mais graves automaticamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Códigos de saída vão de 0 a 255, não são limitados a 0 ou 1 — existe uma faixa maior disponível, com significados definidos por convenção de cada ferramenta, não uma regra binária fixa.')"><b>C</b> Sim, mas só até o código 1; depois disso os números não têm significado nenhum</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Testar a porta local com 'nc -zvw3 127.0.0.1 80' é dar um toque na campainha: confirma se o serviço está escutando na porta antes de testar a resposta HTTP completa.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Nunca confie só no $? do último comando num script com múltiplas checagens.</li>
+    <li>Use um contador de falhas, incrementado a cada checagem que falhar.</li>
+    <li>Só retorne sucesso (exit 0) se o contador de falhas for zero no final.</li>
+    <li>Documente o significado de cada código de saída usado (convenção do seu script).</li>
+    <li>Teste com falhas em posições diferentes, confirmando que nenhuma é perdida.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Adote shellcheck ou uma revisão de checklist padrão pra todo healthcheck novo da equipe,
+  confirmando explicitamente que ele usa contador de falhas em vez de depender do $? do último comando.
+  Isso evita reintroduzir o mesmo bug estrutural em outro script de monitoramento no futuro.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O script usa um contador de falhas, não confia só no $? do último comando.</li>
+    <li>Falhas em qualquer posição do script são corretamente detectadas.</li>
+    <li>O exit code final reflete a saúde real de todo o sistema checado.</li>
+    <li>O significado de cada código de saída usado está documentado.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Um healthcheck é somente leitura sobre o sistema — não existe rollback necessário
+  pra ele mesmo. O risco real de um healthcheck com bug é o dano indireto: alertas que nunca disparam,
+  deixando um problema real sem monitoramento.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "não confie só no último resultado" conecta com
+  o backup de ontem (verificar cada etapa) — a mesma disciplina, agora aplicada a monitoramento contínuo. O
+  Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>usar um
+  contador de falhas que soma cada check que falhar, retornando sucesso só se o contador for zero</b>. O
+  ponto central do caso é este: healthcheck bom não esconde falha antiga só porque o último teste passou.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de escrever healthchecks confiáveis que não perdem falhas. Amanhã
+  você aprende a agendar scripts com cron — e a pegadinha clássica do PATH que faz um script funcionar
+  manualmente mas falhar quando agendado.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 10, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["$? (último código de saída)","Variável especial que guarda o código de saída do comando mais recente executado.",
+   "É a nota da última prova feita — não mostra o boletim inteiro, só o resultado mais recente."],
+  ["Contador de falhas","Variável que acumula quantas verificações falharam ao longo de um script.",
+   "É a contagem de itens reprovados numa inspeção completa, não só o resultado do último item verificado."],
+  ["healthcheck.sh","Script que verifica múltiplos aspectos da saúde de um sistema (disco, serviço, processo) numa única execução.",
+   "É o checkup médico completo, passando por vários exames diferentes numa única consulta."],
+  ["Falha engolida (swallowed failure)","Uma falha real que não é refletida no resultado final por causa de checagens seguintes que passaram.",
+   "É reprovar o primeiro exame mas ser aprovado no boletim final só porque os exames seguintes foram bem."],
+  ["exit 2 (convenção de monitoramento)","Código de saída frequentemente usado por convenção para indicar estado crítico em ferramentas de monitoramento.",
+   "É o carimbo 'urgente' numa correspondência — não é uma regra universal, é uma convenção adotada por quem organiza o sistema."],
+  ["$((FALHAS+1)) (aritmética em bash)","Sintaxe para realizar operações matemáticas simples dentro do bash, como incrementar uma variável.",
+   "É a calculadora embutida usada pra somar mais um item à contagem, sem precisar de ferramenta externa."],
+  ["Ordem de execução (independência)","Garantir que o resultado final de um script não dependa de qual checagem foi executada por último.",
+   "É um julgamento justo que considera todas as evidências apresentadas, não só a última testemunha a falar."],
+  ["Alerta de monitoramento","Notificação disparada quando um healthcheck detecta uma condição de falha real.",
+   "É o sino que toca quando algo realmente precisa de atenção, não decorativo nem silencioso por engano."],
+  ["Convenção de código de saída","Acordo definido por quem escreve um script sobre o que cada número de saída específico significa.",
+   "É o dicionário particular daquele sistema — 2 pode significar 'crítico' aqui, mas isso não vale universalmente em outro script."],
+  ["Verificação de estado do sistema","Processo de checar múltiplos indicadores (disco, memória, serviços) para confirmar a saúde geral de um servidor.",
+   "É a rodada completa de verificação de segurança antes de liberar um equipamento pra uso, não só olhar uma peça."],
+  ["Script de monitoramento contínuo","Um script projetado para rodar repetidamente, detectando problemas assim que eles surgem.",
+   "É a ronda do segurança, feita em intervalos regulares, não uma checagem única e esquecida."],
+  ["Confiabilidade de script","A propriedade de um script sempre produzir um resultado correto e consistente, independente das circunstâncias.",
+   "É o instrumento de medição que dá o mesmo resultado correto toda vez que é usado, não só às vezes."]
+];
+
+const sceneStripIdx = [0,1,3,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

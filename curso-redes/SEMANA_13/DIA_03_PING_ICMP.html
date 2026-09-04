@@ -1,0 +1,528 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 13 · Dia 3 — Ping e ICMP | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_IP_CIDR_SUBREDE.html'>← Semana 13, Dia 2</a><a href='#'>Semana 13</a><a href='DIA_04_PORTAS_SOCKETS_SS.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Você já sabe que ping testa a camada de rede (ICMP). Hoje
+o erro clássico aparece: "ping OK, então rede OK?" Não — ping prova só que o host responde, nada sobre porta
+ou aplicação. Fechar um chamado só com ping é o mesmo erro do reboot às cegas, agora em rede.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: testar cada camada com a ferramenta certa, não só ping.</b>
+Você ganha a sequência completa — ICMP (ping) prova host, porta TCP (nc) prova conexão, resposta HTTP (curl)
+prova aplicação — e a disciplina de nunca fechar um chamado sem testar as três.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 13 · Dia 3 | Nível Júnior — Redes</div>
+  <h1>Ping e ICMP</h1>
+  <p>ping vivo não é aplicação viva — teste IP, porta e resposta real antes de fechar chamado</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S13D03_PING_ICMP.png' alt='Prancha em seis quadros sobre a diferença entre ping (ICMP), teste de porta TCP e resposta real de aplicação HTTP'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket: "Site não abre." Você roda ping, recebe resposta, e marca "Motivo anotado: ping OK"
+  como se o caso estivesse fechado. Mas ping só prova que o host responde a ICMP — nada sobre a porta 80
+  estar aberta, nem sobre o serviço web estar de pé.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um colega fechou um chamado de "site fora do ar" com a nota "testei, ping responde, rede OK" — e escalou
+    de volta pro time de aplicação. Três horas depois o chamado voltou: o site continuava fora do ar. Eu
+    rodei <code>nc -zv</code> na porta 80 e recebi timeout, mesmo com ping respondendo perfeitamente. Fui
+    direto no servidor: <code>ss -tlnp | grep ':80'</code> não retornou nada, e <code>systemctl status
+    nginx</code> mostrava <code>inactive (dead)</code>. O nginx tinha caído num crash silencioso horas antes.
+    Ping nunca testou isso — ICMP e HTTP são protocolos completamente diferentes, em camadas diferentes.
+    <br><br>
+    O ponto que fica: "ping OK" fechar um chamado é a mesma armadilha de "interface UP" significar rede
+    funcionando. Cada teste prova só a camada que ele testa — nunca as de cima. Três testes, três camadas,
+    sempre.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Teste</th><th>Comando</th><th>O que prova</th></tr></thead><tbody>
+    <tr><td>ICMP Echo</td><td><code>ping -c 3 host</code></td><td>Host alcançável na rede (camada de rede).</td></tr>
+    <tr><td>TCP Porta</td><td><code>nc -zv host porta</code></td><td>Porta aberta e aceitando conexão (camada de transporte).</td></tr>
+    <tr><td>HTTP Resposta</td><td><code>curl --connect-timeout 5 http://host</code></td><td>Aplicação respondendo de verdade (camada de aplicação).</td></tr>
+  </tbody></table>
+  <pre>$ ping -c 3 192.168.10.50
+3 packets transmitted, 3 received, 0% packet loss
+
+$ curl --connect-timeout 5 http://192.168.10.50
+curl: (28) Connection timed out after 5000 milliseconds
+
+$ nc -zv 192.168.10.50 80
+nc: connect to 192.168.10.50 port 80 (tcp) timed out
+
+--- investigando localmente no servidor ---
+$ ss -tlnp | grep ':80'
+# (sem saída)
+
+$ systemctl status nginx --no-pager
+● nginx.service - A high performance web server
+   Active: inactive (dead)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme a camada de rede com ping.</div></div>
+      <div class="lab-cmd">$ ping -c 3 127.0.0.1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 3 pacotes transmitidos, 3 recebidos, 0% de perda.</div>
+      <div class="lab-why"><b>Por quê:</b> confirma só que o host responde — ainda não diz nada sobre porta ou aplicação.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tratar ping bem-sucedido como "rede está tudo ok" e fechar o chamado aqui.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: pare um serviço web (se houver) e teste a porta específica.</div></div>
+      <div class="lab-cmd">$ systemctl stop nginx
+$ nc -zv 127.0.0.1 80</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> connection refused ou timed out, dependendo do estado do firewall.</div>
+      <div class="lab-why"><b>Por quê:</b> nc testa especificamente a camada de transporte — a porta aceita conexão ou não, independente do host responder a ping.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir "connection refused" (host respondeu, ninguém escutando) com "timeout" (sem resposta nenhuma, possível firewall) — são causas diferentes.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: investigue localmente no servidor e compare com o resultado do nc.</div></div>
+      <div class="lab-cmd">$ ss -tlnp | grep ':80'
+$ systemctl status nginx --no-pager</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nenhuma linha de saída em ss, serviço inactive em systemctl.</div>
+      <div class="lab-why"><b>Por quê:</b> a investigação local confirma a causa exata (serviço parado) em vez de deixar a suspeita solta entre porta/firewall/aplicação.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pra reiniciar o serviço sem checar os logs antes — você perde a chance de descobrir por que ele caiu.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se nc mostrar connection refused mas ss mostrar o serviço escutando, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar firewall como possível causa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: reinicie o serviço web e repita os três testes em sequência.</div></div>
+      <div class="lab-cmd">$ systemctl start nginx
+$ ping -c 3 127.0.0.1 && nc -zv 127.0.0.1 80 && curl --connect-timeout 5 http://127.0.0.1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ping OK, nc succeeded, curl retornando conteúdo HTML.</div>
+      <div class="lab-why"><b>Por quê:</b> repetir os três testes depois da correção é o que confirma que TODAS as camadas voltaram, não só a que você mexeu.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só a camada que você corrigiu e assumir que as outras continuam boas — sempre revalide as três.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente os três resultados lado a lado.</div></div>
+      <div class="lab-cmd"># ICMP (ping): OK
+# TCP (nc -zv porta 80): OK
+# HTTP (curl): OK — HTML recebido</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> checklist com ICMP, porta e aplicação, todos confirmados — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> esse checklist de três linhas é o que evita fechar o próximo chamado com base só num ping.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> anotar só "resolvido" sem registrar qual camada tinha falhado — a causa raiz se perde e o padrão não é reconhecido da próxima vez.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as três camadas que ping, teste de porta e teste de aplicação confirmam,
+    respectivamente?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Protocolo usado por ping para testar se um host responde na camada de rede." onclick="openGlossary(0)">ICMP (ping)</span>
+      prova que o host está alcançável (camada de rede). Um teste de conexão
+      <span class="hint" data-tip="Verificar se uma porta TCP específica aceita conexão, sem enviar dados de aplicação." onclick="openGlossary(1)">TCP na porta</span>
+      (com nc) prova que o serviço aceita conexão (camada de transporte). Uma resposta real de
+      <span class="hint" data-tip="Verificar se o protocolo de aplicação (como HTTP) realmente responde ao pedido enviado." onclick="openGlossary(2)">HTTP</span>
+      (com curl) prova que a aplicação de fato responde (camada de aplicação). Três camadas, três testes
+      diferentes.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>ping 192.168.10.50 responde normalmente, mas o site continua fora do ar. Qual é
+  a explicação mais precisa e o próximo passo correto?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'ping usa ICMP, que só testa se o host responde na camada de rede — não diz nada sobre a porta 80 estar aberta nem sobre o serviço web estar rodando. O próximo passo correto é testar a porta com nc -zv ou curl, testando as camadas de transporte e aplicação separadamente.')"><b>A</b> ping só prova alcançabilidade via ICMP, na camada de rede — o próximo passo é testar a porta 80 com nc -zv ou curl, testando transporte e aplicação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ping responder já descarta a hipótese de a rede estar totalmente fora do ar — o próximo passo não é repetir o mesmo teste, e sim avançar para as camadas superiores (transporte, aplicação) que ainda não foram testadas.')"><b>B</b> A rede provavelmente está toda fora do ar — é preciso reiniciar o roteador principal</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar o servidor sem antes testar porta e aplicação pula etapas do diagnóstico — o ping já respondeu, então o servidor está de pé; o problema está em outra camada ainda não testada.')"><b>C</b> É preciso reiniciar o servidor inteiro, já que o ping OK não é suficiente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ping mede latência (tempo de resposta), mas isso não é a explicação do site estar fora do ar quando o ping em si já responde normalmente — o problema está em outra camada, não em performance de rede.')"><b>D</b> O ping está medindo a latência errada — é preciso aumentar o timeout do ping</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O PING (ICMP Echo Request/Reply) é como o sonar do submarino: emite um pulso sonoro e mede quantos milissegundos o eco demora para bater no alvo e voltar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 ss -tlnp | grep ':80' não retornou nada, e systemctl status nginx mostra inactive (dead)</h2>
+  <p>Agora você tem evidência concreta, não só suposição.</p>
+  <div class='box question'>Com essa evidência, qual é a conclusão correta sobre a causa do site fora do ar?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'ss confirma que nada está escutando na porta 80 localmente, e systemctl confirma que o serviço nginx está parado — as duas evidências juntas apontam claramente que a causa é o serviço web parado, não um problema de rede, porta ou firewall.')"><b>A</b> O serviço web (nginx) está parado — nenhum processo está escutando na porta 80, confirmado tanto por ss quanto por systemctl</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A evidência (nginx inactive, nada escutando na porta) não aponta para firewall — se fosse bloqueio de firewall, provavelmente haveria um processo escutando localmente, só bloqueado de fora.')"><b>B</b> O firewall está bloqueando a porta 80 — é preciso revisar as regras de firewall</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A evidência já descarta problema de DNS — o teste foi feito diretamente pelo IP (192.168.10.50), sem envolver resolução de nome nenhuma.')"><b>C</b> O problema é de DNS — o nome do site não está resolvendo para o IP correto</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A mensagem 'Destination Host Unreachable' é o carteiro devolvendo a carta dizendo que a rua existe, mas aquela casa específica não foi encontrada.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se ping falha, isso sempre significa que o host está desligado?"</h2>
+  <p>Um colega, vendo ping falhar, já assume que o servidor caiu completamente.</p>
+  <div class='box question'>Por que essa suposição pode estar errada?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Muitos firewalls e servidores são configurados para bloquear ou ignorar ICMP (ping) por política de segurança, mesmo estando totalmente ligados e funcionando — nesse caso, ping falhar não prova que o host está desligado, só que ICMP especificamente está sendo bloqueado ou ignorado.')"><b>A</b> Muitos firewalls bloqueiam ICMP por política de segurança — o host pode estar ligado e funcionando normalmente, só não respondendo a ping</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'ping falhar não é garantia absoluta de host desligado — bloqueio de ICMP por firewall é uma causa comum e não tem relação com o estado real de ligado/desligado do host.')"><b>B</b> Sim, ping falhar sempre significa host desligado, sem exceção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'ping não depende do horário do dia — sua falha ou sucesso está relacionada à configuração de rede/firewall, não a variações de horário.')"><b>C</b> Só é confiável em determinados horários do dia, por causa de variações de tráfego</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Bloquear PING em firewalls não esconde o servidor de ataques reais: scanners avançados testam portas TCP abertas direto, ignorando se o ICMP responde ou não.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Nunca feche um chamado de rede só com base num ping bem-sucedido.</li>
+    <li>Teste a porta específica com nc -zv, confirmando a camada de transporte.</li>
+    <li>Teste a resposta real da aplicação com curl (ou similar), confirmando a camada de aplicação.</li>
+    <li>Se algo falhar, investigue localmente no servidor com ss -tlnp e systemctl status.</li>
+    <li>Documente qual camada exatamente falhou, com evidência de cada teste.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Padronize o checklist de três testes (ICMP → TCP → HTTP) como critério mínimo pra fechar
+  qualquer chamado de "site/serviço fora do ar" — nunca aceite "ping OK" como diagnóstico completo, seu ou de
+  outro técnico.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>ping foi tratado como confirmação de host, não de aplicação.</li>
+    <li>nc -zv (ou equivalente) testou a porta especificamente.</li>
+    <li>curl (ou equivalente) confirmou resposta real da aplicação.</li>
+    <li>Quando algo falhou, a investigação local (ss, systemctl) confirmou a causa exata.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Todos os comandos de hoje (ping, nc, curl, ss, systemctl status) são de leitura —
+  não existe rollback necessário. O cuidado real é resistir à tentação de fechar um chamado só com um teste
+  parcial, quando três camadas diferentes ainda não foram confirmadas.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "um teste parcial não é validação completa"
+  conecta com a Semana 10 (healthcheck cobrindo múltiplos aspectos, não só um) — mesma disciplina aplicada à
+  rede. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a explicação certa foi <b>ping só
+  prova alcançabilidade via ICMP</b> — o próximo passo correto é testar porta e aplicação separadamente. O
+  ponto central do caso é este: ping vivo não é aplicação viva — teste IP, porta e resposta real antes de
+  fechar chamado.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de testar as três camadas relevantes (rede, transporte, aplicação)
+  antes de declarar um problema resolvido ou de outra causa. Amanhã você aprofunda a camada de transporte: o
+  que é exatamente um socket, e a diferença entre "connection refused" e "timeout" — dois erros que parecem
+  iguais, mas contam histórias completamente diferentes.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 13, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["ICMP (Internet Control Message Protocol)","Protocolo usado por ferramentas como ping para testar se um host responde na camada de rede.",
+   "É bater na porta e esperar alguém dizer 'oi, estou aqui' — não diz nada sobre o que a pessoa está fazendo lá dentro."],
+  ["Teste de porta TCP (nc -zv)","Verificar se uma porta TCP específica aceita conexão, sem enviar dados de aplicação de verdade.",
+   "É verificar se uma porta específica do prédio está destrancada — ainda não é entrar na sala, só confirmar que dá pra tentar."],
+  ["Resposta HTTP real (curl)","Enviar uma requisição real ao protocolo de aplicação (como HTTP) e confirmar que ele responde como esperado.",
+   "É entrar na sala e realmente conversar com quem está lá dentro — a prova definitiva de que o serviço funciona."],
+  ["Connection refused","Erro que indica que o host respondeu, mas nenhum serviço está escutando na porta solicitada.",
+   "É alguém abrir a porta e dizer 'aqui não tem ninguém esperando por você' — resposta clara e imediata."],
+  ["Timeout (connection timed out)","Erro que indica que nenhuma resposta chegou dentro do tempo esperado — pode ser bloqueio de firewall ou rota quebrada.",
+   "É bater na porta e ninguém nem aparecer pra dizer nada — o silêncio pode significar bloqueio, não necessariamente ausência."],
+  ["ss -tlnp","Comando que lista sockets TCP em escuta, incluindo o processo (PID) responsável por cada porta.",
+   "É a lista de campainhas do prédio, agora mostrando também o nome do morador responsável por cada uma."],
+  ["Princípio do menor privilégio (aplicado a testes)","Usar apenas o teste necessário para confirmar uma camada específica, sem pular direto para ações mais invasivas.",
+   "É pedir pra ver a identidade antes de liberar o acesso completo — cada teste confirma um nível específico de confiança."],
+  ["Diagnóstico incompleto (armadilha do 'ping OK')","Erro de tratar um único teste bem-sucedido (como ping) como prova de que todo o sistema está funcionando.",
+   "É concluir que o restaurante está aberto só porque a luz da fachada está acesa, sem checar se a cozinha está funcionando."],
+  ["curl --connect-timeout","Opção do curl que define um tempo limite para tentar estabelecer conexão, evitando espera indefinida.",
+   "É dar um prazo máximo de espera na porta antes de desistir e concluir que realmente ninguém vai atender."],
+  ["Camadas testadas separadamente","Prática de confirmar rede, transporte e aplicação com testes distintos, em vez de assumir que um teste cobre todas as camadas.",
+   "É testar freio, motor e direção do carro separadamente, em vez de assumir que 'ligou' significa que tudo funciona."],
+  ["systemctl status (investigação local)","Verificar o estado de um serviço diretamente no servidor, como parte da investigação de uma falha de rede.",
+   "É entrar na sala pessoalmente pra ver se a luz realmente está acesa, em vez de confiar só no que se vê de fora."],
+  ["Evidência antes de fechar chamado","Prática de reunir prova de cada camada relevante antes de considerar um problema de rede resolvido ou diagnosticado.",
+   "É o médico confirmar com exames antes de dar alta — um sintoma sumir não é a mesma coisa que confirmar a cura."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

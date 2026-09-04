@@ -1,0 +1,530 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 10 · Dia 5 — Idempotência e Revisão Final | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_ENV_CONFIG_EXTERNO.html'>← Dia 4</a><a href='#'>Semana 10</a><a href='../SEMANA_11/DIA_01_PROCESSO_DE_BOOT.html'>Semana 11, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com toda a Semana 10:</b> backup verificado, healthcheck confiável, cron
+sem pegadinha de PATH, segredos protegidos — hoje fecha com a última peça de um script de produção real:
+rodar duas vezes não pode ser pior que rodar uma vez só.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: escrever automação idempotente, segura pra rodar quantas
+vezes for preciso.</b> Você ganha o hábito de checar se uma mudança já foi aplicada antes de aplicá-la de
+novo.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 10 · Dia 5 | Nível Júnior</div>
+  <h1>Idempotência: Rodar de Novo Não Pode Multiplicar o Erro</h1>
+  <p>automação profissional pode rodar de novo sem piorar o ambiente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S10D05_IDEMPOTENCIA_REVISAO.png' alt='Prancha em seis quadros sobre idempotência'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você roda <code>add_backup_host.sh</code> duas vezes por engano (clique duplo, execução
+  manual repetida). O script adiciona uma linha em <code>/etc/hosts</code> toda vez que roda — agora existem
+  duas linhas idênticas, e na terceira execução vão ser três.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um cron reagendou sozinho depois de uma falha de rede no meio da execução, e rodou
+    <code>add_backup_host.sh</code> mais uma vez sem ninguém perceber. O script não tinha guarda nenhuma — só
+    adicionava a linha em <code>/etc/hosts</code> direto. Resultado: três linhas idênticas acumuladas ao
+    longo de duas semanas, e um admin gastou meia hora tentando entender por que a resolução de nome do
+    <code>backup-srv</code> às vezes demorava mais que o normal (o sistema lia a primeira ocorrência, mas o
+    arquivo inchado com duplicatas virou sinal de que algo automatizado estava fora de controle). A correção
+    não foi vigiar o cron pra não rodar duas vezes — foi tornar o próprio script seguro pra rodar quantas
+    vezes fosse, checando antes de agir. O ponto que fica: automação de verdade não confia que vai rodar só
+    uma vez — ela é escrita pra não se importar quantas vezes roda.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>grep -qF "$HOST_LINE" /etc/hosts</code></td><td>Verifica se a linha exata já existe — -q silencioso, -F busca texto literal.</td></tr>
+    <tr><td><code>... || echo "$HOST_LINE" | sudo tee -a /etc/hosts</code></td><td>Só adiciona se o grep NÃO encontrou (comando falhou = linha não existe).</td></tr>
+    <tr><td><code>grep -c "backup-srv" /etc/hosts</code></td><td>Conta ocorrências — deve ser sempre 1, não importa quantas vezes o script rodou.</td></tr>
+  </tbody></table>
+  <pre>--- sem guarda, duas execuções ---
+$ sudo ./add_backup_host.sh
+$ sudo ./add_backup_host.sh
+$ grep backup-srv /etc/hosts
+192.168.1.50 backup-srv
+192.168.1.50 backup-srv   # duplicado!
+
+--- com guarda de idempotência ---
+HOST_LINE="192.168.1.50 backup-srv"
+grep -qF "$HOST_LINE" /etc/hosts || \
+  echo "$HOST_LINE" | sudo tee -a /etc/hosts >/dev/null
+
+$ sudo ./add_backup_host.sh
+$ sudo ./add_backup_host.sh
+$ sudo ./add_backup_host.sh
+$ grep -c "backup-srv" /etc/hosts
+1   # sempre 1, não importa quantas vezes rodou</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> escreva um script simples SEM guarda que adiciona uma linha a um arquivo de teste, e rode duas vezes.</div></div>
+      <div class="lab-cmd">$ cat > add_linha.sh &lt;&lt;'EOF'
+#!/bin/bash
+echo "192.168.1.50 backup-srv" >> teste_hosts.txt
+EOF
+$ chmod +x add_linha.sh
+$ ./add_linha.sh
+$ ./add_linha.sh
+$ cat teste_hosts.txt
+192.168.1.50 backup-srv
+192.168.1.50 backup-srv</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> linha duplicada no arquivo, reproduzindo o problema.</div>
+      <div class="lab-why"><b>Por quê:</b> o script só sabe fazer uma coisa — acrescentar — sem nunca checar se o efeito já existe.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione uma guarda com grep -qF antes de adicionar a linha, e teste de novo.</div></div>
+      <div class="lab-cmd">$ cat > add_linha2.sh &lt;&lt;'EOF'
+#!/bin/bash
+LINHA="192.168.1.50 backup-srv"
+grep -qF "$LINHA" teste_hosts2.txt 2>/dev/null || echo "$LINHA" >> teste_hosts2.txt
+EOF
+$ chmod +x add_linha2.sh
+$ ./add_linha2.sh
+$ ./add_linha2.sh
+$ cat teste_hosts2.txt
+192.168.1.50 backup-srv</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> mesmo rodando duas vezes, só uma linha no arquivo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> escrever a guarda checando a coisa errada (por exemplo, só se o arquivo existe, não se a linha específica existe) — isso passa no teste ingênuo mas não garante idempotência real.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> rode o script corrigido 5 vezes seguidas e confirme com grep -c que o resultado continua sendo 1.</div></div>
+      <div class="lab-cmd">$ for i in 1 2 3 4 5; do ./add_linha2.sh; done
+$ grep -c "backup-srv" teste_hosts2.txt
+1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> contagem sempre 1, confirmando idempotência real.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se um script parecer idempotente mas ainda causar efeitos colaterais em execuções repetidas, este é o ponto onde o chat com o Sênior-IA vai ajudar a identificar a causa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> revise todos os scripts que você escreveu nas Semanas 9 e 10, identificando quais são idempotentes e quais não são.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista pessoal de scripts revisados, com nota sobre idempotência de cada um.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente o fechamento da Semana 10 e do bloco de automação inteiro: scripts escritos, princípios aplicados.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que significa um script ser <code>idempotente</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Propriedade de uma operação que produz o mesmo resultado final, não importa quantas vezes seja executada." onclick="openGlossary(0)">Idempotência</span> significa
+      que rodar o script UMA vez ou DEZ vezes deixa o sistema exatamente no mesmo estado final — a
+      <span class="hint" data-tip="Verificação que confirma se uma condição já é verdadeira antes de tentar aplicar uma mudança." onclick="openGlossary(1)">guarda de verificação</span> (checar
+      se algo já existe antes de adicionar) é o que garante isso.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Seu script adiciona uma linha em /etc/hosts toda vez que roda, sem checar se ela
+  já existe. Qual é a correção correta pra torná-lo seguro pra rodar múltiplas vezes?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Limpar manualmente antes de cada execução é um passo extra fácil de esquecer, e não resolve o script em si — a correção real é fazer o próprio script ser seguro, não depender de disciplina externa.')"><b>A</b> Sempre limpar /etc/hosts manualmente antes de rodar o script de novo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Adicionar uma guarda com grep -qF $HOST_LINE /etc/hosts || echo $HOST_LINE | sudo tee -a /etc/hosts >/dev/null garante que a linha só seja adicionada se ainda não existir — rodando uma vez ou dez vezes, o resultado final é sempre o mesmo, uma linha só.')"><b>B</b> Adicionar uma guarda que verifica com grep -qF se a linha já existe antes de adicionar, usando || pra só agir se não existir</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Impedir toda execução repetida é uma solução desproporcional — o script deveria ser seguro pra rodar de novo, não simplesmente recusar rodar.')"><b>C</b> Adicionar uma trava que impede o script de rodar mais de uma vez, pra sempre</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Apagar /etc/hosts inteiro e recriar do zero toda vez é destrutivo e arriscado — remove qualquer outra entrada que já existisse ali por outro motivo, além de ser desproporcional ao problema.')"><b>D</b> Apagar o arquivo /etc/hosts inteiro e recriar do zero a cada execução</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Idempotência é o botão do elevador: não importa se você aperta uma ou cinquenta vezes, o elevador vai para o mesmo andar sem estragar o prédio.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O script rodou três vezes seguidas e grep -c mostra 1 — o que isso comprova sobre o script?</h2>
+  <p>Depois de rodar <code>sudo ./add_backup_host.sh</code> três vezes seguidas, <code>grep -c "backup-srv"
+  /etc/hosts</code> continua mostrando <code>1</code>.</p>
+  <div class='box question'>O que esse resultado comprova sobre a qualidade do script?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Comprova que o script é idempotente — rodar múltiplas vezes não multiplica o efeito, o resultado final é sempre o mesmo estado correto. Essa é exatamente a propriedade que torna um script seguro pra ser reexecutado sem medo, seja por engano ou por reagendamento automático.')"><b>A</b> Comprova que o script é idempotente — múltiplas execuções não multiplicam o efeito, o resultado final é sempre o mesmo estado correto</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O comando grep -c não tem limite de contagem que pare em 1 — se houvesse mais de uma linha idêntica, ele contaria corretamente todas elas; o resultado 1 reflete o estado real do arquivo, não uma limitação da ferramenta.')"><b>B</b> Comprova que o grep -c tem um limite de contagem que sempre para em 1</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O script rodou de verdade nas três vezes (é possível confirmar isso separadamente, por exemplo com um log) — o resultado 1 não indica falha na execução, indica que a guarda de verificação funcionou corretamente nas execuções repetidas.')"><b>C</b> Comprova que o script só rodou de verdade na primeira vez, as outras duas falharam silenciosamente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Um script idempotente verifica se o usuário ou arquivo já existe antes de tentar criar de novo: evita mensagens de erro e duplicações desnecessárias no sistema.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Todo script que usa if pra checar antes de agir já é automaticamente idempotente?"</h2>
+  <p>Um colega assume que basta ter algum <code>if</code> no script pra ele ser considerado idempotente,
+  sem verificar o que exatamente está sendo checado.</p>
+  <div class='box question'>Essa suposição está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta — idempotência exige que a CONDIÇÃO checada seja exatamente sobre o efeito que a ação produziria (ex: essa linha já existe? antes de adicionar essa linha). Um if que checa outra coisa qualquer, ou uma condição incompleta, não garante idempotência real — é preciso que a guarda reflita exatamente o estado que a ação criaria.')"><b>A</b> Não — idempotência exige que a condição checada seja exatamente sobre o efeito que a ação produziria; um if genérico ou que checa a coisa errada não garante isso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A simples presença de um if no código não garante nada sobre idempotência — o que importa é SE a condição checada corresponde exatamente ao efeito da ação, não apenas a existência de alguma lógica condicional.')"><b>B</b> Sim — qualquer condicional no script já garante que ele é seguro pra rodar múltiplas vezes</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A idempotência não depende do número de condicionais no script — um único if bem escrito, checando exatamente a condição certa, já garante idempotência; múltiplos ifs mal escritos não garantem nada.')"><b>C</b> Sim, desde que o script tenha pelo menos dois ifs diferentes</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A revisão de código com foco em idempotência é o teste de robustez: garante que rodar o script dez vezes seguidas produzirá sempre o mesmo estado final limpo.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique o efeito que sua ação produz (linha adicionada, arquivo criado, serviço iniciado).</li>
+    <li>Escreva uma guarda que checa exatamente se esse efeito já existe.</li>
+    <li>Só execute a ação se a guarda confirmar que ainda não foi feita.</li>
+    <li>Teste rodando o script múltiplas vezes seguidas, confirmando o mesmo resultado final.</li>
+    <li>Documente a propriedade de idempotência como parte da revisão do script antes de produção.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Padronize um checklist de revisão pré-produção que exige, pra qualquer script novo, uma
+  pergunta explícita: "o que acontece se isso rodar duas vezes seguidas?" — se a resposta não for "nada
+  muda", o script não está pronto. Combinado com o template de <code>set -euo pipefail</code> + PATH
+  explícito das aulas anteriores, fecha as três camadas de um script realmente pronto pra produção.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O script tem uma guarda que checa exatamente o efeito antes de agir.</li>
+    <li>Rodar o script múltiplas vezes produz sempre o mesmo resultado final.</li>
+    <li>O teste de idempotência foi feito de verdade (rodar várias vezes), não só assumido.</li>
+    <li>O script está documentado e aprovado como pronto pra produção.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Uma guarda de idempotência não é destrutiva — não existe rollback necessário. O
+  risco real evitado é justamente scripts que, rodados por engano mais de uma vez, acumulam efeitos
+  indesejados (linhas duplicadas, usuários duplicados, configurações conflitantes).</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "rodar de novo não pode piorar" fecha a Semana
+  10 e toda a Fase 1 de automação — conectando com backup verificado (Dia 1), healthcheck confiável (Dia 2),
+  cron correto (Dia 3) e segredo protegido (Dia 4). O Anki vai conectar a semana inteira.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>adicionar
+  uma guarda com grep -qF pra verificar se a linha já existe antes de adicionar</b>. O ponto central do caso
+  é este: automação profissional pode rodar de novo sem piorar o ambiente.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de escrever scripts idempotentes, prontos pra produção real —
+  fechando a Semana 10 e o bloco completo de automação em bash da Fase 1. Semana 11 começa o clímax avançado
+  da Fase 1: boot, GRUB e recuperação de sistema.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 10, Dia 5 de ~250 — fecha a Semana 10. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Idempotência","Propriedade de uma operação que produz o mesmo resultado final, não importa quantas vezes seja executada.",
+   "É apertar o botão do elevador várias vezes — o elevador não vem mais rápido nem se confunde, o resultado final é o mesmo."],
+  ["Guarda de verificação (idempotência)","Verificação que confirma se uma condição já é verdadeira antes de tentar aplicar uma mudança.",
+   "É perguntar 'a luz já está acesa?' antes de apertar o interruptor de novo, evitando apagar sem querer."],
+  ["grep -qF","Combinação de opções do grep: -q (silencioso, só retorna sucesso/falha) e -F (busca texto literal, não expressão regular).",
+   "É perguntar discretamente 'isso já está na lista?' sem precisar anunciar a resposta em voz alta."],
+  ["tee -a","Comando que acrescenta conteúdo ao final de um arquivo, mostrando também na tela.",
+   "É adicionar uma linha nova ao caderno, sem apagar nada do que já estava escrito antes."],
+  ["Efeito colateral repetido","Uma consequência indesejada que se acumula cada vez que uma ação sem proteção é executada de novo.",
+   "É a mesma reclamação sendo registrada várias vezes no mesmo protocolo, só porque ninguém checou se já tinha sido registrada."],
+  ["Script de produção idempotente","Um script que pode ser reexecutado com segurança, sem medo de duplicar efeitos ou piorar o estado do sistema.",
+   "É a receita que, seguida uma ou dez vezes, sempre resulta no mesmo prato pronto — nunca em dez pratos empilhados."],
+  ["Estado desejado vs. estado atual","Comparar o que o sistema deveria ter (estado desejado) com o que ele realmente tem agora (estado atual) antes de agir.",
+   "É conferir o estoque antes de fazer um novo pedido, evitando comprar o que você já tem."],
+  ["Teste de reexecução","Rodar deliberadamente o mesmo script várias vezes seguidas para confirmar que ele se comporta de forma idempotente.",
+   "É apertar o mesmo botão várias vezes de propósito, só pra confirmar que ele não faz nada estranho na segunda vez."],
+  ["Condição precisa vs. condição genérica","Uma guarda bem escrita checa exatamente o efeito da ação; uma guarda genérica pode não capturar o cenário certo.",
+   "É perguntar exatamente 'essa pessoa específica já entrou?' em vez de uma pergunta vaga como 'alguém já entrou?'."],
+  ["Revisão pré-produção","Processo de checar um script quanto a segurança, idempotência e tratamento de erro antes de aprová-lo pra uso real.",
+   "É a inspeção final antes de liberar um equipamento pra uso, conferindo cada item do checklist de segurança."],
+  ["Automação segura","Um script ou processo automatizado que pode ser confiado para rodar sem supervisão constante, sem causar dano.",
+   "É a máquina que trabalha sozinha sem precisar de alguém vigiando o tempo todo, porque ela foi construída com cuidado."],
+  ["Aprovação para produção","Marco formal em que um script é considerado pronto e confiável para uso real, não só um teste.",
+   "É o carimbo final que autoriza o produto a sair da fábrica pro mundo real, depois de passar por todos os testes."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

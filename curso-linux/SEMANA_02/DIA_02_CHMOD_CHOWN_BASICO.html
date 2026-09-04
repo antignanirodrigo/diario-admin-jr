@@ -1,0 +1,522 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 2 — chmod/chown Básico | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_SYSTEMCTL_SUPERVISIONADO.html'>← Dia 1</a><a href='#'>Semana 2</a><a href='DIA_03_GREP_FIND.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> ontem você fez sua primeira mudança real — reiniciar um
+serviço, com aprovação. Hoje o alvo é diferente: não é o serviço que está errado, é quem pode ler ou escrever
+num arquivo. É outro tipo de mudança pequena, mas com o mesmo cuidado.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: ajustar permissão de arquivo específico, com o menor
+privilégio necessário.</b> Você ganha autorização pra usar chmod/chown — nunca "777 pra resolver logo", sempre
+o mínimo que resolve o problema real.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 2 | Nível Júnior</div>
+  <h1>chmod/chown Básico: ajustar só o necessário</h1>
+  <p>dono, grupo e outros — três categorias, três respostas diferentes pra "quem pode fazer o quê"</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S02D02_CHMOD_CHOWN_BASICO.png' alt='Prancha em seis quadros sobre chmod e chown básico'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Uma aplicação não consegue gravar em <code>app.log</code>, e a tela mostra <code>Permission
+  denied</code>. Seu primeiro instinto é digitar <code>chmod 777</code> pra resolver rápido — mas o sênior já
+  avisou: 777 não é solução, é ausência de uma.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje uma aplicação não conseguia gravar em <code>app.log</code>, e a tela mostrava
+    <code>Permission denied</code>. O primeiro instinto do Júnior foi digitar <code>chmod 777</code> — "vai
+    resolver rápido". Parei ele: 777 não é solução, é ausência de uma. É trocar a fechadura da sala de
+    servidores por uma porta destrancada e escancarada pra rua, só porque uma pessoa específica não conseguiu
+    entrar.<br><br>
+    Mostrei o caminho certo: descobrir QUEM realmente precisa daquele acesso (a aplicação roda como usuário
+    <code>app</code>, mas o arquivo pertencia a <code>root:root</code>), trocar o dono com <b>chown</b> pra
+    quem de fato precisa, e dar só a permissão mínima com <b>chmod</b> — nesse caso, leitura e escrita pro
+    dono, leitura pro grupo, nada pros outros. O problema sumiu do mesmo jeito que sumiria com 777, só que sem
+    abrir a porta pra qualquer outro usuário do sistema.<br><br>
+    E teve um detalhe que o Júnior não esperava: depois, outro colega pediu acesso de leitura também. A
+    tentação de novo foi "abrir mais um pouco" — mas a resposta certa foi simplesmente colocar esse colega no
+    grupo certo, sem tocar na permissão do arquivo. Foi assim que ensinei: o problema muda, a disciplina do
+    menor privilégio não muda.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>ls -l app.log</code></td><td>Mostra dono, grupo e permissões atuais antes de qualquer mudança.</td></tr>
+    <tr><td><code>sudo chown app:app app.log</code></td><td>Troca dono e grupo do arquivo — só quem precisa acessar deveria ser dono.</td></tr>
+    <tr><td><code>chmod 640 app.log</code></td><td>Define o mínimo necessário: dono lê/escreve, grupo só lê, outros nada.</td></tr>
+  </tbody></table>
+  <pre>$ ls -l app.log
+-rw-r--r-- 1 root root 0 mai 27 app.log
+$ sudo chown app:app app.log
+$ chmod 640 app.log
+$ ls -l app.log
+-rw-r----- 1 app app 0 mai 27 app.log</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um arquivo de teste e observe suas permissões padrão.</div></div>
+      <div class="lab-cmd">touch teste.log
+ls -l teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> permissão padrão criada pelo seu usuário (geralmente -rw-r--r--).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o estado ANTES de qualquer mudança é o passo 1 do procedimento — sem isso você não tem como provar depois o que era diferente antes/depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pro chmod sem rodar ls -l antes — sem o "antes" registrado, um rollback vira chute, não reversão de verdade.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um usuário de teste e troque o dono do arquivo.</div></div>
+      <div class="lab-cmd">sudo useradd testeapp
+sudo chown testeapp:testeapp teste.log
+ls -l teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ls -l mostra testeapp como novo dono do arquivo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> chown resolve QUEM é dono — é sempre o primeiro passo antes de decidir quanto de permissão dar, porque a permissão errada no dono errado não resolve o problema real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> aplicar chmod antes de corrigir o dono com chown — você pode acabar dando permissão certa pro dono errado, sem perceber.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Aplique a permissão mínima (640) e confirme.</div></div>
+      <div class="lab-cmd">chmod 640 teste.log
+ls -l teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> -rw-r----- exatamente, sem permissão nenhuma para "outros".</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> 640 é o exemplo prático do menor privilégio — dono lê/escreve (o que ele precisa), grupo só lê (se fizer sentido), outros nada (porque não precisam).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir 640 com 740 de cabeça — a diferença entre os dois é a permissão de EXECUÇÃO do dono, que um arquivo de log nunca deveria ter.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não tiver certeza de qual número usar pra um caso específico, este é o ponto onde o chat com o Sênior-IA vai ajudar a calcular o mínimo necessário.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Compare visualmente o risco: aplique 777 só pra ver, depois volte pra 640.</div></div>
+      <div class="lab-cmd">chmod 777 teste.log
+ls -l teste.log
+chmod 640 teste.log
+ls -l teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ls -l mostra -rwxrwxrwx (777) e depois volta pra -rw-r----- (640) — comparação visual do risco.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver os dois lado a lado deixa concreto o que "abrir demais" significa — não é abstrato, é literalmente todo mundo do sistema com escrita e execução no arquivo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fazer esse teste num arquivo de produção real "só um segundo" — mesmo por poucos segundos, 777 já é uma janela de risco real, faça isso só em ambiente de teste.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente a mudança completa: dono anterior, dono novo, permissão anterior, permissão nova, motivo.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o registro, 4 linhas
+# ex: "Dono antes: root:root. Dono depois: app:app. Permissão antes: 644. Permissão depois: 640. Motivo: Permission denied na escrita do app."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> um registro de 4 linhas, no mesmo formato usado no chamado de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse registro é o que permite qualquer pessoa (inclusive você, meses depois) entender por que a permissão está do jeito que está, sem precisar adivinhar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só o comando final (chmod 640), sem o "antes" e o motivo — sem contexto, a próxima pessoa não sabe se pode confiar nesse valor ou se precisa reinvestigar do zero.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as três categorias de permissão que todo arquivo Linux tem, e o que
+    significam <span class="hint" data-tip="Permissão de leitura, escrita e execução." onclick="openGlossary(0)">r, w, x</span>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="O usuário que é o proprietário do arquivo." onclick="openGlossary(1)">dono</span>,
+      <span class="hint" data-tip="O grupo associado ao arquivo." onclick="openGlossary(2)">grupo</span> e
+      <span class="hint" data-tip="Todos os demais usuários do sistema." onclick="openGlossary(3)">outros</span> —
+      cada uma recebe sua própria combinação de r (ler), w (escrever) e x (executar).
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>A aplicação roda como o usuário app e não consegue escrever em app.log, que
+  pertence a root:root. Qual é a correção correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'chmod 777 dá leitura, escrita e execução para TODOS os usuários do sistema, não só pra quem precisa — resolve o sintoma na hora, mas abre uma porta que não deveria existir.')"><b>A</b> Rodar chmod 777 app.log pra garantir que funcione de qualquer jeito</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Trocar o dono para app com chown, e dar só leitura+escrita pro dono (e leitura pro grupo, se fizer sentido) com chmod 640 resolve exatamente o problema — a aplicação ganha o acesso que precisa, e mais ninguém ganha acesso que não devia ter.')"><b>B</b> Rodar sudo chown app:app app.log e depois chmod 640 app.log, dando ao dono certo só a permissão necessária</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar a aplicação não muda quem é dono do arquivo nem as permissões dele — o Permission denied vai continuar acontecendo exatamente igual.')"><b>C</b> Reiniciar a aplicação, já que talvez o erro seja temporário</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Apagar e recriar o arquivo sem definir dono e permissão corretos só adia o mesmo erro — o arquivo novo provavelmente nasce com o mesmo dono errado.')"><b>D</b> Apagar o arquivo e deixar a aplicação criar um novo do zero</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A permissão 755 (rwxr-xr-x) é como um livro na biblioteca pública: o autor (dono) pode reescrever, mas o público (outros) só tem permissão de leitura e consulta.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O 640 resolveu, mas outro colega pede pra abrir mais</h2>
+  <p>Depois do ajuste, um colega de outra equipe pede pra também conseguir ler o <code>app.log</code>, mas
+  ele não está no grupo <code>app</code>.</p>
+  <div class='box question'>Qual é o ajuste correto pra atender esse pedido sem abrir demais?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'chmod 777 resolve o pedido do colega, mas também dá escrita e execução pra qualquer usuário do sistema — muito além do que foi pedido.')"><b>A</b> Rodar chmod 777 de novo, já que resolve na hora e evita ter que pensar em grupo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Adicionar o colega ao grupo app (com usermod -aG, por exemplo) mantém a permissão 640 como está, e ele passa a ter leitura porque agora faz parte do grupo certo — sem abrir acesso pra mais ninguém.')"><b>B</b> Adicionar o colega ao grupo app, mantendo a permissão do arquivo em 640</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Trocar o dono do arquivo pro colega tiraria o dono correto (app) — a aplicação que realmente precisa escrever no arquivo perderia a permissão de dono que faz sentido.')"><b>C</b> Trocar o dono do arquivo para o usuário do colega, com chown</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A permissão 600 em chaves SSH privadas é como o segredo do seu cartão bancário: apenas você pode ler; se outros puderem ver, o sistema recusa a conexão por segurança.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "640 e 740 são praticamente a mesma coisa, né?"</h2>
+  <p>Um colega olha os dois números e acha que a diferença entre <code>640</code> e <code>740</code> é
+  irrelevante, "só um número a mais".</p>
+  <div class='box question'>Qual é a diferença real entre chmod 640 e chmod 740 num arquivo?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'640 dá ao dono só leitura e escrita (rw-); 740 dá ao dono leitura, escrita E execução (rwx). Pra um arquivo de log isso importa: execução não faz sentido nele, e dar essa permissão sem necessidade é abrir mais do que o arquivo precisa.')"><b>A</b> 740 dá ao dono também permissão de execução, que um arquivo de log não precisa e não deveria ter</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Os dois números afetam permissões diferentes do dono do arquivo — 640 é rw- e 740 é rwx para o dono, uma diferença real, não cosmética.')"><b>B</b> Não tem diferença nenhuma na prática, os dois liberam o mesmo tipo de acesso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença entre 640 e 740 está na permissão do DONO (terceiro dígito da esquerda é o grupo, primeiro é o dono) — não tem relação com o grupo do arquivo.')"><b>C</b> 740 muda o grupo do arquivo, não a permissão do dono</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'chown usuario:grupo' é como transferir o documento de propriedade do veículo no cartório: muda formalmente quem é o responsável civil por aquele arquivo.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Observe o estado atual com ls -l antes de mudar qualquer coisa.</li>
+    <li>Identifique quem realmente precisa de qual tipo de acesso (dono, grupo ou outros).</li>
+    <li>Ajuste dono/grupo com chown, se necessário.</li>
+    <li>Aplique a permissão mínima que resolve o problema real, nunca 777.</li>
+    <li>Confirme com ls -l de novo, e teste se a aplicação passou a funcionar.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Documente no runbook de deploy da aplicação qual dono/grupo/permissão o arquivo de log
+  deveria nascer com — assim o próximo deploy já cria certo, sem depender de alguém lembrar de corrigir depois.
+  Padronize a proibição de 777 como regra de time, mesmo "só pra testar rápido" — deixe claro que ambientes de
+  teste têm essa liberdade, produção nunca.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Permissão aplicada é a mínima necessária, nunca 777.</li>
+    <li>Dono e grupo correspondem a quem realmente precisa do acesso.</li>
+    <li>ls -l foi conferido antes e depois da mudança.</li>
+    <li>A aplicação foi testada e confirmada funcionando após o ajuste.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Rollback de uma permissão é simplesmente voltar ao valor anterior anotado no
+  ls -l original — por isso o passo 1 (observar antes) nunca pode ser pulado, mesmo em mudanças pequenas.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "menor privilégio necessário" é o mesmo princípio
+  que vai reaparecer em usuários, grupos, firewall e VPN mais adiante — hoje é a primeira vez que ele vira
+  hábito de comando. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>trocar o dono
+  com chown para app:app e aplicar chmod 640</b>, dando exatamente o acesso necessário. O ponto central do caso
+  é este: permissão demais vira risco — dê só o necessário.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Autorização pra ajustar permissões de arquivo com critério, sem recorrer a 777.
+  Amanhã você ganha duas ferramentas de busca — grep pra achar texto dentro de arquivos, find pra achar os
+  próprios arquivos — pra parar de procurar informação na mão.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 2, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["r, w, x","As três permissões básicas do Linux: read (ler), write (escrever) e execute (executar).",
+   "É poder ler um documento, poder escrever nele, e poder rodá-lo como um programa — três coisas separadas."],
+  ["Dono (owner)","O usuário que é proprietário do arquivo, geralmente quem o criou.",
+   "É o nome na porta do escritório — quem tem a chave principal daquela sala."],
+  ["Grupo (group)","Um conjunto de usuários que compartilham um mesmo nível de acesso a um arquivo.",
+   "É o crachá de departamento — todo mundo do mesmo time entra pela mesma porta."],
+  ["Outros (others)","Todos os usuários do sistema que não são o dono nem fazem parte do grupo do arquivo.",
+   "É qualquer visitante que não tem crachá nenhum — o público em geral."],
+  ["chmod","Comando que altera as permissões (r/w/x) de um arquivo ou diretório.",
+   "É trocar a fechadura da porta pra decidir quem pode entrar, mexer ou usar o que está lá dentro."],
+  ["chown","Comando que altera o dono e/ou grupo de um arquivo.",
+   "É transferir a titularidade do imóvel pra outra pessoa ou departamento."],
+  ["chmod 640","Notação octal de permissão: dono lê/escreve, grupo só lê, outros nada.",
+   "É dar a chave completa pro dono, uma cópia limitada pro grupo, e nenhuma pro resto do prédio."],
+  ["chmod 777","Notação octal que dá leitura, escrita e execução para todo mundo, sem exceção.",
+   "É deixar a porta da sala de servidores destrancada e escancarada pra rua."],
+  ["Princípio do menor privilégio","Dar a cada usuário ou processo apenas o acesso mínimo necessário para fazer seu trabalho.",
+   "É entregar só a chave da sala que a pessoa usa, não o molho inteiro do prédio."],
+  ["Permission denied","Mensagem de erro que indica que o usuário ou processo não tem a permissão necessária para aquela ação.",
+   "É o cartão de acesso apitando vermelho na catraca — a porta não abre pra você."],
+  ["usermod -aG","Comando que adiciona um usuário a um grupo adicional, sem remover os grupos que ele já tinha.",
+   "É dar um crachá extra pra outro departamento, sem tirar o crachá que a pessoa já usava."],
+  ["ls -l","Comando que lista arquivos mostrando permissões, dono, grupo, tamanho e data.",
+   "É pedir a ficha completa do arquivo antes de decidir o que mudar nele."]
+];
+
+const sceneStripIdx = [0,4,5,8];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

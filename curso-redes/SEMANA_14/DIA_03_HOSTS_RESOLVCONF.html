@@ -1,0 +1,524 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 14 · Dia 3 — /etc/hosts vs resolv.conf | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_DNS_TTL_CACHE.html'>← Semana 14, Dia 2</a><a href='#'>Semana 14</a><a href='DIA_04_DHCP_DORA.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com os dois dias anteriores:</b> Você já sabe ler DNS e diferenciar
+cache de mudança real. Hoje aparece um jeito de o DNS estar 100% certo e ainda assim UMA máquina específica
+insistir no IP errado — porque ela nem chegou a perguntar pro DNS. /etc/hosts vence antes.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: saber quando o DNS nem é o culpado.</b> Você ganha a ordem
+real de resolução de nomes (nsswitch.conf define: files antes de dns) e o hábito de checar /etc/hosts local
+quando só UMA máquina, de várias, se comporta diferente.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 14 · Dia 3 | Nível Júnior — Redes</div>
+  <h1>/etc/hosts: o Atalho que Engana o DNS</h1>
+  <p>quando só uma máquina vê diferente, procure primeiro por atalhos locais</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S14D03_HOSTS_RESOLVCONF.png' alt='Prancha em seis quadros sobre a ordem de resolução de nomes via nsswitch.conf, /etc/hosts tendo prioridade sobre o DNS, e correção controlada'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Se o DNS está certo, por que só este PC insiste no IP antigo?" PC-01 e PC-03 resolvem
+  app.intra.example pro IP certo (192.168.10.80). PC-02, sozinho, insiste em 192.168.10.99. O DNS não é o
+  culpado aqui — algo local nessa máquina específica está respondendo antes dele.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um chamado dizia "DNS bugado, só um PC não resolve certo" e já vinha com sugestão de reconfigurar o
+    servidor DNS inteiro. Testei os outros PCs da mesma sala: todos resolviam <code>app.intra.example</code>
+    pro IP certo. Só o PC-02 insistia num IP antigo. Isso já descartava o DNS como culpado — se fosse o
+    servidor, todo mundo veria o mesmo erro. Rodei <code>grep '^hosts:' /etc/nsswitch.conf</code> no PC-02:
+    <code>hosts: files dns</code>. Ou seja, <code>/etc/hosts</code> é consultado antes do DNS. Abri o
+    arquivo: uma entrada esquecida de meses atrás, de um teste antigo, apontando pro IP errado.
+    <br><br>
+    O ponto que fica: quando só uma máquina se comporta diferente das outras, o problema quase nunca é do
+    serviço central (DNS) — é de algo local naquela máquina específica. Investigar o atalho local primeiro
+    evita reconfigurar um servidor que nunca esteve errado.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que confirma</th></tr></thead><tbody>
+    <tr><td><code>grep '^hosts:' /etc/nsswitch.conf</code></td><td>Mostra a ordem de resolução configurada (files antes de dns, ou o contrário).</td></tr>
+    <tr><td><code>grep app /etc/hosts</code></td><td>Mostra se existe uma entrada local pro nome pesquisado.</td></tr>
+    <tr><td><code>getent hosts nome</code></td><td>Mostra a resolução final, respeitando a ordem do nsswitch.conf — igual ao que a aplicação real veria.</td></tr>
+  </tbody></table>
+  <pre>$ grep '^hosts:' /etc/nsswitch.conf
+hosts: files dns
+
+$ grep app /etc/hosts
+192.168.10.99  app.intra.example
+
+$ cat /etc/resolv.conf
+nameserver 192.168.10.10
+
+--- correção controlada ---
+$ sudo cp /etc/hosts /etc/hosts.bak
+$ sudo nano /etc/hosts
+# removed stale app.intra.example entry
+
+$ getent hosts app.intra.example
+192.168.10.80  app.intra.example</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione uma entrada errada em /etc/hosts para um nome que também existe no DNS.</div></div>
+      <div class="lab-cmd">$ echo "192.168.10.99  app.intra.example" | sudo tee -a /etc/hosts</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> resolução local criada, diferente do DNS real.</div>
+      <div class="lab-why"><b>Por quê:</b> reproduzir a divergência de propósito é o que te deixa reconhecer o padrão da próxima vez que vir um caso real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer que essa entrada de teste fica lá depois do laboratório — sempre limpe /etc/hosts ao final.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: compare getent hosts com dig para o mesmo nome.</div></div>
+      <div class="lab-cmd">$ getent hosts app.intra.example
+$ dig app.intra.example A +short</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> getent mostra o IP de /etc/hosts; dig mostra o IP real do DNS — divergentes.</div>
+      <div class="lab-why"><b>Por quê:</b> essa comparação prova, na prática, que dig e getent hosts não consultam a mesma coisa — dig ignora /etc/hosts, getent segue a cadeia completa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar só dig pra diagnosticar um problema de resolução — ele nunca vai revelar um override em /etc/hosts, porque não consulta esse arquivo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme a ordem de resolução configurada.</div></div>
+      <div class="lab-cmd">$ grep '^hosts:' /etc/nsswitch.conf</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> hosts: files dns (ou ordem equivalente confirmando a prioridade local).</div>
+      <div class="lab-why"><b>Por quê:</b> confirmar a ordem antes de agir evita assumir "files vem primeiro" quando, numa configuração não-padrão, pode ser o contrário.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que todo sistema Linux tem a mesma ordem em nsswitch.conf — sempre confira, não presuma.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a ordem estiver invertida (dns antes de files), este é o ponto onde o chat com o Sênior-IA vai ajudar a entender as implicações dessa configuração não-padrão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: faça backup, remova a entrada de teste e valide com getent hosts.</div></div>
+      <div class="lab-cmd">$ sudo cp /etc/hosts /etc/hosts.bak
+$ sudo sed -i '/app.intra.example/d' /etc/hosts
+$ getent hosts app.intra.example</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> getent hosts agora retorna o mesmo IP que o dig.</div>
+      <div class="lab-why"><b>Por quê:</b> o backup antes de editar é o que te dá um caminho de volta imediato se a remoção afetar algo além da linha de teste.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> remover a linha errada com sed sem antes confirmar com grep quais linhas seriam afetadas.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente a causa raiz correta.</div></div>
+      <div class="lab-cmd"># DNS: sempre esteve correto (192.168.10.80)
+# causa real: entrada obsoleta em /etc/hosts local
+# ação: backup + remoção da linha + getent confirmou</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório curto confirmando a causa raiz correta — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar "não era o DNS" explicitamente evita que a próxima pessoa reabra a investigação no lugar errado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> registrar só "corrigido" sem anotar onde estava o override — a mesma entrada esquecida pode reaparecer em outro PC clonado da mesma imagem.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual arquivo define a ORDEM em que o sistema consulta fontes de resolução de
+    nomes, e o que normalmente vem primeiro?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Arquivo que define a ordem em que o sistema consulta fontes de resolução de nomes (arquivos locais, DNS, etc.)." onclick="openGlossary(0)">/etc/nsswitch.conf</span>
+      define a ordem — tipicamente <code>hosts: files dns</code>, o que significa: primeiro
+      <span class="hint" data-tip="Arquivo local que mapeia nomes para IPs diretamente, sem consultar o DNS." onclick="openGlossary(1)">/etc/hosts</span>
+      (files), só depois DNS. Se existe uma entrada em /etc/hosts, o DNS nem chega a ser consultado — o
+      atalho local vence antes.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você confirma: DNS está correto (192.168.10.80), mas PC-02 continua resolvendo
+  app.intra.example para 192.168.10.99. Qual é o primeiro lugar a investigar, e por quê?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Como hosts: files dns em /etc/nsswitch.conf, o arquivo /etc/hosts local é consultado ANTES do DNS. Se PC-02 tem uma entrada antiga ali (app.intra.example apontando pra 192.168.10.99), o DNS correto nem chega a ser consultado — o atalho local vence primeiro.')"><b>A</b> /etc/hosts no PC-02 — como files vem antes de dns em nsswitch.conf, uma entrada local ali vence antes do DNS ser consultado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O DNS já foi confirmado como correto — reconfigurar o servidor DNS não resolveria um problema que está localizado numa única máquina, não no servidor.')"><b>B</b> O servidor DNS — é preciso reconfigurá-lo, já que ele está respondendo diferente pra PC-02</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O cabo de rede não explica uma resolução de nome INCORRETA e consistente — um problema físico tenderia a causar falha total de conexão, não uma resposta errada específica e repetível.')"><b>C</b> O cabo de rede do PC-02 — provavelmente está com defeito físico</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reinstalar o sistema operacional é uma medida extremamente desproporcional pra um problema de resolução de nome — /etc/hosts é um arquivo simples de checar antes de qualquer ação tão drástica.')"><b>D</b> O sistema operacional do PC-02 — provavelmente precisa ser reinstalado</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O arquivo /etc/hosts é a agenda telefônica de bolso: tem prioridade sobre o DNS e resolve nomes locais mesmo se a internet e os servidores DNS caírem.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Antes de editar /etc/hosts, você faz backup com cp /etc/hosts /etc/hosts.bak</h2>
+  <p>Um colega acha esse passo desnecessário, "já que é só remover uma linha".</p>
+  <div class='box question'>Por que fazer backup antes, mesmo numa edição simples, é a prática correta?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Backup antes de editar um arquivo de sistema é barato e rápido, e garante um caminho de volta imediato se a edição remover algo importante por engano (como outras entradas legítimas em /etc/hosts) — o custo é mínimo comparado ao risco evitado.')"><b>A</b> Backup é barato e rápido, e garante um caminho de volta imediato se a edição remover algo importante por engano, mesmo numa mudança aparentemente simples</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'/etc/hosts não é reconstruído automaticamente pelo sistema — ele é um arquivo estático editado manualmente; sem backup, uma edição errada fica permanente até ser corrigida manualmente de novo.')"><b>B</b> Não é necessário — /etc/hosts é reconstruído automaticamente pelo sistema se algo der errado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O backup de /etc/hosts não tem relação com auditoria de segurança formal — é uma prática operacional simples de precaução antes de qualquer edição de arquivo de configuração.')"><b>C</b> É necessário só para fins de auditoria de segurança formal exigida por normas</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O /etc/resolv.conf é a indicação de quais telefonistas consultar: lista os IPs dos servidores DNS que o sistema operacional consulta quando o nome não está no /etc/hosts.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "getent hosts e dig fazem a mesma consulta, só com sintaxe diferente?"</h2>
+  <p>Um colega usa os dois comandos como se fossem intercambiáveis.</p>
+  <div class='box question'>Qual é a diferença real entre eles?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'dig consulta o DNS diretamente, ignorando /etc/hosts. getent hosts segue a ordem completa definida em nsswitch.conf (incluindo /etc/hosts antes do DNS) — é a resolução real que uma aplicação comum veria, não só a parte DNS.')"><b>A</b> dig consulta só o DNS diretamente; getent hosts segue a ordem completa do nsswitch.conf, incluindo /etc/hosts — é o que uma aplicação realmente veria</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não são idênticos — dig ignora /etc/hosts e consulta só o DNS; getent hosts segue toda a cadeia configurada, incluindo arquivos locais primeiro.')"><b>B</b> São exatamente idênticos, apenas com sintaxes de comando diferentes</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença entre eles não é sobre IPv4/IPv6 — dig e getent hosts podem lidar com ambos; a diferença real é sobre qual fonte de resolução cada um consulta (só DNS vs. toda a cadeia do nsswitch.conf).')"><b>C</b> dig é usado só para IPv4 e getent hosts só para IPv6</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O systemd-resolved (127.0.0.53) é o intermediário local de cache: recebe as consultas das aplicações e gerencia as conexões DNS com fallback automático.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Quando só uma máquina, de várias, resolve diferente, suspeite de algo local primeiro.</li>
+    <li>Confirme a ordem de resolução com grep '^hosts:' /etc/nsswitch.conf.</li>
+    <li>Verifique /etc/hosts pra uma entrada que possa estar vencendo o DNS.</li>
+    <li>Faça backup antes de editar, remova a entrada obsoleta, e teste com getent hosts.</li>
+    <li>Confirme que a frota inteira agora resolve de forma consistente.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Inclua a checagem de /etc/hosts como primeiro passo padrão em qualquer chamado de
+  "resolução inconsistente numa única máquina" — antes de sequer suspeitar do servidor DNS. Isso corta o
+  tempo de diagnóstico de horas pra minutos.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A investigação começou por /etc/hosts, não por reconfigurar o DNS que já estava certo.</li>
+    <li>A ordem de resolução foi confirmada via nsswitch.conf antes de qualquer conclusão.</li>
+    <li>Backup foi feito antes de editar /etc/hosts.</li>
+    <li>getent hosts confirmou a correção, refletindo o que uma aplicação real veria.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Com o backup (/etc/hosts.bak) feito antes da edição, reverter é simples: copiar o
+  backup de volta. O cuidado real é não editar /etc/hosts sem antes confirmar exatamente qual linha é a
+  obsoleta, evitando remover uma entrada válida por engano.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "quando só uma máquina se comporta diferente,
+  suspeite de configuração local" conecta com a Semana 4 (diagnóstico combinado entre dois servidores) —
+  mesma disciplina de isolar o que é específico de uma máquina. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, o primeiro lugar certo pra investigar
+  foi <b>/etc/hosts no PC-02</b>, já que files vem antes de dns na ordem de resolução. O ponto central do caso
+  é este: quando só uma máquina vê diferente, procure primeiro por atalhos locais.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de reconhecer quando o DNS não é o culpado, e investigar
+  corretamente atalhos locais como /etc/hosts. Amanhã você entra em outro serviço fundamental de rede: DHCP —
+  como um dispositivo sem IP nenhum consegue um endereço automaticamente, em quatro passos bem definidos.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 14, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["/etc/nsswitch.conf","Arquivo que define a ordem em que o sistema consulta fontes de resolução de nomes, como arquivos locais e DNS.",
+   "É a lista de prioridade de quem consultar primeiro — pergunta pro vizinho antes de ligar pra central, se o vizinho já souber."],
+  ["/etc/hosts","Arquivo local que mapeia nomes diretamente para endereços IP, consultado antes do DNS na ordem padrão.",
+   "É a agenda de contatos guardada no próprio celular — mais rápida de consultar que ligar pra central, mas pode ficar desatualizada."],
+  ["getent hosts","Comando que resolve um nome seguindo exatamente a ordem configurada em nsswitch.conf, como uma aplicação real faria.",
+   "É simular a ligação completa que qualquer aplicativo faria — passando pela agenda local antes de tentar a central, na ordem real configurada."],
+  ["/etc/resolv.conf","Arquivo que define qual servidor DNS (resolvedor) o sistema deve consultar para resolução de nomes.",
+   "É o número de telefone da central salvo na agenda — pra onde ligar quando a agenda local não tem a resposta."],
+  ["hosts: files dns (nsswitch)","Configuração comum que define que arquivos locais devem ser consultados antes do DNS na resolução de nomes.",
+   "É a instrução 'pergunte em casa antes de ligar pra central' — a ordem que determina quem responde primeiro."],
+  ["Entrada obsoleta em /etc/hosts","Registro local desatualizado que continua apontando para um endereço antigo, mesmo depois do DNS já ter mudado.",
+   "É um contato salvo com o telefone antigo de alguém que já trocou de número — a agenda ainda 'sabe', mas está errada."],
+  ["Diagnóstico isolado por máquina","Investigar por que apenas um dispositivo específico se comporta diferente dos demais na mesma rede.",
+   "É perguntar por que só um aluno da turma está com a resposta errada, quando todos os outros aprenderam a mesma matéria certa."],
+  ["Atalho local (override)","Configuração que substitui, para uma máquina específica, o comportamento padrão que o resto da rede segue.",
+   "É uma anotação pessoal grudada na porta, que só você vê e segue, diferente da placa oficial do prédio que todos os outros seguem."],
+  ["dig vs. getent hosts","Diferença entre consultar só o DNS diretamente (dig) e seguir a resolução completa configurada no sistema (getent hosts).",
+   "É a diferença entre ligar direto pra central (dig) e simular o processo completo que o telefone realmente segue antes de discar (getent)."],
+  ["Backup antes de editar arquivo crítico","Prática de copiar um arquivo de configuração essencial antes de alterá-lo, garantindo um caminho de reversão rápido.",
+   "É fotografar o documento original antes de rabiscar em cima — se o rabisco sair errado, o original ainda existe."],
+  ["Consistência de frota","Garantir que todas as máquinas de um mesmo ambiente resolvam nomes e se comportem de forma uniforme.",
+   "É todos os relógios do prédio marcando a mesma hora — um relógio adiantado sozinho é o que chama atenção primeiro."],
+  ["nome → IP (resolução em duas fontes)","Reconhecer que um nome pode ser resolvido tanto por um arquivo local quanto por um servidor DNS, dependendo da ordem configurada.",
+   "É saber que uma pergunta pode ser respondida tanto por alguém de casa quanto por um especialista de fora — depende de quem for consultado primeiro."]
+];
+
+const sceneStripIdx = [0,1,2,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,536 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 13 · Dia 1 — Modelo TCP/IP | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+.milestone{width:min(1180px,92vw);margin:24px auto 0;background:linear-gradient(135deg,#0d1f2a,#0d2a24);border:2px solid var(--cyan);border-radius:8px;padding:24px 28px;text-align:center}
+.milestone h2{margin:0 0 8px;font-size:24px;color:var(--cyan)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><span>← Fase 1 concluída</span><a href='#'>Semana 13</a><a href='DIA_02_IP_CIDR_SUBREDE.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="milestone">
+  <h2>🌐 FASE 2 COMEÇA AQUI — REDES</h2>
+  <p style="color:var(--muted);max-width:760px;margin:0 auto">Você fechou a Fase 1 sabendo investigar um
+  sistema Linux sozinho. Agora o mesmo método (evidência antes de correção) se aplica a um domínio novo: a
+  rede que conecta esse sistema a tudo mais.</p>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Fase 1 inteira:</b> "Antes de alterar, observe" foi o lema dos
+últimos três meses. Hoje você aprende ONDE observar numa rede — o modelo TCP/IP não é teoria decorada, é o
+mapa que diz em qual camada seu diagnóstico deve começar.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar rede por camada, não no escuro.</b> Você ganha
+o modelo mental central da Fase 2 inteira: cada camada (física, enlace, rede, transporte, aplicação) falha de
+um jeito diferente, e reiniciar tudo sem saber qual camada falhou é o mesmo erro do reboot às cegas que você
+já aprendeu a evitar.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 13 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>Modelo TCP/IP</h1>
+  <p>rede se diagnostica por camada — primeiro descubra onde o pacote para</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S13D01_MODELO_TCPIP.png' alt='Prancha em seis quadros sobre o modelo TCP/IP em camadas e como diagnosticar cada uma com ip e ss'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket #5842: "Site indisponível. O site não está carregando para os usuários. Impacto:
+  Alto." O reflexo de "reiniciar tudo" ignora uma pergunta essencial: em qual das cinco camadas da rede o
+  problema realmente está? Sem esse mapa, você reinicia o serviço no escuro.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    "Site indisponível" chegou pro plantão às 22h de uma sexta. O técnico de plantão, sem mapa de camadas,
+    reiniciou o serviço web, depois o servidor inteiro — duas janelas de manutenção não programadas, cliente
+    puto, e o site continuou fora do ar. Eu peguei o ticket na manhã seguinte e rodei três comandos, nessa
+    ordem: <b>ip -br link</b> (interface UP, MAC ok), <b>ip -br addr</b> (IP configurado certo), <b>ss -tln</b>
+    (porta 80 <i>não</i> aparecia na lista — só a 22 de SSH). Três minutos, três camadas confirmadas, e a causa
+    ficou óbvia: nginx tinha caído durante um deploy da tarde anterior e ninguém percebeu porque SSH continuava
+    respondendo normalmente. <code>systemctl start nginx</code> resolveu. Nenhum reboot precisou acontecer.
+    <br><br>
+    O ponto que fica: reiniciar sem saber qual camada falhou não é "tentar de tudo" — é apostar. Enlace, rede,
+    transporte e aplicação falham de formas completamente diferentes, e só uma delas (aplicação, nesse caso)
+    precisava de ação. As outras três já estavam confirmadas saudáveis antes de eu tocar em qualquer coisa.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Camada</th><th>Comando</th><th>O que confirma</th></tr></thead><tbody>
+    <tr><td>Enlace</td><td><code>ip -br link</code></td><td>Interface ativa (UP) e endereço MAC.</td></tr>
+    <tr><td>Rede</td><td><code>ip -br addr show ens160</code></td><td>Endereço IP configurado na interface.</td></tr>
+    <tr><td>Transporte</td><td><code>ss -tln</code></td><td>Portas TCP escutando localmente.</td></tr>
+  </tbody></table>
+  <pre>$ ip -br link
+IFACE      STATE  MAC
+ens160     UP     52:54:00:12:34:56
+
+$ ip -br addr show ens160
+IFACE      STATE  ADDRESS
+ens160     UP     192.168.10.25/24
+
+$ ss -tln
+State    Recv-Q   Send-Q     Local Address:Port
+LISTEN   0        128        0.0.0.0:22</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme a camada de enlace na VM de laboratório.</div></div>
+      <div class="lab-cmd">$ ip -br link</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> interface listada como UP, com endereço MAC visível.</div>
+      <div class="lab-why"><b>Por quê:</b> se a interface não estiver UP, nenhuma camada acima dela pode funcionar — é sempre o primeiro ponto a confirmar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir interface "UP" (administrativamente ligada) com "conectada" — cabo desconectado ainda pode mostrar UP dependendo do driver.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme a camada de rede na mesma interface.</div></div>
+      <div class="lab-cmd">$ ip -br addr show ens160</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> endereço IP e prefixo (ex: 192.168.10.25/24) visíveis.</div>
+      <div class="lab-why"><b>Por quê:</b> sem IP configurado, roteamento e portas não têm como funcionar, mesmo com enlace saudável.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que um IP presente está necessariamente correto — confira também a máscara/prefixo, não só a existência do endereço.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme a camada de transporte listando portas escutando.</div></div>
+      <div class="lab-cmd">$ ss -tln</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de portas, incluindo ao menos a 22 (SSH), se estiver ativa.</div>
+      <div class="lab-why"><b>Por quê:</b> uma porta ausente na lista, com as camadas de baixo saudáveis, aponta direto pra causa na aplicação — sem precisar adivinhar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só com <code>ping</code>, que só valida a camada de rede — nunca confirma se a porta da aplicação está escutando.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma porta esperada não aparecer na lista, este é o ponto onde o chat com o Sênior-IA vai ajudar a decidir se o problema é de serviço ou de configuração.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: instale (ou simule) um serviço web simples e confirme a camada de aplicação.</div></div>
+      <div class="lab-cmd">$ ss -tln | grep :80</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> porta 80 (ou a porta do serviço) aparecendo em LISTEN.</div>
+      <div class="lab-why"><b>Por quê:</b> essa é a última camada — só faz sentido testá-la depois das três anteriores confirmadas, senão você não sabe se o erro é dela ou de baixo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> reiniciar o serviço sem antes confirmar se ele nunca subiu, ou se subiu e caiu — os logs (<code>journalctl -u nginx</code>) dizem qual dos dois é.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente, camada por camada, o que cada comando confirmou.</div></div>
+      <div class="lab-cmd"># enlace: UP, MAC ok
+# rede: IP ok
+# transporte: porta esperada ausente
+# aplicação: causa confirmada aqui</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> mapa completo: enlace, rede, transporte, aplicação, cada um com sua evidência — reproduzindo o painel 5 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar por camada é o que transforma "reiniciei e funcionou" em "sei exatamente o que estava errado e por quê".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular a documentação achando que "já resolveu, não precisa mais" — é exatamente esse hábito que faz o mesmo problema voltar sem ninguém reconhecer o padrão.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as cinco camadas do modelo TCP/IP, da mais baixa (física) até a mais alta
+    (aplicação)?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Camada mais baixa: cabo, conector, sinal elétrico ou óptico." onclick="openGlossary(0)">Física</span>
+      (cabo, sinal) →
+      <span class="hint" data-tip="Camada de enlace: endereço MAC, switch, ARP." onclick="openGlossary(1)">Enlace</span>
+      (MAC, switch) →
+      <span class="hint" data-tip="Camada de rede: endereçamento IP, roteamento, ICMP." onclick="openGlossary(2)">Rede</span>
+      (IP, roteamento) →
+      <span class="hint" data-tip="Camada de transporte: TCP (com conexão) ou UDP (sem conexão), portas." onclick="openGlossary(3)">Transporte</span>
+      (TCP/UDP, portas) →
+      <span class="hint" data-tip="Camada mais alta: os protocolos que o usuário final reconhece, como HTTP, DNS, SSH." onclick="openGlossary(4)">Aplicação</span>
+      (HTTP, DNS, SSH). Cada camada tem sua própria ferramenta de diagnóstico.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Um site está indisponível. Você quer confirmar, na ordem certa, se a interface de
+  rede está ativa, se o IP está configurado, e se algum processo está escutando na porta esperada. Qual
+  sequência de comandos segue o modelo de camadas corretamente?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'ip -br link confirma a camada de enlace (interface UP, com MAC). ip -br addr confirma a camada de rede (IP configurado). ss -tln confirma a camada de transporte (porta escutando). Essa ordem sobe pelas camadas, uma de cada vez — exatamente o método usado no painel 5 da prancha de hoje.')"><b>A</b> ip -br link (enlace), depois ip -br addr (rede), depois ss -tln (transporte) — subindo as camadas em ordem</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Testar só a aplicação (ss -tln filtrado numa porta específica) sem confirmar antes as camadas mais baixas pula etapas — se a interface estiver down, mesmo esse teste não fará sentido.')"><b>B</b> ss -tln direto, ignorando as camadas mais baixas, já que a aplicação é o que realmente importa pro usuário</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'reboot não é uma ferramenta de diagnóstico por camada — é uma ação disruptiva que não revela em qual camada específica o problema está, e pode nem resolver a causa real.')"><b>C</b> reboot do servidor inteiro, já que isso reinicia todas as camadas de uma vez</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ping sozinho só testa a camada de rede (ICMP) — não confirma nada sobre a camada de transporte (portas) ou aplicação, que são igualmente relevantes pra um site indisponível.')"><b>D</b> ping para o próprio servidor, repetidamente, até ter certeza absoluta de que a rede funciona</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A pilha TCP/IP é como o envio de uma encomenda internacional: a Aplicação escreve a carta, o Transporte coloca na caixa com rastreio, a Rede cola o endereço postal e o Enlace despacha no caminhão físico.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Você confirmou enlace OK, rede OK, e porta 22 (SSH) escutando — mas o site (porta 80) não aparece
+  em ss -tln</h2>
+  <p>Cada camada abaixo da aplicação está confirmada como saudável.</p>
+  <div class='box question'>O que essa evidência aponta como a causa mais provável?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Se todas as camadas de rede/transporte estão saudáveis mas a porta 80 não aparece escutando, o problema está na camada de aplicação — o serviço web (nginx, apache) provavelmente não está rodando ou não foi configurado para escutar na porta esperada.')"><b>A</b> O problema está na camada de aplicação — o serviço web provavelmente não está rodando ou não escuta na porta esperada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A evidência já descartou a camada física — se o cabo estivesse rompido, a interface nem apareceria como UP em ip -br link, que já foi confirmado saudável.')"><b>B</b> O problema é físico — provavelmente o cabo de rede está com defeito</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O endereçamento IP já foi confirmado correto (camada de rede) — reconfigurar o IP não tem relação com uma porta de aplicação específica não estar escutando.')"><b>C</b> O problema é o endereçamento IP — é preciso reconfigurar o IP da interface</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diferenciar camada 3 (IP) de camada 4 (Porta) é como o número do edifício vs o número do apartamento: o IP acha o prédio na rua, a porta acha qual serviço mora lá dentro.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se a camada física e de enlace estão OK, a rede inteira já está garantida?"</h2>
+  <p>Um colega, satisfeito ao ver a interface UP com MAC correto, já quer declarar a rede "sem problemas".</p>
+  <div class='box question'>Por que confirmar só as camadas mais baixas não é suficiente?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Cada camada falha de um jeito independente — enlace OK só garante que o cabo e a placa de rede funcionam, mas o IP pode estar mal configurado (rede), a porta pode não estar escutando (transporte), ou o serviço pode estar com erro interno (aplicação). Confirmar uma camada não garante nada sobre as de cima.')"><b>A</b> Cada camada pode falhar independentemente das outras — enlace OK não garante nada sobre rede, transporte ou aplicação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'As camadas do modelo TCP/IP não têm essa relação de garantia automática — uma camada inferior funcionando não implica que as camadas superiores também estejam funcionando corretamente.')"><b>B</b> É suficiente sim — se a camada mais baixa funciona, todas as de cima funcionam automaticamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A camada de aplicação não depende só da velocidade do hardware — ela depende do serviço estar configurado corretamente e efetivamente rodando, o que não tem relação com a velocidade da camada física.')"><b>C</b> É suficiente, desde que a velocidade do link físico seja alta o bastante</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O protocolo IP ser 'best-effort' é como a carta simples no correio: ele faz o melhor esforço para entregar, mas quem garante a ordem e a confirmação de entrega é o TCP na camada superior.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de "site fora do ar", não reinicie nada antes de mapear a camada.</li>
+    <li>Confirme enlace com ip -br link (interface UP, MAC presente).</li>
+    <li>Confirme rede com ip -br addr (IP configurado corretamente).</li>
+    <li>Confirme transporte com ss -tln (porta esperada escutando).</li>
+    <li>Só então investigue a aplicação — cada camada confirmada elimina uma hipótese.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Transforme os três comandos de hoje num checklist fixo pra qualquer ticket de "serviço fora
+  do ar": enlace → rede → transporte → aplicação, nessa ordem, antes de qualquer reinicialização. Isso corta
+  o tempo de diagnóstico de minutos incertos pra segundos certos — e evita a manutenção não programada que
+  não resolve nada.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Nenhuma reinicialização foi feita antes de mapear a camada afetada.</li>
+    <li>ip -br link, ip -br addr e ss -tln foram usados nessa ordem, subindo as camadas.</li>
+    <li>A causa foi localizada numa camada específica, não tratada como "a rede está com problema" genericamente.</li>
+    <li>Nada foi alterado — apenas observado.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Os três comandos de hoje (ip -br link, ip -br addr, ss -tln) são estritamente de
+  leitura — não existe rollback necessário. O cuidado real é resistir ao reflexo de "reiniciar tudo" antes de
+  saber qual camada específica está envolvida.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "observe por camada antes de agir" é a mesma
+  disciplina da Semana 11 (mapear as etapas do boot antes de mudar algo) — agora aplicada à rede. O Anki vai
+  conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a sequência certa foi <b>ip -br link
+  → ip -br addr → ss -tln</b>, subindo as camadas em ordem. O ponto central do caso é este: rede se
+  diagnostica por camada — primeiro descubra onde o pacote para.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de mapear um problema de rede pela camada correta, sem reiniciar no
+  escuro. Amanhã você aprende a decifrar o que um endereço IP com máscara (CIDR) realmente revela sobre quais
+  máquinas conseguem se falar direto, e quais precisam de um roteador no meio.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 13, Dia 1 de ~250 — abre a Fase 2. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Camada Física","Nível mais baixo do modelo de rede: cabo, conector e sinal elétrico ou óptico que transporta os bits.",
+   "É a estrada física por onde os carros trafegam — sem asfalto, nenhum veículo (dado) chega a lugar nenhum."],
+  ["Camada de Enlace (Link)","Nível responsável pela comunicação direta entre dispositivos na mesma rede local, usando endereços MAC.",
+   "É a placa do carro reconhecida pelo vizinho da mesma rua — identifica quem é quem dentro do mesmo quarteirão."],
+  ["Camada de Rede (IP)","Nível responsável pelo endereçamento e roteamento de pacotes entre redes diferentes, usando endereços IP.",
+   "É o sistema de CEPs e rotas entre cidades — permite que uma carta saiba para onde ir, mesmo estando fora do próprio bairro."],
+  ["Camada de Transporte","Nível responsável por entregar dados entre aplicações específicas, usando portas e protocolos como TCP e UDP.",
+   "É o número do apartamento dentro do prédio — o CEP (IP) leva até o prédio certo, a porta leva até a sala exata."],
+  ["Camada de Aplicação","Nível mais alto, onde os protocolos que o usuário reconhece operam: HTTP, DNS, SSH, entre outros.",
+   "É a conversa em si acontecendo dentro da sala — todas as camadas de baixo só existem para essa conversa poder acontecer."],
+  ["ip -br link","Comando que lista as interfaces de rede em formato resumido, mostrando estado (UP/DOWN) e endereço MAC.",
+   "É checar se a tomada de energia da parede está ligada e identificada — o primeiro passo antes de ligar qualquer aparelho nela."],
+  ["ip -br addr","Comando que lista os endereços IP configurados em cada interface de rede, em formato resumido.",
+   "É ler o número da casa afixado na fachada — sem ele, ninguém de fora consegue endereçar corretamente uma entrega até ali."],
+  ["ss -tln","Comando que lista sockets TCP em modo de escuta (listening), mostrando quais portas têm serviços aguardando conexão.",
+   "É a lista de campainhas funcionando no prédio — mostra exatamente quais portas estão prontas para receber visitantes."],
+  ["Método de diagnóstico por camada","Investigar um problema de rede confirmando cada camada do modelo, da mais baixa para a mais alta, até achar onde a falha começa.",
+   "É seguir a tubulação de água do cano principal até a torneira — você testa cada trecho até achar onde o fluxo realmente para."],
+  ["MAC (Media Access Control)","Endereço físico único atribuído a uma interface de rede, usado para comunicação na camada de enlace.",
+   "É o número de série gravado na placa-mãe do aparelho — único, e não muda mesmo que o endereço IP mude."],
+  ["Reboot genérico vs. diagnóstico por camada","Diferença entre reiniciar tudo sem saber a causa e investigar metodicamente qual camada específica falhou.",
+   "É a diferença entre desligar a energia do prédio inteiro achando que vai resolver, e checar disjuntor por disjuntor até achar o que caiu."],
+  ["TCP/IP (modelo)","Conjunto de protocolos e camadas que definem como dados trafegam de uma aplicação a outra através de uma rede.",
+   "É o mapa completo de uma entrega de correio — do envelope físico até a mensagem sendo lida pelo destinatário certo."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

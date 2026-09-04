@@ -1,0 +1,520 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 14 · Dia 1 — DNS Conceitual | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_13/DIA_05_TRACEROUTE_MTR.html'>← Semana 13, Dia 5</a><a href='#'>Semana 14</a><a href='DIA_02_DNS_TTL_CACHE.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 13:</b> Você já sabe testar host, porta e aplicação por IP
+direto. Mas ninguém digita IP no navegador — digita um nome. Hoje você aprende o que acontece entre digitar
+um nome e o navegador saber pra onde ir: DNS não é mágica nem arquivo único, é uma cadeia de perguntas.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender o fluxo real de uma consulta DNS.</b> Você ganha
+o modelo mental de hierarquia (resolvedor local → root → TLD → autoritativo) e a diferença entre um registro
+A (nome→IP) e um CNAME (apelido→outro nome) — a base pra qualquer diagnóstico de DNS que vem depois.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 14 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>DNS Conceitual</h1>
+  <p>DNS não é mágica nem arquivo único — é uma cadeia de perguntas até a resposta autoritativa</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S14D01_DNS_CONCEITUAL.png' alt='Prancha em seis quadros sobre o fluxo hierárquico de resolução DNS, registro A, CNAME e servidor autoritativo'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você digita app.empresa.local no navegador e nada abre. "Será que o DNS é só um arquivo
+  grande em algum servidor?" "Onde está esse arquivo?" "Quem responde minha pergunta?" — três perguntas
+  legítimas de quem nunca viu o fluxo real. DNS não é um arquivo, é uma cadeia de perguntas em hierarquia.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um dev novo passou uma hora tentando descobrir "onde está o arquivo do DNS" pra editar manualmente e
+    corrigir um app que não abria — ele imaginava um arquivo texto gigante em algum lugar, tipo um
+    `/etc/hosts` global da internet. Sentei com ele e rodei <code>dig app.empresa.local A</code>: a resposta
+    veio do resolvedor local (192.168.10.10), com TTL 300. Perguntei: "isso é a fonte da verdade, ou uma
+    cópia?" Ele não sabia. Rodei de novo, agora direto no autoritativo com <code>dig @ns1.empresa.local
+    app.empresa.local A</code> — mesma resposta, mas essa sim era a fonte real. O resolvedor só guarda cópia
+    temporária em cache.
+    <br><br>
+    O ponto que fica: não existe "o arquivo do DNS". Existe uma cadeia de perguntas — resolvedor, root, TLD,
+    autoritativo — e cada uma responde de um jeito diferente. Confundir cache com fonte da verdade é o erro
+    que volta amanhã, quando o tema for TTL.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que confirma</th></tr></thead><tbody>
+    <tr><td><code>dig nome A</code></td><td>Resolve um nome para um endereço IPv4 (registro A).</td></tr>
+    <tr><td><code>dig nome CNAME</code></td><td>Mostra se o nome é um apelido apontando para outro nome.</td></tr>
+  </tbody></table>
+  <pre>$ dig app.empresa.local A
+; <<>> DiG 9.18.20 <<>> app.empresa.local A
+;; ANSWER SECTION:
+app.empresa.local.   300  IN  A  192.168.10.50
+;; SERVER: 192.168.10.10#53(192.168.10.10)
+
+$ dig www.empresa.local CNAME
+;; ANSWER SECTION:
+www.empresa.local.   300  IN  CNAME  app.empresa.local.
+;; SERVER: 192.168.10.10#53(192.168.10.10)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: consulte um domínio conhecido e leia a ANSWER SECTION completa.</div></div>
+      <div class="lab-cmd">$ dig example.com A</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro A com IP, TTL e servidor que respondeu.</div>
+      <div class="lab-why"><b>Por quê:</b> ler os três campos (IP, TTL, servidor) juntos é o que ensina a diferenciar resposta de cache de resposta fresca.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ler só o IP e ignorar a linha SERVER — sem ela você não sabe se a resposta veio do resolvedor local ou de um servidor autoritativo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: configure um servidor DNS local simples com uma zona de teste, se disponível.</div></div>
+      <div class="lab-cmd"># exemplo com dnsmasq: adicionar em /etc/dnsmasq.conf
+address=/app.empresa.local/192.168.10.50</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> zona respondendo a consultas locais.</div>
+      <div class="lab-why"><b>Por quê:</b> montar sua própria zona de teste é o que transforma o conceito de "servidor autoritativo" em algo concreto que você controla.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de reiniciar o serviço dnsmasq depois de editar a config — a mudança não entra em vigor sozinha.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione um CNAME apontando para o registro A e teste com dig.</div></div>
+      <div class="lab-cmd">$ dig www.empresa.local CNAME
+$ dig www.empresa.local A</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> dig mostra o CNAME e, seguindo a cadeia, o IP final.</div>
+      <div class="lab-why"><b>Por quê:</b> ver o resolvedor seguir o apelido até o IP final, na prática, fixa a diferença entre CNAME (aponta pra nome) e A (aponta pra IP).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar um CNAME apontando pra outro CNAME em cadeia longa — funciona, mas complica o diagnóstico e é evitado em produção.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a resolução do CNAME não completar, este é o ponto onde o chat com o Sênior-IA vai ajudar a verificar a configuração da zona.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: compare o campo SERVER entre uma consulta ao resolvedor local e uma direta ao autoritativo.</div></div>
+      <div class="lab-cmd">$ dig app.empresa.local A
+$ dig @192.168.10.20 app.empresa.local A</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ambos retornam a mesma resposta, mas de fontes diferentes.</div>
+      <div class="lab-why"><b>Por quê:</b> essa comparação lado a lado é o que prova, na prática, a diferença entre cache e fonte da verdade — não é só teoria.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que a resposta do resolvedor local está sempre atualizada só porque bate com o autoritativo agora — o cache pode ficar desatualizado depois de uma mudança recente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente o fluxo completo observado.</div></div>
+      <div class="lab-cmd"># resolvedor: 192.168.10.10 (cache)
+# autoritativo: 192.168.10.20 (fonte real)
+# A: app.empresa.local → 192.168.10.50 (TTL 300)
+# CNAME: www.empresa.local → app.empresa.local</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> resumo com resolvedor, servidor, tipo de registro e TTL — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> esse resumo é o que você vai usar amanhã, quando o tema for TTL e cache — a base de hoje sustenta o diagnóstico de amanhã.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> anotar só o IP final sem registrar de onde veio a resposta — sem isso, "o DNS está certo mas não funciona" vai parecer contraditório amanhã.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as quatro paradas que uma consulta DNS faz, do seu PC até a resposta
+    final?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Cliente (seu PC) →
+      <span class="hint" data-tip="Servidor que recebe a pergunta do cliente e consulta a hierarquia em nome dele." onclick="openGlossary(0)">resolvedor local</span>
+      → root (.) → TLD (.local, .com, etc.) →
+      <span class="hint" data-tip="Servidor que guarda a resposta oficial e definitiva para uma zona DNS específica." onclick="openGlossary(1)">servidor autoritativo</span>
+      (que conhece a zona específica) → resposta volta pro cliente. Cada etapa é uma pergunta na cadeia, não
+      uma consulta a um arquivo único.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>dig app.empresa.local A retorna a resposta certa (192.168.10.50). Qual servidor,
+  na cadeia de resolução, é a FONTE da verdade sobre esse registro?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O servidor autoritativo da zona empresa.local é a fonte da verdade — ele guarda o arquivo de zona com o registro real (app IN A 192.168.10.50). O resolvedor local só repassa a pergunta e, depois, guarda uma cópia temporária da resposta em cache.')"><b>A</b> O servidor autoritativo da zona empresa.local — ele guarda o arquivo de zona com o registro real</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O resolvedor local repassa a pergunta e pode guardar uma cópia em cache, mas ele não é a fonte da verdade — se a zona mudar, é o servidor autoritativo que reflete a mudança primeiro.')"><b>B</b> O resolvedor local (192.168.10.10) — ele é quem responde diretamente ao cliente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O servidor root (.) só sabe direcionar pra qual TLD perguntar em seguida — ele não guarda o registro específico de app.empresa.local, apenas aponta o próximo passo da cadeia.')"><b>C</b> O servidor root (.) — ele está no topo da hierarquia, então guarda todos os registros</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'CNAME é um tipo de registro (um apelido para outro nome), não um servidor — a pergunta é sobre qual servidor é a fonte da verdade, e CNAME não responde a essa categoria.')"><b>D</b> O CNAME — ele aponta diretamente para o IP final sem precisar de mais consultas</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O DNS é a lista de contatos do celular da humanidade: você lembra o nome da pessoa ('empresa.com.br') e o sistema traduz para o número discável ('203.0.113.5').</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 www.empresa.local é CNAME para app.empresa.local, que por sua vez tem um registro A</h2>
+  <p>Um colega, vendo dois registros diferentes, acha que são consultas independentes sem relação.</p>
+  <div class='box question'>Como o resolvedor realmente resolve www.empresa.local até chegar num IP?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O resolvedor segue a cadeia: pergunta por www.empresa.local, recebe um CNAME apontando pra app.empresa.local, e então pergunta de novo — agora por app.empresa.local — até finalmente receber o registro A com o IP. CNAME é um apelido que precisa ser seguido, não um IP direto.')"><b>A</b> O resolvedor segue a cadeia: recebe o CNAME apontando para app.empresa.local, e pergunta de novo até achar o registro A com o IP final</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'CNAME não contém o IP diretamente — ele é um apelido que aponta para outro NOME, que por sua vez precisa ser resolvido até chegar num registro A com o IP real.')"><b>B</b> O CNAME já contém o IP diretamente, então não é preciso consultar mais nada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Os dois registros têm relação direta — CNAME e A não são consultas independentes quando um aponta para o outro; a resolução de www depende de seguir até o A de app.')"><b>C</b> São consultas totalmente independentes, sem relação entre www e app</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A hierarquia DNS (Raiz . → TLD .br → Autoritativo) é a árvore genealógica postal: o servidor raiz aponta para o cartório do Brasil (.br), que aponta para o cartório da empresa.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se o resolvedor local responde rápido, isso significa que ele é sempre a fonte da verdade?"</h2>
+  <p>Um colega acha que qualquer resposta rápida do resolvedor já é garantidamente atual.</p>
+  <div class='box question'>Por que essa suposição pode estar errada?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'O resolvedor pode responder rápido justamente porque guardou uma resposta em cache anteriormente — velocidade não é sinônimo de atualidade. Se o registro mudou no servidor autoritativo recentemente, o cache do resolvedor pode ainda ter a versão antiga até expirar.')"><b>A</b> Uma resposta rápida pode vir de cache, não necessariamente da consulta mais recente ao servidor autoritativo — velocidade não garante atualidade</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A velocidade de resposta não garante que a informação está atualizada — isso depende de estar vindo de uma consulta fresca ao autoritativo ou de uma cópia em cache, que pode estar desatualizada.')"><b>B</b> Não, resposta rápida sempre significa que veio direto do servidor autoritativo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O tamanho do registro não tem relação com a velocidade de resposta do resolvedor — a fonte real da resposta (cache ou consulta fresca) é o que determina se a informação está atualizada.')"><b>C</b> Só é confiável se o registro consultado for do tipo A, nunca CNAME</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Registros Tipo A apontam para endereços IPv4, enquanto registros CNAME são apelidos que apontam para outro nome canônico.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Ao investigar DNS, lembre que não existe um "arquivo único" — é uma cadeia hierárquica.</li>
+    <li>Use dig nome A pra resolver o registro de endereço, e dig nome CNAME pra checar apelidos.</li>
+    <li>Identifique qual servidor respondeu (linha SERVER na saída do dig).</li>
+    <li>Diferencie o servidor autoritativo (fonte da verdade) do resolvedor local (repassa/cacheia).</li>
+    <li>Ao seguir um CNAME, entenda que a resolução continua até achar um registro A final.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Sempre confirme a linha SERVER na saída do dig antes de tirar conclusão sobre um registro
+  — nunca assuma que uma resposta rápida veio da fonte real. Isso evita horas de investigação num "arquivo
+  DNS" que não existe.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O fluxo hierárquico de resolução DNS foi entendido, sem tratá-lo como "um arquivo único".</li>
+    <li>A diferença entre registro A e CNAME foi confirmada na prática com dig.</li>
+    <li>O servidor autoritativo foi identificado como a fonte real da verdade.</li>
+    <li>Nenhuma configuração foi alterada só pra observar o fluxo.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>dig é um comando de leitura, sem risco — não existe rollback necessário. O
+  cuidado real é não confundir cache (resposta rápida do resolvedor) com fonte da verdade (servidor
+  autoritativo), um erro que vai aparecer de novo amanhã com o tema de TTL.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "cadeia de perguntas, não arquivo único"
+  conecta com a Semana 13 (modelo TCP/IP em camadas) — mesma disciplina de entender o fluxo antes de
+  diagnosticar. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a fonte da verdade foi <b>o servidor
+  autoritativo da zona empresa.local</b>, que guarda o registro real. O ponto central do caso é este: DNS não
+  é mágica nem arquivo único — é uma cadeia de perguntas até a resposta autoritativa.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de entender o fluxo hierárquico de resolução DNS e diferenciar
+  registro A de CNAME. Amanhã você aprende sobre TTL e cache — e por que "o DNS já está certo, mas ainda não
+  funciona" é uma frase que faz sentido, não uma contradição.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 14, Dia 1 de ~250 — abre a Semana 14 (DNS+DHCP). Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Resolvedor local","Servidor que recebe a pergunta do cliente e consulta a hierarquia DNS em nome dele, geralmente com cache.",
+   "É o atendente da central telefônica que liga pros departamentos certos até achar quem tem a resposta, e depois anota a resposta pra próxima vez."],
+  ["Servidor autoritativo","Servidor que guarda a resposta oficial e definitiva para uma zona DNS específica — a fonte da verdade.",
+   "É o cartório: o único lugar cuja certidão vale oficialmente, mesmo que outros lugares tenham cópias."],
+  ["Registro A","Tipo de registro DNS que associa um nome diretamente a um endereço IPv4.",
+   "É o número de telefone real de uma pessoa — quando você pergunta o contato dela, é isso que recebe."],
+  ["CNAME","Tipo de registro DNS que cria um apelido apontando para outro nome, não diretamente para um IP.",
+   "É um apelido salvo na agenda que aponta pro nome verdadeiro do contato — você precisa seguir até achar o número de telefone real."],
+  ["dig (Domain Information Groper)","Ferramenta de linha de comando para consultar servidores DNS e ver a resposta detalhada.",
+   "É a lupa de investigação: mostra exatamente quem respondeu, o que foi respondido, e por quanto tempo a resposta vale."],
+  ["Hierarquia DNS (root → TLD → autoritativo)","Estrutura em árvore da resolução DNS, começando pelos servidores raiz, passando pelo domínio de topo (.com, .local) até o autoritativo.",
+   "É perguntar o caminho pra um endereço específico, começando pela cidade, depois o bairro, até finalmente achar a casa exata."],
+  ["Zona DNS","Porção do espaço de nomes DNS administrada por uma entidade específica, com seu próprio arquivo de registros.",
+   "É o território administrativo de uma prefeitura — cada uma cuida dos próprios endereços, sem interferir nos vizinhos."],
+  ["Arquivo de zona","Arquivo de texto que contém todos os registros DNS (A, CNAME, etc.) de uma zona específica.",
+   "É o livro de registros do cartório — cada linha uma entrada oficial, com nome e endereço correspondente."],
+  ["ANSWER SECTION (dig)","Parte da saída do dig que mostra a resposta real obtida à consulta DNS.",
+   "É a linha de resposta no formulário preenchido — o que realmente foi respondido, separado do resto do formulário."],
+  ["Cliente DNS","O dispositivo (PC, celular) que inicia a consulta DNS ao tentar acessar um nome.",
+   "É a pessoa fazendo a pergunta na central telefônica — o ponto de partida de toda a cadeia de resolução."],
+  ["Consulta recursiva","Tipo de consulta em que o resolvedor assume a responsabilidade de percorrer toda a hierarquia até obter a resposta final.",
+   "É pedir pro atendente 'descubra pra mim', em vez de você mesmo ligar pra cada departamento até achar a resposta."],
+  ["Fonte da verdade vs. cache","Distinção entre onde a informação realmente é definida (autoritativo) e onde uma cópia temporária dela pode estar guardada (cache).",
+   "É a diferença entre o documento original no cartório e a fotocópia guardada na sua gaveta — a fotocópia pode ficar desatualizada."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

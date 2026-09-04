@@ -1,0 +1,519 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 3 · Dia 2 — journalctl a Fundo | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_TOP_HTOP.html'>← Dia 1</a><a href='#'>Semana 3</a><a href='DIA_03_SYSLOG_LOGROTATE.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> top e htop mostram o AGORA. Hoje o problema é diferente: um
+serviço falhou e já não está mais rodando pra você observar em tempo real — a única pista que sobrou é o que
+ele deixou registrado no journal, antes de morrer.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: investigar falhas com journalctl a fundo, sempre antes de
+reiniciar.</b> Você ganha o hábito de ler a causa registrada antes de qualquer restart — restart sem ler o log
+apaga a melhor pista que você tinha.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 3 · Dia 2 | Nível Júnior</div>
+  <h1>journalctl: Log Primeiro, Restart Depois</h1>
+  <p>filtrar por unidade, tempo, prioridade e acompanhar ao vivo — sem virar ruído</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S03D02_JOURNALCTL.png' alt='Prancha em seis quadros sobre journalctl'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>O dashboard mostra <code>app.service — failed</code>. O primeiro pensamento é "se eu
+  reiniciar, resolve?" — mas reiniciar sem ler o log apaga a melhor pista que você tinha sobre o motivo real
+  da falha.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o dashboard mostrou <code>app.service — failed</code>, e o primeiro pensamento do Júnior foi "se eu
+    reiniciar, resolve?". Diferente de ontem — quando o processo ainda estava vivo pra investigar com top —
+    hoje o serviço já morreu. A única pista que sobrou é o que ele deixou registrado antes de cair. Expliquei:
+    reiniciar sem ler esse registro apaga a chance de entender por quê.<br><br>
+    Mostrei o <code>journalctl</code> filtrado — unidade, período, prioridade de erro — e lá estava:
+    <code>bind: address already in use</code>, porta 8080 já ocupada. Confirmamos com <code>ss -ltnp</code>
+    quem estava na porta: um processo <code>node</code> avulso. O Júnior quis matar esse processo na hora com
+    <code>kill -9</code> — segurei: matar algo sem saber o que é pode derrubar outro serviço que depende
+    dele. Resolvemos o conflito primeiro, com calma, e só então reiniciamos app.service.<br><br>
+    E teve o detalhe que sempre confunde: um colega rodou só <code>journalctl -p err</code>, sem o
+    <code>-u</code>, achando que ia ver só os erros do app.service. Expliquei que os filtros são
+    independentes — sem especificar a unidade, o comando mostra erro de TODO o sistema, misturado. Log
+    primeiro, mas o filtro certo é o que separa sinal de ruído.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>journalctl -u app.service --since "10 min ago" -p err</code></td><td>Filtra só os erros recentes daquela unidade específica — corta o ruído de todo o resto do sistema.</td></tr>
+    <tr><td><code>ss -ltnp | grep 8080</code></td><td>Confirma qual processo está ocupando uma porta, quando o log aponta pra esse tipo de conflito.</td></tr>
+    <tr><td><code>journalctl -f</code></td><td>Acompanha novos logs em tempo real, útil depois de aplicar a correção.</td></tr>
+  </tbody></table>
+  <pre>$ journalctl -u app.service --since "10 min ago" -p err
+mai 27 10:12:41 srv01 app[1234]: ERROR Falha ao iniciar
+mai 27 10:12:41 srv01 app[1234]: "bind: address already in use"
+mai 27 10:12:41 srv01 app[1234]: ERROR porta 8080 já em uso
+
+$ ss -ltnp | grep 8080
+LISTEN 0  128  0.0.0.0:8080  0.0.0.0:*  users:(("node",pid=2234,fd=18))</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Veja os últimos 20 registros de um serviço de teste.</div></div>
+      <div class="lab-cmd">journalctl -u ssh -n 20</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista dos últimos 20 eventos daquele serviço específico.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> -u é o filtro mais básico e mais importante — sem ele, você lê o journal do sistema inteiro, o que é ruído demais pra qualquer investigação focada.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o -u e rolar um log gigante tentando achar o serviço certo manualmente — sempre filtre primeiro, leia depois.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Combine período e prioridade pra cortar ruído, e compare com o comando anterior.</div></div>
+      <div class="lab-cmd">journalctl -u ssh --since "1 hour ago" -p err</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista bem menor, só com erros, mais fácil de ler.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> combinar --since e -p é o que transforma um log de centenas de linhas numa lista curta com só o que realmente importa pra investigação de agora.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar -p err sem -u (como o colega da história de hoje) — sem o filtro de unidade, os erros de todos os serviços aparecem misturados.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Acompanhe o log ao vivo numa janela e provoque um evento (restart) noutra.</div></div>
+      <div class="lab-cmd"># janela 1:
+journalctl -u ssh -f
+# janela 2, ao mesmo tempo:
+sudo systemctl restart ssh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> novos logs aparecendo ao vivo na segunda janela conforme o restart acontece.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> -f é a ferramenta certa pra validar em tempo real que uma correção funcionou — você vê o evento acontecer, não precisa adivinhar rodando o comando de novo depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> deixar o journalctl -f rodando numa sessão e esquecer de encerrar com Ctrl+C — não quebra nada, mas ocupa a sessão à toa.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a mensagem de erro no journal não fizer sentido pra você, este é o ponto onde o chat com o Sênior-IA vai ajudar a traduzir o que ela significa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Provoque um conflito de porta conhecido e encontre a causa só pelo journal.</div></div>
+      <div class="lab-cmd"># ocupe uma porta com algo simples, ex:
+python3 -m http.server 8080 &
+# depois tente subir outro serviço na mesma porta e leia o journal dele</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> mensagem de erro específica localizada, explicando exatamente por que o serviço falhou.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir o erro de propósito, num ambiente controlado, é a forma mais segura de reconhecer essa mensagem específica quando ela aparecer de verdade num chamado real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir "porta ocupada" com "serviço com bug" — a mensagem address already in use aponta pra um conflito de recurso, não pra um defeito no código do serviço.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente unidade, filtro usado, mensagem de erro, causa raiz e ação tomada.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o registro final
+# ex: "Unidade: app.service. Filtro: -u app.service -p err. Erro: porta 8080 ocupada por node (PID 2234). Ação: processo encerrado, porta liberada, restart validado."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar a causa raiz (não só "reiniciei e funcionou") é o que impede o mesmo problema de reaparecer sem ninguém entender por quê.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "restart resolveu" sem registrar a causa raiz — some a informação mais valiosa da investigação inteira.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são os quatro filtros principais do journalctl, e o que cada um faz?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Filtra por unidade/serviço específico." onclick="openGlossary(0)">-u serviço</span> (filtra por unidade) ·
+      <span class="hint" data-tip="Define desde quando mostrar os registros." onclick="openGlossary(1)">--since</span> (por período) ·
+      <span class="hint" data-tip="Mostra só mensagens de erro." onclick="openGlossary(2)">-p err</span> (por prioridade) ·
+      -f (acompanha novos logs ao vivo). Combinar os quatro corta ruído e mostra só o que importa.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>app.service aparece como failed no dashboard. Qual é a primeira ação correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar sem consultar o journal significa agir sem saber a causa — se o motivo for algo que vai continuar acontecendo (como uma porta ocupada), o serviço pode cair de novo minutos depois.')"><b>A</b> Reiniciar o serviço direto, já que o dashboard já confirmou a falha</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Consultar o journalctl filtrado pela unidade, período recente e prioridade de erro revela a causa registrada antes de qualquer ação — log primeiro, restart depois, sempre.')"><b>B</b> Consultar journalctl -u app.service --since "10 min ago" -p err pra ler a causa registrada antes de qualquer ação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Desabilitar o serviço não resolve o chamado, que pede pra investigar e corrigir a falha, não removê-la de circulação.')"><b>C</b> Desabilitar o serviço permanentemente pra parar de gerar alertas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Esperar o próximo start automático sem investigar a causa deixa o mesmo problema se repetir, sem nenhum aprendizado sobre o motivo real.')"><b>D</b> Esperar o systemd tentar reiniciar sozinho, sem investigar nada</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O journalctl é como a caixa-preta digital do avião: registra todos os eventos do sistema de inicialização e serviços com precisão de microssegundos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 A causa raiz foi confirmada — e agora, restart?</h2>
+  <p>O journal apontou <code>address already in use</code> na porta 8080, e o <code>ss -ltnp</code> confirmou
+  que o processo <code>node</code> (PID 2234) já está ocupando essa porta.</p>
+  <div class='box question'>Qual é a ação correta a partir daqui?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Reiniciar app.service sem resolver o conflito de porta reproduz exatamente o mesmo erro de novo — o processo node ainda vai estar ocupando a porta 8080.')"><b>A</b> Reiniciar app.service imediatamente, já que a causa já foi encontrada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Resolver o conflito primeiro — encerrando/ajustando o processo node que está na porta errada, ou mudando a porta da aplicação — e só depois reiniciar app.service, é a sequência correta. Reiniciar sem resolver a causa reproduz o mesmo erro.')"><b>B</b> Resolver o conflito de porta primeiro (ajustar o processo node ou a porta da aplicação), e só então reiniciar app.service</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Matar o processo node sem entender o que ele é ou por que está rodando pode derrubar outro serviço que depende dele — não é uma correção segura sem investigar primeiro.')"><b>C</b> Matar o processo node imediatamente com kill -9, sem verificar o que ele é</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag 'journalctl -u servico -xe' é como o médico abrindo a ficha clínica de um paciente específico: vai direto aos últimos sintomas e códigos de erro sem ruído.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Sem -u, o journalctl mostra só os erros do meu serviço, certo?"</h2>
+  <p>Um colega roda só <code>journalctl -p err</code>, sem o filtro <code>-u</code>, esperando ver apenas os
+  erros relacionados ao app.service.</p>
+  <div class='box question'>Esse comando faz o que o colega espera?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Sem -u, journalctl -p err mostra erros de TODOS os serviços e componentes do sistema, não só do app.service — o filtro de unidade e o de prioridade são independentes, e sem o -u o resultado vem misturado com ruído de outros serviços.')"><b>A</b> Não — sem -u, o comando mostra erros de prioridade alta de TODO o sistema, misturados, não só do app.service</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'journalctl não filtra automaticamente pelo serviço mais recente — sem o -u explícito, ele mostra o journal completo do sistema, de todas as unidades.')"><b>B</b> Sim — journalctl sempre assume o último serviço que falhou como filtro padrão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'-p err funciona normalmente sem -u — o comando roda e mostra resultado, só que esse resultado inclui todos os serviços, não é um erro de sintaxe.')"><b>C</b> Sim, mas só funciona se o app.service for o único serviço instalado no servidor</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag 'journalctl -f' (follow) é como assistir à transmissão ao vivo do jogo: mostra as novas linhas de log no exato segundo em que elas são gravadas.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Consulte o journal filtrado por unidade, período e prioridade de erro.</li>
+    <li>Identifique a mensagem de erro exata e o que ela realmente significa.</li>
+    <li>Se necessário, confirme com outra ferramenta (como ss) antes de agir.</li>
+    <li>Resolva a causa raiz, não só o sintoma.</li>
+    <li>Reinicie o serviço só depois da causa resolvida, e valide com status + journal -f.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Documente no runbook do serviço as mensagens de erro mais comuns dele e o que cada uma
+  significa (como "address already in use") — assim a próxima pessoa reconhece o padrão em segundos, sem
+  precisar investigar do zero. Padronize um alias curto pra esse filtro (journalctl -u SERVICO -p err
+  --since "X min ago"), pra virar reflexo, não algo digitado toda vez do zero.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O journal foi consultado antes de qualquer restart.</li>
+    <li>A mensagem de erro exata foi identificada e compreendida.</li>
+    <li>A causa raiz foi resolvida, não só reiniciado o serviço por cima do problema.</li>
+    <li>O restart foi validado com status e journalctl -f depois da correção.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Se a correção não resolver, o journal continua sendo sua fonte de verdade — volte
+  a ler com mais contexto (período maior, prioridade menos restritiva) em vez de tentar mais um restart às
+  cegas.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "log primeiro, restart depois" é a versão de hoje
+  da mesma disciplina de "observe antes de agir" — agora aplicada a serviços que já falharam, não só aos que
+  estão lentos. O Anki vai conectar com o Dia 1.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>consultar
+  journalctl -u app.service --since "10 min ago" -p err</b> pra ler a causa registrada antes de qualquer ação.
+  O ponto central do caso é este: log não é enfeite, é a memória do problema.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de investigar falhas de serviço usando o journal como fonte de
+  verdade, antes de qualquer restart. Amanhã você aprende sobre o syslog clássico e o logrotate — e por que
+  nunca se deve dar rm direto num log que ainda está sendo escrito.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 3, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["-u serviço","Opção do journalctl que filtra os registros por uma unidade (serviço) específica.",
+   "É pedir só a ficha daquele funcionário, não o arquivo de todo o departamento."],
+  ["--since","Opção que define a partir de que momento os registros devem aparecer.",
+   "É dizer 'me mostra só o que aconteceu depois desse horário', em vez do histórico inteiro."],
+  ["-p err","Opção que filtra registros mostrando só os de prioridade de erro ou mais grave.",
+   "É pedir só as ocorrências graves do dia, ignorando os avisos de rotina."],
+  ["-f (follow)","Opção que mantém o journalctl aberto, mostrando novos registros conforme acontecem.",
+   "É ficar de olho na câmera ao vivo, em vez de só rever a gravação de antes."],
+  ["journal","Registro centralizado de eventos do systemd, guardando logs de praticamente todo o sistema.",
+   "É o diário de bordo do navio, onde cada evento relevante é anotado com hora e origem."],
+  ["Unidade (unit)","Um serviço, socket, timer ou outro componente gerenciado pelo systemd.",
+   "É cada posto de trabalho individual dentro da fábrica, cada um com seu próprio histórico."],
+  ["address already in use","Mensagem de erro que indica que outro processo já está usando a porta de rede solicitada.",
+   "É chegar numa vaga de estacionamento e encontrar outro carro já estacionado nela."],
+  ["ss -ltnp","Comando que lista portas em escuta e qual processo está usando cada uma.",
+   "É perguntar ao segurança do prédio quem está ocupando cada sala, andar por andar."],
+  ["Causa raiz vs. sintoma","A causa raiz é o motivo real do problema; o sintoma é só o efeito visível dele.",
+   "É a diferença entre a infecção (causa) e a febre (sintoma) — tratar só a febre não cura a infecção."],
+  ["Prioridade de log (err, warn, info)","Nível de gravidade atribuído a cada mensagem registrada no sistema.",
+   "É a diferença entre um sussurro, um aviso e um grito — cada um pede um nível de atenção diferente."],
+  ["Restart às cegas","Reiniciar um serviço repetidamente sem entender a causa real da falha.",
+   "É apertar o botão de reset do roteador toda vez que a internet cai, sem nunca descobrir por quê."],
+  ["Registro (timestamp)","Marca de data e hora exata associada a cada linha de log.",
+   "É o carimbo de data e hora no envelope — sem ele, você não sabe quando o evento realmente aconteceu."]
+];
+
+const sceneStripIdx = [4,0,1,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

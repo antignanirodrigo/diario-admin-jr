@@ -1,0 +1,513 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 5 · Dia 1 — vmstat: Memória e Swap | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_04/DIA_05_DIAGNOSTICO_COMBINADO.html'>← Semana 4, Dia 5</a><a href='#'>Semana 5</a><a href='DIA_02_IOSTAT.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 3, Dia 1:</b> top e htop já te ensinaram a ler %CPU e %MEM.
+Mas hoje o sintoma não bate com o que eles mostram — CPU parece normal, e a aplicação continua lenta. É hora
+de descer um nível mais fundo: memória e swap, com vmstat.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar pressão de memória com vmstat.</b> Você ganha
+o hábito de observar swap in/out antes de concluir que o problema é só CPU — top mostra a foto, vmstat mostra
+o filme da memória.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 5 · Dia 1 | Nível Júnior</div>
+  <h1>vmstat: Memória e Swap Além do top</h1>
+  <p>antes de alterar memória, observe swap, I/O wait e o horário do sintoma</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S05D01_VMSTAT.png' alt='Prancha em seis quadros sobre vmstat, memória e swap'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Um servidor está lento, mas o <code>top</code> mostra CPU em 12% de uso — normal. A
+  aplicação continua lenta mesmo assim. Se CPU não é o problema, o próximo lugar certo pra olhar é memória e
+  swap, com uma ferramenta que mostra o filme, não a foto.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje um servidor estava lento, e o Júnior fez exatamente o que aprendeu na Semana 3: abriu o
+    <code>top</code>. Mas CPU mostrava 12% — praticamente ocioso. Ele ficou travado: "se não é CPU, o que
+    é?". Perguntei: "e memória? Já parou pra olhar swap?"<br><br>
+    Rodamos <code>vmstat 2 5</code> — cinco amostras, a cada dois segundos, não uma foto só. E ali estava o
+    que o top nunca mostra: a coluna <code>so</code> (swap out) subindo de 128 pra 256 pra 512 em poucos
+    ciclos, junto com <code>wa</code> (I/O wait) subindo de 6% pra 25%. O sistema estava empurrando memória
+    pro disco continuamente — é mandar caixas da mesa lotada pro depósito no porão, funciona, mas pegar de
+    volta é bem mais lento.<br><br>
+    O Júnior quase cometeu outro erro comum: viu a coluna <code>free</code> baixa e achou que já tinha a
+    resposta. Expliquei: free baixo sozinho não significa nada de ruim — o Linux usa RAM livre pra cache o
+    tempo todo, de forma saudável. O sinal REAL de pressão é <code>so</code> subindo, não free caindo. Cache
+    pode ser liberado na hora; memória em swap não. Foi assim que aprendemos: duas métricas juntas contam a
+    história completa, uma sozinha engana.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Coluna do vmstat</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>so</code> (swap out)</td><td>Dados sendo empurrados pra disco por falta de RAM — valor alto e constante é alerta real.</td></tr>
+    <tr><td><code>wa</code> (I/O wait)</td><td>Porcentagem de tempo que a CPU passa esperando disco responder — cresce junto com swap alto.</td></tr>
+  </tbody></table>
+  <pre>$ vmstat 2 5
+procs -----------memory---------- ---swap-- -----io---- --system-- ------cpu-----
+ r  b   free  buff   cache   si   so    bi   bo   in   cs us sy id wa
+ 1  0 120000 22000  410000    0  128   20  300  210  450 12  4 78  6
+ 2  1  98000 21000  390000   32  256   80  700  260  520 10  5 70 15
+ 1  1  76000 20000  360000   64  512  120  980  310  640  8  6 61 25</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Rode vmstat em estado normal e anote os valores de referência.</div></div>
+      <div class="lab-cmd">vmstat 2 5</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> valores baixos ou zero de si/so em estado saudável.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ter um "estado normal" anotado é o que permite reconhecer rápido quando um vmstat real está fora do padrão — sem baseline, você não sabe o que é anormal.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar vmstat sem argumentos e olhar só a primeira linha — a primeira amostra do vmstat é sempre a média desde o boot, não o estado atual; as amostras seguintes são as reais.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Gere pressão de memória controlada e observe o vmstat mudar em tempo real.</div></div>
+      <div class="lab-cmd">stress-ng --vm 2 --vm-bytes 80% --timeout 30s</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> so subindo visivelmente durante o teste, confirmando o padrão de pressão.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver so subir de propósito, sabendo a causa exata (o próprio teste), é o que fixa o reconhecimento desse padrão pra quando aparecer sem aviso num chamado real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar --vm-bytes muito próximo de 100% numa VM pequena — pode travar a VM de teste; use uma margem de segurança.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não tiver certeza se um padrão de vmstat é preocupante, este é o ponto onde o chat com o Sênior-IA vai ajudar a interpretar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Compare free baixo (cache normal) com so alto (pressão real).</div></div>
+      <div class="lab-cmd">free -h
+vmstat 2 3</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> distinção clara entre cache saudável e swap real.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver os dois números lado a lado é o que deixa concreta a diferença entre "parece preocupante" (free baixo) e "é preocupante de verdade" (so subindo).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> concluir pressão de memória só pelo free baixo, como quase aconteceu na história de hoje — sempre confirme com so antes de reportar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Encerre o teste de carga e confirme o retorno ao normal.</div></div>
+      <div class="lab-cmd">vmstat 2 5</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> so e wa retornando aos valores de referência do passo 1.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> validar o "depois" contra o "antes" é o que prova que o sistema realmente voltou ao normal, não só a impressão de que voltou.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> encerrar o teste e não validar o retorno — sem essa checagem final, você não sabe se a pressão de memória realmente cessou.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente sintoma, ferramenta usada, evidência e validação pós-correção.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o registro final
+# ex: "Sintoma: lento, CPU normal. Ferramenta: vmstat. Evidência: so subiu 128→512, wa 6%→25%. Causa: pressão de memória. Validado: retornou ao normal após teste."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar os valores numéricos exatos (não só "estava alto") é o que torna esse relatório útil pra comparação em investigações futuras.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar "problema de memória" sem os números — sem essa evidência quantitativa, o relatório vira opinião, não diagnóstico.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que significam as colunas <code>si</code> e <code>so</code> do vmstat, e por
+    que valores altos ali são sempre sinal de alerta?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Dados sendo trazidos do swap de volta pra memória RAM." onclick="openGlossary(0)">si</span> (swap in) e
+      <span class="hint" data-tip="Dados sendo enviados da memória RAM pro swap em disco." onclick="openGlossary(1)">so</span> (swap out)
+      mostram o sistema movendo memória pra/do disco — disco é ordens de magnitude mais lento que RAM, então
+      <span class="hint" data-tip="Situação em que a demanda por memória RAM ultrapassa o disponível." onclick="openGlossary(2)">pressão de memória</span>
+      real sempre aparece ali primeiro, mesmo quando CPU parece tranquila.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>top mostra CPU em 12%, mas a aplicação continua lenta. Qual é o próximo passo
+  correto de investigação?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Se o top já mostra CPU baixa, insistir em olhar só CPU de novo não vai revelar nada novo — o sintoma pede investigar outro recurso.')"><b>A</b> Continuar olhando o top, esperando a CPU eventualmente subir e explicar a lentidão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Rodar vmstat 2 5 revela o que o top não mostra: atividade de swap (si/so) e I/O wait — se a CPU está tranquila mas o sistema está lento, memória e disco são os próximos suspeitos naturais.')"><b>B</b> Rodar vmstat 2 5 pra investigar memória, swap e I/O — recursos que o top não detalha</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aumentar CPU/vCPU da VM sem nenhuma evidência de que CPU é o gargalo é gastar recurso sem entender o problema real.')"><b>C</b> Adicionar mais vCPUs à VM, já que mais processamento nunca atrapalha</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar sem entender a causa é o mesmo erro já corrigido na Semana 3 — adia o problema, não resolve, e perde a chance de identificar a causa real de memória.')"><b>D</b> Reiniciar a aplicação, já que o top não mostrou nenhum problema óbvio</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'vmstat 1' é o eletrocardiograma contínuo do servidor: exibe uma linha por segundo mostrando o ritmo da memória, blocos de I/O e trocas de contexto.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 so sobe de 128 pra 512 em poucos ciclos — o que isso indica?</h2>
+  <p>Ao longo de três amostras do vmstat, <code>so</code> sobe de 128 para 256 e depois 512, enquanto
+  <code>wa</code> também sobe de 6% para 25%.</p>
+  <div class='box question'>Qual é a leitura correta dessa tendência crescente?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'so subindo continuamente indica pressão de memória crescente — o sistema está empurrando cada vez mais dados pro disco porque a RAM disponível está diminuindo. Junto com o wa subindo, isso confirma que a CPU está passando mais tempo esperando I/O, exatamente o padrão que explica a lentidão sem alta de %CPU.')"><b>A</b> Pressão de memória crescente — o sistema está fazendo cada vez mais swap, e o I/O wait subindo junto confirma que a CPU está esperando disco, não processando de verdade</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'so subindo repetidamente ao longo de várias amostras não é ruído normal — é uma tendência real e consistente, digna de investigação, não de ser ignorada.')"><b>B</b> É normal, todo servidor tem alguma atividade de swap o tempo todo, sem significado nenhum</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Espaço em disco (df) e uso de swap por pressão de memória são coisas diferentes — swap sendo usado não indica necessariamente que a partição de swap está cheia, indica que a RAM está sob pressão.')"><b>C</b> Indica que o disco está cheio, sem relação com memória</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A coluna 'si/so' (swap-in/swap-out) diferente de zero é o alarme de incêndio da RAM: avisa que a memória física esgotou e o sistema está usando o disco lento como muleta.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "free baixo no vmstat já significa falta de memória, certo?"</h2>
+  <p>Um colega vê a coluna <code>free</code> caindo e conclui imediatamente que o servidor está sem memória
+  disponível.</p>
+  <div class='box question'>Essa leitura isolada está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não isoladamente — free baixo sozinho pode só significar que o Linux está usando a RAM livre pra cache (o que é normal e até desejável). O sinal REAL de pressão de memória é so (swap out) subindo, não free caindo — cache pode ser liberado instantaneamente quando necessário, diferente de memória realmente presa em swap.')"><b>A</b> Não isoladamente — free baixo pode só significar que o Linux está usando RAM livre para cache (normal); o sinal real de pressão é so (swap out) subindo, não free caindo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'free baixo, sozinho, não é motivo de pânico — o Linux usa memória livre pra cache de forma agressiva e saudável, isso não é o mesmo que estar sem memória disponível.')"><b>B</b> Sim — free baixo já é motivo suficiente pra escalar como emergência de memória</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Reiniciar sem entender a causa (que pode nem ser um problema real, já que free baixo com cache é normal) reproduz o mesmo erro de agir sem evidência da Semana 3.')"><b>C</b> Sim, e a solução automática é sempre reiniciar o servidor pra "limpar a memória"</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A coluna 'r' (runnable processes) maior que o número de núcleos de CPU é a fila de espera do caixa: indica que há mais processos querendo rodar do que processadores livres.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Se CPU parece normal mas o sintoma persiste, rode vmstat pra investigar memória.</li>
+    <li>Observe so (swap out) ao longo de várias amostras, não só uma leitura isolada.</li>
+    <li>Correlacione so alto com wa (I/O wait) subindo junto.</li>
+    <li>Correlacione o início do padrão com o horário exato do sintoma reportado.</li>
+    <li>Reporte pressão de memória com evidência numérica, não suposição.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Configure alertas de monitoramento baseados em so (swap out) sustentado, não só %CPU — a
+  dashboard padrão de muitos times olha só CPU/memória total, deixando pressão de swap invisível até virar
+  ticket. Documente no runbook a diferença free-baixo-normal vs. so-alto-real, pra ninguém mais confundir os
+  dois sob pressão.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>vmstat foi usado quando o top não explicava o sintoma sozinho.</li>
+    <li>so foi observado ao longo de várias amostras, não numa leitura isolada.</li>
+    <li>free baixo não foi confundido com pressão real de memória.</li>
+    <li>A causa foi correlacionada com o horário exato do sintoma reportado.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>vmstat é somente leitura — não existe rollback. O limite real está em não
+  reiniciar serviços/servidor baseado só numa leitura de free baixo, que sozinha não prova nada.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "duas métricas juntas contam a história completa"
+  já apareceu com %CPU/%MEM na Semana 3 — hoje é si/so + wa. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>rodar
+  vmstat 2 5 pra investigar memória, swap e I/O</b>. O ponto central do caso é este: antes de alterar
+  memória, observe swap, I/O wait e o horário do sintoma.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diagnosticar pressão de memória além do que o top mostra. Amanhã
+  você aprende iostat — a diferença entre disco cheio e disco lento, dois problemas completamente diferentes.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 5, Dia 1 de ~250 — abre a Semana 5. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["si (swap in)","Dados sendo trazidos do espaço de swap de volta pra memória RAM.",
+   "É trazer de volta as caixas que foram guardadas no depósito, porque agora precisam delas na sala outra vez."],
+  ["so (swap out)","Dados sendo enviados da memória RAM pro espaço de swap em disco, por falta de RAM disponível.",
+   "É mandar caixas da mesa lotada pro depósito no porão — funciona, mas pegar de volta é bem mais lento."],
+  ["Pressão de memória","Situação em que a demanda por memória RAM se aproxima ou ultrapassa o que está disponível.",
+   "É a sala ficando cada vez mais cheia, obrigando a mandar coisas pro depósito com frequência crescente."],
+  ["wa (I/O wait)","Porcentagem de tempo que a CPU passa parada, esperando uma operação de disco terminar.",
+   "É o cozinheiro parado esperando o forno, sem poder fazer mais nada até ele terminar."],
+  ["free (vmstat/free -h)","Quantidade de memória RAM completamente livre, sem uso nenhum, nem por cache.",
+   "É a mesa vazia, sem nada em cima — diferente de uma mesa com papéis organizados (cache) que podem ser tirados na hora."],
+  ["cache (memória)","Memória RAM usada pelo Linux para acelerar acessos futuros a dados já lidos, liberável instantaneamente se necessário.",
+   "É deixar ferramentas usadas recentemente à mão em vez de guardar tudo — pode tirar da mesa na hora, sem custo real."],
+  ["swap (partição/arquivo)","Espaço em disco reservado para onde o sistema move memória quando a RAM física se esgota.",
+   "É o depósito no porão — mais lento que a sala principal, mas evita que o sistema trave por falta total de espaço."],
+  ["vmstat","Comando que mostra estatísticas de processos, memória, swap, I/O e CPU em intervalos regulares.",
+   "É o painel de instrumentos completo do carro, mostrando vários sistemas ao mesmo tempo, atualizado a cada segundo."],
+  ["Amostragem contínua (vmstat 2 5)","Coletar múltiplas leituras em intervalos regulares, em vez de uma única foto isolada.",
+   "É medir a febre a cada hora, não só uma vez — a tendência conta mais que um número isolado."],
+  ["Gargalo de recurso","O recurso específico (CPU, memória, disco, rede) que está realmente limitando a performance do sistema.",
+   "É o funil mais estreito da linha de produção — não adianta melhorar as outras etapas se o gargalo real não muda."],
+  ["Correlação de horário (memória)","Alinhar o início de um padrão de swap com o horário exato em que o sintoma foi reportado.",
+   "É confirmar que a dor de cabeça começou exatamente quando a sala ficou lotada, não antes nem depois."],
+  ["Estado de referência (baseline)","Os valores normais e saudáveis de um sistema, usados para comparar com um estado sob investigação.",
+   "É saber qual é a temperatura normal do corpo antes de decidir se a febre atual é preocupante."]
+];
+
+const sceneStripIdx = [1,2,3,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

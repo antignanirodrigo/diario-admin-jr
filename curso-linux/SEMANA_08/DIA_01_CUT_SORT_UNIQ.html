@@ -1,0 +1,526 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 1 — cut, sort, uniq | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_07/DIA_05_PS_PROC.html'>← Semana 7, Dia 5</a><a href='#'>Semana 8</a><a href='DIA_02_SED.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 2, Dia 3:</b> grep e find te ensinaram a buscar. Hoje entra um
+novo bloco: ferramentas que não só encontram texto, mas fatiam, ordenam e contam dados — a base que vai
+alimentar a automação em bash que começa na Semana 9.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: montar pipelines de texto com cut, sort e uniq.</b> Você
+ganha o hábito de encadear ferramentas pequenas, testando cada etapa antes de conectar a próxima.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 1 | Nível Júnior</div>
+  <h1>cut, sort, uniq: Dados em Ordem</h1>
+  <p>pipeline bom é aquele que você consegue explicar etapa por etapa</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S08D01_CUT_SORT_UNIQ.png' alt='Prancha em seis quadros sobre cut, sort e uniq'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket: "qual IP mais acessou o site?" O arquivo <code>access.log</code> tem mais de um
+  milhão de linhas — impossível contar no olho. Você precisa de uma linha de montagem de ferramentas pequenas,
+  cada uma fazendo uma peça do trabalho.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Segunda-feira, abrindo a Semana 8</span>
+    Lá na Semana 2 você aprendeu <code>grep</code> e <code>find</code> — encontrar coisas. Hoje abre um
+    bloco novo: ferramentas que não só encontram, mas fatiam, ordenam e contam dados. É a base que vai
+    alimentar a automação em bash que começa na Semana 9 — sem esses fundamentos, script nenhum consegue
+    processar dados de verdade.<br><br>
+    Lembro do meu primeiro chamado desse tipo: "qual IP mais acessou o site?", com um <code>access.log</code>
+    de mais de um milhão de linhas. Meu primeiro instinto, ainda muito júnior, foi abrir o arquivo num editor
+    de texto pra "dar uma olhada". O editor travou. Um milhão de linhas não é coisa que se lê no olho.<br><br>
+    Um sênior mais experiente me mostrou algo que mudou como eu penso sobre terminal desde então: em vez de
+    uma ferramenta única e complexa, ele encadeou várias ferramentas pequenas, cada uma fazendo uma coisa só,
+    muito bem feita. <code>cut</code> fatiava a coluna do IP. <code>sort</code> colocava em ordem.
+    <code>uniq -c</code> contava repetições — mas só funciona certo se a entrada já estiver ordenada, porque
+    ele só agrupa linhas idênticas que estão uma do lado da outra. Depois outro <code>sort -rn</code>
+    ranqueava por quantidade, e <code>head</code> mostrava só o topo.<br><br>
+    Cinco ferramentas, cada uma simples, conectadas por pipe. Nenhuma delas sozinha resolvia o problema —
+    juntas, formavam uma linha de montagem que processava um milhão de linhas em segundos. E o mais
+    importante: cada etapa podia ser testada isoladamente antes de conectar a próxima. Hoje você monta essa
+    mesma cadeia, peça por peça, sentindo por que "pipeline bom é aquele que você consegue explicar etapa por
+    etapa".
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>cut -d' ' -f1</code></td><td>Extrai a primeira coluna (separada por espaço) de cada linha — no caso, o IP.</td></tr>
+    <tr><td><code>sort | uniq -c</code></td><td>Ordena e conta repetições — uniq -c exige entrada já ordenada pra funcionar corretamente.</td></tr>
+    <tr><td><code>sort -rn | head -5</code></td><td>Ranqueia numericamente em ordem decrescente e mostra só os 5 primeiros.</td></tr>
+  </tbody></table>
+  <pre>$ cut -d' ' -f1 access.log | sort | uniq -c | sort -rn | head -5
+842 203.0.113.44
+617 198.51.100.20
+331 192.0.2.15
+120 10.0.0.8
+ 98 172.16.1.50</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um arquivo de teste com algumas linhas repetidas, simulando um log.</div></div>
+      <div class="lab-cmd">$ cat > teste.log << 'EOF'
+10.0.0.1 GET /home
+10.0.0.2 GET /login
+10.0.0.1 GET /home
+10.0.0.3 GET /home
+10.0.0.1 GET /login
+EOF</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo de teste com repetições intencionais, IP 10.0.0.1 aparecendo 3 vezes.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> um arquivo pequeno com resultado esperado conhecido (você sabe que 10.0.0.1 deve vencer) é o que permite validar cada etapa da cadeia com confiança.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar direto num arquivo grande de produção — sem saber a resposta certa de antemão, fica impossível confirmar se o pipeline está funcionando.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> rode só o cut isolado e confirme que a coluna certa está sendo extraída.</div></div>
+      <div class="lab-cmd">$ cut -d' ' -f1 teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de 5 IPs, na ordem original do arquivo, sem ordenação ainda.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> testar cut isolado primeiro é o que garante que a coluna extraída é realmente a certa, antes de complicar a cadeia com mais ferramentas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir o delimitador errado — se o log usar tab ou vírgula em vez de espaço, -d' ' extrai a coluna errada silenciosamente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione sort e depois uniq -c, um de cada vez, verificando a saída em cada passo.</div></div>
+      <div class="lab-cmd">$ cut -d' ' -f1 teste.log | sort
+$ cut -d' ' -f1 teste.log | sort | uniq -c</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> primeiro os IPs ordenados alfabeticamente, depois a contagem correta — "3 10.0.0.1", "1 10.0.0.2", "1 10.0.0.3".</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o sort funcionar antes do uniq -c é o que prova, na prática, por que a ordem entre eles importa — é exatamente o erro que a Questão 3 vai testar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pra uniq -c sem o sort, "pra economizar um comando" — o resultado sai tecnicamente errado, contando em blocos separados.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma contagem parecer errada mesmo com sort aplicado, este é o ponto onde o chat com o Sênior-IA vai ajudar a debugar a cadeia.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> complete a cadeia com sort -rn e head, obtendo o ranking final.</div></div>
+      <div class="lab-cmd">$ cut -d' ' -f1 teste.log | sort | uniq -c | sort -rn | head -3</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "3 10.0.0.1" no topo, confirmando exatamente o resultado esperado desde o início.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o resultado final bater com o que você já esperava (porque montou o arquivo de teste você mesmo) é a validação mais forte possível antes de rodar a mesma cadeia num arquivo real de um milhão de linhas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar no resultado só porque "parece razoável" num arquivo grande — sem ter testado antes num arquivo pequeno e conhecido, você não tem como confirmar que o pipeline está certo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente comando completo usado, arquivo analisado, resultado do top.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Comando: cut -d' ' -f1 teste.log | sort | uniq -c | sort -rn | head -3
+Arquivo: teste.log (5 linhas)
+Resultado: 3 10.0.0.1 (confirmado, bate com esperado)</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> documentar o comando completo é o que permite reaplicar exatamente a mesma cadeia num arquivo de produção real, sem precisar reconstruir tudo do zero.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só o resultado final, sem o comando completo — sem ele, ninguém (nem você) consegue reproduzir a análise depois.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é o papel de cada ferramenta nessa cadeia:
+    <code>cut | sort | uniq -c | sort -rn | head</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Extrai uma coluna específica de cada linha de texto." onclick="openGlossary(0)">cut</span> fatia a coluna que interessa →
+      <span class="hint" data-tip="Coloca linhas de texto em ordem, geralmente necessário antes de contar repetições." onclick="openGlossary(1)">sort</span> ordena os valores →
+      <span class="hint" data-tip="Conta quantas vezes cada linha repetida aparece, exigindo entrada já ordenada." onclick="openGlossary(2)">uniq -c</span> conta repetições →
+      sort -rn ranqueia por quantidade → head mostra só o topo. Cada ferramenta faz uma coisa simples e bem
+      feita.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa descobrir qual IP mais aparece num log de acesso com mais de um
+  milhão de linhas. Qual é a abordagem correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'cut -d\' \' -f1 access.log | sort | uniq -c | sort -rn | head -5 extrai a coluna do IP, ordena, conta repetições, ranqueia por quantidade e mostra o top 5 — uma cadeia de ferramentas simples, cada uma testável separadamente.')"><b>A</b> Montar a cadeia cut -d\' \' -f1 access.log | sort | uniq -c | sort -rn | head -5, construindo e testando cada etapa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Abrir um arquivo de mais de um milhão de linhas num editor de texto trava a maioria dos editores e não escala pra esse volume de dados.')"><b>B</b> Abrir o arquivo inteiro num editor de texto e contar manualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'grep sozinho não conta ocorrências agrupadas por IP nem ranqueia — ele encontra linhas que combinam com um padrão, não faz a contagem e ordenação que a pergunta exige.')"><b>C</b> Usar só grep pra procurar cada IP individualmente, um de cada vez</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Escrever um script complexo do zero, sem tentar as ferramentas simples primeiro, é mais trabalho do que necessário pra um problema que ferramentas padrão já resolvem bem.')"><b>D</b> Escrever um programa completo em outra linguagem só pra essa contagem simples</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'cut -d: -f1 /etc/passwd' é como a tesoura do alfaiate: fatia o texto usando os dois-pontos como guia e extrai apenas a coluna com os nomes de usuários.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O resultado mostra 842 requisições do IP 203.0.113.44 — como confirmar antes de reportar?</h2>
+  <p>O topo do ranking mostra <code>842 203.0.113.44</code>, claramente destacado dos demais.</p>
+  <div class='box question'>Qual é o passo de validação correto antes de reportar esse resultado?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Testar cada etapa da cadeia separadamente (primeiro só o cut, depois cut+sort, depois cut+sort+uniq) antes de confiar no resultado final garante que nenhuma etapa está com erro escondido — se uma etapa erra, o pipeline inteiro mente, mesmo com uma saída que parece plausível.')"><b>A</b> Testar cada etapa da cadeia separadamente antes de confiar no resultado final, confirmando que cada uma faz exatamente o esperado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Um resultado numérico parecer razoável não é validação real — sem testar as etapas, um erro sutil em alguma delas pode gerar um número plausível mas incorreto.')"><b>B</b> Confiar no resultado final direto, já que o número parece razoável</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Rodar exatamente o mesmo comando de novo sem mudar nada não revela erros que já estavam presentes na primeira execução — repetir sem testar etapas não é validação.')"><b>C</b> Rodar o comando de novo do zero, exatamente igual, só pra ter certeza</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'sort | uniq -c' é como o caixa contando cédulas de dinheiro: primeiro empilha todas as notas iguais juntas e depois conta quantas notas de 50 e 100 existem no maço.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "uniq -c sozinho, sem sort antes, já conta certo?"</h2>
+  <p>Um colega roda só <code>cut -d' ' -f1 access.log | uniq -c</code>, sem o <code>sort</code> antes do
+  <code>uniq -c</code>, e fica confuso com a contagem estranha.</p>
+  <div class='box question'>Por que pular o sort antes do uniq -c dá resultado errado?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'uniq -c só conta linhas IGUAIS CONSECUTIVAS — se as ocorrências do mesmo IP estiverem espalhadas pelo arquivo sem estar juntas (sem sort antes), uniq -c vai contar cada bloco separado como uma contagem diferente, gerando várias entradas pro mesmo IP em vez de uma só com o total correto.')"><b>A</b> uniq -c só conta linhas IGUAIS CONSECUTIVAS — sem sort antes, ocorrências do mesmo IP espalhadas pelo arquivo são contadas em blocos separados, não juntas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'uniq -c não precisa de privilégio elevado pra funcionar corretamente — o problema é puramente sobre a ordem dos dados de entrada, não sobre permissões.')"><b>B</b> uniq -c precisa de sudo pra contar corretamente, e o colega esqueceu de usar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O tamanho do arquivo não é a causa do problema — mesmo um arquivo pequeno teria o mesmo comportamento de contar em blocos separados sem o sort antes.')"><b>C</b> O arquivo é grande demais, uniq -c só funciona corretamente em arquivos pequenos</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag 'sort -nr' é a classificação da tabela do campeonato: ordena os números do maior para o menor para colocar os IPs que mais atacaram o servidor no topo da lista.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique qual coluna você precisa extrair com cut.</li>
+    <li>Sempre ordene (sort) antes de usar uniq -c.</li>
+    <li>Use uniq -c pra contar repetições, sort -rn pra ranquear por quantidade.</li>
+    <li>Teste cada etapa da cadeia separadamente antes de confiar no resultado final.</li>
+    <li>Reporte com evidência: comando usado, arquivo analisado, resultado exato.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Salve pipelines de análise recorrentes (como "top IPs do log") como scripts nomeados
+  (ex.: <code>top-ips.sh</code>) num diretório compartilhado da equipe. Isso evita reconstruir a cadeia do
+  zero toda vez, e reduz o risco de esquecer uma etapa como o sort antes do uniq -c.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Cada etapa da cadeia foi testada separadamente antes do resultado final.</li>
+    <li>sort foi usado antes de uniq -c, sempre.</li>
+    <li>O resultado foi reportado com o comando completo como evidência.</li>
+    <li>A pergunta original (qual IP mais acessou) foi respondida com precisão.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>cut, sort e uniq são somente leitura sobre o arquivo original — não existe
+  rollback necessário. O risco real está em confiar num pipeline sem testar cada etapa, o que pode gerar um
+  número plausível mas tecnicamente errado.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "construir aos poucos, testando cada etapa"
+  conecta com grep+find da Semana 2 — a mesma disciplina de combinar ferramentas pequenas em vez de confiar
+  numa mágica só. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a decisão correta foi montar a cadeia
+  <b>cut | sort | uniq -c | sort -rn | head -5</b>, construindo e testando cada etapa. O ponto central do caso
+  é este: pipeline bom é aquele que você consegue explicar etapa por etapa.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de montar pipelines de texto simples e confiáveis. Amanhã você
+  aprende sed — alterar texto em massa sem estragar o arquivo, sempre com prévia antes de aplicar de verdade.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 8, Dia 1 de ~250 — abre a Semana 8. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["cut","Comando que extrai uma coluna específica de cada linha de texto, com base num delimitador.",
+   "É recortar só a coluna de preços de uma planilha impressa, ignorando o resto."],
+  ["sort","Comando que coloca linhas de texto em ordem, alfabética ou numérica.",
+   "É organizar fichas soltas em ordem, antes de conseguir agrupar as iguais."],
+  ["uniq -c","Comando que conta quantas vezes cada linha repetida aparece, exigindo entrada já ordenada.",
+   "É contar quantas fichas idênticas existem numa pilha já organizada — só funciona se as iguais estiverem juntas."],
+  ["Pipeline (encadeamento)","Sequência de comandos conectados por pipe (|), onde a saída de um vira a entrada do próximo.",
+   "É uma linha de montagem — cada estação faz uma tarefa simples, e o produto passa de uma pra outra."],
+  ["-d (delimitador do cut)","Opção que define qual caractere separa as colunas num arquivo de texto.",
+   "É dizer onde termina uma coluna e começa a próxima, como a linha divisória de uma planilha."],
+  ["sort -rn","Opção do sort que ordena numericamente (n) em ordem decrescente/reversa (r).",
+   "É o ranking do maior pro menor, em vez da ordem crescente padrão."],
+  ["head -N","Comando que mostra apenas as primeiras N linhas de uma entrada.",
+   "É pedir só o topo do pódio, não a lista completa de todos os competidores."],
+  ["Construção incremental de pipeline","Prática de testar cada comando de uma cadeia separadamente antes de conectar o próximo.",
+   "É montar um móvel seguindo as instruções passo a passo, conferindo cada etapa antes de prosseguir."],
+  ["Contagem consecutiva (uniq)","Limitação do uniq de só contar linhas idênticas que estão adjacentes umas às outras.",
+   "É só conseguir agrupar objetos iguais se eles já estiverem lado a lado, não espalhados pela sala."],
+  ["Ranking por frequência","Ordenar itens com base em quantas vezes cada um aparece, do mais para o menos frequente.",
+   "É a lista dos produtos mais vendidos da loja, ordenada do campeão de vendas pro menos popular."],
+  ["Ferramenta composável","Uma ferramenta simples projetada para ser combinada com outras através de pipes.",
+   "É uma peça de Lego — sozinha faz pouco, mas combinada com outras peças constrói algo complexo."],
+  ["Validação de resultado numérico","Confirmar que um número calculado por um pipeline está correto, testando as etapas que o produziram.",
+   "É conferir a conta do restaurante item por item, não só olhar o total e assumir que está certo."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

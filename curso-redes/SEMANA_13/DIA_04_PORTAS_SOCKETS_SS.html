@@ -1,0 +1,531 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 13 · Dia 4 — Portas e Sockets | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_PING_ICMP.html'>← Semana 13, Dia 3</a><a href='#'>Semana 13</a><a href='DIA_05_TRACEROUTE_MTR.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você separou o teste de porta como uma camada própria.
+Hoje você aprofunda: o que exatamente é um socket, e por que "connection refused" e "timeout" — dois erros que
+parecem parecidos — na verdade apontam pra causas completamente diferentes.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: ler o SIGNIFICADO de um erro de conexão, não só o erro em
+si.</b> Você ganha a distinção central: refused significa "alguém respondeu dizendo que não há serviço ali";
+timeout significa "ninguém respondeu, o caminho pode estar bloqueado". São diagnósticos opostos.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 13 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>Portas e Sockets</h1>
+  <p>ss mostra quem escuta; nc mostra se o caminho até a porta funciona</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S13D04_PORTAS_SOCKETS_SS.png' alt='Prancha em seis quadros sobre sockets, a diferença entre connection refused e timeout, e diagnóstico de firewall com nftables'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Vou desligar o firewall só pra testar..." — reflexo perigoso. A conexão falhou, e o
+  reflexo de desabilitar segurança pra "só testar" ignora que refused e timeout já contam histórias
+  diferentes, sem precisar tocar em nada. Ler o sinal antes de mudar a configuração é o método de hoje.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Uma aplicação nova numa porta 8080 não conectava remotamente, e o colega de plantão sugeriu desligar o
+    firewall inteiro "só pra confirmar rápido" — em produção, com dezenas de outros serviços expostos por
+    trás daquele mesmo firewall. Eu pedi 30 segundos: <code>ss -tlnp</code> mostrou o processo escutando na
+    8080 normalmente. O teste remoto com <code>nc -zv</code> dava <b>timeout</b>, não <b>refused</b> — sinal
+    diferente, causa diferente. Fui direto no <code>nft list chain inet filter input</code>: policy drop, com
+    regra só pra porta 22. Faltava uma linha: <code>tcp dport 8080 accept</code>. Adicionei, testei, resolvido
+    — sem nunca desligar a proteção das outras 40 portas do servidor.
+    <br><br>
+    O ponto que fica: refused e timeout parecem "a mesma coisa não conectou", mas são sinais opostos —
+    um é rejeição ativa, o outro é silêncio (bloqueio ou rota quebrada). Ler esse sinal antes de agir é o
+    que evita a "solução" de desligar tudo pra testar.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Sinal</th><th>Significado</th><th>Causa provável</th></tr></thead><tbody>
+    <tr><td>connection refused</td><td>Pacote chegou, ninguém escuta na porta.</td><td>Serviço parado ou porta errada.</td></tr>
+    <tr><td>timeout</td><td>Nenhuma resposta chegou.</td><td>Firewall bloqueando ou rota quebrada.</td></tr>
+  </tbody></table>
+  <pre>--- NO SERVIDOR (local) ---
+$ sudo ss -tlnp | grep ':8080'
+LISTEN  0  128  0.0.0.0:8080  0.0.0.0:*  users:(("app",pid=2381,fd=7))
+
+--- DE OUTRA MÁQUINA (remoto) ---
+$ nc -zv 192.168.10.50 8080
+nc: connect to 192.168.10.50 port 8080 (tcp) timed out
+
+--- verificando o firewall no servidor ---
+$ sudo nft list chain inet filter input
+table inet filter {
+  chain input {
+    type filter hook input priority filter; policy drop;
+    tcp dport 22 accept
+  }
+}
+→ Serviço OK, regra faltando. Não há regra para tcp dport 8080 accept.</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: inicie um serviço simples numa porta e confirme localmente.</div></div>
+      <div class="lab-cmd">$ python3 -m http.server 8080 &amp;
+$ ss -tlnp | grep ':8080'</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> porta 8080 aparecendo em LISTEN, com o processo associado.</div>
+      <div class="lab-why"><b>Por quê:</b> confirmar localmente primeiro dá a linha de base — sem isso, você não sabe se um teste remoto que falha é do serviço ou do caminho.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de derrubar o servidor de teste no final — ele fica rodando e ocupando a porta pra próxima vez.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: de outra VM, teste a porta correta e uma porta sem serviço.</div></div>
+      <div class="lab-cmd">$ nc -zv 192.168.10.X 8080
+$ nc -zv 192.168.10.X 9999</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> succeeded na porta certa, connection refused na porta sem serviço.</div>
+      <div class="lab-why"><b>Por quê:</b> ver os dois sinais lado a lado (succeeded vs refused) é o que fixa a diferença antes de introduzir o terceiro sinal (timeout).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só uma porta e não comparar — sem o contraste, "refused" e "timeout" continuam parecendo a mesma coisa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione uma regra de firewall com policy drop, sem accept pra porta do serviço.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 drop
+$ nc -zv 192.168.10.X 8080</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> timeout, em vez de refused ou succeeded.</div>
+      <div class="lab-why"><b>Por quê:</b> reproduzir o timeout de propósito é o que prova, na prática, que ele vem do firewall — não é só teoria.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar uma regra de drop na porta SSH por engano, numa VM sem console alternativo — isso te tranca fora da própria VM.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você acidentalmente bloquear sua própria porta SSH ao testar firewall, este é o ponto onde o chat com o Sênior-IA vai ajudar a recuperar o acesso via console.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione a regra específica de accept e confirme que o teste remoto volta a funcionar.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 accept
+$ nc -zv 192.168.10.X 8080</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nc succeeded após a regra correta ser adicionada.</div>
+      <div class="lab-why"><b>Por quê:</b> a regra específica corrige só a causa identificada — nunca precisou desligar o firewall inteiro em nenhum momento do laboratório.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> adicionar a regra accept sem remover a regra drop anterior — dependendo da ordem, a primeira regra que casar decide, então a posição importa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente o diagnóstico completo.</div></div>
+      <div class="lab-cmd"># serviço: escutando (ss confirmou)
+# sinal remoto: timeout (não refused)
+# causa: firewall policy drop sem regra accept
+# correção: tcp dport 8080 accept</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> checklist completo do diagnóstico — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar o sinal exato observado (não só "resolvido") é o que ensina você a reconhecer o padrão refused-vs-timeout da próxima vez.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> anotar "adicionei regra de firewall" sem registrar qual porta e qual sinal motivou — a próxima pessoa (ou você, meses depois) não vai entender o raciocínio.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é a diferença de causa entre um erro "connection refused" e um "timeout" ao
+    tentar se conectar numa porta?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Combinação de IP + porta + protocolo que identifica um serviço de rede de forma única." onclick="openGlossary(0)">Connection refused</span>
+      significa que o pacote chegou até o host, mas ninguém está escutando naquela porta — resposta ativa de
+      rejeição. Um
+      <span class="hint" data-tip="Ausência de resposta dentro do tempo esperado — o pacote pode ter sido bloqueado ou perdido no caminho." onclick="openGlossary(1)">timeout</span>
+      significa que nenhuma resposta chegou — o caminho pode estar bloqueado por firewall, ou a rota está
+      quebrada. São causas opostas, apesar de os dois parecerem só "não conectou".
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Ao tentar conectar na porta 8080 de um servidor remoto, você recebe "timeout"
+  (não "connection refused"). ss -tlnp no próprio servidor confirma que algo está escutendo nessa porta. Qual
+  é a causa mais provável?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Se o serviço está escutando localmente (confirmado por ss) mas a conexão remota nem recebe uma resposta de rejeição (timeout, não refused), o caminho até a porta está bloqueado — o suspeito mais provável é uma regra de firewall (como nftables) sem uma regra de accept para essa porta específica.')"><b>A</b> O caminho está bloqueado antes de chegar ao serviço — provavelmente falta uma regra de firewall permitindo a porta 8080</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Se o serviço estivesse realmente parado, a tentativa de conexão remota tenderia a resultar em connection refused (quando o pacote chega mas ninguém escuta), não timeout — além disso, ss já confirmou que algo está escutando.')"><b>B</b> O serviço na porta 8080 está parado — é preciso reiniciá-lo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Sockets não têm uma noção de expirar no sentido de precisarem ser recriados diariamente — esse não é um comportamento real de portas/sockets em rede.')"><b>C</b> O socket expirou e precisa ser recriado com um comando de reinicialização diária</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'DNS não está envolvido nesse cenário — o teste foi feito diretamente contra um IP/porta, sem resolução de nome, então trocar servidor DNS não teria efeito na causa desse timeout específico.')"><b>D</b> É um problema de DNS — o servidor de nomes precisa ser trocado</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Um Socket (IP:Porta) é a tomada conectada na parede: junta o endereço do host com o canal de comunicação exclusivo daquela aplicação específica.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Você confirmou: serviço escutando, firewall com policy drop e sem regra para 8080</h2>
+  <p>A causa está clara. Um colega quer desligar o firewall inteiro "só pra confirmar rápido".</p>
+  <div class='box question'>Por que adicionar a regra específica é melhor do que desligar o firewall pra
+  testar?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Adicionar tcp dport 8080 accept resolve exatamente a causa identificada, sem abrir mão da proteção das outras portas. Desligar o firewall inteiro, mesmo temporariamente, expõe todos os outros serviços do servidor — um risco desnecessário quando a causa exata já foi identificada com precisão.')"><b>A</b> A regra específica corrige exatamente a causa identificada, sem expor todas as outras portas do servidor como desligar o firewall inteiro faria</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Desligar o firewall não é mais rápido de reverter do que adicionar uma regra — os dois são operações simples, mas desligar completamente cria uma janela de exposição desnecessária.')"><b>B</b> Não faz diferença real — desligar o firewall é mais rápido de reverter depois</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Regras de firewall como nftables não têm relação com consumo de memória do servidor — a escolha entre regra específica e desligar tudo é sobre segurança e precisão, não performance.')"><b>C</b> A regra específica usa menos memória do servidor do que manter o firewall completo ativo</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'ss -tulpn' é o vigia noturno conferindo as portas do prédio: lista quais estão destrancadas, ouvindo conexões (LISTEN) e qual processo é o dono.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Um socket é a mesma coisa que uma porta?"</h2>
+  <p>Um colega usa "socket" e "porta" como sinônimos exatos, o tempo todo.</p>
+  <div class='box question'>Qual é a diferença real entre os dois termos?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Porta é só um número (como 8080). Socket é a combinação completa: IP + porta + protocolo (ex: 192.168.10.50:8080/tcp) — é o endereço completo de um serviço específico na rede, não apenas o número da porta isolado.')"><b>A</b> Porta é apenas um número; socket é a combinação completa de IP + porta + protocolo, o endereço completo de um serviço</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não são sinônimos perfeitos — socket é um conceito mais amplo que inclui o IP e o protocolo, além da porta em si; usá-los como idênticos gera confusão na hora de descrever um endereço de serviço completo.')"><b>B</b> São sinônimos perfeitos, sem nenhuma diferença técnica entre os dois termos</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença entre socket e porta não é sobre IPv4 versus IPv6 — ambos os termos se aplicam independente da versão do protocolo IP em uso.')"><b>C</b> Porta é usada em IPv4 e socket é o termo equivalente usado em IPv6</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Portas efêmeras (32768-60999) são as senhas descartáveis da fila do banco: o cliente ganha um número temporário para falar com o servidor na porta fixa 443 e devolve a senha ao encerrar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Ao ver uma conexão falhar, leia o sinal exato — refused ou timeout — antes de qualquer ação.</li>
+    <li>Confirme localmente com ss -tlnp se o serviço realmente está escutando.</li>
+    <li>Se estiver escutando mas o teste remoto der timeout, verifique regras de firewall.</li>
+    <li>Adicione a regra específica necessária — nunca desligue o firewall inteiro pra "testar".</li>
+    <li>Documente serviço, sinal observado, causa e regra aplicada.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Nunca desligue um firewall inteiro em produção "só pra testar" — mesmo com pressa. Padronize
+  o diagnóstico refused-vs-timeout como primeiro passo de qualquer chamado de conexão recusada: o sinal já diz
+  onde procurar antes de qualquer regra ser tocada.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O sinal de erro (refused vs timeout) foi lido corretamente antes de qualquer ação.</li>
+    <li>ss -tlnp confirmou o estado real do serviço localmente.</li>
+    <li>A causa foi confirmada como firewall antes de qualquer regra ser alterada.</li>
+    <li>Uma regra específica foi adicionada, sem desligar o firewall inteiro.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Adicionar uma regra de firewall é reversível removendo a mesma regra depois, se
+  necessário. Nunca desligue o firewall inteiro "só pra testar" em produção — isso expõe todas as portas, não
+  só a que você está investigando, criando um risco desproporcional ao problema.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "correção específica vence chute" conecta
+  diretamente com a Semana 12 (aplicar correção específica em vez de reboot genérico) — mesma disciplina,
+  agora em firewall. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a causa correta foi <b>caminho
+  bloqueado por falta de regra de firewall</b>, identificada porque o serviço estava escutando (ss) mas o
+  teste remoto dava timeout. O ponto central do caso é este: ss mostra quem escuta; nc mostra se o caminho até
+  a porta funciona.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diferenciar refused de timeout e diagnosticar firewall com
+  precisão cirúrgica, sem desligar proteções inteiras. Amanhã fecha a Semana 13: traceroute e mtr, pra quando o
+  problema não é "conecta ou não conecta", mas "está lento em algum ponto específico do caminho".</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 13, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Socket","Combinação de endereço IP, porta e protocolo que identifica um serviço de rede de forma única, como 192.168.10.50:8080/tcp.",
+   "É o endereço completo de uma entrega: rua (IP), número do apartamento (porta) e tipo de correspondência (protocolo) — juntos, apontam pra um destino único."],
+  ["Connection refused","Erro que indica que o pacote chegou ao host, mas nenhum serviço está escutando na porta solicitada — resposta ativa de rejeição.",
+   "É bater na porta e alguém responder de dentro dizendo 'aqui não tem ninguém esperando por você' — resposta clara e imediata."],
+  ["Timeout (connection timed out)","Ausência de resposta dentro do tempo esperado — pode indicar bloqueio de firewall ou rota quebrada no caminho.",
+   "É bater na porta e ninguém sequer aparecer — o silêncio pode significar que a mensagem nem chegou, ou foi ignorada de propósito."],
+  ["ss -tlnp","Comando que lista sockets TCP em escuta, mostrando também o processo (PID) responsável por cada porta.",
+   "É a lista de campainhas do prédio, mostrando o nome do morador responsável por cada uma."],
+  ["nc -zv (netcat)","Comando que testa se uma porta TCP específica aceita conexão, sem enviar dados de aplicação reais.",
+   "É verificar se uma porta específica do prédio está destrancada, sem entrar de fato na sala."],
+  ["nftables","Framework moderno de firewall no Linux, usado para definir regras de filtragem de pacotes por chain e tabela.",
+   "É o conjunto de regras da portaria: quem pode entrar, por qual porta, e o que acontece por padrão quando nenhuma regra específica se aplica."],
+  ["policy drop","Configuração padrão de uma chain de firewall que descarta silenciosamente todo tráfego sem uma regra explícita de permissão.",
+   "É a portaria com instrução padrão de 'não deixe ninguém entrar, a menos que esteja explicitamente na lista' — silêncio total pra quem não está autorizado."],
+  ["tcp dport X accept","Regra de firewall que permite explicitamente conexões TCP destinadas a uma porta específica (X).",
+   "É adicionar um nome específico à lista de convidados liberados pela portaria — só aquele nome, nada além dele."],
+  ["Diagnóstico por sinal de erro","Interpretar corretamente o tipo específico de erro de conexão (refused vs timeout) para inferir a causa provável antes de agir.",
+   "É o médico diferenciar os sintomas exatos antes de prescrever — uma febre alta e uma febre baixa apontam para causas bem diferentes."],
+  ["Correção cirúrgica vs. desligar tudo","Diferença entre aplicar exatamente a mudança necessária para resolver a causa identificada e desabilitar uma proteção inteira 'para testar'.",
+   "É trocar só o fusível queimado, em vez de desligar a energia da casa inteira só pra confirmar que era mesmo o fusível."],
+  ["chain input (firewall)","Conjunto de regras que se aplicam ao tráfego chegando na própria máquina, avaliado na ordem em que as regras aparecem.",
+   "É a fila de checagem de entrada de um evento — cada regra é um checkpoint, avaliado na ordem em que foi colocado na fila."],
+  ["Evidência local vs. teste remoto","Combinar o que se observa diretamente no servidor (ss) com o que se testa de fora (nc) para isolar exatamente onde está o problema.",
+   "É comparar o que a cozinha diz que está pronto com o que realmente chega na mesa — a diferença entre os dois aponta onde o processo travou."]
+];
+
+const sceneStripIdx = [0,1,2,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

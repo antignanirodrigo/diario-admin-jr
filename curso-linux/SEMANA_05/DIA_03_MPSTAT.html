@@ -1,0 +1,523 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 5 · Dia 3 — mpstat: Um Núcleo Gritando Sozinho | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_IOSTAT.html'>← Dia 2</a><a href='#'>Semana 5</a><a href='DIA_04_DISCOS_PARTICOES.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> iostat te ensinou que uma métrica isolada pode enganar. Hoje
+o mesmo padrão se repete com CPU: o top mostra 40% de uso médio, mas a aplicação continua travando com
+timeouts. A média pode estar escondendo um único núcleo saturado sozinho.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar por núcleo com mpstat, não só pela média.</b>
+Você ganha o hábito de investigar por núcleo individual quando a média geral não bate com o sintoma real.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 5 · Dia 3 | Nível Júnior</div>
+  <h1>mpstat: Um Núcleo Gritando Sozinho</h1>
+  <p>quando a média não combina com o sintoma, investigue por núcleo antes de mexer</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S05D03_MPSTAT.png' alt='Prancha em seis quadros sobre mpstat'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>O dashboard mostra CPU total em 40% — parece tranquilo. Mas a aplicação continua com
+  timeouts intermitentes. Um número médio confortável pode estar escondendo um problema concentrado num único
+  lugar.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o dashboard mostrava CPU total em 40% — número tranquilo. Mas usuários continuavam relatando
+    timeouts intermitentes. O Júnior ficou confuso: "se a métrica está normal, por que o sintoma continua?"
+    Era o mesmo padrão de ontem, só que agora com CPU: uma média confortável escondendo um problema
+    concentrado.<br><br>
+    Rodamos <code>mpstat -P ALL 2</code> — e ali estava: núcleos 0, 1 e 2 tranquilos, abaixo de 6%, mas o
+    núcleo 3 sozinho em 98%. A média de quatro núcleos (38%) era matematicamente correta, mas escondia
+    completamente o gargalo real — é a nota média da turma escondendo um aluno reprovado. Confirmamos com
+    <code>ps -o pid,psr,pcpu,comm</code> qual processo estava preso àquele núcleo: <code>app</code>, PID
+    2210, PSR 3, 99,2% de CPU.<br><br>
+    O Júnior perguntou: "então é só reiniciar que libera?". Expliquei que não — a aplicação é single-thread,
+    só consegue usar um núcleo por vez, não importa quantos núcleos o servidor tenha. Reiniciar zera o
+    processo por um momento, mas assim que a carga real voltar, ela vai saturar um núcleo de novo, do mesmo
+    jeito. É um gargalo de arquitetura da aplicação, não um estado temporário — reset não resolve estrutura.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>mpstat -P ALL 2</code></td><td>Mostra %usr, %sys, %iowait e %idle por núcleo individual, não só a média.</td></tr>
+    <tr><td><code>ps -o pid,psr,pcpu,comm -C app</code></td><td>Confirma em qual núcleo (PSR) um processo específico está rodando.</td></tr>
+  </tbody></table>
+  <pre>$ mpstat -P ALL 2
+CPU  %usr  %sys  %iowait  %idle
+all  38.0   2.0     1.0    59.0
+0     5.0   1.0     0.0    94.0
+1     6.0   1.0     0.0    93.0
+2     4.0   1.0     0.0    95.0
+3    98.0   2.0     0.0     0.0
+
+$ ps -o pid,psr,pcpu,comm -C app
+PID   PSR  %CPU  COMMAND
+2210    3  99.2  app</pre>
+  <p>A média geral (38%) esconde o núcleo 3 sozinho em 98% — exatamente o processo <code>app</code> (PID
+  2210), rodando preso ao PSR 3.</p>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Confirme quantos núcleos a VM tem e o uso individual de cada um.</div></div>
+      <div class="lab-cmd">mpstat -P ALL 2</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de núcleos com uso individual mostrado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> conhecer a topologia de núcleos da sua VM é o pré-requisito pra qualquer diagnóstico por núcleo — sem saber quantos existem, você não consegue interpretar o padrão.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> olhar só a linha "all" (média) e ignorar as linhas individuais — é exatamente essa linha que esconde o problema, como a história de hoje mostrou.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Gere uma carga single-thread e observe qual núcleo ela satura.</div></div>
+      <div class="lab-cmd">yes > /dev/null &</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> um único núcleo saturado em ~100%, os outros permanecendo tranquilos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver esse padrão acontecer de propósito, sabendo a causa exata, é o que fixa o reconhecimento pra quando aparecer sem aviso num chamado real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de encerrar o processo yes depois do teste — ele continua consumindo um núcleo indefinidamente até você matá-lo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Identifique o PID e o núcleo exato do processo de teste.</div></div>
+      <div class="lab-cmd">ps -o pid,psr,pcpu,comm -C yes</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> PSR confirmando qual núcleo específico o processo está usando.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> a coluna PSR é o que conecta o número frio do mpstat a um processo real e nomeável — sem ela, você sabe QUE núcleo está saturado, mas não POR QUEM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que o núcleo saturado é sempre o mesmo — o kernel pode migrar processos entre núcleos ao longo do tempo, então confirme o PSR no momento certo.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você quiser entender por que uma aplicação específica não usa múltiplos núcleos, este é o ponto onde o chat com o Sênior-IA vai ajudar a explicar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Encerre o processo de teste e confirme o retorno ao normal.</div></div>
+      <div class="lab-cmd">kill %1
+mpstat -P ALL 2</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> todos os núcleos voltando a valores baixos de uso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> validar que TODOS os núcleos voltam ao normal (não só o médio) é a prova completa de que o teste terminou como esperado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> validar só a média geral no final, sem checar núcleo por núcleo — é exatamente o hábito que a aula toda existe pra quebrar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente sintoma, média enganosa, núcleo real e processo responsável.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o registro final
+# ex: "Sintoma: timeouts, CPU média 40%. Evidência: núcleo 3 em 98% (mpstat), processo app PID 2210 (ps -o psr). Causa: single-thread, estrutural."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar explicitamente "estrutural, não temporário" é o que evita que alguém tente "resolver" com um simples restart no futuro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "CPU alta" sem especificar que é um núcleo isolado — perde a informação mais importante do diagnóstico.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que a <code>%CPU total</code> pode parecer normal mesmo quando um processo
+    está travando tudo?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque a média divide o uso entre todos os
+      <span class="hint" data-tip="Unidade de processamento independente dentro de um processador multi-core." onclick="openGlossary(0)">núcleos</span> —
+      um <span class="hint" data-tip="Processo que só consegue usar um núcleo por vez, mesmo num servidor com vários disponíveis." onclick="openGlossary(1)">processo single-thread</span>
+      pode saturar 100% de UM núcleo sozinho, e num servidor de 4 núcleos isso ainda dá só 25% de
+      <span class="hint" data-tip="Consumo de CPU calculado como média entre todos os núcleos do processador." onclick="openGlossary(2)">média geral</span> —
+      escondendo completamente o gargalo real.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>CPU total mostra 40%, mas a aplicação trava com timeouts intermitentes. Qual é
+  o próximo passo correto de investigação?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A média já está sendo mostrada e não explica o sintoma — insistir nela de novo não revela informação nova, é preciso quebrar por núcleo.')"><b>A</b> Continuar monitorando a média geral, esperando ela subir e confirmar o problema</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'mpstat -P ALL 2 mostra o uso de CPU núcleo por núcleo, revelando se algum deles está isoladamente saturado mesmo com a média geral parecendo tranquila — exatamente o que o sintoma pede investigar.')"><b>B</b> Rodar mpstat -P ALL 2 pra ver o uso de CPU núcleo por núcleo, não só a média</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Adicionar mais vCPUs sem saber se o problema é falta de núcleos ou um processo preso a um núcleo só pode nem resolver nada — se for single-thread, mais núcleos disponíveis não ajudam.')"><b>C</b> Adicionar mais vCPUs à VM, já que 40% ainda deixa margem pra crescer</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Ignorar o sintoma porque a métrica geral parece normal descarta um relato real de usuários (timeouts) sem investigar a fundo.')"><b>D</b> Ignorar o sintoma, já que 40% de CPU é um valor tecnicamente saudável</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O 'mpstat -P ALL 2' é como olhar o velocímetro de cada motor de uma aeronave quadrimotor: mostra se apenas uma turbina está em 100% enquanto as outras estão ociosas.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Um único núcleo em 98%, os outros três abaixo de 6% — o que isso confirma?</h2>
+  <p>O processo <code>app</code> (PID 2210) está preso ao núcleo 3 (PSR 3), consumindo 99,2% de CPU, enquanto
+  os núcleos 0, 1 e 2 permanecem quase ociosos.</p>
+  <div class='box question'>Qual é a causa raiz correta pra esse padrão?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Um processo single-thread só consegue usar um núcleo por vez, não importa quantos núcleos o servidor tenha disponíveis — ele satura o núcleo 3 completamente, enquanto os outros ficam ociosos porque a aplicação não distribui o trabalho entre eles. É um gargalo de arquitetura da aplicação, não falta de CPU no servidor.')"><b>A</b> A aplicação é single-thread e não escala em múltiplos núcleos — ela satura um núcleo sozinha, mesmo com outros três disponíveis e ociosos</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Núcleos ociosos não indicam defeito de hardware — o padrão mostra exatamente o oposto: os outros núcleos estão saudáveis e disponíveis, só não estão sendo usados pela aplicação.')"><b>B</b> O servidor tem um defeito de hardware, já que 3 dos 4 núcleos estão praticamente parados</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O sistema operacional não decide sozinho travar núcleos por segurança dessa forma — a explicação está no comportamento da aplicação, confirmado pelo PSR fixo em 3 no ps.')"><b>C</b> É um comportamento normal de segurança do Linux, travando núcleos por padrão</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A coluna '%iowait' alta é como o motorista pisando fundo no acelerador com o freio de mão puxado: a CPU não está lenta, ela só está travada esperando o disco responder.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se um núcleo está em 98%, é só reiniciar que ele libera, certo?"</h2>
+  <p>Um colega sugere reiniciar o servidor pra "liberar" o núcleo saturado, sem entender a causa raiz do
+  comportamento single-thread.</p>
+  <div class='box question'>Reiniciar o servidor resolve esse problema de forma definitiva?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não resolve de forma definitiva — reiniciar zera o processo temporariamente, mas assim que a aplicação single-thread voltar a processar carga real, ela vai saturar um núcleo de novo, exatamente do mesmo jeito. O problema é arquitetural (a aplicação não usa múltiplos núcleos), não um estado temporário que reset resolve.')"><b>A</b> Não — reiniciar zera o processo momentaneamente, mas a aplicação single-thread vai voltar a saturar um núcleo assim que processar carga real de novo; o problema é estrutural</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A causa raiz (aplicação não distribuída entre núcleos) não é resolvida por um restart — o comportamento de saturar um núcleo sozinho volta a acontecer assim que a carga voltar.')"><b>B</b> Sim — reiniciar redistribui automaticamente a carga entre todos os núcleos disponíveis</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A saturação de núcleo não é causada por acúmulo de tempo de atividade (uptime) — é causada pela arquitetura single-thread da aplicação processando carga real.')"><b>C</b> Sim, mas só depois de 24 horas de atividade contínua sem reiniciar</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A diferença entre processo single-thread e multi-thread é como um único carregador de peso vs uma equipe inteira: o single-thread trava um núcleo e deixa o resto do time sem trabalho.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Se a média geral não bate com o sintoma relatado, quebre por núcleo com mpstat -P ALL.</li>
+    <li>Identifique se algum núcleo específico está isoladamente saturado.</li>
+    <li>Confirme com ps -o psr,pcpu,comm qual processo está preso a esse núcleo.</li>
+    <li>Diagnostique se é comportamento single-thread (estrutural) ou algo pontual.</li>
+    <li>Reporte a causa real, sem confundir com falta geral de CPU.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Documente no runbook da aplicação se ela é single-thread ou multi-thread desde o início —
+  isso muda completamente como interpretar métricas de CPU dela no futuro. Configure alertas de monitoramento
+  por núcleo, não só na média geral, pra pegar esse tipo de gargalo antes de virar ticket de "aplicação
+  travando".</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A média geral não foi tratada como resposta final quando não batia com o sintoma.</li>
+    <li>O uso por núcleo foi investigado com mpstat -P ALL.</li>
+    <li>O processo responsável foi identificado com PSR via ps.</li>
+    <li>A causa foi corretamente atribuída a comportamento single-thread, não falta de CPU.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>mpstat e ps são somente leitura — não existe rollback. O limite real é assumir que
+  reiniciar resolve um problema estrutural de arquitetura da aplicação, quando na verdade só adia o mesmo
+  padrão se repetindo.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "a média pode esconder o gargalo real" conecta
+  diretamente com iostat de ontem (%util/await escondidos atrás de espaço livre) — o mesmo princípio, aplicado
+  a CPU hoje. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>rodar
+  mpstat -P ALL 2 pra ver o uso de CPU núcleo por núcleo, não só a média</b>. O ponto central do caso é este:
+  quando a média não combina com o sintoma, investigue por núcleo antes de mexer.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diagnosticar gargalos de CPU escondidos atrás de médias
+  confortáveis. Amanhã você aprende a mapear discos e partições — o passo antes de qualquer trabalho real com
+  storage e LVM.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 5, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Núcleo (core)","Unidade de processamento independente dentro de um processador multi-core, capaz de executar instruções sozinha.",
+   "É um caixa individual num banco com vários caixas — cada um atende uma fila própria, independente dos outros."],
+  ["Processo single-thread","Um processo que só consegue usar um núcleo de CPU por vez, mesmo num servidor com vários núcleos disponíveis.",
+   "É um funcionário que só sabe operar uma máquina por vez, mesmo que a fábrica tenha dez máquinas disponíveis."],
+  ["Média geral de CPU","Consumo de CPU calculado como média entre todos os núcleos do processador.",
+   "É a nota média da turma — pode esconder um aluno reprovado se os outros foram muito bem."],
+  ["mpstat -P ALL","Comando que mostra estatísticas de uso de CPU separadas por núcleo individual.",
+   "É a nota individual de cada aluno, não só a média da turma inteira."],
+  ["PSR (processor)","Coluna do ps que mostra em qual núcleo específico um processo está sendo executado no momento.",
+   "É o número do caixa específico onde aquele cliente está sendo atendido agora."],
+  ["Gargalo estrutural","Uma limitação causada pela arquitetura de um software, não por falta momentânea de recursos.",
+   "É a porta estreita de uma casa — não importa quantos cômodos grandes existam, todo mundo ainda passa um de cada vez por ali."],
+  ["Timeout intermitente","Um erro de tempo limite que acontece de forma irregular, não constante, dificultando a percepção do padrão.",
+   "É a luz que pisca de vez em quando — fácil de ignorar até você perceber que sempre pisca no mesmo horário."],
+  ["Escalabilidade multi-core","Capacidade de uma aplicação distribuir seu trabalho entre vários núcleos de CPU simultaneamente.",
+   "É uma equipe dividindo tarefas entre vários membros, em vez de uma pessoa só fazendo tudo sozinha."],
+  ["Núcleo ocioso (idle)","Um núcleo de CPU disponível mas sem trabalho sendo executado nele no momento.",
+   "É o caixa livre, esperando cliente, enquanto a fila inteira se acumula no caixa ao lado."],
+  ["Diagnóstico por camada de granularidade","Investigar do nível mais geral (média) para o mais específico (núcleo, processo) até achar a causa exata.",
+   "É dar zoom numa foto — primeiro a paisagem inteira, depois a região específica onde está o detalhe que importa."],
+  ["Restart como falso remédio","Reiniciar um sistema que só mascara temporariamente um problema estrutural que vai voltar a acontecer.",
+   "É apagar o alarme de incêndio sem apagar o fogo — o silêncio dura só até o fogo crescer de novo."],
+  ["Arquitetura de aplicação","O modo como um software é projetado para processar tarefas, incluindo se usa uma ou várias threads/núcleos.",
+   "É a planta do prédio — decide de antemão quantas pessoas podem circular ao mesmo tempo por cada corredor."]
+];
+
+const sceneStripIdx = [1,3,4,0];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

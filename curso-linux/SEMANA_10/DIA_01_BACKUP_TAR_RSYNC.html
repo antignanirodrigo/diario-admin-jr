@@ -1,0 +1,544 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 10 · Dia 1 — Backup: tar + rsync com Verificação | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_09/DIA_05_SET_E_TRATAMENTO_ERRO.html'>← Semana 9, Dia 5</a><a href='#'>Semana 10</a><a href='DIA_02_HEALTHCHECK.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com toda a Semana 9:</b> shebang, condicionais, loops, funções e set -e
+te deram um toolkit completo de bash. Semana 10 é onde tudo isso vira scripts prontos pra produção de
+verdade — começando por um backup que verifica cada etapa, não só assume que deu certo.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: automatizar backup com verificação real de sucesso.</b>
+Você ganha o hábito de checar o código de saída de cada etapa antes de declarar o backup como concluído.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 10 · Dia 1 | Nível Júnior</div>
+  <h1>Backup Automatizado: tar + rsync com Verificação</h1>
+  <p>backup só é sucesso quando cada etapa confirma que terminou bem</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S10D01_BACKUP_TAR_RSYNC.png' alt='Prancha em seis quadros sobre script de backup com tar e rsync'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Seu script de backup roda <code>tar -czf</code> seguido de <code>rsync</code> e depois
+  <code>echo "Backup concluído"</code> — sem checar nada no meio. "Rodou sem gritar" não é a mesma coisa que
+  "funcionou de verdade": o tar pode ter falhado por disco cheio, e o script nunca saberia.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Segunda-feira, abrindo a Semana 10</span>
+    A Semana 9 te deu um toolkit completo de bash: shebang, condicionais, loops, funções, set -e. Hoje esse
+    toolkit vira scripts de verdade, prontos pra rodar sem supervisão em produção — começando pelo mais
+    clássico de todos: backup.<br><br>
+    O chamado que me marcou nesse assunto foi um script de backup que "sempre funcionava". Rodava
+    <code>tar -czf</code>, depois <code>rsync</code>, e no final um <code>echo "Backup concluído"</code>.
+    Nenhum erro na tela, nunca. Achei que estava tudo certo até o dia em que precisei restaurar de verdade —
+    e o arquivo <code>.tar.gz</code> estava corrompido, cortado no meio. O disco tinha ficado cheio durante
+    a compactação, semanas antes, e o <code>tar</code> escreveu só uma parte do arquivo. O script não
+    percebeu, o <code>rsync</code> enviou o arquivo parcial do mesmo jeito, e o <code>echo</code> final
+    disse "concluído" com a maior tranquilidade — porque nenhum desses comandos tinha travado o script,
+    só produzido um resultado ruim silenciosamente.<br><br>
+    A lição que aprendi ali é simples de dizer e fácil de esquecer: "rodou sem gritar" não é a mesma coisa
+    que "funcionou de verdade". Um comando pode falhar PARCIALMENTE sem interromper o script inteiro. A
+    correção não é complicada — encadear cada etapa crítica com <code>||</code> ("se isso falhar, registre
+    o erro e saia"), e só declarar sucesso no log depois que TODAS as etapas realmente passaram, uma por
+    uma, com evidência própria.<br><br>
+    Hoje você escreve exatamente esse script: <code>tar</code> verificado, <code>rsync</code> verificado, e
+    um log que conta a história real de cada etapa — não um "concluído" genérico que pode estar mentindo.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>tar -czf "$ARQ" "$ORIGEM" || { ...; exit 1; }</code></td><td>Se tar falhar, registra erro e sai — não continua pro rsync com um arquivo ruim.</td></tr>
+    <tr><td><code>rsync "$ARQ" backup:/srv/backup/ || exit 1</code></td><td>Se rsync falhar, sai sem registrar sucesso.</td></tr>
+    <tr><td>log SUCCESS só se ambos passarem</td><td>O log só reflete sucesso real, nunca otimismo sem verificação.</td></tr>
+  </tbody></table>
+  <pre>--- sem verificação, disco cheio ---
+$ tar -czf app.tgz /var/www/app
+tar: Wrote only 4096 of 10240 bytes
+$ rsync app.tgz backup:/srv/backup/
+sending incremental file list
+app.tgz
+$ echo "Backup concluído"
+Backup concluído   # arquivo parcial enviado!
+
+--- com verificação de cada etapa ---
+$ tar -czf "$ARQ" "$ORIGEM" || { echo "ERRO no tar" >> "$LOG"; exit 1; }
+$ rsync "$ARQ" backup:/srv/backup/ || exit 1
+2025-05-27 02:00:21 BACKUP OK</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> escreva um script de backup simples com tar, sem nenhuma verificação de erro ainda.</div></div>
+      <div class="lab-cmd">$ mkdir -p ~/lab_backup/origem && touch ~/lab_backup/origem/arquivo.txt
+$ cat > backup.sh << 'EOF'
+#!/bin/bash
+tar -czf backup.tgz ~/lab_backup/origem
+echo "Backup concluído"
+EOF
+$ chmod +x backup.sh && ./backup.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> script funcional no caminho feliz, sem tratamento de erro — sempre imprime "Backup concluído", mesmo que algo falhe.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver a versão ingênua funcionando é o ponto de partida — ela "funciona" no caso normal, exatamente como o script da história antes de eu descobrir o problema.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só esse caminho feliz e nunca simular uma falha — é exatamente esse ponto cego que causou o backup corrompido da história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione || com registro de erro e exit 1 depois do tar.</div></div>
+      <div class="lab-cmd">$ cat > backup.sh << 'EOF'
+#!/bin/bash
+LOG=~/lab_backup/backup.log
+tar -czf backup.tgz ~/lab_backup/origem || { echo "ERRO no tar" >> "$LOG"; exit 1; }
+echo "TAR OK" >> "$LOG"
+EOF
+$ chmod +x backup.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> script preparado pra parar e registrar erro se o tar falhar, em vez de seguir cegamente.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse é o encadeamento exato que teria evitado o backup corrompido da história — parar e registrar no primeiro sinal de falha real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o exit 1 depois do echo de erro — sem ele, o script registra o erro no log mas continua rodando de qualquer jeito.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> simule uma falha apontando o tar pra uma origem que não existe, e confirme que o script para com a mensagem correta.</div></div>
+      <div class="lab-cmd">$ sed -i 's#~/lab_backup/origem#/caminho/que/nao/existe#' backup.sh
+$ ./backup.sh; echo "exit code: $?"
+$ cat ~/lab_backup/backup.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "ERRO no tar" no log, exit code diferente de zero, script encerrado antes de qualquer outra etapa.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> forçar a falha de propósito é o único jeito de confirmar que a proteção realmente funciona — sem testar o caminho de erro, você só está confiando na intenção do código, não no comportamento real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> nunca testar deliberadamente o caminho de falha — é exatamente esse teste que faltou no script original da história.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o script não parar como esperado numa falha simulada, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a lógica de encadeamento.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> corrija a simulação e confirme que o script completa com sucesso, registrando cada etapa no log.</div></div>
+      <div class="lab-cmd">$ sed -i 's#/caminho/que/nao/existe#~/lab_backup/origem#' backup.sh
+$ ./backup.sh
+$ cat ~/lab_backup/backup.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> log completo mostrando "TAR OK", confirmando que a etapa passou de verdade, não só que o script terminou.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o log registrar sucesso real (não genérico) é o que a Questão 2 vai testar — a diferença entre "rodou até o fim" e "cada etapa confirmou que funcionou".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar só na ausência de mensagem de erro na tela — sempre confira o conteúdo real do log antes de considerar o backup validado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente cenário de falha testado, cenário de sucesso testado, conteúdo do log final.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Falha simulada: origem inexistente -> "ERRO no tar" no log, exit 1, script parou
+Sucesso: origem válida -> "TAR OK" no log, script completou
+Log final conferido linha por linha, não só ausência de erro na tela</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> documentar os dois cenários (falha e sucesso) é a prova de que o script foi testado de verdade nos dois caminhos, não só no que "sempre funciona".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só o cenário de sucesso — sem o teste de falha registrado, ninguém sabe se a proteção contra erro realmente foi validada.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que "o script rodou até o fim sem erro visível" não é o mesmo que "o backup
+    funcionou"?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Um comando pode falhar PARCIALMENTE (como <code>tar</code> escrevendo só parte do arquivo por disco
+      cheio) sem travar o script inteiro — sem checar o
+      <span class="hint" data-tip="Número retornado por um comando ao terminar, indicando sucesso (0) ou erro (diferente de 0)." onclick="openGlossary(0)">código de saída</span>
+      de CADA etapa, um <span class="hint" data-tip="Backup incompleto, resultado de uma falha parcial durante a cópia ou compactação." onclick="openGlossary(1)">arquivo parcial</span>
+      pode ser enviado e registrado como sucesso, mesmo estando corrompido.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Seu script de backup roda tar e rsync sem checar nenhum resultado no meio. Qual
+  é a correção correta pra garantir que "sucesso" só seja declarado se as duas etapas realmente funcionarem?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Confiar que rodou sem gritar é suficiente é exatamente o problema — um comando pode falhar parcialmente (disco cheio no meio do tar) sem interromper o script, e sem checar cada etapa isso passa despercebido.')"><b>A</b> Manter o script como está, já que ele roda até o fim sem mostrar nenhum erro visível na tela</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Encadear tar -czf $ARQ $ORIGEM || { echo ERRO no tar >> $LOG; exit 1; }, seguido de rsync $ARQ backup:/srv/backup/ || exit 1, e só registrar SUCCESS no log se as duas etapas passarem, garante que o log reflita a realidade — sem sucesso nas duas etapas, não há backup.')"><b>B</b> Encadear cada etapa com || pra checar erro, registrando SUCCESS no log só se tar E rsync passarem</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar o script manualmente todo dia contradiz o próprio objetivo de automatizar o backup, e ainda não resolve o problema real de falta de verificação de erro no script.')"><b>C</b> Rodar o script manualmente todo dia, observando a tela com atenção, em vez de automatizar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Remover o rsync e confiar só no tar local não move o backup pro destino remoto, que é justamente a proteção contra perder o servidor original inteiro.')"><b>D</b> Remover a etapa de rsync, confiando só no arquivo tar local como backup suficiente</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'tar -czf backup.tar.gz' é a mala selada a vácuo com carimbo de data: compacta e congela os arquivos do sistema naquele minuto exato.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Depois de corrigir o espaço em disco, o script roda e o log mostra TAR OK e RSYNC OK — isso confirma o quê?</h2>
+  <p>O arquivo <code>/var/log/backup.log</code> agora mostra <code>INICIO backup</code>, <code>TAR OK</code>,
+  <code>RSYNC OK</code> e <code>BACKUP OK</code>, todos com timestamps.</p>
+  <div class='box question'>Qual é a leitura correta desse log completo?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O log com as três confirmações intermediárias (TAR OK, RSYNC OK) além do resultado final prova que cada etapa foi verificada individualmente, não só que o script chegou ao fim — é exatamente essa granularidade que diferencia um log confiável de um Backup concluído genérico e sem evidência.')"><b>A</b> Confirma que cada etapa foi verificada individualmente, com evidência própria — não só que o script terminou de rodar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O log com múltiplas linhas específicas (TAR OK, RSYNC OK) não é redundante — cada linha confirma uma etapa diferente, dando granularidade real sobre onde exatamente algo poderia ter falhado.')"><b>B</b> Confirma só que o log está registrando linhas demais, deveria ser simplificado pra uma linha só</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Múltiplos timestamps próximos ao longo da execução são esperados e normais — não indicam problema de performance, só mostram o script avançando etapa por etapa.')"><b>C</b> Confirma que o script está rodando mais devagar do que deveria, por causa dos vários timestamps</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Excluir pastas como /proc, /sys e /tmp do backup é como não embalar a água da torneira na mudança: são arquivos voláteis criados dinamicamente pela memória RAM.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "|| exit 1 e && exit 1 fazem a mesma coisa?"</h2>
+  <p>Um colega troca <code>rsync ... || exit 1</code> por <code>rsync ... && exit 1</code> por engano, achando
+  que os dois operadores são intercambiáveis.</p>
+  <div class='box question'>Qual é a diferença real entre os dois?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'|| (OU) executa o comando seguinte só se o anterior FALHAR — é o padrão certo pra tratamento de erro (\se falhar, saia\). && (E) executa o comando seguinte só se o anterior TIVER SUCESSO — usar && exit 1 inverteria a lógica, fazendo o script sair justamente quando o rsync funcionar, o oposto do que se quer.')"><b>A</b> || executa o exit só se o comando anterior FALHAR (comportamento correto pra tratamento de erro); && executaria o exit só se o comando TIVESSE sucesso, invertendo a lógica</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'|| e && têm significados opostos em bash — não são apenas estilos diferentes de escrever a mesma coisa, a lógica de quando cada um dispara é invertida.')"><b>B</b> Não tem diferença real, são só estilos diferentes de escrever a mesma lógica</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença entre || e && não é sobre velocidade de execução — é sobre a CONDIÇÃO que dispara o comando seguinte (falha vs. sucesso do comando anterior).')"><b>C</b> || é mais rápido de executar que &&, mas o resultado final é o mesmo</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Armazenar a soma SHA-256 do arquivo .tar.gz no cofre é o lacre de segurança: garante que o arquivo de backup não sofreu corrupção de disco durante o armazenamento.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Encadeie cada etapa crítica com || pra tratar falha imediatamente.</li>
+    <li>Registre no log cada etapa individualmente (TAR OK, RSYNC OK), não só o resultado final.</li>
+    <li>Só declare SUCCESS no log se todas as etapas realmente passaram.</li>
+    <li>Teste deliberadamente com uma etapa falhando (disco cheio simulado), confirmando que o script para.</li>
+    <li>Valide o log gerado, não confie só na ausência de erro na tela.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Adicione um healthcheck de espaço em disco ANTES de iniciar o tar (ex.: alertar se menos
+  de 20% livre). Isso ataca a causa raiz da história — disco cheio — antes mesmo dela chegar a gerar um
+  arquivo parcial, em vez de só detectar o problema depois que ele já aconteceu.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Cada etapa crítica (tar, rsync) tem tratamento de erro explícito.</li>
+    <li>O log registra cada etapa individualmente, não só o resultado final.</li>
+    <li>SUCCESS só é registrado se todas as etapas realmente passaram.</li>
+    <li>O script foi testado deliberadamente com falha simulada, não só o caminho feliz.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Um script de backup com verificação não é destrutivo em si — mas se ele reportar
+  sucesso falso (sem essa verificação), o dano real só aparece quando alguém tentar restaurar e descobrir que
+  o backup está incompleto. É por isso que a verificação de cada etapa é tão importante.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "backup só é sucesso quando validado" conecta
+  diretamente com "backup não testado não é backup" da Semana 6 — a mesma disciplina, agora automatizada
+  dentro do próprio script. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>encadear
+  cada etapa com ||, registrando SUCCESS no log só se tar E rsync passarem</b>. O ponto central do caso é
+  este: backup só é sucesso quando cada etapa confirma que terminou bem.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de escrever scripts de backup que verificam cada etapa, não só
+  assumem sucesso. Amanhã você aprende healthcheck — e por que um script que só respeita o último resultado
+  pode estar mentindo sobre a saúde real do sistema.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 10, Dia 1 de ~250 — abre a Semana 10. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Código de saída","Número retornado por um comando ao terminar, indicando sucesso (0) ou erro (diferente de 0).",
+   "É o carimbo de aprovado ou reprovado que cada etapa de uma inspeção deixa registrado."],
+  ["Arquivo parcial","Backup incompleto, resultado de uma falha parcial durante a cópia ou compactação.",
+   "É uma cópia de segurança pela metade — parece existir, mas falta justamente a parte que você mais precisaria."],
+  ["|| (OU lógico)","Operador que executa o comando seguinte apenas se o comando anterior falhar.",
+   "É o plano B que só entra em ação se o plano A não der certo."],
+  ["&& (E lógico)","Operador que executa o comando seguinte apenas se o comando anterior tiver sucesso.",
+   "É a próxima etapa que só acontece se a anterior realmente funcionou."],
+  ["Encadeamento de verificação","Conectar comandos de forma que cada etapa só prossiga se a anterior foi bem-sucedida.",
+   "É uma corrente de aprovações — cada elo só se conecta ao próximo se o anterior realmente segurou."],
+  ["Log de etapas","Registro detalhado que confirma cada etapa individual de um processo, não só o resultado final.",
+   "É o checklist carimbado item por item, não só uma assinatura genérica no final do formulário."],
+  ["Falha silenciosa em backup","Uma falha que não interrompe o script, resultando num backup incompleto registrado como sucesso.",
+   "É a cópia de segurança que parece pronta na prateleira, mas está incompleta por dentro — só se descobre no momento errado."],
+  ["Verificação de etapa crítica","Checar explicitamente se um passo essencial (como compactar ou transferir) realmente funcionou antes de prosseguir.",
+   "É testar cada trava de segurança antes de fechar o cofre, não só assumir que todas fecharam."],
+  ["Sucesso real vs. sucesso assumido","Sucesso real é confirmado com evidência de cada etapa; sucesso assumido é só a ausência de erro visível.",
+   "É a diferença entre 'ninguém reclamou' e 'todo mundo confirmou que está tudo certo' — só o segundo é confiável."],
+  ["Script de produção (backup)","Um script de backup que trata erros, verifica etapas e registra evidência, pronto para rodar sem supervisão.",
+   "É a diferença entre um teste de bancada e a máquina real rodando na linha de produção, sem ninguém observando."],
+  ["Disco cheio (causa de falha parcial)","Situação em que a falta de espaço interrompe uma operação de escrita no meio, gerando dados incompletos.",
+   "É tentar encher um balde além da capacidade — o que não cabe simplesmente não é gravado, sem aviso claro."],
+  ["Teste de falha deliberada","Provocar intencionalmente uma condição de erro para confirmar que o script reage corretamente a ela.",
+   "É puxar o freio de emergência do trem de propósito, só pra confirmar que ele realmente para quando precisa."]
+];
+
+const sceneStripIdx = [0,2,3,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,529 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 1 · Dia 3 — Navegar e Ler o Sistema de Arquivos | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_IDENTIDADE_AMBIENTE.html'>← Dia 2</a><a href='#'>Semana 1</a><a href='DIA_04_DISCO_PROCESSOS.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 2:</b> ontem você aprendeu a confirmar sua identidade e o host antes
+de qualquer coisa. Hoje, com isso resolvido, o primeiro chamado de verdade chega: acham um erro específico
+dentro de um log. Sem saber navegar com fluência, você se perde procurando — e perder tempo procurando é
+diferente de não saber a resposta.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: ainda ZERO mudança no sistema.</b> Mas hoje você ganha
+fluência de navegação — depois de hoje, achar qualquer arquivo específico num servidor deixa de ser um
+problema, mesmo em diretórios que você nunca visitou antes.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 1 · Dia 3 | Nível Júnior</div>
+  <h1>Navegar e Ler o Sistema de Arquivos</h1>
+  <p>pwd, ls, cd, cat, less, head, tail -f — e por que cada um serve pra uma coisa diferente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S01D03_NAVEGACAO_ARQUIVOS.png' alt='Prancha em seis quadros sobre navegar e ler o sistema de arquivos'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket #3487: "Encontrar erro no log da aplicação." Só isso. Você recebe o ticket sem
+  saber em qual pasta o log está, nem o que exatamente procurar dentro dele. Antes de sair digitando comandos
+  ao acaso, é preciso navegar com método.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje chegou um chamado enxuto demais: "Encontrar erro no log da aplicação." Só isso — nem pasta, nem
+    horário, nada. O Júnior ficou olhando pra tela sem saber por onde começar. Perguntei: "antes de procurar o
+    erro, você sabe nem onde está agora?" Ele rodou <b>pwd</b>, viu que estava na própria pasta pessoal, longe
+    de qualquer log de aplicação — o mesmo hábito do Dia 1 e do Dia 2, confirmar onde você está antes de
+    agir, aparecendo de novo hoje.<br><br>
+    Aí ele quase cometeu o erro clássico: ia abrir o log inteiro com <b>cat</b>. Eu segurei a mão dele — um
+    arquivo de milhares de linhas despejado de uma vez na tela não é leitura, é enchente. Expliquei a
+    diferença entre ler um livro com calma usando <b>less</b>, uma página de cada vez, e ficar de olho na
+    porta com <b>tail -f</b>, vendo quem entra agora em tempo real. Cada ferramenta de leitura resolve um
+    problema diferente — usar a errada não é erro de digitação, é erro de escolha.<br><br>
+    Foi assim, com <code>less</code> e <code>tail -f</code> na mão, que o Júnior achou a linha exata do erro
+    sem afogar o terminal. É esse método — navegar com propósito, não no escuro — que você vai treinar agora.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>pwd</code></td><td>Mostra o caminho completo de onde você está agora.</td></tr>
+    <tr><td><code>ls -la</code></td><td>Lista tudo na pasta atual, incluindo itens ocultos (os que começam com ponto).</td></tr>
+    <tr><td><code>cd /var/log</code></td><td>Muda de pasta — /var/log é onde a maioria dos logs do sistema fica.</td></tr>
+    <tr><td><code>less app.log</code></td><td>Abre o arquivo pra leitura navegável, sem carregar tudo de uma vez na tela.</td></tr>
+    <tr><td><code>head -20 app.log</code></td><td>Mostra só as primeiras 20 linhas — útil pra ver o início de um arquivo.</td></tr>
+    <tr><td><code>tail -f app.log</code></td><td>Acompanha o arquivo em tempo real, mostrando cada linha nova assim que ela é escrita.</td></tr>
+  </tbody></table>
+  <pre>$ pwd
+/home/adminjr
+$ ls -la
+total 12
+Documentos  Downloads  logs
+$ cd /var/log
+$ pwd
+/var/log
+$ tail -f app.log
+10:41 INFO [api] conexão estabelecida
+10:42 ERROR conexão recusada
+10:43 INFO [api] nova tentativa
+10:44 INFO [api] conexão OK</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Confirme onde você está, veja o que existe na pasta, depois navegue até /var/log.</div></div>
+      <div class="lab-cmd">pwd
+ls -la
+cd /var/log
+pwd</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> o segundo <code>pwd</code> mostra <code>/var/log</code>, confirmando que a navegação funcionou.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> confirmar a posição antes e depois de navegar é o mesmo hábito do Dia 1 e do Dia 2 — sem isso, você não tem certeza de que o próximo comando vai atuar onde você pensa que está.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> encadear vários <code>cd</code> seguidos sem checar <code>pwd</code> entre eles — depois de 3-4 comandos, é fácil perder a noção de onde você realmente está.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Abra um arquivo de log com less e navegue com as setas, depois saia sem alterar nada.</div></div>
+      <div class="lab-cmd">less app.log
+# setas pra navegar, "q" pra sair</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> você consegue rolar pra cima e pra baixo sem o terminal ficar poluído, e sair sem alterar nada.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> less carrega o arquivo sob demanda, página por página — é a ferramenta certa pra qualquer arquivo que você não sabe o tamanho antes de abrir.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> abrir com <code>cat</code> por hábito, mesmo depois de aprender a diferença — num log de produção de milhares de linhas isso afoga o terminal na hora.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Compare o início e o final do mesmo arquivo.</div></div>
+      <div class="lab-cmd">head -20 app.log
+tail -20 app.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> head mostra o início do arquivo, tail mostra o final — conteúdos diferentes do mesmo arquivo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> saber que existem essas duas pontas evita abrir o arquivo inteiro só pra ver o começo ou o fim — economiza tempo numa investigação real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> achar que <code>head</code> e <code>tail</code> mostram a mesma coisa só que "diferente" — são pontas opostas do arquivo, não a mesma informação reorganizada.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Acompanhe um arquivo em tempo real e, em outra janela/aba, adicione uma linha nova nele.</div></div>
+      <div class="lab-cmd"># janela 1:
+tail -f app.log
+# janela 2, ao mesmo tempo:
+echo "teste" >> app.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> a linha nova aparece automaticamente na tela do tail -f, sem precisar rodar o comando de novo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a ferramenta certa pra qualquer investigação "ao vivo" — foi assim que o log do chamado de hoje mostrou o erro aparecendo e sumindo em tempo real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer <code>tail -f</code> rodando numa sessão e sair sem encerrar com Ctrl+C — não altera nada no sistema, mas ocupa a sessão sem necessidade.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a linha não apareceu automaticamente, este é o ponto onde o chat com o Sênior-IA vai ajudar a debugar o motivo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Escreva o relato do ticket #3487: caminho do arquivo, horário do erro, mensagem exata.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o relato, 3 linhas
+# ex: "Arquivo: /var/log/app.log. Horário: 10:42. Erro: conexão recusada, recuperado em 10:44."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> um relato de 3 linhas que qualquer colega conseguiria seguir sem perguntar nada de volta.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> o registro é o produto real do seu trabalho hoje — sem ele, ninguém além de você sabe o que foi encontrado, mesmo que você tenha investigado certo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> registrar só "encontrei o erro" sem horário nem mensagem exata — isso obriga quem ler depois a refazer toda a investigação do zero.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> antes de qualquer outra coisa, qual comando confirma exatamente em qual pasta
+    você está agora, mesmo depois de vários cd seguidos?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <code>pwd</code> (<span class="hint" data-tip="Mostra o caminho completo da pasta atual." onclick="openGlossary(0)">print working directory</span>).
+      É o mesmo hábito do Dia 1 e do Dia 2 — antes de agir, confirme onde você está.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa encontrar uma linha de erro específica dentro de um log de milhares de linhas. Qual abordagem é mais eficiente e segura?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'cat despeja o arquivo inteiro de uma vez, sem controle de navegação — num log de milhares de linhas, isso afoga o terminal e dificulta muito achar a linha certa.')"><b>A</b> Usar cat no arquivo inteiro e rolar a tela procurando visualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'less permite ler com calma, página por página, e tail -f acompanha novas linhas em tempo real — as duas ferramentas certas pra esse tipo de investigação, cada uma no seu momento.')"><b>B</b> Usar less pra ler com calma e tail -f pra acompanhar novas linhas em tempo real</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Apagar linhas de um log de produção destrói evidência permanentemente — e ainda por cima não resolve encontrar o erro, só reduz o que sobrou pra procurar.')"><b>C</b> Apagar linhas antigas do log pra ele ficar menor e mais fácil de ler</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Pedir pro sênior fazer resolve o ticket de hoje, mas não constrói a fluência que você precisa pra fazer isso sozinho da próxima vez — e o chamado é seu.')"><b>D</b> Pedir pro sênior investigar, já que é mais rápido</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Usar caminhos absolutos (/etc/...) em scripts em vez de relativos (../) é como preencher uma carta com o CEP e endereço completo em vez de dizer 'na casa da esquina'.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 A falha apareceu e sumiu sozinha</h2>
+  <p>Acompanhando o log com <code>tail -f</code>, você vê exatamente essa sequência: conexão estabelecida às
+  10:41, erro às 10:42, nova tentativa às 10:43, conexão OK às 10:44.</p>
+  <div class='box question'>O que essa sequência sugere sobre o problema, e o que você deve fazer agora, no Dia 3?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O log mostra que a conexão voltou sozinha um minuto depois (10:44 INFO conexão OK) — não há nenhuma evidência de que reiniciar algo seria necessário, e hoje é dia de só observar.')"><b>A</b> Reiniciar o serviço da aplicação pra garantir que o erro não volte</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'A sequência sugere uma falha transitória: erro às 10:42, seguido de nova tentativa e sucesso dois minutos depois. A ação certa hoje é registrar a evidência exata — horário e mensagem — sem tentar corrigir nada, já que você ainda está na fase de só observar.')"><b>B</b> Registrar a evidência exata (horário 10:42, mensagem conexão recusada) e reportar no ticket sem alterar nada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Apagar a linha de erro do log destrói a única evidência que existe do problema, sem resolver a causa e sem cumprir o que o ticket pediu.')"><b>C</b> Apagar a linha de erro do log, já que o problema já se resolveu sozinho</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Arquivos ocultos (que começam com ponto, como .bashrc) são como os disjuntores atrás do quadro de força: ficam escondidos para evitar alterações acidentais no dia a dia.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "cat é mais simples, por que não usar sempre?"</h2>
+  <p><code>cat</code> também mostra o conteúdo de um arquivo, e é mais rápido de digitar que <code>less</code>.</p>
+  <div class='box question'>Por que não usar cat pra tudo, já que é mais simples de digitar?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'cat despeja o arquivo inteiro de uma vez, sem controle de navegação. Num log de produção com milhares de linhas, isso enche o terminal instantaneamente e torna quase impossível achar a linha certa — less permite navegar com calma, e tail -f acompanha em tempo real. Cada ferramenta serve pra um propósito diferente.')"><b>A</b> cat funciona bem pra arquivos pequenos, mas em logs grandes ele desce tudo de uma vez e afoga o terminal — less e tail -f dão controle que cat não dá</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Se cat fosse sempre a melhor opção, não existiria motivo pra less e tail -f terem sido criados como ferramentas separadas — cada um resolve um problema que cat não resolve bem.')"><b>B</b> Não faz diferença nenhuma, cat e less mostram exatamente a mesma coisa do mesmo jeito</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'cat funciona perfeitamente bem tecnicamente — o problema não é ele falhar, é ele não dar controle de navegação num arquivo grande, o que é uma limitação de uso, não de funcionamento.')"><b>C</b> cat só funciona em arquivos pequenos e trava em arquivos grandes</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'ls -lah' é como ligar a lanterna e abrir todas as gavetas de um armário: mostra o tamanho exato, quem é o dono e as permissões de cada item.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme onde você está com pwd antes de qualquer navegação.</li>
+    <li>Use ls -la pra ver o que existe na pasta, incluindo itens ocultos.</li>
+    <li>Navegue com cd até o diretório indicado pelo tipo de arquivo que procura.</li>
+    <li>Use less pra ler com calma, nunca cat em arquivos grandes.</li>
+    <li>Use tail -f quando precisar acompanhar o que está acontecendo agora.</li>
+    <li>Registre caminho completo, horário e a linha exata da evidência encontrada.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Padronize que todo ticket de log deve vir com caminho do arquivo ou nome da aplicação — se
+  não vier, é a primeira pergunta a fazer antes de começar a procurar às cegas. Documente no time o hábito
+  "less/tail -f pra ler, nunca cat em arquivo grande", pra ninguém redescobrir isso afogando um terminal em
+  produção.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você navegou até a pasta certa sem se perder.</li>
+    <li>Você sabe quando usar less, quando usar tail -f, e por que nunca cat num log grande.</li>
+    <li>A linha exata do erro foi identificada com horário e mensagem.</li>
+    <li>Nenhum arquivo foi alterado ou apagado durante a investigação.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Como toda a aula de hoje é somente leitura, não há rollback técnico. Se você abriu
+  um arquivo com um editor por engano, sempre saia sem salvar até ter certeza do que está fazendo.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "confirme onde você está antes de agir" apareceu
+  no Dia 1 (fingerprint do host), no Dia 2 (hostname do chamado) e hoje (pwd antes de navegar) — é o mesmo
+  hábito se repetindo em três camadas diferentes. O Anki vai juntar os três.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>usar less pra
+  ler com calma e tail -f pra acompanhar novas linhas em tempo real</b>. O ponto central do caso é este: cada
+  ferramenta de leitura serve pra um momento diferente da investigação.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Ainda nenhuma mudança no sistema — mas agora você navega e lê qualquer parte do
+  servidor sem se perder, e sabe escolher a ferramenta certa pra cada tipo de leitura. Amanhã, no Dia 4, você
+  aprende a diferença entre "quanto espaço existe" e "quem está consumindo recurso agora" — duas perguntas que
+  todo iniciante confunde.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 1, Dia 3 de ~250. Mesmo padrão: glossário com analogia, 3 questões + 1
+recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["pwd (print working directory)","Mostra o caminho completo da pasta em que você está agora.",
+   "É perguntar 'em que sala eu estou?' antes de decidir pra onde andar."],
+  ["ls (list)","Lista os arquivos e pastas dentro do diretório atual.",
+   "É abrir a porta da sala e ver o que tem dentro dela."],
+  ["ls -la","Lista tudo, incluindo itens ocultos (que começam com ponto) e detalhes de permissão.",
+   "É abrir a sala e olhar também dentro das gavetas escondidas."],
+  ["cd (change directory)","Muda a pasta atual pra outra.",
+   "É andar de uma sala pra outra dentro do prédio."],
+  ["cat","Mostra o conteúdo inteiro de um arquivo de uma vez só, sem controle de navegação.",
+   "É despejar uma caixa inteira de papéis na sua mesa de uma vez, sem organizar."],
+  ["less","Abre um arquivo pra leitura navegável, página por página, sem carregar tudo de uma vez.",
+   "É folhear um livro com calma, uma página de cada vez, em vez de rasgar todas as páginas soltas na mesa."],
+  ["head","Mostra apenas as primeiras linhas de um arquivo.",
+   "É ler só a primeira página de um documento pra ter uma ideia geral."],
+  ["tail -f","Mostra o final de um arquivo e continua acompanhando novas linhas em tempo real.",
+   "É ficar de olho na porta vendo quem entra agora, em vez de olhar uma foto antiga de quem já entrou."],
+  ["diretório","Uma pasta dentro do sistema de arquivos do Linux.",
+   "É uma sala dentro do prédio, que pode ter outras salas (subpastas) dentro dela."],
+  ["/var/log","Diretório padrão onde a maioria dos logs do sistema e das aplicações fica guardada.",
+   "É o arquivo morto do prédio, onde ficam guardados os registros de tudo que aconteceu."],
+  ["Ticket (chamado)","Registro formal de uma solicitação de trabalho, com número e descrição.",
+   "É a ordem de serviço oficial — sem ela, o trabalho não tem rastro nem responsável."],
+  ["Log de aplicação","Arquivo onde um programa registra eventos, avisos e erros conforme eles acontecem.",
+   "É o diário de bordo do programa, escrito automaticamente enquanto ele funciona."]
+];
+
+const sceneStripIdx = [0,4,5,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

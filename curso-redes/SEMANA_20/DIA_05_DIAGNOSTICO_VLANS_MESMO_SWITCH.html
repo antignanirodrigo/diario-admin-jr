@@ -1,0 +1,489 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 20 · Dia 5 — Diagnóstico: VLANs Vazando | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.milestone{width:min(1180px,92vw);margin:0 auto 40px;background:linear-gradient(135deg,#1a1408,#0d1f2a);border:2px solid var(--gold);border-radius:10px;padding:30px}
+.milestone h2{margin-top:0}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_ISOLAMENTO_ENTRE_VLANS.html'>← Semana 20, Dia 4</a><a href='#'>Semana 20</a><a href='../SEMANA_21/DIA_01_NFS_CONCEITO.html'>Semana 21, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 4 (validação de isolamento):</b> Você já sabe validar isolamento
+com teste de controle. Hoje o cenário inverte: a validação FALHOU — a VLAN de visitantes consegue alcançar o
+servidor interno, quando não deveria. Hora de descobrir exatamente onde o isolamento vazou.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar um vazamento de isolamento entre VLANs.</b>
+Você ganha o roteiro de investigação que junta tudo da semana: conferir VLAN de cada porta, conferir VLANs
+permitidas em cada trunk, e achar exatamente qual configuração está deixando passar tráfego que deveria estar
+bloqueado.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 20 · Dia 5 — Fecha a Semana | Nível Júnior — Redes</div>
+  <h1>Diagnóstico: VLANs Vazando</h1>
+  <p>quando o isolamento falha, a causa quase sempre está numa única linha de configuração esquecida</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S20D05_DIAGNOSTICO_VLANS_MESMO_SWITCH.png' alt='Prancha em seis quadros sobre diagnosticar um vazamento de isolamento entre VLANs no mesmo switch, revisando configuração de porta access e VLANs permitidas no trunk'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2005: "A validação do Dia 4 deu certo mês passado. Hoje, do nada, alguém da rede
+  de visitantes conseguiu acessar o servidor financeiro." Nada muda sozinho numa rede — alguma configuração foi
+  alterada nesse meio tempo. A investigação começa revisando exatamente as duas coisas que aprendemos essa
+  semana: a VLAN de cada porta access, e as VLANs permitidas em cada
+  <span class="hint" data-tip="Link entre switches configurado pra carregar múltiplas VLANs simultaneamente, usando tagging 802.1Q." onclick="openGlossary(1)">trunk</span>.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são os dois pontos de configuração mais prováveis de causar um vazamento de
+    isolamento entre VLANs, e qual comando revela cada um?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Primeiro ponto: uma porta access configurada na VLAN errada — revelado por show vlan brief (ou
+      equivalente), listando qual VLAN cada porta pertence. Segundo ponto: um trunk permitindo mais VLANs do
+      que deveria — revelado por show interfaces trunk, listando as VLANs realmente permitidas naquele link.
+      Um vazamento de isolamento quase sempre é um desses dois — raramente é "o switch quebrou sozinho".
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você roda show interfaces trunk no switch principal e vê Gi0/24 (o link entre os
+  dois switches) com "Vlans allowed: all" — em vez da lista específica "10,50" que deveria estar ali, incluindo
+  a VLAN 10 (financeiro) e a VLAN 50 (visitantes) juntas. O que isso explica?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Com Vlans allowed: all, o trunk está carregando TODAS as VLANs configuradas no switch, incluindo tanto a VLAN 10 quanto a VLAN 50 — sem nenhuma restrição. Isso explica exatamente o vazamento: o trunk deveria ter sido restrito só às VLANs necessárias, mas alguém (ou uma configuração padrão de fábrica) deixou passar tudo, inclusive a comunicação indevida entre visitantes e financeiro.')"><b>A</b> O trunk está permitindo todas as VLANs do switch, sem restrição — incluindo tanto a VLAN 10 quanto a 50, o que explica o vazamento entre elas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Vlans allowed: all é uma configuração real e válida de trunk — não é um erro de leitura ou digitação; é literalmente o que o switch está permitindo passar naquele link, e é exatamente essa configuração que precisa ser corrigida.')"><b>B</b> "Vlans allowed: all" é apenas um erro de digitação no comando, sem efeito real na configuração do switch</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'all não significa nenhuma VLAN passando — significa exatamente o oposto: TODAS as VLANs configuradas no switch estão sendo permitidas naquele trunk, sem exceção.')"><b>C</b> Isso significa que nenhuma VLAN está passando pelo trunk no momento, o que não explicaria o vazamento</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Vlans allowed é especificamente sobre quais VLANs atravessam aquele link — não tem relação direta com a velocidade da porta; um trunk gigabit e um trunk mais lento podem ter exatamente a mesma configuração de VLANs permitidas.')"><b>D</b> Isso é normal em qualquer porta trunk gigabit, independente da configuração de VLANs</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 05 DIAGNOSTICO VLANS MESMO SWITCH é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>Revela</th></tr></thead><tbody>
+    <tr><td><code>show vlan brief</code></td><td>Qual VLAN cada porta access do switch pertence.</td></tr>
+    <tr><td><code>show interfaces trunk</code></td><td>Quais VLANs cada porta trunk está realmente permitindo.</td></tr>
+    <tr><td><code>show mac address-table</code></td><td>Quais dispositivos (por MAC) estão associados a qual VLAN, no momento.</td></tr>
+  </tbody></table>
+  <pre>--- estado incorreto (causa do vazamento) ---
+$ show interfaces trunk
+Port      Mode         Vlans allowed
+Gi0/24    trunk        all               ← deveria ser só 10,50
+
+--- correção ---
+$ switchport trunk allowed vlan 10,50
+$ show interfaces trunk
+Port      Mode         Vlans allowed
+Gi0/24    trunk        10,50             ← restrito ao necessário
+
+--- reteste (Dia 4, teste de controle + teste de isolamento) ---
+$ ping -c 3 10.10.10.100        # visitante tentando alcançar financeiro
+3 packets transmitted, 0 received, 100% packet loss
+✅ isolamento restaurado</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje mostra o sênior explicando que "Vlans allowed: all" costuma ser a
+  configuração PADRÃO de fábrica de um trunk, não algo que alguém digitou por engano</h2>
+  <p>Um colega assume que precisa ter sido um erro humano recente pra causar esse vazamento.</p>
+  <div class='box question'>Por que "Vlans allowed: all" costuma ser justamente a configuração PADRÃO de
+  fábrica ao criar um trunk, tornando esse tipo de vazamento comum mesmo sem erro humano recente?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Muitos switches, ao configurar uma porta como trunk, assumem por padrão que TODAS as VLANs existentes devem ser permitidas, a menos que alguém restrinja explicitamente a lista. Isso significa que o vazamento pode ter existido desde a criação do trunk, meses atrás — só passou despercebido até uma VLAN sensível (financeiro) ser criada depois e cair automaticamente dentro dessa permissão ampla já existente.')"><b>A</b> O padrão de fábrica de muitos switches já libera todas as VLANs num trunk recém-criado — o vazamento pode existir desde a criação do link, só passou despercebido até agora</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A idade do switch (novo ou antigo) não determina se ele usa allowed vlan all como padrão — esse comportamento é uma característica de configuração do fabricante/modelo, não do tempo de uso do equipamento.')"><b>B</b> Só acontece em switches muito antigos, com mais de dez anos de uso — equipamentos novos nunca vêm com essa configuração padrão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A quantidade de portas físicas do switch não tem relação com o comportamento padrão de VLANs permitidas num trunk — um switch de 8 portas e um de 48 portas podem ter exatamente o mesmo comportamento padrão de allowed vlan all.')"><b>C</b> Só acontece em switches com menos de 24 portas físicas, por limitação de memória de configuração</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 05 DIAGNOSTICO VLANS MESMO SWITCH é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Depois de corrigir o trunk, preciso testar mais alguma coisa?"</h2>
+  <p>Um colega corrige o "allowed vlan" do trunk e já considera o chamado encerrado, sem testar de novo.</p>
+  <div class='box question'>Por que é importante repetir o procedimento de validação do Dia 4 (teste de
+  controle + teste de isolamento) depois de aplicar a correção, em vez de só confiar que a mudança de
+  configuração resolveu?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Aplicar uma correção de configuração não é garantia automática de que o resultado prático é o esperado — pode existir outro ponto de vazamento não percebido (outra porta mal configurada, outro trunk), ou a correção pode ter efeito colateral inesperado, como quebrar uma comunicação legítima que dependia daquele acesso mais amplo. Só reteste com evidência confirma que o problema foi realmente resolvido, sem quebrar nada além dele.')"><b>A</b> A correção de configuração não garante sozinha o resultado prático esperado — só reteste com evidência confirma que o vazamento foi resolvido sem quebrar nada mais</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'switchport trunk allowed vlan é um comando real e válido em switches gerenciáveis — a suposição de que ele nunca falha e por isso dispensa reteste é justamente o tipo de suposição que o princípio de ANTES DE ALTERAR, OBSERVE — DEPOIS DE ALTERAR, VALIDE existe para evitar.')"><b>B</b> Não é necessário — o comando switchport trunk allowed vlan sempre funciona perfeitamente na primeira tentativa, sem exceção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Reiniciar o switch inteiro não é necessário nem recomendado só pra aplicar uma mudança de VLANs permitidas num trunk — mudanças de configuração de VLAN geralmente têm efeito imediato, sem exigir reboot completo do equipamento.')"><b>C</b> Só é necessário reiniciar o switch inteiro depois da correção, sem precisar reprocessar nenhum teste específico</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 05 DIAGNOSTICO VLANS MESMO SWITCH é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de um vazamento entre VLANs, comece revisando show vlan brief pra cada porta access envolvida.</li>
+    <li>Revise show interfaces trunk pra cada link entre switches, conferindo as VLANs realmente permitidas.</li>
+    <li>Restrinja explicitamente qualquer trunk encontrado com "allowed vlan: all" pra só as VLANs necessárias.</li>
+    <li>Aplique a correção e repita o procedimento de validação do Dia 4 (controle + isolamento).</li>
+    <li>Documente a causa raiz encontrada, pra evitar o mesmo erro em trunks futuros.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em ambiente de laboratório e confirme nomes de dispositivos e VLANs antes de cada mudança.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Configure um trunk de laboratório deliberadamente sem restringir "allowed vlan" (deixando o padrão).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> show interfaces trunk mostrando "all" ou todas as VLANs existentes.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Teste ping entre duas VLANs que deveriam estar isoladas, confirmando o vazamento.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ping funcionando entre VLANs que não deveriam se comunicar.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não souber qual sintaxe exata seu switch de laboratório usa pra restringir VLANs permitidas, este é o ponto onde o chat com o Sênior-IA vai te mostrar a variação por fabricante.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Corrija o trunk, restringindo explicitamente as VLANs necessárias.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> show interfaces trunk mostrando só a lista restrita esperada.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Repita o procedimento completo de validação do Dia 4 (teste de controle + teste de isolamento).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> controle OK, isolamento confirmado — vazamento resolvido com evidência.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Vazamentos de isolamento quase sempre vêm de porta access na VLAN errada, ou trunk permitindo VLANs demais.</li>
+    <li>"Allowed vlan: all" costuma ser padrão de fábrica — não exige erro humano recente pra existir.</li>
+    <li>show vlan brief e show interfaces trunk são os dois comandos centrais dessa investigação.</li>
+    <li>Toda correção precisa ser revalidada com o mesmo rigor do teste de controle + isolamento do Dia 4.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Restringir "allowed vlan" num trunk é reversível, mas tem risco real de quebrar
+  comunicação legítima que dependia (mesmo sem intenção) do acesso mais amplo anterior — por isso o reteste
+  completo depois da correção não é opcional, é parte do procedimento.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "configuração padrão de fábrica costuma ser
+  mais permissiva do que deveria" é um padrão que reaparece em firewall, permissões de arquivo e agora VLAN —
+  vale reforçar esse princípio geral de segurança, não só o caso específico de trunk. Fecha a Semana 20
+  conectando direto com essa disciplina. O Anki vai reforçar esse padrão.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a causa raiz foi um trunk configurado
+  com "allowed vlan: all", permitindo tráfego entre VLANs que deveriam estar isoladas. O ponto central do caso é
+  este: quando o isolamento falha, a causa quase sempre está numa única linha de configuração esquecida.</div>
+</section>
+
+<div class="milestone">
+  <h2>🏁 Semana 20 concluída — VLANs, do conceito ao diagnóstico de vazamento</h2>
+  <p>Você fechou cinco dias que levaram você de "por que dois notebooks no mesmo switch não se enxergam" até
+  diagnosticar exatamente qual configuração estava deixando um isolamento vazar. No caminho: conceito de
+  segmentação lógica, tagging 802.1Q com trunk e access, subinterfaces VLAN no Linux, validação formal de
+  isolamento, e diagnóstico de vazamento real.</p>
+  <p><strong>Amanhã começa a Semana 21:</strong> NFS — compartilhamento de arquivos em rede no mundo Linux, do
+  primeiro export até os detalhes de permissão que costumam confundir todo administrador iniciante.</p>
+</div>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diagnosticar um vazamento de isolamento entre VLANs, revisando
+  configuração de porta e de trunk com método. A Semana 20 está completa.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 20, Dia 5 de ~250 — encerra a Semana 20. Mesmo
+padrão: glossário com analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro
+Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["show vlan brief","Comando que lista as VLANs configuradas num switch e quais portas access pertencem a cada uma.",
+   "É a planta do prédio mostrando qual porta dá acesso a qual apartamento — o primeiro lugar a checar quando alguém está no lugar errado."],
+  ["show interfaces trunk","Comando que lista quais portas estão em modo trunk e quais VLANs cada uma está realmente permitindo.",
+   "É a lista de elevadores de serviço do prédio e exatamente quais andares cada um está autorizado a atender no momento."],
+  ["Vlans allowed: all","Configuração de trunk que permite TODAS as VLANs existentes no switch, sem nenhuma restrição explícita.",
+   "É o elevador de serviço configurado pra parar em qualquer andar do prédio, mesmo quando só alguns andares deveriam ter acesso por ali."],
+  ["Padrão de fábrica (permissivo por padrão)","Configuração inicial de um equipamento que tende a liberar mais acesso do que o necessário, até ser restringida deliberadamente.",
+   "É a porta vindo destravada de fábrica — alguém precisa lembrar de trancá-la, ela não vem trancada sozinha."],
+  ["Vazamento de isolamento","Situação onde tráfego consegue atravessar entre VLANs que deveriam estar isoladas, geralmente por erro de configuração.",
+   "É a água escapando por uma rachadura na parede que deveria estar vedada — o isolamento existe no design, mas falhou na prática."],
+  ["show mac address-table","Comando que mostra quais endereços MAC estão associados a qual VLAN e porta, útil pra confirmar onde um dispositivo específico está conectado.",
+   "É o registro de quem está hospedado em qual quarto do prédio, no momento exato da consulta."],
+  ["Causa raiz (vs. sintoma)","A configuração ou evento específico que originou um problema, distinta do sintoma observado (como um ping que não deveria funcionar).",
+   "É a rachadura na parede, não a poça d'água no chão — o sintoma aponta pro problema, mas a causa raiz é o que precisa ser corrigido."],
+  ["Reteste pós-correção","Prática de repetir o procedimento de validação completo depois de aplicar uma correção, em vez de assumir que ela funcionou.",
+   "É vistoriar de novo depois do conserto, não só confiar que o reparo funcionou porque a ferramenta certa foi usada."],
+  ["Efeito colateral de correção","Consequência não intencional de uma mudança de configuração, como quebrar uma comunicação legítima que dependia do acesso anterior mais amplo.",
+   "É consertar uma rachadura e sem querer entupir um cano que passava exatamente por ali — toda correção merece verificação completa, não só do problema original."],
+  ["switchport trunk allowed vlan (comando de correção)","Comando usado pra restringir explicitamente quais VLANs uma porta trunk deve permitir, corrigindo uma configuração excessivamente permissiva.",
+   "É trocar a fechadura do elevador de serviço pra só aceitar os cartões dos andares realmente autorizados."],
+  ["Investigação por eliminação (porta vs. trunk)","Método de checar sistematicamente os dois pontos mais prováveis de falha (configuração de porta, configuração de trunk) antes de suspeitar de causas mais exóticas.",
+   "É checar primeiro as duas causas mais comuns de um sintoma antes de partir pra hipóteses raras e complicadas."],
+  ["Documentação de causa raiz (prevenção futura)","Registro do que causou um incidente específico, usado pra evitar que o mesmo erro se repita em configurações futuras.",
+   "É anotar no diário de manutenção exatamente o que quebrou e por quê, pra próxima pessoa não cair na mesma armadilha."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

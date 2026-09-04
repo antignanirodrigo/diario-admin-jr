@@ -1,0 +1,531 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 15 · Dia 1 — Firewall Stateful: Não se Tranque Fora | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_14/DIA_05_DHCP_LEASE_RENOVACAO.html'>← Semana 14, Dia 5</a><a href='#'>Semana 15</a><a href='DIA_02_NFTABLES_BASICO_ROLLBACK.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 13 (portas e sockets):</b> Você já sabe diagnosticar firewall
+sem desligá-lo. Hoje o risco muda de figura: aplicar uma regra de firewall remotamente, sem plano de volta,
+pode derrubar a própria sessão que você está usando pra aplicar a regra — igual ao isolate da Semana 11, mas
+agora com nftables.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender que firewall stateful não é mágica.</b> Você ganha
+a distinção crítica entre conexões NEW (novas, precisam de regra explícita), ESTABLISHED (já em andamento) e
+RELATED — e a armadilha: aplicar um deny-all sem primeiro permitir SSH NEW te tranca fora imediatamente.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 15 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>Firewall Stateful: Não se Tranque Fora</h1>
+  <p>toda regra que pode bloquear acesso remoto precisa de caminho de volta antes do primeiro Enter</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S15D01_FIREWALL_STATEFUL_TRAVAR_SSH.png' alt='Prancha em seis quadros sobre firewall stateful, os estados NEW/ESTABLISHED/RELATED, e o risco de se trancar fora da própria sessão SSH ao aplicar um deny-all sem regra de exceção'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Se eu aplicar deny-all agora, continuo conectado?" — pergunta certa, feita tarde demais.
+  O comando sudo nft add rule inet filter input drop já foi digitado. Sem uma regra explícita permitindo SSH
+  ANTES do drop padrão, a resposta é não: "Connection timed out" na próxima tentativa.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um colega novo, animado pra "deixar tudo seguro", rodou <code>sudo nft add rule inet filter input
+    drop</code> num servidor de produção acessado só por SSH remoto — sem nenhuma regra de accept antes. A
+    sessão dele congelou no meio da linha. Sem console local disponível, o servidor ficou inacessível até
+    alguém ir fisicamente ao datacenter reconectar um monitor e reverter a regra. Duas horas de downtime por
+    uma linha de comando na ordem errada.
+    <br><br>
+    O que eu ensinei depois: firewall stateful rastreia ESTADO das conexões (NEW, ESTABLISHED, RELATED), não
+    intenção. "Stateful" não significa "sabe que aquele SSH é meu" — uma conexão nova ainda precisa de regra
+    explícita de accept, sempre, antes do drop padrão existir. E nunca aplique policy drop sem console
+    disponível como plano B — é a mesma lição do isolate via SSH da Semana 11, agora em firewall.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Direção</th><th>Significado</th></tr></thead><tbody>
+    <tr><td>INPUT</td><td>Tráfego que vem de fora, entrando no próprio firewall/servidor.</td></tr>
+    <tr><td>OUTPUT</td><td>Tráfego que sai do firewall/servidor para fora.</td></tr>
+    <tr><td>FORWARD</td><td>Tráfego que atravessa o firewall, com destino a outra máquina.</td></tr>
+  </tbody></table>
+  <pre>--- ANTES (armadilha) ---
+$ sudo nft list chain inet filter input
+policy drop;
+# no tcp dport 22 accept   &lt;-- FALTA essa regra!
+
+$ ssh admin@192.168.10.50
+Connection timed out        &lt;-- sem regra de entrada, ninguém volta por SSH
+
+--- ORDEM SEGURA (session A: acesso já ativo) ---
+$ sudo nft add rule inet filter input ip saddr 192.168.10.20 \
+    tcp dport 22 accept
+$ sudo nft add rule inet filter input ct state established,related accept
+$ sudo nft add rule inet filter input drop
+
+--- VALIDAÇÃO REAL (nova tentativa) ---
+$ ssh admin@192.168.10.50
+admin@srv-app-01:~$ [OK, sem lockout]</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: com acesso via CONSOLE (não SSH), observe a chain input atual.</div></div>
+      <div class="lab-cmd">$ sudo nft list chain inet filter input</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> chain vazia ou com policy accept (estado inicial seguro).</div>
+      <div class="lab-why"><b>Por quê:</b> começar por console, não SSH, é o que te protege de um lockout durante o próprio laboratório.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fazer esse laboratório inteiro só por SSH, sem console de backup — é exatamente o risco que a aula ensina a evitar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione as regras na ordem correta — SSH, depois established/related, depois drop.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input ip saddr SEU_IP tcp dport 22 accept
+$ sudo nft add rule inet filter input ct state established,related accept
+$ sudo nft add rule inet filter input drop</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> três regras adicionadas com sucesso, chain agora com policy drop efetiva.</div>
+      <div class="lab-why"><b>Por quê:</b> essa ordem exata é o que garante que o drop nunca seja avaliado antes da regra que te permite entrar de novo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> inverter a ordem "só pra testar rápido" — mesmo em laboratório, isso reproduz o lockout real.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: abra uma NOVA sessão SSH pra testar se a regra realmente permite conexões novas.</div></div>
+      <div class="lab-cmd">$ ssh admin@IP_DA_VM</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nova sessão conecta normalmente, sem timeout.</div>
+      <div class="lab-why"><b>Por quê:</b> testar com uma sessão NOVA (não a do console já aberto) é a única forma de validar que a regra funciona pra uma conexão NEW de verdade.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar só na sessão de console já aberta e assumir que SSH também funciona — sessões diferentes, estados diferentes.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você se trancar fora acidentalmente numa VM de laboratório, este é o ponto onde o chat com o Sênior-IA vai ajudar a recuperar via console.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confira os contadores de pacotes/bytes de cada regra.</div></div>
+      <div class="lab-cmd">$ sudo nft list chain inet filter input</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> contadores diferentes de zero nas regras de SSH e established/related.</div>
+      <div class="lab-why"><b>Por quê:</b> contador subindo prova que ESSA regra específica é a responsável pelo tráfego passando, não uma coincidência de outra condição.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que "SSH funcionou, então a regra está certa" sem checar o contador — pode ter sido outra regra (ou nenhuma) que deixou passar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente a ordem aplicada e a validação completa.</div></div>
+      <div class="lab-cmd"># ordem: SSH accept -> established,related accept -> drop
+# validação: nova sessão SSH conectou (sem lockout)
+# contadores: > 0 nas regras de accept</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> checklist completo sem nenhum lockout — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar a ordem exata usada é o que vira referência confiável pra próxima mudança de firewall, sua ou de outro técnico.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> aplicar a mesma sequência de cabeça da próxima vez, sem checklist — um IP de origem digitado errado já é o suficiente pra repetir o lockout.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são os três estados de conexão que um firewall stateful reconhece, e por
+    que "stateful" não significa "seguro por padrão"?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Estado de uma conexão que ainda não foi estabelecida — o primeiro pacote de uma tentativa nova." onclick="openGlossary(0)">NEW</span>
+      (primeiro pacote de uma conexão),
+      <span class="hint" data-tip="Estado de uma conexão que já foi aceita e está em andamento normalmente." onclick="openGlossary(1)">ESTABLISHED</span>
+      (conexão já em andamento) e
+      <span class="hint" data-tip="Estado de uma conexão nova, mas relacionada a uma conexão já existente." onclick="openGlossary(2)">RELATED</span>
+      (relacionada a uma existente). Firewall stateful ajuda conexões JÁ estabelecidas a continuarem — mas uma
+      conexão NEW, como um SSH que ainda não começou, precisa de regra explícita de permissão, sempre.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa aplicar um firewall com policy drop padrão num servidor acessado só
+  remotamente via SSH. Qual é a ORDEM correta de regras para não se trancar fora?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Primeiro permitir SSH da origem conhecida (garantindo que a conexão atual e futuras continuem possíveis), depois permitir conexões ct state established,related (mantendo sessões já em andamento), e só então aplicar o drop padrão. Essa ordem garante que a regra de acesso remoto seja avaliada ANTES do bloqueio geral.')"><b>A</b> Primeiro permitir SSH da origem conhecida, depois permitir ct state established,related, e só então aplicar o drop padrão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aplicar o drop primeiro bloqueia tudo imediatamente, inclusive a própria sessão SSH atual — mesmo adicionando uma regra de permissão depois, a sessão já caiu antes dessa segunda regra existir.')"><b>B</b> Aplicar o drop primeiro, e depois adicionar a regra de permissão SSH em seguida</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A ordem das regras dentro de uma chain do firewall importa muito — cada pacote é avaliado regra por regra, na ordem em que aparecem, até a primeira que casar; não existe avaliação simultânea sem ordem.')"><b>C</b> A ordem não importa, desde que as duas regras (SSH e drop) existam no firewall</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aplicar só o drop, sem nenhuma regra de exceção pra SSH, bloqueia toda conexão nova — incluindo a sua própria sessão de gestão, sem exceção nenhuma criada.')"><b>D</b> Aplicar só o drop, já que o SSH já está conectado e continuará funcionando automaticamente</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 01 FIREWALL STATEFUL TRAVAR SSH é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 A regra de SSH foi aplicada primeiro, depois established/related, depois o drop. A sessão
+  sobreviveu</h2>
+  <p>O painel 6 da prancha de hoje mostra nft list chain confirmando os contadores das regras (packets,
+  bytes) crescendo.</p>
+  <div class='box question'>Por que confirmar os contadores de pacotes/bytes nas regras é parte da
+  validação, além de só testar se o SSH funciona?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Ver os contadores de pacotes/bytes crescendo em cada regra confirma que ELA especificamente está sendo usada pelo tráfego real — não só que o resultado final (SSH funcionando) está certo, mas que a REGRA CERTA é a responsável por esse resultado, e não alguma outra condição acidental.')"><b>A</b> Os contadores confirmam que cada regra específica está realmente sendo usada pelo tráfego, não só que o resultado final está certo por acaso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Os contadores de pacotes/bytes não medem velocidade da conexão — eles contam quantos pacotes/bytes passaram por aquela regra específica, uma métrica de uso, não de performance.')"><b>B</b> Os contadores medem a velocidade da conexão SSH, garantindo performance adequada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Contadores de pacotes/bytes por regra não têm relação com cobrança de provedor de internet — são uma métrica interna do firewall, sobre o que passou por cada regra.')"><b>C</b> É só uma questão de cobrança do provedor de internet baseada em volume de dados</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 01 FIREWALL STATEFUL TRAVAR SSH é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se meu firewall é stateful, ele já sabe automaticamente que SSH é meu e deve permitir?"</h2>
+  <p>Um colega acha que "stateful" significa que o firewall reconhece intenções, não só estados de conexão.</p>
+  <div class='box question'>Por que essa suposição está errada?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Stateful significa que o firewall rastreia o ESTADO das conexões (NEW, ESTABLISHED, RELATED) — não que ele saiba automaticamente quais serviços você quer permitir. Uma conexão NEW, mesmo sendo SSH legítimo seu, ainda precisa de uma regra explícita de accept; sem ela, o policy drop bloqueia mesmo assim.')"><b>A</b> Stateful rastreia o ESTADO das conexões, não a intenção — uma conexão NEW ainda precisa de regra explícita de accept, mesmo sendo SSH seu</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Stateful não é sinônimo de seguro automaticamente — ele descreve o rastreamento de estado das conexões, não um julgamento automático de quais tráfegos são legítimos ou não.')"><b>B</b> É verdade — firewall stateful é inteligente o suficiente para reconhecer tráfego legítimo automaticamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'stateful não tem relação com o uso de senha — é sobre rastrear o estado da conexão em nível de rede/transporte, algo completamente diferente de autenticação por senha dentro do protocolo SSH.')"><b>C</b> Só funciona automaticamente se o SSH usar autenticação por senha, não por chave</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 01 FIREWALL STATEFUL TRAVAR SSH é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de aplicar policy drop, garanta uma regra explícita permitindo o acesso remoto atual.</li>
+    <li>Adicione a regra de accept para established,related, mantendo conexões em andamento.</li>
+    <li>Só então aplique o drop padrão — nessa ordem exata, nunca invertida.</li>
+    <li>Teste a partir de uma nova tentativa de conexão, não confiando só na sessão já aberta.</li>
+    <li>Confirme os contadores de pacotes/bytes nas regras pra validar que elas estão em uso real.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Nunca aplique policy drop remotamente sem um console de backup disponível — SSH via
+  KVM/iDRAC/console de provedor cloud, ou acesso físico. Trate isso como regra inegociável, igual ao isolate
+  via SSH da Semana 11: uma sessão remota nunca é o único caminho de volta.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A regra de SSH foi aplicada antes do drop padrão, nunca depois.</li>
+    <li>established,related foi permitido pra manter conexões em andamento.</li>
+    <li>Uma nova sessão (não a atual) validou que o acesso remoto continua funcionando.</li>
+    <li>Os contadores das regras confirmaram que estão sendo realmente usadas.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Se algo der errado e a sessão travar mesmo assim, o único caminho de volta é o
+  console local/da VM — por isso trabalhar com console disponível é obrigatório ao aplicar mudanças de
+  firewall remotamente pela primeira vez. Regras nftables podem ser removidas com nft delete rule, usando o
+  handle exibido por nft -a list.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "toda regra que pode bloquear acesso remoto
+  precisa de caminho de volta" conecta diretamente com a Semana 11 (isolate via SSH pode derrubar a própria
+  sessão) — mesmo tipo de autossabotagem remota, agora em firewall. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a ordem certa foi <b>SSH da origem
+  conhecida → established,related → drop padrão</b>, nessa sequência exata. O ponto central do caso é este:
+  toda regra que pode bloquear acesso remoto precisa de caminho de volta antes do primeiro Enter.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de aplicar firewall stateful sem se trancar fora do próprio
+  servidor. Amanhã você aprende a base de organização do nftables — tables, chains e regras — e por que
+  backup e rollback testado são obrigatórios antes de qualquer mudança de firewall em produção.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 15, Dia 1 de ~250 — abre a Semana 15 (firewall). Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["NEW (estado de conexão)","Estado de uma conexão que ainda não foi estabelecida — o primeiro pacote de uma tentativa nova.",
+   "É a primeira batida na porta — ninguém abriu ainda, é só o pedido inicial de entrada."],
+  ["ESTABLISHED (estado de conexão)","Estado de uma conexão que já foi aceita e está em andamento normalmente.",
+   "É a conversa já rolando dentro da sala — a porta já foi aberta e a visita já está acontecendo."],
+  ["RELATED (estado de conexão)","Estado de uma conexão nova, mas relacionada a uma conexão já existente (como uma transferência de FTP passivo).",
+   "É alguém chegando dizendo 'sou amigo de quem já está lá dentro' — uma conexão nova, mas com vínculo comprovado a outra já aceita."],
+  ["Firewall stateful","Tipo de firewall que rastreia o estado de cada conexão (NEW, ESTABLISHED, RELATED), permitindo decisões mais inteligentes que apenas olhar pacotes isolados.",
+   "É o segurança que lembra quem já entrou e está dentro, em vez de checar a identidade de cada pessoa a cada passo que ela dá dentro do prédio."],
+  ["policy drop","Configuração padrão de uma chain de firewall que descarta silenciosamente todo tráfego sem uma regra explícita de permissão.",
+   "É a portaria com instrução padrão de 'não deixe ninguém entrar, a menos que esteja explicitamente na lista' — silêncio total pra quem não está autorizado."],
+  ["INPUT / OUTPUT / FORWARD","As três direções básicas de tráfego num firewall: entrando no próprio host, saindo do próprio host, ou atravessando para outro destino.",
+   "É a diferença entre alguém entrando no seu prédio, alguém saindo dele, ou alguém só passando por ele a caminho de outro lugar."],
+  ["ct state (nftables)","Sintaxe do nftables para verificar o estado de rastreamento de conexão (connection tracking) de um pacote.",
+   "É perguntar ao crachá do visitante 'você é novo aqui, já estava dentro, ou é amigo de alguém que já está'?"],
+  ["Console local vs. sessão remota","Diferença entre acessar a máquina fisicamente/via console de VM e acessar via SSH pela rede.",
+   "É a diferença entre estar dentro da sala de controle versus falar com ela por telefone — se a linha cair, só quem está dentro continua no controle."],
+  ["Autossabotagem remota (lockout)","Situação em que uma ação executada via sessão remota acaba derrubando a própria conexão usada para executá-la.",
+   "É serrar o galho em que você está sentado — a ferramenta usada pra agir depende exatamente do que está sendo cortado."],
+  ["Ordem de avaliação de regras","Sequência em que um firewall avalia suas regras, geralmente parando na primeira que casar com o pacote.",
+   "É a fila de checagem de entrada de um evento — cada regra é um checkpoint, avaliado na ordem em que foi colocado na fila."],
+  ["nft list chain (contadores)","Comando que mostra as regras de uma chain nftables junto com contadores de pacotes e bytes que passaram por cada uma.",
+   "É o extrato detalhado de uso — mostra não só as regras existentes, mas quantas vezes cada uma realmente foi acionada."],
+  ["Validação com nova sessão","Testar uma mudança de acesso remoto abrindo uma conexão completamente nova, em vez de confiar só na sessão já aberta.",
+   "É testar a chave nova saindo de casa e voltando, em vez de só confiar que a porta continua destrancada enquanto você está lá dentro."]
+];
+
+const sceneStripIdx = [0,1,3,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

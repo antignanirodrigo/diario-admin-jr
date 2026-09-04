@@ -1,0 +1,472 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 17 · Dia 1 — NAT: um IP Público para Muitos Privados | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_16/DIA_05_MISSAO_INTEGRADORA_FASE2.html'>← Semana 16, Dia 5</a><a href='#'>Semana 17</a><a href='DIA_02_SNAT_MASQUERADE.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 13 (IP e CIDR):</b> Você já sabe que cada máquina numa rede
+privada tem seu próprio IP interno. Hoje você aprende como 50 máquinas com IPs privados diferentes conseguem
+sair pra internet usando um único IP público — sem cada uma precisar de endereço próprio na internet.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender NAT como tradução, não mágica.</b> Você ganha o
+modelo mental completo: o roteador troca a origem na saída, guarda uma tabela de tradução, e usa essa tabela
+pra devolver a resposta certa pro cliente certo — cada conexão rastreada por porta.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 17 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>NAT: um IP Público para Muitos Privados</h1>
+  <p>NAT muda o envelope do pacote, mas precisa lembrar para quem entregar a resposta</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S17D01_NAT_CONCEITO.png' alt='Prancha em seis quadros sobre o conceito de NAT, tradução de endereço e porta, e a tabela de conntrack que guarda as traduções ativas'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Como todo mundo sai para a internet se cada PC tem IP privado?" Até 50 máquinas
+  (192.168.10.15, .22, .31...) atrás de um único roteador. Nenhuma delas tem IP público próprio — mas todas
+  acessam a internet normalmente. NAT é a tradução que torna isso possível.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que o roteador troca no pacote quando ele sai da LAN pra internet, e como ele
+    sabe pra quem devolver a resposta?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Sigla de Network Address Translation — tradução de endereço (e porta) de rede." onclick="openGlossary(0)">NAT</span>
+      troca o IP:porta de origem do pacote (ex: 192.168.10.15:51544) pelo IP:porta público do roteador (ex:
+      203.0.113.5:40001). O roteador guarda essa tradução numa
+      <span class="hint" data-tip="Tabela mantida pelo firewall/roteador com todas as conexões NAT ativas, permitindo rastrear cada uma." onclick="openGlossary(1)">tabela de conntrack</span>
+      — quando a resposta chega, ele consulta a tabela e sabe devolver pro cliente interno certo.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Três máquinas internas (192.168.10.15, .22, .31) acessam a internet
+  simultaneamente através do mesmo roteador NAT. Como o roteador consegue devolver cada resposta pro cliente
+  certo, se todas saem com o mesmo IP público?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O roteador atribui uma porta de origem diferente para cada conexão traduzida (ex: 40001, 40002, 40003), mesmo usando o mesmo IP público. A tabela de tradução guarda IP:porta interno ↔ IP:porta externo — quando a resposta chega numa porta específica, o roteador consulta a tabela e sabe exatamente pra qual cliente interno devolver.')"><b>A</b> Cada conexão recebe uma porta externa diferente (mesmo IP público) — a tabela de tradução mapeia cada porta de volta ao cliente interno correto</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Se todas usassem sempre a mesma porta externa, o roteador não teria como diferenciar as respostas de conexões simultâneas — é justamente a variação de porta que resolve esse problema.')"><b>B</b> Todas usam sempre a mesma porta externa, e o roteador distribui as respostas em ordem de chegada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O roteador NAT não modifica o endereço MAC de origem para esse propósito — a tradução relevante aqui é de IP e porta (camadas de rede/transporte), não de endereço MAC (camada de enlace).')"><b>C</b> O roteador usa o endereço MAC de cada máquina para identificar a resposta correta</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O roteador não precisa perguntar a cada máquina — ele mantém uma tabela de tradução própria (conntrack) que já sabe automaticamente pra onde cada resposta deve ir, sem consulta adicional.')"><b>D</b> O roteador pergunta a cada máquina se aquela resposta é dela antes de entregar</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 01 NAT CONCEITO é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que confirma</th></tr></thead><tbody>
+    <tr><td><code>ip -4 addr show eth0</code></td><td>Mostra o IP privado real da máquina interna.</td></tr>
+    <tr><td><code>curl -s https://checkip.example</code></td><td>Mostra qual IP aparece pro mundo externo — o IP público do roteador.</td></tr>
+    <tr><td><code>conntrack -L | grep IP</code></td><td>Mostra a tabela de traduções NAT ativas.</td></tr>
+  </tbody></table>
+  <pre>$ ip -4 addr show eth0
+inet 192.168.10.15/24 brd 192.168.10.255 scope global eth0
+
+$ curl -s https://checkip.example
+203.0.113.5    <-- IP privado por dentro; IP do roteador por fora
+
+$ conntrack -L | grep 203.0.113.5
+src=192.168.10.15 sport=51544 → src=203.0.113.5 sport=40001
+src=192.168.10.22 sport=51545 → src=203.0.113.5 sport=40002
+src=192.168.10.31 sport=51546 → src=203.0.113.5 sport=40003
+--- entrada criada na saída, removida ao terminar a conexão ---</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O sênior explica: "não existem IPs públicos escondidos. O roteador troca a origem na saída e guarda
+  uma tabela para devolver a resposta ao cliente certo"</h2>
+  <p>Um colega acha que cada máquina interna "secretamente" também tem um IP público próprio.</p>
+  <div class='box question'>Por que essa suposição está errada?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'As máquinas internas têm APENAS o IP privado — nunca tiveram nem têm um IP público próprio. O que acontece é uma tradução temporária: o roteador substitui a origem pelo SEU IP público só durante a saída da conexão, e desfaz isso (via a tabela) quando a resposta volta. Não existe IP público escondido em cada máquina.')"><b>A</b> As máquinas internas só têm IP privado — o roteador substitui temporariamente a origem pelo seu próprio IP público, sem que a máquina interna tenha um IP público de verdade</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não existe IP público secreto por trás do NAT — a tradução é feita pelo roteador usando o próprio IP público dele, não um IP oculto pertencente à máquina interna.')"><b>B</b> Está certo — cada máquina interna tem um segundo IP público que fica oculto, só usado pelo NAT</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'IPs públicos não são emprestados dinamicamente para cada máquina interna individualmente — o roteador usa consistentemente o seu próprio IP público único para traduzir todo o tráfego de saída.')"><b>C</b> Cada máquina empresta temporariamente um IP público disponível de um pool, escolhido aleatoriamente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 01 NAT CONCEITO é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "A entrada na tabela de conntrack fica lá pra sempre, uma vez criada?"</h2>
+  <p>Um colega acha que a tabela de tradução cresce indefinidamente, sem nunca ser limpa.</p>
+  <div class='box question'>Por que a tabela de conntrack não cresce sem limite?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A entrada na tabela de conntrack é criada quando a conexão de saída começa, e removida automaticamente quando a conexão termina (ou expira por inatividade) — como o próprio painel 5 da prancha de hoje diz: entrada criada na saída, removida ao terminar. Isso evita que a tabela cresça sem limite.')"><b>A</b> A entrada é criada quando a conexão começa e removida quando ela termina (ou expira) — evitando crescimento indefinido da tabela</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A tabela de conntrack não precisa de limpeza manual diária — o próprio sistema de rastreamento de conexões gerencia a criação e remoção das entradas automaticamente, conforme as conexões começam e terminam.')"><b>B</b> Precisa ser limpa manualmente todo dia pelo administrador, senão o roteador trava</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A tabela de conntrack não tem relação com o número de dispositivos físicos conectados fisicamente — ela rastreia conexões de rede ativas, que são criadas e removidas dinamicamente conforme o tráfego, não conforme dispositivos plugados.')"><b>C</b> Só é limpa quando um novo dispositivo é conectado fisicamente à rede</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 01 NAT CONCEITO é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme o IP privado real da máquina com ip -4 addr show.</li>
+    <li>Compare com o IP visto de fora, usando um serviço de checagem externa (checkip).</li>
+    <li>Use conntrack -L pra ver as traduções NAT ativas em tempo real.</li>
+    <li>Entenda que a tradução é temporária, criada na saída e removida ao terminar a conexão.</li>
+    <li>Nunca trate NAT como "mágica" — é sempre tradução rastreável de endereço e porta.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Em VM de laboratório atrás de NAT, confirme o IP privado com ip -4 addr show.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> endereço na faixa privada (ex: 192.168.x.x).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Acesse um serviço de checagem de IP externo e compare com o IP privado.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> IP público diferente do IP privado interno.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">No roteador/gateway (se tiver acesso), rode conntrack -L e observe as traduções ativas.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de conexões com src interno e IP público de saída.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se conntrack não mostrar nada, este é o ponto onde o chat com o Sênior-IA vai ajudar a confirmar se o módulo de rastreamento está carregado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Abra duas conexões simultâneas de máquinas internas diferentes e compare as portas de origem na tabela.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> portas de origem externas diferentes para cada conexão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Documente o modelo completo: LAN privada → roteador NAT → internet — reproduzindo o painel 6 da prancha de hoje.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> diagrama e explicação clara do fluxo de tradução.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O IP privado e o IP público foram confirmados como diferentes.</li>
+    <li>A tabela de conntrack foi observada, mostrando traduções reais em andamento.</li>
+    <li>Ficou claro que cada conexão recebe uma porta externa própria, não um IP escondido.</li>
+    <li>NAT foi entendido como tradução rastreável, não como mágica.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Os comandos de hoje (ip addr, curl, conntrack -L) são todos de leitura, sem
+  risco. O cuidado real é conceitual: entender que a tabela de tradução é temporária e específica por conexão
+  — isso evita confusão mais adiante quando você configurar SNAT e DNAT manualmente.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "tradução rastreável, não mágica" conecta com a
+  Semana 14 (DNS não é arquivo único, é cadeia de perguntas) — mesma disciplina de desmistificar um conceito
+  de rede como processo concreto e rastreável. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a explicação certa foi <b>porta
+  externa diferente por conexão, mapeada na tabela de tradução</b>. O ponto central do caso é este: NAT muda
+  o envelope do pacote, mas precisa lembrar para quem entregar a resposta.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de entender NAT como tradução rastreável de endereço e porta.
+  Amanhã você configura isso na prática com nftables: uma única regra masquerade cobrindo uma sub-rede
+  inteira, em vez do erro comum de tentar criar uma regra por máquina.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 17, Dia 1 de ~250 — abre a Semana 17 (NAT). Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["NAT (Network Address Translation)","Sigla de Network Address Translation — tradução de endereço (e porta) de rede, permitindo que múltiplos hosts privados compartilhem um IP público.",
+   "É a recepção de um prédio que recebe entregas com o endereço geral e as redireciona internamente pro apartamento certo."],
+  ["Tabela de conntrack","Tabela mantida pelo firewall/roteador com todas as conexões NAT ativas, permitindo rastrear cada uma e devolver respostas ao cliente certo.",
+   "É o livro de registro da portaria — cada visita anotada com origem, destino e horário, pra saber a quem entregar qualquer correspondência que chegue depois."],
+  ["IP privado","Endereço IP usado dentro de uma rede local, não roteável diretamente na internet pública.",
+   "É o número do apartamento dentro do condomínio — só faz sentido pra quem já está dentro do prédio."],
+  ["IP público","Endereço IP roteável na internet, único globalmente, usado para identificar um host ou rede de fora.",
+   "É o endereço completo do prédio, visível e alcançável por qualquer entregador de fora da cidade."],
+  ["Porta de origem (source port)","Número que identifica de qual processo/conexão específica um pacote de saída partiu, usado para diferenciar conexões simultâneas.",
+   "É o número do apartamento anexado à correspondência de saída — permite que a resposta seja endereçada de volta ao remetente exato."],
+  ["Tradução de endereço e porta","Processo de substituir tanto o endereço IP quanto a porta de origem de um pacote, mantendo o rastreamento da conexão original.",
+   "É trocar tanto o remetente quanto o número de referência de uma encomenda — dois dados mudam juntos, mas o rastreio continua íntegro."],
+  ["Roteador NAT","Dispositivo de rede responsável por realizar a tradução de endereços entre a rede privada interna e a internet pública.",
+   "É o zelador do prédio que intermedeia toda correspondência entre os moradores e o mundo externo, trocando o remetente na saída."],
+  ["Conexão de saída (outbound)","Conexão iniciada por um dispositivo dentro da rede privada em direção a um destino na internet.",
+   "É a carta que você manda pra fora do condomínio — parte de dentro, passa pela portaria, e vai pro mundo."],
+  ["Entrada temporária (NAT)","Registro na tabela de tradução que existe apenas enquanto a conexão correspondente está ativa.",
+   "É o crachá de visitante temporário — válido só enquanto a visita dura, descartado assim que ela termina."],
+  ["checkip / serviço de checagem de IP","Serviço externo que mostra qual endereço IP aparece como origem de uma requisição vista de fora da rede.",
+   "É perguntar pra alguém de fora do prédio qual endereço aparece no envelope quando você manda uma carta — confirma o que o mundo externo realmente vê."],
+  ["Compartilhamento de IP público","Prática de múltiplos dispositivos numa rede privada usarem coletivamente o mesmo endereço IP público para acessar a internet.",
+   "É várias famílias de um mesmo condomínio compartilhando o mesmo endereço de rua, cada uma identificada pelo número do apartamento internamente."],
+  ["Rastreabilidade de conexão (NAT)","Capacidade de identificar, a qualquer momento, qual dispositivo interno originou uma conexão traduzida específica.",
+   "É conseguir sempre apontar exatamente qual apartamento enviou determinada correspondência, mesmo que todas saiam pelo mesmo endereço do prédio."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

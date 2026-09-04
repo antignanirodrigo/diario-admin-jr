@@ -1,0 +1,535 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 5 — PATH, alias, .bashrc | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_PIPES_REDIRECIONAMENTO.html'>← Dia 4</a><a href='#'>Semana 8</a><a href='../SEMANA_09/DIA_01_PRIMEIRO_SCRIPT.html'>Semana 9, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a semana inteira:</b> cut, sed, awk, pipes — todas essas ferramentas
+rodam DENTRO de um ambiente de shell. Hoje você entende esse ambiente por dentro: por que um comando às vezes
+"some" mesmo estando instalado, e como personalizar de forma permanente.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar e corrigir problemas de PATH e configurar
+.bashrc.</b> Você ganha o entendimento do ambiente de shell completo — a base necessária antes de escrever
+scripts na Semana 9.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 5 | Nível Júnior</div>
+  <h1>Ambiente de Shell: PATH, Alias, .bashrc</h1>
+  <p>entender o ambiente do shell evita consertar a ferramenta errada</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S08D05_AMBIENTE_SHELL.png' alt='Prancha em seis quadros sobre PATH, alias e .bashrc'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Um comando que funcionava ontem agora diz <code>command not found</code>. Seu primeiro
+  pensamento é que a ferramenta "sumiu" — mas na maioria das vezes, ela não sumiu, o shell só não sabe mais
+  onde procurar por ela.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Sexta-feira, fechando a Semana 8</span>
+    A semana inteira foi sobre ferramentas que rodam DENTRO de um ambiente de shell — cut, sed, awk, pipes.
+    Hoje você entende esse ambiente por dentro, fechando o bloco de ferramentas de texto antes de partir pra
+    automação de verdade na Semana 9.<br><br>
+    O chamado que me ensinou essa lição foi frustrante antes de ficar simples. Um comando que eu usava todo
+    dia, de repente, deu <code>command not found</code>. Meu primeiro pensamento foi de pânico: "sumiu, foi
+    desinstalado por engano, preciso reinstalar". Passei uma hora tentando reinstalar a ferramenta, sem
+    sucesso, cada vez mais confuso, porque o instalador dizia que ela já estava presente.<br><br>
+    Um sênior mais experiente me fez três perguntas simples que eu não tinha pensado em fazer:
+    <code>echo $PATH</code> — quais pastas o shell está mesmo procurando? <code>which ferramenta</code> — o
+    shell encontra o comando com o PATH atual? <code>ls</code> na pasta onde o binário deveria estar — ele
+    ainda existe fisicamente no disco? A resposta caiu como um balde de água fria: o arquivo estava lá,
+    intacto, em <code>/opt/tools/bin</code>. Só que essa pasta simplesmente não estava listada no
+    <code>PATH</code> — talvez removida sem querer numa edição anterior do <code>.bashrc</code>.<br><br>
+    <code>command not found</code> quase nunca significa "a ferramenta sumiu". Significa "o shell não sabe
+    mais onde procurar". São dois problemas completamente diferentes, com soluções completamente diferentes
+    — reinstalar resolve o primeiro, mas é inútil pro segundo. Hoje você pratica exatamente essa
+    investigação, e a correção permanente: adicionar a pasta faltante ao <code>.bashrc</code>, não só
+    remendar a sessão atual com um <code>export</code> que desaparece no próximo terminal.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>echo $PATH</code></td><td>Mostra as pastas, em ordem, onde o shell procura por comandos.</td></tr>
+    <tr><td><code>which ferramenta</code></td><td>Confirma se o shell consegue encontrar o comando com o PATH atual.</td></tr>
+    <tr><td><code>ls /opt/tools/bin/ferramenta</code></td><td>Confirma se o arquivo ainda existe fisicamente, mesmo se o PATH não o alcança.</td></tr>
+  </tbody></table>
+  <pre>$ echo $PATH
+/usr/local/bin:/usr/bin:/bin
+$ which ferramenta
+not found
+$ ls /opt/tools/bin/ferramenta
+/opt/tools/bin/ferramenta
+
+$ echo 'export PATH=$PATH:/opt/tools/bin' >> ~/.bashrc
+$ source ~/.bashrc
+$ which ferramenta
+/opt/tools/bin/ferramenta</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> veja o PATH atual e identifique todas as pastas listadas.</div></div>
+      <div class="lab-cmd">$ echo $PATH</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de pastas separadas por dois-pontos, algo como /usr/local/bin:/usr/bin:/bin.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> saber ler essa lista é o primeiro passo de qualquer investigação de "command not found" — sem isso, você está adivinhando, não diagnosticando.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> não notar a ordem das pastas — o shell para na primeira ocorrência do comando, então a ordem importa quando existem duas versões da mesma ferramenta em pastas diferentes.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um script de teste fora do PATH e reproduza o sintoma do chamado.</div></div>
+      <div class="lab-cmd">$ mkdir -p ~/scripts_teste
+$ echo 'echo ola' > ~/scripts_teste/meuscript.sh
+$ chmod +x ~/scripts_teste/meuscript.sh
+$ meuscript.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "command not found", reproduzindo exatamente o sintoma da história de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir o erro de propósito, num script que você mesmo criou, é o que te deixa pronto pra reconhecer esse padrão exato quando aparecer de verdade num chamado real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir "arquivo não executável" (falta chmod +x) com "problema de PATH" — são causas diferentes pro mesmo tipo de erro, sempre confirme as duas possibilidades.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione essa pasta ao PATH de forma permanente e aplique sem reiniciar o terminal.</div></div>
+      <div class="lab-cmd">$ echo 'export PATH=$PATH:~/scripts_teste' >> ~/.bashrc
+$ source ~/.bashrc
+$ meuscript.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "ola" impresso na tela — o script agora executável só pelo nome, sem caminho completo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é exatamente a correção permanente que resolveu o chamado da história — editar .bashrc, não só remendar a sessão atual com export solto.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar só o export no terminal, sem editar o .bashrc — funciona até você fechar essa sessão, e o problema "volta" no próximo terminal.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se depois do source o comando ainda não for encontrado, este é o ponto onde o chat com o Sênior-IA vai ajudar a diagnosticar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um alias simples e teste depois de aplicar.</div></div>
+      <div class="lab-cmd">$ echo "alias ll='ls -la'" >> ~/.bashrc
+$ source ~/.bashrc
+$ ll</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ll funcionando como atalho pra ls -la, sem precisar digitar o comando completo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> alias é outro tipo de personalização permanente do .bashrc — junto com PATH, fecha o entendimento completo do ambiente de shell antes da Semana 9.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar um alias com o mesmo nome de um comando já existente sem perceber — isso pode sobrescrever silenciosamente o comportamento esperado daquele comando.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente sintoma, diagnóstico, correção aplicada, validação final — fechando a Semana 8.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Sintoma: command not found em meuscript.sh
+Diagnóstico: echo $PATH não incluía ~/scripts_teste; which confirmou; ls confirmou arquivo existia
+Correção: export PATH adicionado ao .bashrc + source
+Validado: meuscript.sh roda normalmente agora</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse registro é o modelo exato de investigação que separa "consertei" de "entendi por que quebrou e corrigi a causa raiz de forma permanente".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "corrigido", sem registrar o diagnóstico — sem isso, o próximo "command not found" vai exigir reinvestigar tudo do zero.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que é <code>PATH</code>, e o que acontece quando uma pasta necessária não está
+    listada nele?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Variável de ambiente com a lista ordenada de pastas onde o shell procura por comandos." onclick="openGlossary(0)">PATH</span> é a lista de
+      pastas onde o shell procura comandos, em ordem. Se a pasta da ferramenta não está listada, o shell
+      simplesmente não a encontra, mesmo que o arquivo exista fisicamente no disco —
+      <span class="hint" data-tip="Erro que aparece quando o shell não encontra o comando digitado em nenhuma pasta do PATH." onclick="openGlossary(1)">command not found</span>
+      quase sempre é isso, não a ferramenta ter sido apagada.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Um comando que funcionava antes agora dá "command not found". Qual é a
+  investigação correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reinstalar sem investigar primeiro pode ser desnecessário — se a ferramenta ainda existe no disco e o problema é só o PATH, reinstalar não resolve nada e desperdiça tempo.')"><b>A</b> Reinstalar a ferramenta direto, assumindo que ela foi desinstalada por engano</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'echo $PATH mostra as pastas onde o shell procura; which confirma se encontra o comando; ls na pasta esperada confirma se o arquivo ainda existe fisicamente — essa sequência revela se o problema é PATH (ferramenta existe, mas não está no caminho de busca) antes de qualquer ação drástica.')"><b>B</b> Verificar echo $PATH, testar which nome_da_ferramenta, e confirmar com ls se o arquivo ainda existe na pasta esperada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar o servidor sem nenhuma investigação não diagnostica nada, e a maioria dos problemas de PATH não se resolve sozinha com um restart.')"><b>C</b> Reiniciar o servidor inteiro, já que "command not found" pode indicar problema grave</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Trocar de shell sem entender a causa raiz não resolve o problema, só o move — o PATH mal configurado provavelmente vai continuar sendo um problema no shell novo também.')"><b>D</b> Trocar de shell (por exemplo, de bash pra zsh), já que pode ser um problema do bash especificamente</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A variável '$PATH' é a lista de endereços onde o sistema procura ferramentas: quando você digita 'nginx', o shell varre as pastas do PATH até achar o executável.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O arquivo existe em /opt/tools/bin, mas não está no PATH — como corrigir de forma permanente?</h2>
+  <p>Depois de confirmar que <code>/opt/tools/bin</code> não está listado no <code>PATH</code>, você precisa
+  corrigir isso de forma que funcione em qualquer terminal novo, não só na sessão atual.</p>
+  <div class='box question'>Qual é a correção correta e permanente?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Adicionar a linha export PATH=$PATH:/opt/tools/bin no ~/.bashrc, seguido de source ~/.bashrc pra aplicar sem precisar sair do terminal, torna a correção permanente — o .bashrc é lido toda vez que um novo shell inicia.')"><b>A</b> Adicionar export PATH=$PATH:/opt/tools/bin ao ~/.bashrc e rodar source ~/.bashrc pra aplicar sem sair do terminal</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Rodar export PATH=$PATH:/opt/tools/bin só no terminal atual, sem adicionar ao .bashrc, resolve apenas temporariamente — a mudança desaparece assim que você abrir um novo terminal.')"><b>B</b> Rodar export PATH=$PATH:/opt/tools/bin só no terminal atual, sem editar nenhum arquivo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Mover o binário pra dentro de /usr/bin manualmente pode funcionar, mas mistura arquivos de instalação de terceiros com os do sistema — adicionar ao PATH é a prática mais limpa e reversível.')"><b>C</b> Mover manualmente o arquivo binário pra dentro de /usr/bin, já que essa pasta já está no PATH</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O arquivo '~/.bashrc' é a sua receita de café personalizada: toda vez que você abre uma janela de terminal, ele carrega seus aliases e variáveis de ambiente automaticamente.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Depois de editar .bashrc, preciso fechar e abrir o terminal de novo pra funcionar?"</h2>
+  <p>Um colega edita o <code>~/.bashrc</code> e assume que a única forma de aplicar a mudança é fechando e
+  reabrindo o terminal inteiro.</p>
+  <div class='box question'>Existe uma forma mais rápida?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Sim — source ~/.bashrc (ou o atalho . ~/.bashrc) recarrega o arquivo de configuração na sessão atual, sem precisar fechar e abrir o terminal. Fechar e reabrir também funciona, mas source é mais rápido e prático quando você está testando ajustes.')"><b>A</b> Sim — rodar source ~/.bashrc recarrega a configuração na sessão atual, sem precisar fechar e abrir o terminal</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Existe sim uma forma de aplicar sem fechar o terminal — o comando source foi feito exatamente pra isso, recarregar configuração na sessão já aberta.')"><b>B</b> Não, fechar e abrir o terminal é realmente a única forma de aplicar mudanças no .bashrc</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'.bashrc não é aplicado automaticamente e imediatamente ao ser salvo — é preciso rodar source (ou abrir um novo shell) pra ele ser lido de novo.')"><b>C</b> Sim, mas só se você salvar o arquivo com uma extensão .sh</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'export VARIAVEL=valor' é como colocar o crachá no peito: faz com que todos os novos processos e scripts filhos herdem aquela configuração.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme com echo $PATH quais pastas o shell está procurando.</li>
+    <li>Use which pra confirmar se o comando é encontrado com o PATH atual.</li>
+    <li>Se não encontrado, confirme com ls se o arquivo ainda existe fisicamente.</li>
+    <li>Corrija de forma permanente, adicionando ao ~/.bashrc, não só na sessão atual.</li>
+    <li>Aplique com source ~/.bashrc e valide com which de novo.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Mantenha o .bashrc de servidores compartilhados sob controle de versão (git), com
+  histórico claro de cada linha adicionada e por quê. Isso torna trivial descobrir quando e por que uma
+  pasta essencial desapareceu do PATH, em vez de investigar às cegas como na história de hoje.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>PATH foi verificado antes de assumir que a ferramenta tinha sumido.</li>
+    <li>which e ls confirmaram se era problema de PATH ou de arquivo realmente ausente.</li>
+    <li>A correção foi aplicada permanentemente via .bashrc, não só na sessão atual.</li>
+    <li>source foi usado pra validar sem precisar fechar o terminal.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Rollback de uma mudança no .bashrc é remover a linha adicionada e rodar source de
+  novo — simples, já que o arquivo é só texto. O cuidado real é não adicionar caminhos duvidosos ao PATH sem
+  confirmar sua origem.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "não confunda sintoma com causa" fecha a Semana 8
+  do mesmo jeito que apareceu com iostat (Semana 5) — "command not found" parece ser sobre a ferramenta, mas
+  na maioria das vezes é sobre o ambiente. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi verificar
+  <b>echo $PATH, testar which, e confirmar com ls se o arquivo ainda existe</b>. O ponto central do caso é
+  este: command not found quase sempre é PATH, não é a ferramenta ter sumido.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Compreensão completa do ambiente de shell, fechando a Semana 8 e todo o bloco
+  de ferramentas de texto. Semana 9 abre a automação em bash de verdade — seu primeiro script real,
+  construído sobre tudo que você já domina.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 8, Dia 5 de ~250 — fecha a Semana 8. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["PATH","Variável de ambiente com a lista ordenada de pastas onde o shell procura por comandos.",
+   "É a lista de gavetas que alguém revisa, em ordem, procurando uma ferramenta específica."],
+  ["command not found","Erro que aparece quando o shell não encontra o comando digitado em nenhuma pasta do PATH.",
+   "É a mensagem 'não encontrei em nenhuma gaveta que eu conheço' — não significa que o item não existe, só que não está onde se procurou."],
+  ["which","Comando que mostra o caminho completo do executável que seria usado para um comando, com base no PATH atual.",
+   "É perguntar 'em qual gaveta exatamente você encontraria isso', confirmando se a busca teria sucesso."],
+  ["~/.bashrc","Arquivo de configuração lido toda vez que um novo shell interativo do bash é iniciado.",
+   "É o manual de instruções que o funcionário lê no início de cada turno, configurando como ele vai trabalhar."],
+  ["export PATH=$PATH:/pasta","Sintaxe que adiciona uma nova pasta ao final da lista de busca do PATH, sem remover as existentes.",
+   "É acrescentar uma gaveta nova à lista de busca, sem esquecer nenhuma das que já existiam."],
+  ["source (comando)","Comando que executa um arquivo de configuração na sessão atual do shell, aplicando mudanças sem reiniciar.",
+   "É reler o manual de instruções no meio do turno, aplicando as atualizações sem precisar bater o ponto de novo."],
+  ["alias","Atalho personalizado que substitui um comando longo ou frequente por um nome mais curto.",
+   "É o apelido que você dá pra um contato longo na agenda, pra discar mais rápido."],
+  ["Variável de ambiente","Um valor nomeado que o sistema operacional disponibiliza para processos e shells, como PATH ou HOME.",
+   "É uma informação padrão disponível pra qualquer funcionário consultar, como o endereço do escritório."],
+  ["Sessão de shell (interativa)","Uma instância ativa do interpretador de comandos, com seu próprio ambiente carregado.",
+   "É o turno de trabalho de um funcionário — cada novo turno começa lendo o manual de instruções de novo."],
+  ["Correção temporária vs. permanente","Uma correção temporária vale só pra sessão atual; uma permanente é salva num arquivo de configuração.",
+   "É a diferença entre anotar um lembrete num post-it que se perde e escrever no caderno oficial que fica guardado."],
+  ["Diagnóstico de ambiente","Investigar se um problema está na ferramenta em si ou nas configurações do ambiente que a cerca.",
+   "É verificar se o problema é a ferramenta quebrada ou só a instrução de onde encontrá-la estar desatualizada."],
+  ["Ordem de busca do PATH","A sequência em que o shell verifica cada pasta listada, parando no primeiro comando encontrado com aquele nome.",
+   "É a ordem em que alguém checa gavetas numeradas, parando assim que encontra o item procurado na primeira que tiver."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

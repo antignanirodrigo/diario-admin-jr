@@ -1,0 +1,476 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 22 · Dia 1 — Samba: o Conceito | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_21/DIA_05_NFS_DIAGNOSTICO_ESCRITA.html'>← Semana 21, Dia 5</a><a href='#'>Semana 22</a><a href='DIA_02_SAMBA_SMBCONF_BASICO.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 21 (NFS):</b> Você já sabe compartilhar arquivos entre
+máquinas Linux com NFS. Hoje você aprende a resolver o mesmo problema pra um público diferente: máquinas
+Windows não falam NFS nativamente — elas falam SMB, e é isso que o Samba implementa no Linux.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender por que Samba existe ao lado do NFS, não no lugar
+dele.</b> Você ganha a distinção central: dois protocolos de compartilhamento de arquivo diferentes, cada um
+nativo de um mundo — e por que escolher o errado significa pedir pro cliente instalar software extra.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 22 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>Samba: o Conceito</h1>
+  <p>o mesmo problema do NFS, resolvido no idioma que o Windows já fala nativamente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S22D01_SAMBA_CONCEITO.png' alt='Prancha em seis quadros sobre o conceito de Samba, mostrando um servidor Linux compartilhando arquivos com clientes Windows via protocolo SMB'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2201: "Configurei um export NFS igual fiz semana passada, mas os notebooks
+  Windows do escritório não conseguem acessar de jeito nenhum — nem aparece nada no Explorador de Arquivos."
+  O problema não é configuração errada, é protocolo errado: o Windows fala nativamente
+  <span class="hint" data-tip="Protocolo de rede usado pelo Windows para compartilhamento de arquivos e impressoras, diferente do protocolo usado pelo NFS." onclick="openGlossary(1)">SMB</span>,
+  não NFS. Pra atender esses clientes, o servidor Linux precisa rodar
+  <span class="hint" data-tip="Conjunto de programas open source que implementa o protocolo SMB no Linux, permitindo que ele funcione como servidor de arquivos compatível com Windows." onclick="openGlossary(0)">Samba</span>.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que um cliente Windows não consegue simplesmente montar um export NFS do
+    jeito que um cliente Linux faz, sem nenhum software adicional?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      NFS e SMB são protocolos de rede DIFERENTES, cada um com seu próprio jeito de negociar conexão,
+      autenticação e transferência de arquivo. O Windows, por padrão, só fala SMB nativamente — ele não
+      "entende" NFS sem instalar um cliente NFS separado (que existe, mas é extra, menos comum, e menos
+      integrado que o suporte nativo a SMB). Samba resolve isso na ponta do SERVIDOR: o Linux passa a falar o
+      idioma que o Windows já entende de fábrica, sem exigir nada extra do lado do cliente.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa compartilhar uma pasta de um servidor Linux especificamente pra
+  notebooks Windows do escritório, sem instalar nenhum software adicional nesses notebooks. Qual é a solução
+  correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Instalar e configurar Samba no servidor Linux, criando um compartilhamento SMB. Como o Windows já fala SMB nativamente, os notebooks conseguem acessar a pasta direto pelo Explorador de Arquivos, sem precisar instalar nenhum software cliente adicional — a compatibilidade nasce do lado do servidor.')"><b>A</b> Instalar e configurar Samba no servidor Linux, criando um compartilhamento SMB acessível nativamente pelo Windows</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Um export NFS comum não é acessível nativamente pelo Windows — seria necessário instalar um cliente NFS separado em cada notebook, exatamente o tipo de software adicional que o chamado pede pra evitar.')"><b>B</b> Configurar um export NFS comum, como feito na Semana 21, já que o procedimento é o mesmo independente do sistema operacional do cliente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Instalar um cliente NFS em cada notebook Windows resolveria tecnicamente, mas é exatamente o tipo de software adicional no lado do cliente que o chamado pede pra evitar — a solução mais direta é resolver no servidor com Samba.')"><b>C</b> Instalar um cliente NFS em cada notebook Windows, permitindo que eles montem o export normalmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'VLANs controlam segmentação de rede (Semana 20), não têm nenhuma relação com qual protocolo de compartilhamento de arquivo um cliente consegue falar — colocar tudo na mesma VLAN não resolve incompatibilidade de protocolo.')"><b>D</b> Colocar o servidor e os notebooks na mesma VLAN, já que isso resolve qualquer problema de acesso à rede</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 01 SAMBA CONCEITO é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Componente</th><th>Papel</th></tr></thead><tbody>
+    <tr><td>smbd</td><td>Daemon que provê compartilhamento de arquivos e impressoras via SMB.</td></tr>
+    <tr><td>nmbd</td><td>Daemon que resolve nomes NetBIOS, ajudando o Windows a encontrar o servidor.</td></tr>
+    <tr><td>testparm</td><td>Verifica a sintaxe do arquivo de configuração do Samba antes de aplicar.</td></tr>
+  </tbody></table>
+  <pre>--- verificando se o Samba está instalado e rodando ---
+$ systemctl status smbd
+● smbd.service - Samba SMB Daemon
+     Active: active (running)
+
+$ systemctl status nmbd
+● nmbd.service - Samba NMB Daemon
+     Active: active (running)
+
+--- do lado do cliente Windows, sem instalar nada ---
+\\10.10.10.50\compartilhado    ← caminho UNC, funciona direto no Explorador de Arquivos
+
+--- comparando os dois protocolos no mesmo servidor ---
+$ ss -tlnp | grep -E '2049|445'
+LISTEN  0  128  0.0.0.0:2049   ← NFS (Semana 21)
+LISTEN  0  128  0.0.0.0:445    ← SMB (Samba, porta padrão)</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o técnico tentando logar no compartilhamento Samba com a
+  senha do usuário Linux, e sendo recusado</h2>
+  <p>Um colega já criou o usuário joao no Linux (useradd) e acha que a mesma senha já deveria funcionar pra
+  acessar o compartilhamento Samba.</p>
+  <div class='box question'>Por que a senha de um usuário Linux comum, criada com useradd/passwd, não
+  funciona automaticamente pra autenticação Samba?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O Samba mantém sua própria base de credenciais, separada da base de senhas do sistema Linux — mesmo que o usuário exista no Linux, ele precisa ser cadastrado explicitamente na base do Samba (com smbpasswd, tema aprofundado no Dia 3) antes de conseguir autenticar num compartilhamento. As duas bases de senha são independentes.')"><b>A</b> O Samba mantém sua própria base de credenciais, separada da senha do sistema Linux — o usuário precisa ser cadastrado explicitamente também no Samba</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Reiniciar o serviço smbd não sincroniza nem cria automaticamente credenciais Samba a partir das senhas Linux — as duas bases de senha permanecem independentes até um cadastro explícito ser feito na base do Samba.')"><b>B</b> É só um cache desatualizado — reiniciar o serviço smbd sincroniza automaticamente as senhas Linux com o Samba</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O comprimento da senha não é o fator determinante aqui — o problema é estrutural: a base de credenciais do Samba é separada da base de senhas do sistema Linux, independente de quantos caracteres a senha tenha.')"><b>C</b> Senhas Linux com menos de 8 caracteres não são aceitas pelo Samba por política de segurança padrão</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 01 SAMBA CONCEITO é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "SMB e CIFS são a mesma coisa ou são protocolos diferentes?"</h2>
+  <p>Um colega vê os dois termos usados de forma aparentemente intercambiável em documentações diferentes e
+  fica confuso se são coisas separadas.</p>
+  <div class='box question'>Qual é a relação real entre os termos SMB e CIFS?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'CIFS foi originalmente um dialeto específico e mais antigo do protocolo SMB, popularizado pela Microsoft nos anos 90 — hoje os dois termos costumam ser usados de forma intercambiável na prática, mas tecnicamente SMB é o nome da família completa do protocolo (incluindo versões modernas como SMB2 e SMB3), enquanto CIFS se refere especificamente àquela implementação mais antiga.')"><b>A</b> CIFS foi um dialeto mais antigo e específico do SMB; hoje os termos são usados quase de forma intercambiável, mas SMB é o nome da família completa do protocolo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'SMB e CIFS não são protocolos completamente independentes sem relação nenhuma — CIFS é historicamente um dialeto específico dentro da família de protocolos SMB, não uma tecnologia paralela sem conexão.')"><b>B</b> São dois protocolos completamente independentes, sem nenhuma relação técnica ou histórica entre eles</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A distinção entre SMB e CIFS não é definida por sistema operacional específico — as duas siglas se referem à mesma família de protocolo de compartilhamento de arquivos, usada tanto no contexto Windows quanto na implementação Samba do Linux.')"><b>C</b> SMB é usado só no Linux (Samba) e CIFS é usado só no Windows — são nomes regionais do mesmo conceito</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 01 SAMBA CONCEITO é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de um chamado de compartilhamento de arquivo, identifique primeiro o sistema operacional do cliente.</li>
+    <li>Para clientes Linux/Unix, NFS (Semana 21) costuma ser a opção mais nativa e simples.</li>
+    <li>Para clientes Windows, Samba é a opção que evita instalar software adicional no cliente.</li>
+    <li>Confirme os serviços smbd e nmbd ativos no servidor antes de configurar qualquer compartilhamento.</li>
+    <li>Lembre desde já que autenticação Samba é uma base separada da autenticação Linux — isso será configurado no Dia 3.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM de laboratório, instale o pacote samba e confirme os serviços smbd e nmbd ativos.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> systemctl status smbd e nmbd mostrando active (running).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Confirme com ss -tlnp que a porta 445 está escutando.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> porta 445 em LISTEN.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se os serviços não subirem, este é o ponto onde o chat com o Sênior-IA vai te ajudar a ler o log de erro do smbd.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Se tiver uma VM ou máquina Windows disponível, tente acessar \\ip-do-servidor\ no Explorador de Arquivos.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> pedido de credencial aparecendo (mesmo sem compartilhamento configurado ainda).</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>NFS e SMB são protocolos diferentes — Windows fala SMB nativamente, não NFS.</li>
+    <li>Samba implementa SMB no Linux, permitindo compatibilidade nativa com clientes Windows.</li>
+    <li>Samba mantém uma base de credenciais própria, separada da autenticação Linux comum.</li>
+    <li>SMB é a família de protocolo; CIFS foi um dialeto específico mais antigo dela.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Instalar o pacote Samba e confirmar os serviços é uma operação de baixo risco e
+  reversível (apt remove samba, se necessário). O cuidado real chega quando compartilhamentos reais forem
+  configurados (Dia 2 em diante) — cada compartilhamento é uma superfície de acesso à rede que precisa ser
+  deliberada, igual às regras de firewall e export NFS já vistas.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "protocolo nativo de cada mundo" é a mesma
+  lógica de escolher a ferramenta certa pro público certo, já vista em várias camadas do curso — vale reforçar
+  esse princípio de adequação, não só o caso específico NFS vs. SMB. O Anki vai conectar essa ideia à Semana 21.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a solução foi instalar e configurar
+  Samba no servidor Linux, criando compatibilidade nativa com o Windows. O ponto central do caso é este: o
+  mesmo problema do NFS, resolvido no idioma que o Windows já fala nativamente.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de reconhecer quando usar Samba em vez de NFS, e entender a
+  distinção fundamental entre os dois mundos de protocolo. Amanhã você configura seu primeiro
+  compartilhamento real, escrevendo smb.conf com autenticação básica.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 22, Dia 1 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Samba","Conjunto de programas open source que implementa o protocolo SMB no Linux, permitindo que ele funcione como servidor de arquivos compatível com Windows.",
+   "É um tradutor instalado na recepção de um prédio que fala o idioma dos visitantes de outro país, sem exigir que eles aprendam o idioma local."],
+  ["SMB (Server Message Block)","Protocolo de rede usado pelo Windows para compartilhamento de arquivos e impressoras, diferente do protocolo usado pelo NFS.",
+   "É o idioma nativo falado pelos visitantes de um país específico — o Windows já vem de fábrica sabendo se comunicar nele."],
+  ["CIFS (Common Internet File System)","Dialeto específico e mais antigo do protocolo SMB, historicamente popularizado pela Microsoft.",
+   "É um sotaque regional mais antigo do mesmo idioma — hoje as pessoas usam os dois nomes quase como sinônimos no dia a dia."],
+  ["smbd","Daemon do Samba responsável por prover compartilhamento de arquivos e impressoras via protocolo SMB.",
+   "É o funcionário da recepção que efetivamente atende os visitantes e libera o acesso às salas compartilhadas."],
+  ["nmbd","Daemon do Samba responsável por resolver nomes NetBIOS, ajudando clientes Windows a localizar o servidor na rede.",
+   "É a placa de identificação do prédio, ajudando visitantes a encontrar o endereço certo mesmo sem saber o número exato."],
+  ["Caminho UNC","Notação padrão do Windows para endereçar recursos de rede, no formato \\\\servidor\\compartilhamento.",
+   "É o endereço formal de correspondência usado especificamente no sistema postal de um país — funciona diferente do endereço usado em outro país (como o formato NFS)."],
+  ["Base de credenciais Samba","Banco de dados próprio do Samba que armazena as senhas usadas para autenticação em compartilhamentos, separado da base de senhas do sistema Linux.",
+   "É o crachá de visitante emitido especificamente pela recepção do prédio compartilhado — diferente do documento de identidade que a pessoa já tinha em casa."],
+  ["testparm","Ferramenta que verifica a sintaxe do arquivo de configuração do Samba antes de aplicá-lo, evitando erros de configuração.",
+   "É a revisão do contrato antes de assinar — confirma que não há cláusula mal escrita antes de a regra valer de verdade."],
+  ["Porta 445 (SMB)","Porta TCP padrão usada pelo protocolo SMB moderno para comunicação direta, distinta da porta 2049 usada pelo NFS.",
+   "É o número do guichê específico de atendimento pra visitantes que falam aquele idioma — cada protocolo tem o seu."],
+  ["Workgroup (menção)","Agrupamento simples de nome usado em redes SMB sem um servidor central de autenticação, distinto de um domínio Windows mais estruturado.",
+   "É um grupo de vizinhança informal, sem uma administração central — todos se reconhecem pelo nome do grupo, sem hierarquia formal."],
+  ["Compartilhamento (share)","Equivalente ao export do NFS no mundo Samba — um diretório disponibilizado especificamente para acesso via SMB.",
+   "É a mesma ideia da sala aberta pra visita externa (export NFS), só que anunciada no idioma e no sistema que os visitantes daquele prédio específico entendem."],
+  ["Dois protocolos, dois mundos (síntese)","Reconhecimento de que NFS e SMB coexistem no mesmo servidor Linux, cada um atendendo um tipo de cliente diferente, sem um substituir o outro.",
+   "É o mesmo prédio tendo duas recepções especializadas, cada uma atendendo visitantes de um país diferente, sem que uma substitua a outra."]
+];
+
+const sceneStripIdx = [0,1,2,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

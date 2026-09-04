@@ -1,0 +1,533 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 15 · Dia 3 — Serviço ou Firewall? | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_NFTABLES_BASICO_ROLLBACK.html'>← Semana 15, Dia 2</a><a href='#'>Semana 15</a><a href='DIA_04_ORDEM_REGRAS_FIREWALL.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 13 (portas e sockets):</b> Você já sabe diferenciar refused
+de timeout. Hoje aplica isso direto: "de fora não acessa" tem duas causas possíveis — serviço parado ou
+firewall bloqueando — e desligar o firewall pra descobrir qual é apaga justamente a evidência que você precisa.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar sem desligar a proteção.</b> Você ganha as
+duas perguntas que substituem "vou desligar rapidinho": o serviço está escutando? A porta está permitida?
+Uma resposta não substitui a outra — as duas precisam ser respondidas, na ordem certa.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 15 · Dia 3 | Nível Júnior — Redes</div>
+  <h1>Serviço ou Firewall?</h1>
+  <p>nunca derrube a proteção para descobrir a causa; pergunte à camada certa</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S15D03_SERVICO_OU_FIREWALL.png' alt='Prancha em seis quadros sobre diagnosticar se uma falha de acesso é do serviço ou do firewall, sem desligar a proteção'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"De fora não acessa. Vou desligar o firewall rapidinho?" — reflexo perigoso, de novo.
+  O dashboard local mostra app-test rodando. Mas o usuário remoto vê timeout na porta 8080. Desligar o
+  firewall pra testar apagaria justamente a evidência de qual das duas causas é a real.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    "De fora não acessa. Vou desligar o firewall rapidinho, só pra confirmar?" — um colega já tinha o dedo
+    no comando quando eu pedi pra esperar 30 segundos. Rodei <code>ss -tlnp | grep 8080</code>: o serviço
+    app-test estava perfeitamente escutendo, processo saudável. Rodei <code>nft list chain inet filter
+    input</code>: policy drop, e só uma regra pra porta 22. Nenhuma regra pra 8080. Causa isolada em segundos,
+    sem tocar na proteção do servidor.
+    <br><br>
+    Se ele tivesse desligado o firewall e o acesso voltasse a funcionar, isso só confirmaria "era o
+    firewall" — sem revelar qual regra faltava, nem se havia também algo errado no serviço escondido atrás
+    do bloqueio. Duas perguntas, sempre: o serviço está escutando? A porta está permitida? Uma resposta não
+    substitui a outra, e nenhuma delas exige desligar nada.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Pergunta</th><th>Comando</th><th>Resposta possível</th></tr></thead><tbody>
+    <tr><td>Serviço está escutando?</td><td><code>ss -tlnp | grep porta</code></td><td>Presente (OK) ou ausente (serviço parado).</td></tr>
+    <tr><td>Porta está permitida?</td><td><code>nft list ruleset</code> ou <code>nft list chain</code></td><td>Regra existe (OK) ou ausente (bloqueado).</td></tr>
+  </tbody></table>
+  <pre># ss -tlnp | grep 8080
+LISTEN  0  128  0.0.0.0:8080  0.0.0.0:*
+users:(("app-test",pid=2418,fd=7))
+
+# systemctl is-active app-test
+active
+
+$ sudo nft list chain inet filter input
+chain input {
+    type filter hook input priority 0; policy drop;
+    ct state established,related accept
+    tcp dport 22 accept
+}
+
+$ nc -zv 192.168.10.50 8080
+nc: connect to 192.168.10.50 port 8080 (tcp) timed out
+
+--- correção precisa ---
+$ sudo nft add rule inet filter input tcp dport 8080 accept
+$ nc -zv 192.168.10.50 8080
+Connection to 192.168.10.50 8080 port [tcp/*] succeeded!</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: inicie um serviço simples numa porta e confirme que está escutando.</div></div>
+      <div class="lab-cmd">$ python3 -m http.server 8080 &amp;
+$ ss -tlnp | grep 8080</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> porta aparecendo em LISTEN, com o processo associado.</div>
+      <div class="lab-why"><b>Por quê:</b> confirmar essa primeira pergunta (serviço escutando) antes de suspeitar do firewall evita investigar na ordem errada.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pro firewall sem confirmar o serviço primeiro — a ordem das duas perguntas importa pra não perder tempo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: aplique um firewall com policy drop sem regra pra essa porta e teste o acesso remoto.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input drop
+$ nc -zv 127.0.0.1 8080</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> timeout, mesmo com o serviço saudável e escutando.</div>
+      <div class="lab-why"><b>Por quê:</b> ver o timeout acontecer com o serviço confirmadamente saudável é o que prova, na prática, que as duas causas (serviço, firewall) são independentes.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver o timeout e concluir "o serviço caiu" sem checar de novo com ss — o serviço nunca parou, só o caminho até ele foi bloqueado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: sem desligar o firewall, confirme a ausência da regra específica.</div></div>
+      <div class="lab-cmd">$ sudo nft list ruleset</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> policy drop confirmado, nenhuma regra de accept pra essa porta.</div>
+      <div class="lab-why"><b>Por quê:</b> essa é a segunda pergunta respondida sem tocar na proteção — a evidência completa (serviço OK + porta bloqueada) já isola a causa exata.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> sentir a tentação de "só desligar rapidinho pra confirmar" — resista; o nft list já responde tudo que você precisa saber.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se ambas as checagens (ss e nft) parecerem normais e o acesso ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar outras camadas (roteamento, NAT).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: adicione a regra específica e teste de novo.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 accept
+$ nc -zv 127.0.0.1 8080</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> succeeded, confirmando a correção precisa.</div>
+      <div class="lab-why"><b>Por quê:</b> a correção específica resolve exatamente a causa identificada, sem ter exposto nenhuma outra porta durante o diagnóstico.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> adicionar uma regra ampla demais (ex: liberar todas as portas) "pra garantir" — sempre a regra mais específica possível.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente serviço confirmado, causa isolada, correção aplicada.</div></div>
+      <div class="lab-cmd"># serviço: escutando (ss confirmou)
+# firewall: policy drop, sem regra pra 8080 (nft confirmou)
+# correção: tcp dport 8080 accept
+# firewall: permaneceu ativo o tempo todo</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ticket documentado como resolvido, com evidências completas — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar as duas evidências (não só a conclusão) é o que prova que o diagnóstico foi metódico, não um chute que deu certo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> registrar só "firewall corrigido" sem anotar que o serviço também foi checado — a próxima pessoa pode assumir que só uma causa foi investigada.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as duas perguntas que devem ser respondidas ANTES de tocar no
+    firewall, quando um acesso remoto falha?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      1) O
+      <span class="hint" data-tip="Verificar se algum processo está aguardando conexões numa porta específica, usando ss -tlnp." onclick="openGlossary(0)">serviço está escutando</span>?
+      (ss -tlnp) 2) A
+      <span class="hint" data-tip="Verificar se existe uma regra de firewall permitindo explicitamente tráfego para uma porta específica." onclick="openGlossary(1)">porta está permitida</span>
+      no firewall? (nft list ruleset) Uma resposta não substitui a outra — as duas juntas é que revelam se a
+      causa é o serviço, o firewall, ou ambos.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>ss -tlnp | grep 8080 mostra o serviço app-test escutando em 0.0.0.0:8080.
+  nft list chain inet filter input mostra policy drop e apenas uma regra pra tcp dport 22. Qual é a conclusão
+  correta e a correção precisa?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O serviço está saudável e escutando (confirmado por ss). O firewall não tem regra pra porta 8080 (confirmado por nft list) — a causa é exatamente essa regra ausente. A correção precisa é adicionar tcp dport 8080 accept, sem desligar o firewall inteiro.')"><b>A</b> O serviço está OK; falta a regra de firewall para 8080 — adicionar tcp dport 8080 accept resolve, sem desligar nada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ss já confirmou que o serviço está escutando (users:((app-test...)), então reiniciá-lo não resolveria nada — a evidência aponta claramente para o firewall, não para o serviço.')"><b>B</b> O serviço precisa ser reiniciado, já que ele não está respondendo corretamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Desligar o firewall inteiro exporia todas as outras portas do servidor desnecessariamente — a causa já foi isolada com precisão (falta uma regra específica), então a correção também deve ser específica.')"><b>C</b> É preciso desligar o firewall completamente, já que ele está bloqueando o acesso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O IP do usuário remoto não está em questão aqui — a evidência (ss + nft) já isolou a causa como falta de regra de porta, não como restrição por IP de origem específico.')"><b>D</b> O problema é o IP do usuário remoto, que precisa ser adicionado a uma whitelist separada</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 03 SERVICO OU FIREWALL é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Um colega já quer desligar o firewall inteiro, argumentando que "assim resolve mais rápido"</h2>
+  <p>O painel 4 da prancha de hoje mostra o sênior alertando: "desligar o firewall apaga a evidência."</p>
+  <div class='box question'>Por que desligar o firewall pra testar realmente compromete o diagnóstico, além
+  do risco de segurança?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Se você desliga o firewall e o acesso volta a funcionar, isso confirma que o firewall ERA parte do problema — mas não diz exatamente QUAL regra faltava, nem se havia também um problema no serviço escondido atrás do bloqueio. Testar com o firewall ativo, usando as ferramentas certas, preserva a granularidade da evidência.')"><b>A</b> Desligar o firewall só confirma que ele fazia parte do problema, mas não revela qual regra específica faltava — perde a granularidade da evidência necessária pra uma correção precisa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A questão não é sobre velocidade de resposta do serviço — é sobre perder a capacidade de identificar exatamente qual regra de firewall estava faltando, uma informação essencial pra correção precisa.')"><b>B</b> Não compromete nada — desligar e religar o firewall é uma forma válida e rápida de testar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O tempo de resposta do ping não é o que se perde ao desligar o firewall pra testar — o que se perde é a informação específica de qual regra estava causando o bloqueio.')"><b>C</b> O problema é só que desligar demora mais tempo do que adicionar uma regra específica</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 03 SERVICO OU FIREWALL é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se o serviço está ativo (systemctl is-active), isso já garante que ele está acessível de fora?"</h2>
+  <p>Um colega confunde "serviço rodando" com "serviço acessível remotamente".</p>
+  <div class='box question'>Por que essas duas coisas são diferentes?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'systemctl is-active confirma só que o PROCESSO está rodando — não diz nada sobre se o firewall permite tráfego externo até ele. Um serviço pode estar perfeitamente ativo e saudável, e ainda assim inacessível de fora se não houver regra de firewall liberando a porta correspondente.')"><b>A</b> systemctl is-active confirma só que o processo está rodando — não diz nada sobre se o firewall permite tráfego externo até a porta dele</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'systemctl is-active não verifica firewall — ele é uma ferramenta de gerenciamento de serviços (systemd), sem relação com regras de rede/firewall.')"><b>B</b> Sim, systemctl is-active já verifica automaticamente as regras de firewall relacionadas ao serviço</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A questão não é sobre versão do systemd — systemctl is-active sempre confirma só o estado do processo/serviço, independente da versão, e nunca inclui checagem de firewall.')"><b>C</b> Só é diferente em versões antigas do systemd; nas versões novas, is-active já cobre firewall também</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 03 SERVICO OU FIREWALL é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de "de fora não acessa", nunca desligue o firewall como primeiro passo.</li>
+    <li>Responda primeiro: o serviço está escutando? (ss -tlnp)</li>
+    <li>Responda depois: a porta está permitida no firewall? (nft list)</li>
+    <li>Combine as duas respostas pra isolar a causa exata — serviço, firewall, ou ambos.</li>
+    <li>Aplique a correção precisa (regra específica), documentando a evidência de cada checagem.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Treine a equipe pra nunca oferecer "desligar o firewall pra testar" como opção, mesmo sob
+  pressão de urgência — duas checagens de leitura (ss + nft) respondem a mesma pergunta em segundos, sem
+  abrir mão da proteção.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O firewall nunca foi desligado como ferramenta de diagnóstico.</li>
+    <li>ss -tlnp confirmou o estado do serviço antes de qualquer suspeita de firewall.</li>
+    <li>nft list confirmou (ou descartou) a ausência de regra específica.</li>
+    <li>A correção aplicada foi precisa, baseada nas duas evidências combinadas.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>ss e nft list são comandos de leitura, sem risco. A correção (adicionar uma
+  regra) é reversível com nft delete rule, usando o handle mostrado por nft -a list. O cuidado real é nunca
+  usar "desligar o firewall" como ferramenta de diagnóstico, mesmo temporariamente.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "duas perguntas, não uma resposta só" conecta
+  com a Semana 13 (ping vivo não é aplicação viva, testar múltiplas camadas) — mesma disciplina de não
+  aceitar um único sinal como diagnóstico completo. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a conclusão certa foi <b>serviço OK,
+  falta regra de firewall</b> — corrigida com tcp dport 8080 accept, sem desligar nada. O ponto central do
+  caso é este: nunca derrube a proteção para descobrir a causa; pergunte à camada certa.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diagnosticar corretamente entre serviço parado e firewall
+  bloqueando, sem comprometer a segurança pra investigar. Amanhã você aprende sobre a armadilha mais comum de
+  firewall: a ordem das regras, e por que uma regra genérica antes de uma específica pode mascarar a decisão
+  final sem ninguém perceber.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 15, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["ss -tlnp (serviço escutando)","Verificar se algum processo está aguardando conexões numa porta específica, mostrando também qual processo é.",
+   "É checar se tem alguém atendendo a campainha de um apartamento específico, e quem é essa pessoa."],
+  ["nft list ruleset (porta permitida)","Verificar se existe uma regra de firewall permitindo explicitamente tráfego para uma porta específica.",
+   "É checar se o nome da visita está na lista de autorizados da portaria — mesmo que o morador esteja em casa esperando."],
+  ["Duas perguntas independentes","Reconhecer que 'serviço ativo' e 'porta permitida' são checagens separadas, e nenhuma substitui a outra.",
+   "É checar se o restaurante está aberto E se a porta de entrada está destravada — as duas coisas juntas, nenhuma sozinha basta."],
+  ["Desligar proteção para diagnosticar (erro)","Prática arriscada de desativar temporariamente uma camada de segurança só para tentar identificar a causa de um problema.",
+   "É tirar todos os alarmes do prédio pra descobrir por que um específico não funcionou — resolve a dúvida, mas expõe tudo enquanto isso."],
+  ["Camada certa (pergunta certa)","Fazer a pergunta de diagnóstico à camada específica onde a resposta realmente está, em vez de testar tudo de forma genérica.",
+   "É perguntar ao encanador sobre o cano, não ao eletricista — cada especialista responde à pergunta certa pra sua área."],
+  ["systemctl is-active","Comando que confirma rapidamente se um serviço específico está atualmente em execução.",
+   "É perguntar 'a loja está aberta agora?' — uma resposta simples de sim ou não sobre o estado atual."],
+  ["Correção precisa (não genérica)","Aplicar exatamente a mudança necessária pra resolver a causa identificada, sem ações amplas ou desproporcionais.",
+   "É trocar só o fusível queimado, em vez de desligar a energia da casa inteira só pra confirmar que era mesmo o fusível."],
+  ["Evidência combinada","Juntar informações de múltiplas fontes (serviço + firewall) para chegar numa conclusão de diagnóstico completa e confiável.",
+   "É juntar o depoimento de duas testemunhas diferentes pra montar o quadro completo do que realmente aconteceu."],
+  ["Ticket documentado com evidências","Registrar num chamado de suporte não só a solução aplicada, mas as checagens que confirmaram a causa raiz.",
+   "É o laudo médico completo — não só o remédio prescrito, mas os exames que confirmaram o diagnóstico."],
+  ["nc -zv (teste de porta)","Comando que testa se uma porta TCP específica aceita conexão, sem enviar dados de aplicação reais.",
+   "É verificar se uma porta específica do prédio está destrancada, sem entrar de fato na sala."],
+  ["Risco de segurança temporário","Exposição desnecessária criada ao desabilitar uma proteção mesmo que por um curto período, para fins de teste.",
+   "É deixar a porta da frente destrancada 'só por um minutinho' — o risco existe durante todo esse minuto, mesmo que pareça curto."],
+  ["Diagnóstico não-destrutivo","Investigar a causa de um problema usando apenas comandos de leitura, sem alterar ou desativar nada durante a investigação.",
+   "É examinar a cena do crime sem tocar em nada, coletando evidência sem contaminar o que já está lá."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

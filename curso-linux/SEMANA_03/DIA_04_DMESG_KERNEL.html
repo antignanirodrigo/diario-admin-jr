@@ -1,0 +1,512 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 3 · Dia 4 — dmesg: Quando o Kernel Fala | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_SYSLOG_LOGROTATE.html'>← Dia 3</a><a href='#'>Semana 3</a><a href='DIA_05_LAST_LASTLOG_AUDITD.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com os últimos dois dias:</b> journalctl e syslog registram o que a
+APLICAÇÃO e o systemd têm a dizer. Mas hoje o silêncio é total — nem o app registrou erro, porque o problema
+aconteceu um nível abaixo, no kernel. Quando o log da aplicação simplesmente para, é hora de escutar mais fundo.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: investigar eventos de kernel e hardware com dmesg.</b> Você
+ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para sem explicação nenhuma.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 3 · Dia 4 | Nível Júnior</div>
+  <h1>dmesg: Quando o Kernel Fala</h1>
+  <p>se a aplicação ficou muda sem erro nenhum, escute o kernel</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S03D04_DMESG_KERNEL.png' alt='Prancha em seis quadros sobre dmesg'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Durante a madrugada o servidor reiniciou sozinho. De manhã, o log da aplicação
+  simplesmente PARA às 10:42 — nenhum erro registrado, nenhuma explicação. O app não tem culpa nenhuma nisso:
+  o motivo está numa camada abaixo dele.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o servidor reiniciou sozinho durante a madrugada. De manhã, o Júnior abriu o app.log — e o log
+    simplesmente PARA às 10:42, sem nenhum erro. Nenhuma explicação, nenhum aviso. Ele ficou preso ali,
+    relendo as mesmas linhas de novo, achando que tinha perdido algo. Expliquei: "não tem nada pra achar
+    aí. O app não é culpado — o motivo está numa camada abaixo dele."<br><br>
+    Foi a primeira vez que expliquei essa ideia de camadas: aplicação, systemd, e embaixo de tudo, o kernel —
+    a sala de máquinas do navio, que funciona mesmo sem os passageiros verem. Rodamos <code>dmesg -T</code> e
+    lá estava: <code>Out of memory: Killed process 4821 (app-worker)</code>, com timestamp poucos segundos
+    antes do log parar. O kernel tem um mecanismo — o OOM killer — que mata processos automaticamente quando
+    a memória se esgota. Não foi bug do app. Foi o segurança do navio jogando carga pela borda.<br><br>
+    E teve o raciocínio mais importante do dia: um log limpo NÃO é prova de estabilidade. O Júnior quase
+    concluiu "sem erro no log, então estava tudo bem" — expliguei que um log limpo às vezes só prova que a
+    aplicação foi morta rápido demais pra registrar qualquer coisa. Silêncio, às vezes, é a pista mais
+    importante de todas.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>dmesg -T | tail -30</code></td><td>Mostra os últimos eventos do kernel, com timestamp legível para humanos.</td></tr>
+    <tr><td><code>dmesg -l err,warn</code></td><td>Filtra só eventos de erro e aviso, cortando o ruído de mensagens informativas.</td></tr>
+  </tbody></table>
+  <pre>$ dmesg -T | tail -30
+[Qui Mai 29 10:42:05 2025] Out of memory: Killed process 4821 (app-worker) score 987 or sacrifice child
+[Qui Mai 29 10:42:05 2025] Dado de memória insuficiente: Kill process selecionado para liberar memória.</pre>
+  <p>Comparando os horários entre <code>app.log</code> (parou às 10:42:08) e o <code>dmesg</code> (matou o
+  processo às 10:42:03), a coincidência de poucos segundos confirma a mesma causa.</p>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Leia os eventos mais recentes do kernel, mesmo sem incidente nenhum.</div></div>
+      <div class="lab-cmd">dmesg -T | tail -30</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de eventos de kernel com timestamp legível.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> conhecer o "normal" do dmesg antes de um incidente é o que te permite reconhecer rápido quando algo foge do padrão numa investigação real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar dmesg sem o -T e tentar interpretar timestamps em "segundos desde o boot" — sem conversão pra data/hora legível, correlacionar com outros logs vira matemática desnecessária.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Filtre só eventos de erro e aviso, cortando ruído informativo.</div></div>
+      <div class="lab-cmd">dmesg -l err,warn</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista bem menor, só com eventos relevantes, sem o ruído informativo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> o kernel gera MUITAS mensagens informativas de rotina — filtrar por prioridade é o que separa sinal real de ruído de fundo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> filtrar tão agressivamente que perde contexto — às vezes um evento "info" logo antes de um "err" é parte da mesma história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Pesquise o significado de uma mensagem de dmesg que você não reconheça.</div></div>
+      <div class="lab-cmd"># nenhum comando específico — leia a mensagem real da sua VM e pesquise o termo técnico</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> compreensão do que aquele evento específico de kernel significa.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> mensagens de kernel usam jargão denso — construir esse vocabulário aos poucos, com calma, é mais barato que tentar aprender tudo sob pressão de um incidente real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ignorar uma mensagem só porque parece "normal demais pra ser importante" — algumas mensagens de warning são os primeiros sinais de um problema que vai piorar.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma mensagem de kernel parecer indecifrável, este é o ponto onde o chat com o Sênior-IA vai ajudar a traduzir o jargão técnico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Pratique correlacionar horários entre dmesg e o log de uma aplicação de teste.</div></div>
+      <div class="lab-cmd">dmesg -T | tail -5
+tail -5 /var/log/syslog</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> dois eventos alinhados no tempo, mesmo que de fontes diferentes.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> foi essa correlação exata (poucos segundos de diferença) que confirmou a causa real hoje — treinar esse olhar é o que faz a diferença numa investigação de verdade.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir causa só por proximidade de horário sem checar o conteúdo das mensagens — coincidência de tempo é uma pista forte, não uma prova sozinha.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente um relatório de incidente completo.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o relatório final
+# ex: "Causa raiz: OOM killer matou app-worker (PID 4821) às 10:42:03 por falta de memória. Impacto: app.log parou sem erro. Ação: investigar consumo de memória do app-worker."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório completo, com causa raiz identificada no kernel, não na aplicação.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar a causa na camada CERTA evita que alguém, meses depois, tente "corrigir um bug" no código do app que nunca existiu.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> escrever no relatório "aplicação travou" quando na verdade foi morta pelo kernel — a diferença muda completamente pra onde vai o esforço de correção.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quando o log da aplicação simplesmente para, sem erro nenhum registrado, em qual
+    camada abaixo dela você deve procurar a explicação?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      No <span class="hint" data-tip="Núcleo do sistema operacional, responsável por gerenciar hardware, memória e processos." onclick="openGlossary(0)">kernel</span> —
+      camada abaixo do sistema operacional em nível de usuário. Eventos como falta de memória
+      (<span class="hint" data-tip="Mecanismo do kernel que mata processos pra liberar memória quando ela se esgota." onclick="openGlossary(1)">OOM killer</span>)
+      acontecem ali, silenciosamente pra aplicação, mas totalmente visíveis no <code>dmesg</code>.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>O log da aplicação para sem nenhum erro registrado, e o servidor reiniciou
+  durante a madrugada. Qual é o próximo passo correto?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O log da aplicação já foi checado e não tem nada — insistir em procurar ali de novo, sem mudar de camada, não vai revelar informação nova nenhuma.')"><b>A</b> Continuar procurando só no log da aplicação, com mais atenção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Consultar dmesg -T | tail -30 investiga a camada do kernel, abaixo da aplicação — quando o app fica silencioso sem erro, o motivo geralmente está registrado ali, não no log dele.')"><b>B</b> Consultar dmesg -T | tail -30 pra investigar eventos de kernel e hardware, um nível abaixo da aplicação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reinstalar a aplicação é uma ação desproporcional e sem nenhuma evidência que a justifique — o problema pode nem ter relação com a instalação do app.')"><b>C</b> Reinstalar a aplicação do zero, já que o log dela não tem explicação nenhuma</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Fechar o ticket como resolvido sem entender a causa deixa o mesmo problema livre pra acontecer de novo, sem nenhum aprendizado real sobre o motivo do reboot.')"><b>D</b> Fechar o ticket como "resolvido sozinho", já que o servidor voltou ao normal</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O buffer do 'dmesg' é como o relatório da autópsia ou do parto do computador: registra o reconhecimento de cada chip, placa PCIe e disco no instante do boot.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 dmesg mostra "Out of memory: Killed process" — o que isso realmente significa?</h2>
+  <p>A mensagem completa é <code>Out of memory: Killed process 4821 (app-worker) score 987 or sacrifice
+  child</code>, com timestamp poucos segundos antes do log da aplicação parar.</p>
+  <div class='box question'>Qual é a leitura correta dessa mensagem?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O kernel tem um mecanismo (OOM killer) que mata processos automaticamente quando a memória do sistema se esgota — ele escolheu o app-worker pela pontuação de risco calculada, e foi isso, não um bug do app, que causou o silêncio nos logs.')"><b>A</b> O kernel matou o processo automaticamente por falta de memória disponível no sistema — não foi um bug do app, foi o OOM killer agindo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A mensagem não indica um ataque externo — é um mecanismo interno e normal do kernel Linux, ativado quando a memória disponível do sistema se esgota, sem relação com invasão.')"><b>B</b> O servidor foi invadido, e o invasor matou o processo manualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A mensagem indica claramente falta de MEMÓRIA (Out of memory), não espaço em disco — são recursos completamente diferentes.')"><b>C</b> O disco ficou cheio e por isso o processo foi encerrado</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag 'dmesg -T' é como adicionar a data e a hora no carimbo da foto: traduz os segundos brutos do boot para o horário legível do relógio da parede.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se o log da aplicação está limpo, é porque não teve erro nenhum, certo?"</h2>
+  <p>Um colega vê o <code>app.log</code> sem nenhuma linha de erro e conclui que a aplicação nunca teve
+  problema nenhum naquela madrugada.</p>
+  <div class='box question'>Essa conclusão está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta — um log limpo só prova que a APLICAÇÃO não registrou erro, mas ela não tem visibilidade sobre eventos do kernel, como o OOM killer, que aconteceu numa camada completamente abaixo dela e a matou sem dar chance de registrar nada.')"><b>A</b> Não — o log limpo só mostra que a aplicação não registrou erro, mas ela não tem visibilidade sobre eventos de kernel que podem tê-la matado sem aviso nenhum</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O silêncio no log da aplicação não é prova de estabilidade — pode ser exatamente o oposto, um sinal de que ela foi encerrada de forma abrupta antes de conseguir registrar qualquer coisa.')"><b>B</b> Sim — log limpo é sempre sinal de que está tudo estável, sem exceção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A ausência de erro no log da aplicação não garante nada sobre a saúde do disco — são duas fontes de informação completamente diferentes, sem relação direta.')"><b>C</b> Sim — se o app não registrou erro, isso já garante que o disco também está saudável</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Erros de 'I/O error' no dmesg são como o barulho de metal raspando no motor: avisam que o disco rígido está falhando fisicamente antes do sistema travar de vez.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme onde o log da aplicação parou, com timestamp exato.</li>
+    <li>Se não houver erro explicando a parada, desça uma camada: consulte dmesg -T.</li>
+    <li>Procure eventos próximos ao horário da parada, especialmente OOM killer ou hardware.</li>
+    <li>Correlacione os horários dos dois logs pra confirmar a mesma causa.</li>
+    <li>Documente a causa real (kernel, não bug do app) e a ação recomendada.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Configure alertas de monitoramento de memória com margem de aviso (ex: 80%), pra agir antes
+  do OOM killer precisar entrar em ação. Documente no runbook do time o hábito de checar dmesg sempre que um
+  log de aplicação parar sem erro — vira reflexo, não descoberta acidental.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>dmesg foi consultado quando o log da aplicação não explicava a falha.</li>
+    <li>Os horários dos dois logs foram correlacionados pra confirmar a mesma causa.</li>
+    <li>A causa raiz foi identificada corretamente na camada certa (kernel, não app).</li>
+    <li>Um relatório de incidente foi documentado com causa, impacto e ação recomendada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>dmesg é somente leitura — não existe rollback aqui. O cuidado real é não concluir
+  precipitadamente que é "bug do app" sem antes checar a camada de baixo, o que levaria a uma correção no
+  lugar errado.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "descer uma camada quando o log de cima não
+  explica" conecta journalctl (systemd), syslog (aplicação) e agora dmesg (kernel) — três camadas da mesma
+  investigação. O Anki vai conectar as três.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>consultar
+  dmesg -T | tail -30</b> pra investigar a camada do kernel, um nível abaixo da aplicação. O ponto central do
+  caso é este: se a aplicação ficou muda, escute o kernel.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de investigar eventos de kernel e hardware quando a aplicação não
+  explica a própria falha. Amanhã fecha a Semana 3: last, lastlog e auditd, pra responder com evidência
+  cruzada quem acessou o servidor e quando.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 3, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Kernel","Núcleo do sistema operacional, responsável por gerenciar hardware, memória e processos diretamente.",
+   "É a sala de máquinas do navio, abaixo do convés onde os passageiros (aplicações) andam — funciona mesmo sem eles verem."],
+  ["OOM killer","Mecanismo do kernel Linux que mata processos automaticamente quando a memória disponível se esgota.",
+   "É o segurança do navio que joga carga pela borda quando o peso passa do limite, escolhendo o que sacrificar primeiro."],
+  ["dmesg","Comando que exibe o buffer de mensagens do kernel, incluindo eventos de hardware e memória.",
+   "É o diário de bordo da sala de máquinas — registra eventos que os passageiros no convés nunca veem diretamente."],
+  ["-T (timestamp humano)","Opção do dmesg que converte o tempo de boot em data e hora legíveis.",
+   "É trocar 'minuto 42 desde que o navio zarpou' por 'quinta-feira, 10:42 da manhã' — muito mais fácil de correlacionar."],
+  ["Camada de sistema","Nível de abstração — aplicação, sistema operacional, kernel, hardware — cada um com sua própria visibilidade.",
+   "É os andares de um prédio: o que acontece no porão nem sempre é visto do escritório do 10º andar."],
+  ["Score (OOM)","Pontuação calculada pelo kernel pra decidir qual processo matar primeiro numa situação de falta de memória.",
+   "É a lista de prioridade de resgate — quem sai primeiro do barco lotado é decidido por critérios específicos, não por acaso."],
+  ["Reboot inesperado","Reinicialização do servidor que não foi solicitada por ninguém, geralmente sinal de um problema sério.",
+   "É a casa toda apagando e reacendendo sozinha de madrugada — sempre motivo pra investigar, nunca pra ignorar."],
+  ["Correlação de horários","Comparar os timestamps de eventos em fontes diferentes pra confirmar se são a mesma causa.",
+   "É alinhar dois relógios de testemunhas diferentes pra confirmar se elas viram o mesmo momento do acidente."],
+  ["Silêncio no log","Quando um log para de registrar eventos sem nenhuma mensagem de erro explicando o motivo.",
+   "É o rádio que simplesmente para de transmitir, sem despedida — o silêncio em si já é uma pista."],
+  ["Bug do app vs. causa de sistema","Distinção entre um erro no código da aplicação e um problema causado por recursos do sistema (memória, disco, kernel).",
+   "É a diferença entre o motorista errar a curva (bug) e a estrada desmoronar embaixo do carro (causa de sistema)."],
+  ["Memória insuficiente","Situação em que a demanda de RAM do sistema ultrapassa o que está fisicamente disponível.",
+   "É tentar encaixar mais malas do que cabem no porta-malas — algo precisa ser deixado pra trás."],
+  ["Relatório de incidente","Documento que registra causa raiz, impacto e ação recomendada para um problema investigado.",
+   "É o laudo pericial do acidente: o que causou, o que foi afetado, e o que fazer a respeito."]
+];
+
+const sceneStripIdx = [0,1,2,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,477 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 19 · Dia 4 — Salvando Captura em Arquivo | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_HANDSHAKE_TCP_LEITURA.html'>← Semana 19, Dia 3</a><a href='#'>Semana 19</a><a href='DIA_05_INVESTIGACAO_PACOTE_CHEGA.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 3 (handshake TCP):</b> Você já sabe ler o handshake direto no
+terminal. Hoje você aprende a guardar essa captura num arquivo — pra reabrir depois, comparar com outra
+captura, ou mandar pra um colega analisar sem precisar reproduzir o problema ao vivo de novo.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: capturar pra arquivo com -w e reler com -r.</b> Você ganha a
+diferença entre um diagnóstico que só existe no momento em que você olhou a tela, e uma evidência que fica
+salva, reproduzível e compartilhável.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 19 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>Salvando Captura em Arquivo</h1>
+  <p>uma captura salva em arquivo é uma evidência; uma captura só na tela é uma lembrança</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S19D04_TCPDUMP_SALVAR_ARQUIVO.png' alt='Prancha em seis quadros sobre salvar uma captura tcpdump em arquivo .pcap com a flag -w e reabri-la depois com -r'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #1904: "O bug só acontece de madrugada, quando ninguém está de plantão pra ficar
+  olhando o terminal ao vivo." A resposta certa não é ficar acordado esperando — é deixar uma captura rodando,
+  salvando pra
+  <span class="hint" data-tip="Formato de arquivo padrão pra armazenar capturas de pacotes de rede, legível por tcpdump, Wireshark e outras ferramentas." onclick="openGlossary(0)">arquivo .pcap</span>,
+  e analisar tudo com calma na manhã seguinte.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é a diferença prática entre rodar tcpdump normalmente (imprimindo linhas no
+    terminal) e rodar com -w arquivo.pcap?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Sem -w, o tcpdump traduz cada pacote pra uma linha de texto legível e imprime direto no terminal, mas não
+      guarda nada depois que a tela rola pra frente. Com -w arquivo.pcap, ele grava os pacotes BRUTOS num
+      arquivo binário, sem nem mesmo mostrar nada no terminal por padrão — e esse arquivo pode ser reaberto
+      depois com -r, quantas vezes precisar, sem perder nenhum detalhe do momento original da captura.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa deixar uma captura rodando a noite inteira numa VM, salvando tudo
+  num arquivo pra analisar de manhã, sem precisar ficar olhando o terminal ao vivo. Qual comando faz isso?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'tcpdump -i eth0 -w captura.pcap grava todos os pacotes capturados na interface eth0 diretamente num arquivo binário chamado captura.pcap, sem depender de ninguém ficar olhando o terminal — o arquivo fica pronto pra ser reaberto e analisado a qualquer momento depois.')"><b>A</b> tcpdump -i eth0 -w captura.pcap</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Sem a flag -w, o tcpdump só imprime as linhas no terminal — se ninguém estiver olhando ou salvando essa saída manualmente (como com um redirecionamento pra arquivo de texto), a informação simplesmente se perde depois que a tela rola.')"><b>B</b> tcpdump -i eth0, deixando o terminal aberto a noite inteira sem fazer mais nada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A flag -r é usada pra LER um arquivo já existente, não pra criar um novo a partir de uma captura ao vivo — usar -r sem um arquivo .pcap prévio não tem o que ler.')"><b>C</b> tcpdump -i eth0 -r captura.pcap</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'journalctl mostra logs do sistema (systemd), não tráfego de rede capturado pacote a pacote — são fontes de informação completamente diferentes.')"><b>D</b> journalctl -u tcpdump --since "hoje 00:00"</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 TCPDUMP SALVAR ARQUIVO é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+    <tr><td><code>tcpdump -i eth0 -w arq.pcap</code></td><td>Captura na interface e grava tudo num arquivo binário.</td></tr>
+    <tr><td><code>tcpdump -r arq.pcap</code></td><td>Lê um arquivo .pcap já existente, exibindo como se fosse ao vivo.</td></tr>
+    <tr><td><code>tcpdump -r arq.pcap host X</code></td><td>Reaplica um filtro sobre um arquivo já capturado.</td></tr>
+  </tbody></table>
+  <pre>$ sudo tcpdump -i eth0 -w /var/log/captura_1904.pcap &amp;
+[1] 8821
+$ jobs
+[1]+  Running    tcpdump -i eth0 -w /var/log/captura_1904.pcap &amp;
+
+--- na manhã seguinte ---
+$ kill 8821
+
+$ tcpdump -r /var/log/captura_1904.pcap
+14:50:01 IP cliente.51500 &gt; servidor.443: Flags [S], seq 1000, win 64240, length 0
+14:50:01 IP servidor.443 &gt; cliente.51500: Flags [S.], seq 5000, ack 1001, win 65160, length 0
+14:50:01 IP cliente.51500 &gt; servidor.443: Flags [.], ack 5001, win 502, length 0
+
+--- reaplicando filtro sobre o arquivo já salvo ---
+$ tcpdump -r /var/log/captura_1904.pcap host 10.10.10.50
+2 packets read from file</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o técnico esquecendo de limitar o tamanho da captura numa VM
+  com pouco espaço em disco</h2>
+  <p>Um colega deixa tcpdump -w captura.pcap rodando por dias numa VM com pouco espaço livre, sem nenhum
+  limite de tamanho ou tempo.</p>
+  <div class='box question'>Qual é o risco real de deixar uma captura -w rodando indefinidamente, sem
+  nenhuma flag de limite, numa VM com disco limitado?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O arquivo .pcap cresce continuamente enquanto a captura roda, sem limite automático — em tráfego constante, isso pode encher o disco da VM completamente, causando problemas no próprio sistema (inclusive impedindo logs e outros serviços de funcionarem). Flags como -C (tamanho máximo) ou -G (rotação por tempo) existem exatamente pra evitar esse risco.')"><b>A</b> O arquivo cresce sem limite e pode encher o disco da VM, causando problemas no próprio sistema — flags como -C ou -G existem pra evitar isso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O tcpdump não tem rotação automática de arquivo habilitada por padrão — sem uma flag explícita como -G, ele continua escrevendo no mesmo arquivo indefinidamente, sem trocar de arquivo sozinho.')"><b>B</b> Nenhum risco real — o tcpdump troca automaticamente de arquivo a cada hora por padrão, sem precisar de nenhuma flag adicional</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A criptografia do disco não tem relação nenhuma com o crescimento do arquivo de captura — o risco é puramente de espaço em disco disponível, independente de o disco estar criptografado ou não.')"><b>C</b> O único risco é a criptografia do disco ficar mais lenta com o tempo, sem relação com espaço disponível</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 TCPDUMP SALVAR ARQUIVO é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Posso abrir o arquivo .pcap direto num editor de texto?"</h2>
+  <p>Um colega tenta abrir um arquivo .pcap com cat ou num editor de texto comum e vê só caracteres
+  ilegíveis.</p>
+  <div class='box question'>Por que um arquivo .pcap não pode ser lido diretamente como texto simples?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'O arquivo .pcap armazena os pacotes em formato BINÁRIO, byte a byte, exatamente como foram capturados na rede — não é texto formatado. Por isso precisa de uma ferramenta que entenda essa estrutura binária (como tcpdump -r ou Wireshark) pra traduzir os bytes de volta em linhas legíveis, com IPs, portas e flags.')"><b>A</b> O arquivo .pcap guarda os pacotes em formato binário bruto, e precisa de uma ferramenta como tcpdump -r ou Wireshark pra traduzir isso em algo legível</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é uma questão de permissão de arquivo — mesmo com permissão total de leitura, o conteúdo continua sendo binário; o problema é o formato dos dados, não quem pode acessá-lo.')"><b>B</b> É só uma questão de permissão do arquivo — com sudo cat captura.pcap o conteúdo aparece perfeitamente legível</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe corrupção acontecendo aqui — o arquivo .pcap está correto e íntegro; ele simplesmente não é um formato de texto, então uma ferramenta de texto comum não sabe interpretá-lo.')"><b>C</b> O arquivo está corrompido; é preciso capturar de novo com uma flag diferente pra gerar texto direto</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 TCPDUMP SALVAR ARQUIVO é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Use -w &lt;arquivo&gt;.pcap pra gravar a captura em formato binário, em vez de só imprimir na tela.</li>
+    <li>Rode em background com &amp; (ou dentro de um screen/tmux) quando precisar deixar rodando sem terminal ativo.</li>
+    <li>Considere -C (tamanho máximo por arquivo) ou -G (rotação por tempo) em capturas longas, pra não encher o disco.</li>
+    <li>Reabra com -r &lt;arquivo&gt;.pcap depois, aplicando os mesmos filtros de host/port que quiser.</li>
+    <li>Nomeie o arquivo com data e contexto do chamado, pra facilitar encontrar depois.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Rode tcpdump -i eth0 -w teste.pcap enquanto gera algum tráfego (curl, ping).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo teste.pcap criado, com tamanho maior que zero.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Interrompa a captura e reabra o arquivo com tcpdump -r teste.pcap.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> as mesmas linhas de tráfego aparecendo, como se fosse ao vivo.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se quiser abrir esse mesmo arquivo visualmente no Wireshark depois, este é o ponto onde o chat com o Sênior-IA vai te mostrar o próximo passo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Reaplique um filtro host ou port sobre o arquivo já salvo, com tcpdump -r teste.pcap host &lt;ip&gt;.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> só as linhas relevantes ao filtro aparecem, mesmo lendo de um arquivo já pronto.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Tente abrir o mesmo arquivo com cat teste.pcap e observe o conteúdo ilegível.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> caracteres binários sem sentido no terminal, confirmando que não é texto simples.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>-w grava a captura em arquivo binário; -r reabre esse arquivo depois.</li>
+    <li>Filtros podem ser reaplicados sobre um arquivo já salvo, não só ao vivo.</li>
+    <li>Capturas longas sem limite de tamanho podem encher o disco — -C e -G existem pra evitar isso.</li>
+    <li>Um arquivo .pcap é binário, não texto — precisa de tcpdump -r ou Wireshark pra ser lido.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Apagar um arquivo .pcap depois de analisado é seguro e reversível só até o ponto
+  de exclusão — depois de apagado, a evidência daquele momento específico não pode ser recriada, só uma nova
+  captura futura. Por isso, é boa prática manter capturas relevantes de incidentes arquivadas por um tempo antes
+  de descartar.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "captura salva é evidência; captura só na tela é
+  lembrança" conecta com qualquer disciplina de log e auditoria que você já viu no curso — documentar não é
+  burocracia, é sobrevivência de diagnóstico. O Anki vai reforçar esse princípio.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, o comando certo pra deixar uma captura
+  rodando sem monitoramento ao vivo foi tcpdump -i eth0 -w captura.pcap. O ponto central do caso é este: uma
+  captura salva em arquivo é uma evidência; uma captura só na tela é uma lembrança.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de capturar tráfego pra arquivo e reabri-lo depois com filtros.
+  Amanhã fecha a Semana 19 com o cenário mais realista: investigar se um pacote específico realmente chegou (ou
+  não) num servidor, usando tudo que você aprendeu essa semana.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 19, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Arquivo .pcap","Formato de arquivo padrão pra armazenar capturas de pacotes de rede, legível por tcpdump, Wireshark e outras ferramentas.",
+   "É a fita gravada de uma câmera de segurança — pode ser guardada, reproduzida depois, e assistida por qualquer pessoa com o equipamento certo."],
+  ["-w (flag de gravação)","Flag do tcpdump que grava a captura diretamente num arquivo binário, em vez de só imprimir linhas no terminal.",
+   "É apertar o botão de gravar da câmera, em vez de só observar ao vivo sem guardar nada."],
+  ["-r (flag de leitura)","Flag do tcpdump que lê um arquivo .pcap já existente, exibindo o conteúdo como se fosse uma captura ao vivo.",
+   "É colocar a fita gravada de volta pra reproduzir — você vê tudo de novo, no seu próprio ritmo, quantas vezes quiser."],
+  ["Background (execução em segundo plano)","Técnica de rodar um comando com &amp; no final, liberando o terminal pra outras tarefas enquanto ele continua rodando.",
+   "É deixar a câmera gravando sozinha enquanto você vai fazer outra coisa, sem precisar ficar parado assistindo."],
+  ["-C (limite de tamanho)","Flag que limita o tamanho máximo de cada arquivo de captura, criando um novo arquivo automaticamente quando o limite é atingido.",
+   "É trocar o cartão de memória da câmera automaticamente quando ele enche, em vez de parar de gravar."],
+  ["-G (rotação por tempo)","Flag que cria um novo arquivo de captura automaticamente a cada intervalo de tempo definido.",
+   "É trocar a fita da câmera automaticamente a cada tantas horas, mantendo um histórico organizado por período."],
+  ["Formato binário (vs. texto)","Representação de dados em bytes brutos, sem estrutura de texto legível diretamente por um ser humano sem tradução.",
+   "É um filme gravado em fita magnética — precisa de um aparelho de reprodução certo, não dá pra 'ler' a fita a olho nu."],
+  ["Wireshark (menção)","Ferramenta gráfica de análise de pacotes que também lê arquivos .pcap, oferecendo uma interface visual mais rica que o terminal.",
+   "É a sala de reprodução com tela grande e controles avançados, pra quem quer examinar a gravação com mais detalhe visual."],
+  ["Reaplicar filtro sobre arquivo salvo","Capacidade de usar host, port e outros filtros do tcpdump ao reler um arquivo .pcap já gravado, isolando o que interessa depois.",
+   "É reassistir a fita gravada procurando só pelas cenas de uma pessoa específica, sem precisar assistir tudo de novo."],
+  ["Espaço em disco (risco de captura longa)","Recurso limitado que pode se esgotar se uma captura -w rodar por muito tempo sem limite de tamanho definido.",
+   "É o limite físico do cartão de memória da câmera — sem gerenciamento, ele enche e para de gravar, ou pior, trava outros processos."],
+  ["Nomenclatura de evidência (data + contexto)","Prática de nomear arquivos de captura com data e referência ao chamado, facilitando localização futura.",
+   "É etiquetar a fita gravada com data e assunto, em vez de deixar uma pilha de fitas sem identificação nenhuma."],
+  ["Evidência reproduzível","Registro que pode ser revisitado e reanalisado depois, em contraste com uma observação que só existiu no momento em que aconteceu.",
+   "É a diferença entre uma fotografia guardada e uma lembrança de memória — uma pode ser reexaminada por qualquer um, a outra só existiu na sua cabeça."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

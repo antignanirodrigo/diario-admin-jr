@@ -1,0 +1,526 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 3 · Dia 3 — Syslog Clássico e logrotate | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_JOURNALCTL.html'>← Dia 2</a><a href='#'>Semana 3</a><a href='DIA_04_DMESG_KERNEL.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> journalctl é o log moderno do systemd. Mas nem todo sistema
+usa só ele — muitos ambientes ainda dependem do syslog clássico (rsyslog) e da rotação automática via
+logrotate. Hoje você aprende a ler os dois e a nunca dar rm direto num log vivo.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender rotação de log e resolver disco cheio sem apagar
+nada na mão.</b> Você ganha o hábito de usar logrotate com segurança, em vez de rm direto em arquivos que
+processos ainda podem estar escrevendo.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 3 · Dia 3 | Nível Júnior</div>
+  <h1>Syslog Clássico e logrotate</h1>
+  <p>log cheio se trata com rotação, não com apagar no escuro</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S03D03_SYSLOG_LOGROTATE.png' alt='Prancha em seis quadros sobre syslog clássico e logrotate'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Um alerta de disco mostra <code>/var/log</code> em 98% de uso. O reflexo é digitar
+  <code>rm /var/log/app.log</code> — mas se um processo ainda estiver escrevendo nesse arquivo, apagar o nome
+  não libera o espaço de verdade, só esconde o problema.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje um alerta mostrou <code>/var/log</code> em 98%. O reflexo do Júnior foi digitar
+    <code>rm /var/log/app.log</code> — o mesmo comando que ele já dominava com segurança desde a Semana 2.
+    Segurei: "esse rm é diferente. Esse arquivo pode estar VIVO." Um processo escrevendo nele mantém o
+    arquivo aberto mesmo depois do nome sumir — é como rasgar um contrato mas uma das partes ainda guardar
+    uma cópia trancada na gaveta. Juridicamente sumiu, fisicamente ainda ocupa espaço.<br><br>
+    Rodamos <code>lsof | grep deleted</code> e lá estava: <code>/var/log/app.log (deleted)</code>, 10,5G
+    ainda presos por um processo. O Júnior quis rodar <code>rm</code> de novo — expliquei que não adianta,
+    o nome já sumiu, não tem mais o que apagar. O jeito certo era reiniciar o processo que segurava o
+    arquivo, com aprovação, pra ele soltar o vínculo de verdade.<br><br>
+    Mostrei a ferramenta certa pra situações assim: <code>logrotate</code>, que rotaciona logs sem quebrar
+    esse vínculo. Simulamos primeiro com <code>-d</code> — um colega, noutra ocasião, achou que a simulação
+    já tinha aplicado a rotação de verdade. Expliquei: -d é só "o que SERIA feito". Pra rotacionar de fato,
+    precisa rodar sem -d. Log cheio se resolve com rotação e paciência, nunca apagando no escuro.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>lsof | grep deleted</code></td><td>Revela arquivos apagados que ainda estão presos, ocupando espaço, por um processo aberto.</td></tr>
+    <tr><td><code>logrotate -d /etc/logrotate.conf</code></td><td>Simula a rotação sem aplicar, mostrando o que seria feito.</td></tr>
+    <tr><td><code>logrotate -f /etc/logrotate.conf</code></td><td>Força a rotação de verdade, respeitando a política configurada.</td></tr>
+  </tbody></table>
+  <pre>$ lsof | grep deleted
+app  1234  root  7w  REG  253,1  10.5G  123456  /var/log/app.log (deleted)
+
+$ sudo logrotate -d /etc/logrotate.conf
+rotate log /var/log/app.log, log->rotateCount is 5
+rotate /var/log/app.log.1 -> /var/log/app.log.2
+rotate /var/log/app.log -> /var/log/app.log.1
+create /var/log/app.log
+
+$ df -h
+/dev/sdb1  100G  62G  38G  62%  /var</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um arquivo de teste e mantenha ele aberto num processo.</div></div>
+      <div class="lab-cmd"># janela 1:
+touch teste.log
+tail -f teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> processo tail rodando, arquivo sendo acompanhado ao vivo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de um arquivo "vivo" de verdade pra reproduzir o cenário real — um processo com o arquivo aberto é exatamente o que faz um rm parecer não liberar espaço.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar isso num arquivo real de produção — sempre use um arquivo de teste isolado pra esse tipo de experimento.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Apague o arquivo enquanto o tail ainda está rodando, e confirme que o espaço ainda está preso.</div></div>
+      <div class="lab-cmd"># janela 2, com tail ainda rodando na janela 1:
+rm teste.log
+lsof | grep deleted</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo listado como (deleted) no lsof, ainda ocupando espaço.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver com os próprios olhos o "(deleted)" no lsof é o que fixa o conceito de inode preso — muito mais concreto que só ouvir a explicação.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar rm de novo no mesmo caminho achando que vai "apagar de vez" — o nome já sumiu, rm de novo não faz nada.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Encerre o processo que prende o arquivo e confirme que o espaço foi liberado.</div></div>
+      <div class="lab-cmd"># janela 1: Ctrl+C no tail
+lsof | grep deleted</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lsof | grep deleted não mostra mais o arquivo, espaço confirmado livre.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a prova de que o espaço volta assim que o processo solta o arquivo — não com um rm mágico, mas com o processo liberando o vínculo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> matar o processo com kill -9 num caso real sem aprovação — em produção, reinicie o serviço com o mesmo cuidado da Semana 2, não mate processos às cegas.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não conseguir identificar qual processo está prendendo um arquivo, este é o ponto onde o chat com o Sênior-IA vai ajudar a interpretar o lsof.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Simule a rotação de log sem aplicar nada ainda.</div></div>
+      <div class="lab-cmd">sudo logrotate -d /etc/logrotate.conf</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> saída detalhada mostrando quais arquivos seriam rotacionados e como.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> -d é a etapa de segurança que confirma o que vai acontecer antes de aplicar de verdade — pular direto pra -f é como pular o pwd antes de um rm.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir a saída do -d com a rotação já aplicada — como o colega da história de hoje, é só simulação, nada mudou no disco ainda.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente partição afetada, causa do espaço preso, ação tomada, espaço liberado antes/depois.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o registro final
+# ex: "/var em 98%. Causa: teste.log preso por processo tail. Ação: processo encerrado, espaço liberado. df -h antes: 98%, depois: 62%."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar os números antes/depois é a prova concreta de que a ação funcionou — sem isso, "resolvi" é só uma afirmação, não uma validação.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "rotacionei os logs" sem os números de espaço antes/depois — sem essa comparação, não dá pra confirmar que o problema real foi resolvido.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que apagar um arquivo de log com <code>rm</code> não libera o espaço em disco
+    imediatamente, se o processo ainda estiver escrevendo nele?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      O arquivo some do nome, mas o
+      <span class="hint" data-tip="Referência interna do sistema de arquivos para o conteúdo real de um arquivo." onclick="openGlossary(0)">inode</span>
+      continua existindo enquanto algum processo mantém o arquivo aberto — o espaço só volta quando esse
+      processo solta o arquivo (fecha ou é reiniciado). É por isso que o
+      <span class="hint" data-tip="Ferramenta que roda a rotação automática e segura de arquivos de log." onclick="openGlossary(1)">logrotate</span>
+      existe: ele rotaciona sem quebrar esse vínculo.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>/var/log está em 98% de uso. Qual é a ação correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'rm direto num log que um processo ainda está escrevendo não libera o espaço de verdade enquanto o processo mantém o arquivo aberto — e ainda quebra o rastro histórico daquele log.')"><b>A</b> Rodar rm nos arquivos .log maiores, já que o objetivo é liberar espaço rápido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Usar logrotate (verificando a configuração com -d e aplicando com -f se necessário) rotaciona os logs com segurança, respeitando a política de retenção e sem quebrar o vínculo com processos que ainda escrevem neles.')"><b>B</b> Verificar e aplicar a rotação com logrotate, respeitando a política de retenção configurada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Desligar o serviço que gera log não resolve o disco já cheio, e ainda tira do ar algo que provavelmente está funcionando normalmente.')"><b>C</b> Desligar o serviço que está gerando os logs até o disco esvaziar sozinho</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aumentar o disco sem entender por que ele encheu tão rápido só adia o mesmo problema pra uma data futura, sem resolver a causa.')"><b>D</b> Aumentar o tamanho do disco imediatamente, sem investigar por que encheu</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O rsyslog é como a central dos correios do prédio: recebe cartas de todos os serviços e distribui para as caixas de correio certas (/var/log/auth.log, /var/log/syslog).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 lsof mostra um arquivo "(deleted)" ocupando 10,5G — o que isso significa?</h2>
+  <p>O comando <code>lsof | grep deleted</code> mostra <code>/var/log/app.log (deleted)</code> com 10,5G ainda
+  associados a ele, mesmo depois de alguém já ter rodado <code>rm</code> nesse arquivo antes.</p>
+  <div class='box question'>Como recuperar esse espaço de forma correta?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Como o processo (PID 1234) ainda tem o arquivo aberto mesmo depois do rm, o espaço só é liberado quando esse processo solta o arquivo — reiniciando o serviço com segurança (ou truncando o descritor aberto), não apagando de novo, já que apagar de novo não muda nada.')"><b>A</b> Reiniciar o serviço que mantém o arquivo aberto (PID 1234), com aprovação — só assim o processo solta o inode e o espaço volta de verdade</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O arquivo já foi apagado uma vez (é isso que o (deleted) significa) — rodar rm de novo no mesmo caminho não faz nada, porque o nome já não existe mais no sistema de arquivos.')"><b>B</b> Rodar rm de novo no mesmo caminho, com mais força (rm -f)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Reformatar o disco é uma ação desproporcional e destrutiva pra resolver um único arquivo preso por um processo — existe uma solução muito mais simples e segura.')"><b>C</b> Reformatar a partição /var, já que o espaço não volta de outro jeito</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O logrotate é como o zelador que descarta jornais velhos no fim do mês: compacta logs antigos em .gz e apaga os que têm mais de 90 dias para não lotar o disco.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "logrotate -d já rotacionou os logs, certo?"</h2>
+  <p>Um colega roda <code>logrotate -d /etc/logrotate.conf</code>, vê a simulação completa no terminal, e
+  acha que a rotação já foi aplicada de verdade.</p>
+  <div class='box question'>Essa conclusão está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A flag -d é justamente de simulação (debug) — ela mostra o que SERIA feito, sem alterar nada de verdade. Pra aplicar a rotação de fato, é preciso rodar sem -d (ou com -f pra forçar), e só então os arquivos são realmente rotacionados.')"><b>A</b> Não — -d é modo de simulação (debug), mostra o que seria feito mas não altera nada; pra aplicar de verdade, roda sem -d ou com -f</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'-d não aplica nada de verdade — se aplicasse automaticamente, não faria sentido ter uma flag -f separada só pra forçar a execução real.')"><b>B</b> Sim — -d sempre aplica a rotação de verdade além de mostrar a simulação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A distinção entre -d e a execução real não depende do tamanho do arquivo de configuração — -d é sempre simulação, não importa quantas regras existam.')"><b>C</b> Depende do tamanho do arquivo de configuração — se for pequeno, -d já aplica de verdade</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A diretiva 'rotate 4' no logrotate é como guardar apenas os últimos 4 holerites: quando o quinto chega, o mais antigo é triturado automaticamente.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme com df -h qual partição está cheia e o quanto.</li>
+    <li>Identifique os maiores arquivos com du, sem apagar nada ainda.</li>
+    <li>Verifique se algum arquivo "sumido" ainda está preso com lsof | grep deleted.</li>
+    <li>Simule a rotação com logrotate -d antes de aplicar de verdade.</li>
+    <li>Aplique a rotação (ou reinicie o processo que prende o inode) e valide o espaço liberado com df -h.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Configure logrotate com política de retenção adequada em TODO serviço que gera log,
+  desde o dia da instalação — não deixe pra pensar nisso só quando o disco já está em 98%. Documente no
+  runbook que rm direto em log nunca é o primeiro passo, é sempre logrotate ou reinício supervisionado do
+  processo que prende o arquivo.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Nenhum log ativo foi apagado diretamente com rm sem entender o vínculo com processos.</li>
+    <li>logrotate foi simulado (-d) antes de ser aplicado de verdade.</li>
+    <li>Espaço em disco foi validado com df -h antes e depois da ação.</li>
+    <li>A política de retenção de logs foi respeitada, não ignorada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Rotação de log seguindo a política configurada não tem "rollback" necessário — os
+  arquivos antigos continuam disponíveis (.1, .2.gz) conforme a retenção definida. O risco real está em pular
+  a simulação e rodar logrotate -f sem antes conferir o que ele vai fazer.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "nunca apague o que um processo ainda usa" conecta
+  com a lição de rm com segurança da Semana 2 — mesma disciplina, aplicada agora a logs vivos. O Anki vai
+  conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>verificar e
+  aplicar a rotação com logrotate, respeitando a política de retenção configurada</b>. O ponto central do caso
+  é este: log cheio se trata com rotação, não com apagar no escuro.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de resolver disco cheio de logs com segurança, sem quebrar processos
+  que ainda escrevem neles. Amanhã você desce um nível abaixo da aplicação: dmesg, pra ouvir o que o kernel
+  tem a dizer quando o app fica em silêncio.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 3, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["inode","Estrutura interna do sistema de arquivos que guarda os metadados e o conteúdo real de um arquivo.",
+   "É o número do processo no cartório — o nome do arquivo pode sumir, mas o registro em si continua existindo até ser oficialmente encerrado."],
+  ["logrotate","Ferramenta que roda a rotação automática e segura de arquivos de log, geralmente via cron.",
+   "É o funcionário do arquivo morto que troca as pastas antigas por novas, sem nunca destruir nada sem critério."],
+  ["rsyslog","Serviço que centraliza e escreve continuamente os eventos de log no formato clássico do syslog.",
+   "É o escrivão que registra tudo que acontece, linha por linha, num caderno que nunca para de ser escrito."],
+  ["Arquivo (deleted)","Um arquivo que foi removido do nome, mas ainda está aberto por algum processo, ainda ocupando espaço.",
+   "É um contrato rasgado que uma das partes ainda guarda uma cópia trancada na gaveta — juridicamente sumiu, fisicamente ainda existe."],
+  ["lsof","Comando que lista arquivos abertos no sistema, incluindo os que já foram apagados mas seguem em uso.",
+   "É perguntar 'quem está com a chave dessa sala', mesmo que a placa da porta já tenha sido removida."],
+  ["Rotação de log (.1, .2.gz)","Processo de renomear e compactar logs antigos, mantendo um histórico organizado por retenção.",
+   "É trocar o caderno de anotações do mês por um novo, guardando o antigo arquivado e etiquetado."],
+  ["Política de retenção","Regra que define por quanto tempo ou quantas versões de log devem ser mantidas.",
+   "É a regra do arquivo morto: guardar os últimos 5 anos, descartar o que passou disso."],
+  ["/var/log","Diretório padrão do Linux onde a maioria dos logs de sistema e aplicação são armazenados.",
+   "É o arquivo central do prédio, onde cada departamento deposita seus registros."],
+  ["cron (do logrotate)","Agendador que dispara o logrotate automaticamente em intervalos regulares, geralmente diário.",
+   "É o despertador que lembra o funcionário do arquivo de trocar as pastas todo santo dia, sem precisar ser cobrado."],
+  ["Truncar vs. apagar","Truncar esvazia o conteúdo de um arquivo mantendo ele aberto; apagar remove o nome do arquivo do sistema.",
+   "É esvaziar a caixa de correio mantendo ela no lugar, versus arrancar a caixa de correio inteira da parede."],
+  ["df -h","Comando que mostra o uso de espaço por partição, em formato legível para humanos.",
+   "É o medidor de combustível de cada tanque separado do carro, não do carro inteiro."],
+  ["Espaço fantasma","Espaço em disco que parece livre pelo nome do arquivo ter sumido, mas continua ocupado de verdade.",
+   "É a mesa que parece vazia porque a etiqueta sumiu, mas o material ainda está empilhado embaixo dela."]
+];
+
+const sceneStripIdx = [1,3,4,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

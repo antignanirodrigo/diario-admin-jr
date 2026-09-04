@@ -1,0 +1,479 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 24 · Dia 4 — Missão Final: Validação Ponta a Ponta | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_CORRIGIR_EM_ORDEM_VALIDAR_PASSO.html'>← Semana 24, Dia 3</a><a href='#'>Semana 24 — Missão Final</a><a href='DIA_05_RELATORIO_FINAL_INCIDENTE.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Continua o Chamado #2400 (Dia 3):</b> As três correções foram aplicadas e validadas
+individualmente. O acesso externo direto já funciona. Hoje é hora do teste que realmente importa: como um
+parceiro real, usando a VPN de verdade, do computador dele — não do seu.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: descobrir que "cada camada passou no teste" não é o mesmo
+que "o caminho inteiro funciona".</b> Você ganha a validação mais honesta que existe: testar exatamente como o
+usuário final vai usar, não como é mais conveniente pra você testar.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 24 · Dia 4 — Missão Final Júnior | Fecha a Fase 2</div>
+  <h1>Validação Ponta a Ponta</h1>
+  <p>cada camada passar no próprio teste não garante que o caminho inteiro, de ponta a ponta, funciona</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S24D04_VALIDACAO_PONTA_A_PONTA.png' alt='Prancha em seis quadros sobre validar um incidente resolvido testando exatamente como o usuário final real utiliza o sistema, revelando uma última lacuna na configuração de VPN'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O teste que realmente importa</h2>
+  <div class='box'>Você testa nc -zv 203.0.113.10 443 do seu notebook, fora da rede — funciona. Mas pede pra
+  um parceiro real testar pela VPN dele, do jeito que ele usa todo dia. O parceiro reporta: "a VPN conecta
+  normalmente, mas ainda não alcanço o servidor novo." O
+  <span class="hint" data-tip="Campo de configuração WireGuard que define quais sub-redes são roteadas (do lado que envia) ou aceitas (do lado que recebe) através de um peer específico." onclick="openGlossary(0)">AllowedIPs</span>
+  tem duas pontas — e você só corrigiu uma delas.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> lembra da Semana 18, Dia 4 — "AllowedIPs é rota e filtro"? No Dia 3 desta semana,
+    você editou o AllowedIPs do lado do SERVIDOR. Qual das duas funções (rota ou filtro) isso corrigiu, e
+    qual ainda falta?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      No lado do servidor, o AllowedIPs pro peer do parceiro funciona como FILTRO: define de quais IPs de
+      origem o servidor aceita tráfego vindo daquele peer. Corrigir isso no Dia 3 já garantia que o servidor
+      aceitaria tráfego da nova subnet, se ele chegasse. Mas falta o lado do PARCEIRO: no computador dele, o
+      AllowedIPs pro peer do servidor funciona como ROTA — decide quais destinos são enviados PELO túnel. Se
+      o AllowedIPs do lado do parceiro ainda só lista a subnet antiga, o tráfego dele pro servidor novo nunca
+      nem entra no túnel — sai pela rota normal da internet dele, sem nunca alcançar o destino certo.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual ação resolve definitivamente o acesso do parceiro real via VPN à nova
+  subnet do servidor?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Atualizar o AllowedIPs no arquivo de configuração WireGuard DO LADO DO PARCEIRO, incluindo a nova subnet (10.20.30.0/24) na lista de rotas que passam pelo túnel. Sem isso, o tráfego do parceiro pro servidor novo nunca entra no túnel, mesmo com o lado do servidor já corretamente configurado desde o Dia 3.')"><b>A</b> Atualizar o AllowedIPs no lado do parceiro, incluindo a nova subnet como rota através do túnel</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O lado do servidor já foi corrigido no Dia 3 — refazer essa mesma correção não resolve nada, já que o problema agora está especificamente no lado do parceiro, que ainda não foi ajustado.')"><b>B</b> Editar de novo o AllowedIPs do lado do servidor, já que a correção do Dia 3 pode não ter sido suficiente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O NAT já foi validado com sucesso no Dia 3 através de teste direto de fora da VPN — o sintoma específico deste dia (VPN conecta mas não alcança o servidor) não é causado por NAT, e sim pela rota ausente do lado do parceiro.')"><b>C</b> Revisar o NAT de novo, já que ele pode estar interferindo especificamente no tráfego vindo da VPN</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Trocar o parceiro de VLAN não faz sentido — o parceiro está numa rede completamente externa, se conectando via VPN; VLANs são um conceito de segmentação da rede interna da empresa, não têm aplicação nesse contexto específico.')"><b>D</b> Pedir pro parceiro trocar de VLAN, já que ele pode estar na VLAN errada</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 VALIDACAO PONTA A PONTA é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Teste</th><th>Resultado</th><th>Conclusão</th></tr></thead><tbody>
+    <tr><td>nc -zv externo direto</td><td>Sucesso</td><td>Trunk + NAT (Dia 3) confirmados corretos</td></tr>
+    <tr><td>VPN do parceiro real</td><td>Conecta, mas não alcança</td><td>Falta rota do lado do cliente</td></tr>
+  </tbody></table>
+  <pre>--- do lado do servidor (já corrigido no Dia 3) ---
+[Peer]
+PublicKey = parceiro_pubkey
+AllowedIPs = 10.20.10.0/24, 10.20.30.0/24        ← filtro: aceita as duas subnets
+
+--- do lado do parceiro (AINDA NÃO corrigido) ---
+[Peer]
+PublicKey = servidor_pubkey
+Endpoint = 203.0.113.10:51820
+AllowedIPs = 10.20.10.0/24                        ← rota: só a subnet ANTIGA
+
+$ ping 10.20.30.50   # do computador do parceiro, pela VPN
+Request timeout       ← tráfego nem entra no túnel, rota não existe pra esse destino
+
+--- correção: AllowedIPs do lado do parceiro ---
+[Peer]
+PublicKey = servidor_pubkey
+Endpoint = 203.0.113.10:51820
+AllowedIPs = 10.20.10.0/24, 10.20.30.0/24        ← corrigido, agora inclui a rota nova
+
+$ ping 10.20.30.50   # testando de novo
+64 bytes from 10.20.30.50: icmp_seq=1 ttl=63 time=12.4 ms   ✅ funcionando</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o júnior, no Dia 3, tendo testado só do PRÓPRIO notebook, e
+  considerado o incidente resolvido sem envolver nenhum parceiro real no teste</h2>
+  <p>Testar do próprio notebook parecia suficiente, já que o resultado foi positivo.</p>
+  <div class='box question'>Por que testar só do seu próprio notebook, mesmo com resultado positivo, não é
+  suficiente pra considerar um incidente de acesso de terceiros como totalmente resolvido?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Seu notebook, testando direto (nc -zv), usa um caminho diferente do que o parceiro real usa (via VPN). Os dois caminhos passam por configurações diferentes — o seu teste valida trunk+NAT, mas não valida a rota específica de VPN que só existe do lado do cliente do parceiro. Só testando exatamente como o usuário final usa é que você descobre gaps que existem especificamente naquele caminho.')"><b>A</b> Seu teste direto usa um caminho diferente do caminho VPN real do parceiro — validar um caminho não garante que o outro caminho, com configuração própria, também funciona</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O notebook e o computador do parceiro não precisam ser exatamente o mesmo modelo — a diferença real está no CAMINHO de rede usado (direto vs. via VPN), não nas características físicas do hardware de cada máquina.')"><b>B</b> Não há diferença real — qualquer notebook produz o mesmo resultado, independente do modelo ou fabricante</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não existe uma regra de sempre precisar de pelo menos dois parceiros testando simultaneamente — a questão não é quantidade de testadores, é testar pelo caminho de rede real (VPN) que o usuário final efetivamente usa.')"><b>C</b> Só é insuficiente se for testado por menos de dois parceiros diferentes ao mesmo tempo</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 VALIDACAO PONTA A PONTA é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se o servidor já aceita a subnet nova (AllowedIPs corrigido no Dia 3), por que o cliente precisa
+  de configuração própria também?"</h2>
+  <p>Um colega acha redundante o cliente também precisar de AllowedIPs correto, já que o servidor "já
+  aceita".</p>
+  <div class='box question'>Por que o servidor aceitar tráfego de uma subnet (filtro) não é suficiente pra
+  garantir que o cliente vai efetivamente enviar tráfego pra lá (rota)?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Como visto na Semana 18, AllowedIPs tem duas funções completamente diferentes dependendo de qual lado você olha: no servidor, é filtro (aceita ou rejeita); no cliente, é rota (decide o que entra no túnel). O servidor aceitar não faz o cliente automaticamente decidir enviar aquele tráfego pelo túnel — as duas configurações são independentes e ambas precisam estar corretas.')"><b>A</b> AllowedIPs é filtro no servidor e rota no cliente — são duas funções independentes; o servidor aceitar não faz o cliente automaticamente rotear o tráfego certo pelo túnel</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe sincronização automática entre as duas pontas de uma configuração WireGuard — cada lado mantém sua própria configuração local, sem propagar mudanças automaticamente pro outro peer.')"><b>B</b> Está errado pensar que é redundante — mas na prática o WireGuard sincroniza automaticamente as duas pontas, então não deveria ser necessário editar as duas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe uma versão específica do WireGuard que sincroniza automaticamente as duas configurações — em qualquer versão amplamente usada, cada peer mantém sua configuração própria e independente.')"><b>C</b> Só é necessário nas versões mais recentes do WireGuard; versões antigas sincronizavam automaticamente</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 VALIDACAO PONTA A PONTA é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Depois de corrigir e validar cada camada individualmente, sempre teste ponta a ponta.</li>
+    <li>Teste exatamente pelo caminho que o usuário final real usa, não pelo caminho mais conveniente pra você.</li>
+    <li>Em configurações com duas pontas (como VPN), lembre que cada lado tem sua própria configuração independente.</li>
+    <li>Envolva um usuário real no teste final sempre que possível, não só simulações do seu próprio ambiente.</li>
+    <li>Só declare o incidente resolvido depois da validação ponta a ponta bem-sucedida, não antes.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Simule o parceiro com uma segunda VM cliente WireGuard, ainda com o AllowedIPs antigo do lado dela.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VPN conecta (handshake ok), mas ping pra nova subnet falha.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Atualize o AllowedIPs do lado dessa VM cliente, incluindo a nova subnet.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ping bem-sucedido pela VPN até o servidor novo.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você esquecer qual lado precisa de qual tipo de AllowedIPs, este é o ponto onde o chat com o Sênior-IA vai te lembrar da distinção rota/filtro da Semana 18.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Documente essa última correção, deixando claro que ela era do lado do cliente, distinta da correção do Dia 3.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo diferenciando as correções de servidor e de cliente.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>AllowedIPs do lado do parceiro (rota) corrigido, complementando o do servidor (filtro) já corrigido no Dia 3.</li>
+    <li>Teste ponta a ponta confirma o caminho real do usuário final, não só um caminho conveniente de testar.</li>
+    <li>Configurações de duas pontas (como VPN) exigem correção e validação dos dois lados, não só um.</li>
+    <li>O incidente só pode ser considerado resolvido depois da validação ponta a ponta, não antes.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>A correção do AllowedIPs do parceiro depende de coordenação com alguém fora da
+  empresa — diferente das correções do Dia 3, que estavam totalmente sob seu controle. Isso reforça a
+  importância de comunicação clara: o parceiro precisa saber exatamente o que mudar na configuração dele, com
+  instruções específicas, não um pedido vago de "atualize sua VPN".</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> este dia conecta diretamente com a Semana 18,
+  Dia 4 — "AllowedIPs é rota e filtro" foi ensinado ali como um conceito isolado, e hoje você viu o custo real
+  de esquecer metade dessa dualidade num incidente de verdade. O Anki vai reforçar essa conexão específica.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a correção final foi atualizar o
+  AllowedIPs do lado do parceiro, complementando a correção do servidor já feita no Dia 3. O ponto central do
+  caso é este: cada camada passar no próprio teste não garante que o caminho inteiro, de ponta a ponta,
+  funciona.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de validar um incidente resolvido testando o caminho real do
+  usuário final, não um atalho conveniente. Amanhã fecha a missão — e a Fase 2 inteira — com o relatório final
+  do incidente.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 24, Dia 4 de ~250 — Missão Final Júnior (Dia 4 de
+5). Mesmo padrão: glossário com analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot
+reservado pro Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["AllowedIPs (revisão, Semana 18)","Campo de configuração WireGuard que define quais sub-redes são roteadas (do lado que envia) ou aceitas (do lado que recebe) através de um peer específico.",
+   "É uma placa de rua que funciona nos dois sentidos: pra quem sai, indica o caminho; pra quem chega, indica quem tem permissão de entrar por ali."],
+  ["AllowedIPs como filtro (lado servidor)","No lado que recebe, define se um pacote alegando vir de um peer específico é aceito ou descartado.",
+   "É o segurança da portaria conferindo se a pessoa está vindo do endereço esperado, antes de deixar entrar."],
+  ["AllowedIPs como rota (lado cliente)","No lado que inicia a conexão, define quais destinos são efetivamente enviados através do túnel.",
+   "É decidir, antes de sair de casa, por qual caminho você vai passar pra chegar em cada destino específico."],
+  ["Teste ponta a ponta (end-to-end)","Validação que percorre o caminho completo, exatamente como o usuário final real utiliza, em vez de testar só uma parte isolada do sistema.",
+   "É provar a refeição inteira do jeito que o cliente vai comer, não só cada ingrediente separadamente na cozinha."],
+  ["Caminho de rede real do usuário","O trajeto específico que o tráfego de um usuário final percorre na prática, que pode ser diferente do caminho usado por um teste de conveniência do administrador.",
+   "É a rota que o cliente realmente percorre até a loja, que pode ser diferente da rota de entrega usada pelos fornecedores."],
+  ["Configuração de duas pontas (peer-to-peer)","Situação onde uma conexão depende de configuração independente em AMBOS os lados, como acontece em túneis VPN.",
+   "É um acordo que precisa ser assinado pelos dois lados — só uma das partes assinar não torna o acordo válido."],
+  ["Envolver o usuário final no teste","Prática de incluir a pessoa que realmente vai usar o sistema na validação final, em vez de confiar só em testes simulados pelo próprio administrador.",
+   "É pedir pro cliente real experimentar o produto antes do lançamento, em vez de confiar só nos testes internos da fábrica."],
+  ["Declaração de resolução (timing correto)","Momento apropriado de comunicar um incidente como resolvido — só depois da validação ponta a ponta, nunca antes.",
+   "É só anunciar a ponte reaberta depois de um carro real atravessar ela inteira, não só depois de inspecionar cada pilar separadamente."],
+  ["Coordenação externa (correção fora do seu controle)","Situação onde parte da correção de um incidente depende da ação de alguém fora da própria organização, exigindo comunicação clara e específica.",
+   "É pedir pra um vizinho consertar a parte da cerca que é dele — não basta você consertar só o seu lado."],
+  ["Conexão Semana 18 → Semana 24 (síntese)","Reconhecimento de que um conceito ensinado isoladamente numa semana anterior (AllowedIPs rota/filtro) tem consequência real e concreta num incidente integrador posterior.",
+   "É perceber que uma regra aprendida isoladamente na aula de trânsito realmente evita um acidente real na estrada, meses depois."]
+];
+
+const sceneStripIdx = [0,1,2,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

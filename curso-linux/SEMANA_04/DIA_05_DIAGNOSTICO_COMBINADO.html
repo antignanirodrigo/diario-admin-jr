@@ -1,0 +1,524 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 4 · Dia 5 — Diagnóstico Combinado | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_GESTAO_USUARIOS.html'>← Dia 4</a><a href='#'>Semana 4</a><a href='../SEMANA_05/DIA_01_VMSTAT.html'>Semana 5, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com as últimas duas semanas inteiras:</b> top/htop, journalctl, syslog,
+dmesg, last/lastlog/auditd, sar, correlação entre servidores, pacotes e usuários — hoje você usa TUDO isso
+junto, num único chamado com dois sintomas ao mesmo tempo.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: investigação combinada usando o toolkit completo de duas
+semanas.</b> Você ganha a confiança de que sabe qual ferramenta usar pra cada tipo de pergunta, e como
+cruzá-las quando os sintomas parecem não ter relação nenhuma.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 4 · Dia 5 | Nível Júnior</div>
+  <h1>Diagnóstico Combinado: Lento e Estranho ao Mesmo Tempo</h1>
+  <p>duas coisas estranhas ao mesmo tempo raramente são coincidência — cruze os horários</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S04D05_DIAGNOSTICO_COMBINADO.png' alt='Prancha em seis quadros sobre diagnóstico combinado'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket #4587, prioridade alta, com DOIS sintomas no mesmo chamado: "servidor lento" e
+  "login desconhecido detectado". Sua primeira dúvida é qual investigar primeiro — mas duas coisas estranhas
+  ao mesmo tempo raramente são coincidência.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje chegou um ticket com DOIS sintomas ao mesmo tempo: "servidor lento" e "login desconhecido
+    detectado". O Júnior me perguntou: "qual eu investigo primeiro?". Respondi: "os dois. Ao mesmo tempo.
+    Duas coisas estranhas juntas raramente são coincidência."<br><br>
+    Fizemos o que aprendemos nas últimas duas semanas, tudo junto pela primeira vez: <code>top</code> mostrou
+    um processo chamado <code>miner</code> consumindo 98,2% de CPU, nome que não batia com nada do padrão do
+    sistema. <code>last -a</code> mostrou um login de IP desconhecido às 08:12 — minutos antes da lentidão
+    começar. Cruzando os horários: login estranho → processo suspeito iniciado → CPU saturada, três eventos
+    alinhados numa sequência só.<br><br>
+    O Júnior quis matar o processo e fechar o ticket na hora. Segurei: quando a causa envolve acesso não
+    autorizado, matar o processo resolve só o SINTOMA — a causa real (como esse acesso aconteceu) continua
+    sem resposta. Isso não é mais um chamado técnico comum, é um caso que precisa escalar pra segurança:
+    trocar credenciais, auditar outros acessos daquele IP, entender o que mais foi feito. Foi o dia em que
+    todo o toolkit de duas semanas — carga, log, histórico, acesso — trabalhou junto pela primeira vez.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>top</code></td><td>Mostra um processo (miner) consumindo 98,2% de CPU, nome fora do padrão dos processos conhecidos.</td></tr>
+    <tr><td><code>last -a</code></td><td>Mostra um login de IP desconhecido (203.0.113.45) minutos antes da lentidão começar.</td></tr>
+  </tbody></table>
+  <pre>$ top
+PID  USER   %CPU  %MEM  COMMAND
+3124 root   98,2  2,1   miner
+
+$ last -a
+usuario  IP             início
+root     203.0.113.45   08:12  (login de IP desconhecido)
+admin    10.0.0.15      07:45</pre>
+  <p>Cruzando os horários: login desconhecido às 08:12, processo <code>miner</code> iniciado (PID 3124) logo
+  em seguida, CPU em 98% minutos depois — três eventos alinhados numa sequência só.</p>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Simule um incidente combinado: gere carga de CPU e confira acessos ao mesmo tempo.</div></div>
+      <div class="lab-cmd">yes > /dev/null &
+last -a</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> dois conjuntos de dados coletados na mesma janela de investigação.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> praticar coletar duas fontes ao mesmo tempo, mesmo sintéticas, é o treino necessário pra fazer isso rápido quando um chamado real com dois sintomas chegar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> investigar as duas fontes em momentos separados, sem anotar horários — sem essa sincronização, fica impossível cruzar depois.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Monte uma linha do tempo cruzando os dois conjuntos de dados.</div></div>
+      <div class="lab-cmd"># não é comando único — combine os horários do top e do last -a
+# ex: "08:00 login registrado (last) → 08:01 carga de CPU iniciada (top)"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> prática de montar timeline cruzada, mesmo com dados sintéticos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a habilidade central de toda a Semana 4 — pegar fontes diferentes e montar uma narrativa única e coerente, mesmo sem incidente real acontecendo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> forçar uma "conexão" entre dois eventos que não têm relação real só porque estão próximos no tempo — nem toda coincidência é causa raiz, use julgamento.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não tiver certeza de qual ferramenta usar pra um sintoma específico, este é o ponto onde o chat com o Sênior-IA vai ajudar a decidir.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Revise todo o toolkit das Semanas 3 e 4, de memória, sem consultar nada.</div></div>
+      <div class="lab-cmd"># nenhum comando — exercício mental
+# carga → ? | log → ? | histórico → ? | acesso → ?</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista pessoal de referência rápida (carga → top/htop, log → journalctl, histórico → sar, acesso → last/auditd).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> recuperar essa lista de memória, sem olhar, é o teste real de que você absorveu o toolkit — não só reconhece os comandos quando vê, mas lembra sozinho na hora do chamado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir qual ferramenta responde "agora" vs "histórico" — é exatamente essa distinção (Dia 1 desta semana) que mais gera confusão sob pressão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Escreva um relatório de incidente completo, incluindo critério de escalonamento.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é o relatório
+# ex: "Sintomas: lentidão + login desconhecido. Causa: acesso não autorizado + processo miner. Ação: processo encerrado. Escalado: sim, segurança (credenciais + auditoria)."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório com causa, evidência cruzada, ação tomada e critério de escalonamento.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> incluir explicitamente o "por que escalei" (ou "por que não escalei") é o que transforma um relatório técnico num documento que outra pessoa consegue auditar depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tratar "encerrei o processo" como o fim da investigação — quando envolve acesso não autorizado, o encerramento do processo é só o primeiro passo, não o último.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente o fechamento da Semana 4 com autoavaliação honesta.</div></div>
+      <div class="lab-cmd"># não é comando de shell — é a autoavaliação final
+# ex: "Domino: top/htop, journalctl, sar. Preciso praticar mais: cruzar auditd com outras fontes rapidamente."</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> autoavaliação honesta, reproduzindo o espírito do painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reconhecer o que ainda não está sólido é tão importante quanto celebrar o que já domina — é isso que direciona o que revisar antes da próxima semana.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> escrever uma autoavaliação genérica ("aprendi bastante") sem nomear ferramentas específicas — sem especificidade, a autoavaliação não ajuda a decidir o que revisar.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais quatro categorias de ferramentas formam o seu toolkit completo até agora, e
+    o que cada uma responde?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Mostram o que está consumindo recursos agora." onclick="openGlossary(0)">top/htop</span> = agora ·
+      <span class="hint" data-tip="Eventos e mensagens registradas do sistema." onclick="openGlossary(1)">journalctl</span> = logs ·
+      <span class="hint" data-tip="Histórico de métricas coletadas ao longo do tempo." onclick="openGlossary(2)">sar</span> = histórico ·
+      last/auditd = acesso. Combinar as quatro categorias é o que resolve um chamado com sintomas
+      aparentemente desconectados.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>O ticket reporta "servidor lento" E "login desconhecido" ao mesmo tempo. Qual é
+  a abordagem correta pra investigar os dois sintomas?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Investigar cada sintoma isoladamente, sem cruzar horários, arrisca perder justamente a conexão entre eles — que pode ser a explicação real de ambos.')"><b>A</b> Escolher só um dos dois sintomas pra investigar primeiro, e tratar o outro como um chamado separado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Investigar os dois em paralelo, cruzando os horários entre eles (top/htop pra carga, last -a pra acesso), é a abordagem correta — sintomas simultâneos frequentemente compartilham a mesma causa raiz, e só cruzando os dados você descobre isso.')"><b>B</b> Investigar os dois sintomas em paralelo, cruzando os horários de cada evidência, já que podem compartilhar a mesma causa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Reiniciar o servidor sem investigar nenhum dos dois sintomas apaga evidências valiosas (processos em execução, contexto do login) sem entender nada sobre o que está acontecendo.')"><b>C</b> Reiniciar o servidor imediatamente, já que isso costuma resolver lentidão de qualquer causa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Escalar sem nenhuma investigação prévia não agrega a evidência que torna o chamado acionável — mesmo escalando depois, reunir dados primeiro é sempre o passo certo.')"><b>D</b> Escalar direto pra outra equipe, já que dois sintomas ao mesmo tempo é grave demais pra investigar sozinho</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O checklist de triagem do Sênior é o protocolo de trauma da emergência: checa primeiro as vias aéreas (CPU), circulação (RAM), hemorragia (Disco) e comunicação (Rede).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 login desconhecido → processo miner → CPU 98% — qual é a conclusão correta?</h2>
+  <p>Os três eventos, cruzados por horário, formam uma sequência clara: acesso não reconhecido, seguido de
+  um processo suspeito consumindo praticamente toda a CPU do servidor.</p>
+  <div class='box question'>Qual é a leitura correta dessa sequência de evidências?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'A sequência cruzada (login desconhecido → processo miner iniciado → CPU saturada) aponta fortemente pra um acesso não autorizado que instalou e rodou um processo de mineração — os dois sintomas do ticket (lentidão e login estranho) têm a mesma causa raiz, não são coincidência.')"><b>A</b> Os dois sintomas compartilham a mesma causa raiz: um acesso não autorizado que iniciou um processo de mineração, explicando tanto o login estranho quanto a lentidão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A correlação exata de horário entre login estranho e processo suspeito é forte demais pra ser tratada como coincidência — nomes de processo incomuns (miner) reforçam ainda mais essa leitura.')"><b>B</b> É coincidência — processos com nomes estranhos são comuns, e login de IP diferente não significa nada de errado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Matar o processo sem preservar evidência (comando usado, horário exato, origem) perde informação valiosa pra uma investigação de segurança mais profunda que provavelmente vai ser necessária depois.')"><b>C</b> A causa é só o processo miner, sem relação com o login — deve ser encerrado (kill) sem mais investigação</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Interpretar métricas de forma combinada (CPU alta + Disco saturado) é como febre alta com tosse: apontam para uma causa raiz conjunta (ex: swapping severo por falta de RAM).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Já sei a causa, posso matar o processo e fechar o ticket, certo?"</h2>
+  <p>Com a causa raiz identificada (acesso suspeito + processo miner), um colega sugere encerrar o processo e
+  fechar o chamado imediatamente.</p>
+  <div class='box question'>Essa é a ação completa e correta pra esse cenário?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não é suficiente — quando a causa envolve acesso não autorizado, o chamado precisa escalar pra investigação de segurança (mudar credenciais, verificar outros acessos daquele IP, auditar o que mais foi feito), não só encerrar o processo e considerar resolvido.')"><b>A</b> Não é suficiente — além de encerrar o processo, um acesso não autorizado exige escalar pra investigação de segurança, mudança de credenciais e auditoria de outras ações</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Encerrar o processo resolve o sintoma imediato (CPU alta), mas não resolve a causa (como o acesso não autorizado aconteceu) — o mesmo problema pode se repetir se isso não for investigado.')"><b>B</b> Sim — matar o processo já resolve o sintoma principal, o resto é burocracia desnecessária</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Esperar o processo miner voltar sozinho não é uma estratégia de investigação — o correto é agir com a evidência que você já tem, escalando adequadamente.')"><b>C</b> Não, é melhor não fazer nada e esperar o processo voltar de novo pra confirmar o padrão antes de agir</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Documentar o diagnóstico no chamado com evidências de antes e depois é o laudo médico assinado: encerra o incidente com respaldo técnico irrefutável.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Liste todos os sintomas reportados no chamado, sem descartar nenhum de antemão.</li>
+    <li>Investigue cada sintoma com a ferramenta certa (carga, log, histórico, acesso).</li>
+    <li>Cruze os horários de todas as evidências coletadas numa linha do tempo única.</li>
+    <li>Identifique se há uma causa raiz comum conectando os sintomas.</li>
+    <li>Documente com clareza e escale pra segurança se envolver acesso não autorizado.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Padronize um checklist único de "incidente com múltiplos sintomas" no runbook do time,
+  garantindo que ninguém investigue só o sintoma mais óbvio e feche o chamado cedo demais. Documente critérios
+  claros de quando escalar pra segurança (qualquer acesso não reconhecido, por padrão), pra essa decisão não
+  depender do julgamento individual de quem está de plantão.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Ambos os sintomas foram investigados, não só um deles.</li>
+    <li>Os horários de todas as evidências foram cruzados numa linha do tempo única.</li>
+    <li>A causa raiz comum foi identificada com evidência, não suposição.</li>
+    <li>O caso foi escalado corretamente, já que envolvia acesso não autorizado.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Encerrar um processo suspeito é reversível (pode ser reiniciado se necessário),
+  mas revogar acesso e trocar credenciais tem consequência real — sempre com aprovação e dentro do
+  procedimento de segurança da equipe, nunca decidido sozinho no calor do momento.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "sintomas separados podem ter uma causa só" fecha
+  a Semana 4 conectando tudo: carga (Semana 3, Dia 1), logs (Semana 3 inteira), histórico (hoje, Dia 1) e
+  acesso (Semana 3, Dia 5) — o toolkit completo trabalhando junto pela primeira vez. O Anki vai conectar tudo.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>investigar
+  os dois sintomas em paralelo, cruzando os horários de cada evidência</b>. O ponto central do caso é este:
+  sintomas separados podem ter uma causa só — investigue a linha do tempo antes de tratar como problemas
+  desconectados.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>O toolkit completo de investigação combinada, fechando a Semana 4 e o bloco
+  inteiro de Monitoramento e Logs. Semana 5 começa um novo território: diagnóstico avançado de recursos com
+  vmstat — memória e swap além do que o top consegue mostrar.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 4, Dia 5 de ~250 — fecha a Semana 4. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["top/htop (agora)","Ferramentas que mostram carga e processos consumindo recursos no instante atual.",
+   "É a foto do que está acontecendo neste exato segundo."],
+  ["journalctl/syslog (logs)","Ferramentas que mostram eventos e mensagens já registradas pelo sistema e aplicações.",
+   "É o diário de bordo — o que já aconteceu e ficou escrito."],
+  ["sar (histórico)","Ferramenta que consulta métricas coletadas em intervalos regulares ao longo do tempo.",
+   "É o filme completo, revisável em qualquer trecho passado."],
+  ["last/auditd (acesso)","Ferramentas que mostram quem acessou o sistema, quando, e o que fez depois de entrar.",
+   "É o livro de visitas cruzado com a câmera de segurança do prédio."],
+  ["Sintomas simultâneos","Dois ou mais sinais de problema aparecendo ao mesmo tempo, potencialmente conectados.",
+   "É duas luzes de alerta acendendo juntas no painel do carro — vale investigar se são do mesmo motivo."],
+  ["Causa raiz comum","Um único motivo real explicando múltiplos sintomas que pareciam desconectados.",
+   "É descobrir que a febre e a dor de cabeça vêm da mesma infecção, não são dois problemas separados."],
+  ["Processo suspeito","Um processo em execução que não corresponde ao padrão esperado do sistema, merecendo investigação.",
+   "É um funcionário que ninguém reconhece circulando pela fábrica — não é acusação automática, mas exige checagem."],
+  ["Login não autorizado","Um acesso ao sistema que não corresponde a nenhum usuário ou origem esperada.",
+   "É alguém entrando pela porta dos fundos com uma chave que não deveria ter."],
+  ["Escalonamento de segurança","Encaminhar um incidente que envolve acesso indevido para um processo formal de investigação, além da correção técnica imediata.",
+   "É chamar a supervisão quando a câmera flagra alguém estranho, não só trocar a fechadura sozinho."],
+  ["Cruzamento de evidências (multi-fonte)","Combinar dados de ferramentas diferentes numa única linha do tempo para revelar conexões.",
+   "É juntar as peças de quebra-cabeças diferentes que, juntas, formam uma imagem que nenhuma sozinha mostrava."],
+  ["Toolkit de investigação","O conjunto completo de ferramentas e o critério de quando usar cada uma.",
+   "É a caixa de ferramentas madura de um profissional — não só ter cada chave, mas saber qual usar em cada parafuso."],
+  ["Relatório de incidente combinado","Documento que reúne múltiplos sintomas, evidências cruzadas e a causa raiz unificada de um chamado complexo.",
+   "É o laudo pericial que conecta várias pistas espalhadas numa única explicação coerente do que aconteceu."]
+];
+
+const sceneStripIdx = [0,2,3,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,506 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 24 · Dia 5 — Missão Final: Relatório e Fim da Fase Júnior | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.milestone{width:min(1180px,92vw);margin:0 auto 40px;background:linear-gradient(135deg,#1a1408,#0d1f2a);border:2px solid var(--gold);border-radius:10px;padding:30px}
+.milestone h2{margin-top:0}
+.grand-finale{width:min(1180px,92vw);margin:0 auto 40px;background:linear-gradient(135deg,#1a1408,#0d1f2a,#1a0a2e);border:3px solid var(--gold);border-radius:12px;padding:36px;text-align:center}
+.grand-finale h2{margin-top:0;font-size:32px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_VALIDACAO_PONTA_A_PONTA.html'>← Semana 24, Dia 4</a><a href='#'>Semana 24 — Missão Final</a><span>Fase Pleno → (em breve)</span></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Fecha o Chamado #2400 — e a Fase Júnior inteira:</b> As quatro correções foram
+aplicadas e validadas ponta a ponta. Hoje você escreve o relatório final — não só deste incidente, mas o
+fechamento de tudo que você construiu desde a Semana 1.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: fechar um incidente com um relatório que previne o
+próximo.</b> Você ganha a última peça da disciplina profissional: um relatório não é só "o que aconteceu" —
+é também "o que vamos mudar pra isso não se repetir".</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 24 · Dia 5 — Missão Final Júnior | Fecha a Fase Júnior Inteira</div>
+  <h1>Relatório Final e Fim da Fase Júnior</h1>
+  <p>um relatório que só descreve o passado é incompleto — o valor real está em prevenir o próximo incidente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S24D05_RELATORIO_FINAL_INCIDENTE.png' alt='Prancha em seis quadros sobre escrever o relatório final de um incidente complexo, incluindo linha do tempo, causas raiz múltiplas, ações corretivas e recomendações de prevenção futura'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. Fechando o Chamado #2400</h2>
+  <div class='box'>Cinco dias de investigação e correção chegam ao fim. Falta a última peça: o relatório
+  final, no formato que você aprendeu na Semana 23 — mas agora com um item a mais que incidentes simples não
+  exigem: recomendações de prevenção, porque este incidente teve uma causa de PROCESSO por trás das três
+  causas técnicas — a migração de VLAN não teve um checklist cobrindo NAT, trunk e VPN juntos.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que "corrigimos as quatro causas e validamos ponta a ponta" ainda não é um
+    relatório completo, mesmo sendo tecnicamente verdadeiro?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque descreve só O QUE aconteceu desta vez, sem abordar POR QUE aconteceu no nível de processo. A
+      causa técnica de cada uma das quatro correções foi resolvida, mas a causa por trás delas — uma
+      migração de infraestrutura sem checklist cobrindo todas as configurações dependentes — continua
+      existindo. Sem uma recomendação de prevenção (como criar um checklist de migração de VLAN cobrindo NAT,
+      trunk e VPN juntos), a próxima migração de infraestrutura corre o risco de repetir exatamente o mesmo
+      padrão de incidente, só que com outro servidor.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual estrutura de relatório final está completa, cobrindo tanto o que aconteceu
+  quanto a prevenção futura?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Linha do tempo completa (Dias 1-4), as quatro causas raiz identificadas, as correções aplicadas em ordem com validação de cada uma, E uma recomendação de prevenção (checklist de migração cobrindo NAT+trunk+VPN juntos). Essa estrutura cobre tanto o incidente específico quanto o processo que precisa mudar pra evitar repetição.')"><b>A</b> Linha do tempo, causas raiz (as quatro), correções aplicadas com validação, e recomendação de prevenção pra migrações futuras</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Um relatório só com incidente resolvido e a data não documenta nada do que foi aprendido — sem causa raiz, sem ações tomadas, sem prevenção, é impossível pra qualquer pessoa da equipe aprender com esse incidente ou evitar repeti-lo.')"><b>B</b> Só a frase incidente resolvido com a data, já que o importante é o resultado final</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Listar só a primeira causa encontrada (NAT) esconde as outras três causas reais que também precisaram de correção — um relatório assim daria a impressão errada de que o incidente era mais simples do que realmente foi.')"><b>C</b> Só a causa raiz mais óbvia (NAT), já que foi a primeira encontrada e é a mais fácil de explicar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Detalhes técnicos sem nenhuma recomendação de prevenção deixam a equipe sem nenhuma orientação sobre o que fazer diferente na próxima migração — o relatório fica incompleto, mesmo sendo tecnicamente detalhado.')"><b>D</b> Só os comandos técnicos usados, sem nenhuma explicação de causa ou recomendação de prevenção</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 05 RELATORIO FINAL INCIDENTE é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. O relatório final do Chamado #2400</h2>
+  <table><thead><tr><th>Seção</th><th>Conteúdo</th></tr></thead><tbody>
+    <tr><td>Linha do tempo</td><td>Dia 1: escopo. Dia 2: 3 causas mapeadas. Dia 3: correções aplicadas. Dia 4: validação ponta a ponta.</td></tr>
+    <tr><td>Causas raiz</td><td>Trunk sem VLAN 30, NAT desatualizado, AllowedIPs (servidor e cliente) desatualizado.</td></tr>
+    <tr><td>Prevenção</td><td>Checklist de migração de VLAN cobrindo trunk, NAT e VPN juntos.</td></tr>
+  </tbody></table>
+  <pre>=== RELATÓRIO FINAL — CHAMADO #2400 ===
+Título: Acesso externo a api.empresa.com fora do ar após migração de VLAN
+
+LINHA DO TEMPO
+Dia 1: Escopo definido (falha só externa). DNS confirmado OK.
+Dia 2: Três causas raiz mapeadas, independentes entre si.
+Dia 3: Correções aplicadas em ordem de dependência, validadas isoladamente.
+Dia 4: Validação ponta a ponta revelou uma quarta lacuna (AllowedIPs do cliente).
+
+CAUSAS RAIZ (todas decorrentes da migração de VLAN incompleta)
+1. Trunk entre switch e firewall sem a VLAN 30 liberada.
+2. Regra de NAT ainda apontando pro IP antigo do servidor (10.20.10.50).
+3. AllowedIPs do servidor (WireGuard) restrito à subnet antiga.
+4. AllowedIPs do CLIENTE do parceiro, também restrito à subnet antiga.
+
+AÇÕES TOMADAS
+1. Trunk liberado pra VLAN 30 — validado com ping interno.
+2. NAT atualizado pro IP novo — validado com nc externo direto.
+3. AllowedIPs do servidor atualizado — parte da validação ponta a ponta.
+4. AllowedIPs do cliente do parceiro atualizado — validação final ponta a ponta bem-sucedida.
+
+RECOMENDAÇÃO DE PREVENÇÃO
+Criar checklist obrigatório de migração de VLAN cobrindo: trunk, NAT,
+regras de firewall, e configuração de VPN (dos dois lados) — a ser
+seguido em toda migração futura de infraestrutura.
+
+STATUS: RESOLVIDO E VALIDADO PONTA A PONTA — 2026-09-01</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra a gerência perguntando "isso vai acontecer nas próximas
+  migrações também?" — e o júnior sem resposta pronta, porque o relatório não tinha seção de prevenção</h2>
+  <p>Sem a recomendação de prevenção documentada, a pergunta pega o júnior de surpresa.</p>
+  <div class='box question'>Por que ter a recomendação de prevenção JÁ ESCRITA no relatório evita esse tipo
+  de situação desconfortável?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Com a recomendação já documentada (checklist de migração cobrindo as três configurações), a resposta pra vai acontecer de novo já está pronta e concreta: não, se o checklist for seguido, porque ele cobre exatamente as três configurações que falharam desta vez. Sem isso, a resposta fica vaga e reativa, dando a impressão de que o problema não foi realmente entendido.')"><b>A</b> Com a prevenção documentada, a resposta já está pronta e concreta — sem ela, a resposta fica vaga, dando impressão de que o problema não foi realmente entendido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Escrever a seção de prevenção não é sobre transferir responsabilidade — é sobre garantir que o conhecimento adquirido durante a investigação vire uma melhoria de processo concreta, útil pra qualquer pessoa da equipe, não só quem escreveu.')"><b>B</b> Não tem relação real com prevenção — é só uma forma de transferir a responsabilidade pra gerência, caso aconteça de novo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A recomendação de prevenção não depende do tamanho da empresa — mesmo em empresas pequenas, documentar o que precisa mudar de processo evita repetir o mesmo tipo de incidente, independente de quantos funcionários existem.')"><b>C</b> Só importa em empresas com mais de 100 funcionários; empresas pequenas não precisam se preocupar com isso</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 05 RELATORIO FINAL INCIDENTE é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Escrever sobre prevenção não é meio que admitir que a migração foi malfeita, e alguém vai levar a
+  culpa?"</h2>
+  <p>Um colega evita escrever recomendações de prevenção com medo de que isso pareça apontar culpados.</p>
+  <div class='box question'>Por que um relatório de prevenção focado em PROCESSO (não em pessoas) evita a
+  armadilha de "apontar culpados"?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A recomendação de prevenção foca no PROCESSO que faltou (um checklist de migração cobrindo as três configurações), não em qual pessoa específica esqueceu de atualizar o quê. Essa é a diferença entre um relatório construtivo, que melhora o sistema pra qualquer pessoa no futuro, e um relatório que busca culpados, que só gera medo sem resolver a causa real (falta de processo).')"><b>A</b> A recomendação foca no processo que faltou (checklist), não em qual pessoa esqueceu o quê — isso melhora o sistema pra qualquer pessoa, em vez de buscar um culpado individual</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Um relatório com recomendação de prevenção não é sinônimo de esconder quem fez a migração — a questão não é omitir informação, é escolher o FOCO do relatório: no processo que faltou, não em julgar a pessoa que executou a migração sem um checklist que ainda não existia.')"><b>B</b> Não tem como evitar isso — qualquer recomendação de prevenção automaticamente aponta a pessoa responsável pela migração original</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe uma regra de esperar 30 dias antes de escrever recomendações de prevenção — quanto antes o processo for corrigido (documentado e implementado), menor a chance de o mesmo tipo de incidente se repetir numa migração próxima.')"><b>C</b> Só é seguro escrever prevenção depois de pelo menos 30 dias do incidente, pra dar tempo de esfriar a situação</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 05 RELATORIO FINAL INCIDENTE é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Escreva a linha do tempo completa do incidente, do início ao fechamento.</li>
+    <li>Liste TODAS as causas raiz encontradas, não só a primeira ou a mais óbvia.</li>
+    <li>Documente as ações tomadas em ordem, com a validação específica de cada uma.</li>
+    <li>Inclua uma recomendação de prevenção focada em processo, não em pessoas.</li>
+    <li>Feche o relatório com status claro: resolvido e validado ponta a ponta, com data.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> este laboratório é de documentação — não envolve comandos de sistema, mas revise o conteúdo com o mesmo cuidado de qualquer entrega profissional.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Reúna os logs de investigação dos quatro dias anteriores (Dias 1-4) desta missão.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo das quatro etapas disponível pra consulta.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Escreva o relatório final completo, seguindo a estrutura da seção 5 desta aula.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório com linha do tempo, causas, ações e prevenção.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se quiser feedback sobre a clareza do seu relatório antes de considerá-lo pronto, este é o ponto onde o chat com o Sênior-IA vai revisar com você.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Escreva especificamente a recomendação de prevenção, focada em processo (o checklist de migração).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> recomendação concreta e acionável, não vaga.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Um relatório completo cobre linha do tempo, todas as causas, ações e prevenção.</li>
+    <li>Recomendações de prevenção focam em processo, não em pessoas.</li>
+    <li>Ter a prevenção já documentada evita respostas vagas quando alguém perguntar "isso vai acontecer de novo?".</li>
+    <li>O relatório só é fechado depois da validação ponta a ponta confirmada (Dia 4).</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Um relatório de incidente é um documento permanente — depois de publicado e
+  compartilhado com a equipe, corrigi-lo exige uma nota de atualização datada, não uma reescrita silenciosa.
+  Trate relatórios de incidente com o mesmo cuidado de qualquer documentação que outras pessoas vão consultar
+  no futuro.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> esta Missão Final inteira — 5 dias, 4 causas,
+  1 correção final revelada só na validação ponta a ponta — é o material mais denso do curso até aqui. Vale
+  revisar os cinco dias completos antes de seguir pro Pleno, não só este relatório final.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, o relatório completo incluiu linha
+  do tempo, as quatro causas raiz, as ações com validação, e a recomendação de prevenção. O ponto central do
+  caso é este: um relatório que só descreve o passado é incompleto — o valor real está em prevenir o próximo
+  incidente.</div>
+</section>
+
+<div class="milestone">
+  <h2>🏁 Semana 24 concluída — Missão Final Júnior encerrada</h2>
+  <p>Cinco dias, um incidente, quatro causas raiz, uma validação ponta a ponta que revelou o que a validação
+  por camada não pegou, e um relatório final que fecha o ciclo com prevenção, não só correção. Você atravessou
+  sozinho um incidente do tamanho que um sistemista júnior real encontra em produção — sem atalhos, sem pular
+  etapas, documentando cada passo.</p>
+</div>
+
+<div class="grand-finale">
+  <h2>🎓 FASE JÚNIOR COMPLETA — 24 semanas, do primeiro acesso SSH até uma migração de infraestrutura real</h2>
+  <p style="font-size:17px;max-width:900px;margin:0 auto 16px">Você começou na Semana 1 aprendendo a observar
+  antes de tocar num servidor pela primeira vez. Passou por processos, texto, automação em bash, storage,
+  boot e recuperação — fechando a Fase 1 (Linux Júnior). Depois construiu, camada por camada, o modelo
+  TCP/IP, DNS, firewall, NAT, VPN, VLAN, tcpdump, NFS e Samba — fechando a Fase 2 (Redes Júnior). E hoje você
+  fechou os dois com um incidente real, integrando tudo isso de uma vez, do jeito que a produção realmente
+  cobra.</p>
+  <p style="font-size:17px;max-width:900px;margin:0 auto"><strong>A Fase Pleno começa em breve</strong>,
+  aprofundando cada uma dessas áreas com o nível de complexidade que separa quem sabe operar de quem sabe
+  projetar. Parabéns por chegar até aqui — a Fase Júnior está oficialmente completa.</p>
+</div>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de fechar um incidente complexo com um relatório completo, incluindo
+  prevenção focada em processo. A Semana 24 está completa — e com ela, toda a Fase Júnior.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 24, Dia 5 de ~250 — encerra a Missão Final Júnior
+e a Fase Júnior inteira. Mesmo padrão: glossário com analogia, 3 questões + 1 recall, laboratório com
+resultado esperado, slot reservado pro Mentor-IA (Estágio A, ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Post-incident review (revisão pós-incidente)","Documento estruturado escrito após a resolução de um incidente, cobrindo linha do tempo, causas, ações e recomendações de prevenção.",
+   "É o laudo completo de uma perícia — não serve só pra arquivar o caso, serve pra evitar que o mesmo tipo de acidente aconteça de novo."],
+  ["Causa raiz múltipla (revisão)","Reconhecimento de que um incidente pode ter mais de uma causa independente, todas precisando de correção própria.",
+   "É reconhecer que uma enchente pode ter várias causas ao mesmo tempo — chuva forte, bueiro entupido, e área impermeabilizada — cada uma contribuindo separadamente."],
+  ["Recomendação de prevenção","Sugestão concreta de mudança de processo, feita no relatório final, pra reduzir a chance do mesmo tipo de incidente se repetir.",
+   "É a mudança na norma de segurança do prédio depois de um incidente — não conserta o que já aconteceu, mas evita a próxima ocorrência do mesmo tipo."],
+  ["Foco em processo, não em pessoas","Princípio de relatório de incidente que direciona recomendações para melhorias de sistema e checklist, evitando atribuir culpa individual.",
+   "É consertar o degrau quebrado da escada, em vez de culpar quem tropeçou nele — o degrau consertado protege todo mundo que passar depois."],
+  ["Checklist de migração (prevenção concreta)","Lista estruturada de verificações a seguir em toda migração de infraestrutura futura, cobrindo todas as configurações dependentes identificadas neste incidente.",
+   "É a lista de verificação que agora inclui especificamente os três itens que falharam desta vez — nenhuma migração futura esquece deles de novo."],
+  ["Status de fechamento (resolvido e validado)","Declaração formal final de um incidente, feita somente depois de validação ponta a ponta confirmada, não antes.",
+   "É o carimbo final de aprovação numa inspeção — só é colocado depois que TODOS os testes relevantes já passaram, não no meio do processo."],
+  ["Documentação como legado (pra próxima pessoa)","Reconhecimento de que um relatório de incidente bem escrito serve como referência útil pra qualquer pessoa da equipe no futuro, não só pra quem o escreveu.",
+   "É deixar um mapa detalhado do caminho percorrido, útil pra qualquer pessoa que precisar passar por ali de novo, mesmo anos depois."],
+  ["Fase Júnior (síntese completa)","Conjunto das Fases 1 (Linux) e 2 (Redes) do curso, encerradas com esta Missão Final integradora.",
+   "É a formação básica completa — não o fim do aprendizado, mas a base sólida sobre a qual tudo o que vem depois vai se apoiar."],
+  ["Transição pra nível Pleno","Passagem de operar sistemas seguindo procedimentos estabelecidos para projetar e antecipar cenários mais complexos.",
+   "É a diferença entre seguir a receita com precisão e começar a criar receitas novas, entendendo profundamente por que cada ingrediente funciona daquele jeito."],
+  ["Incidente integrador (padrão pedagógico)","Formato de exercício final que combina múltiplos conceitos aprendidos separadamente, num único cenário realista, testando a capacidade de conectar conhecimento.",
+   "É a diferença entre treinar cada movimento isoladamente e jogar a partida completa de verdade, onde tudo precisa funcionar junto ao mesmo tempo."]
+];
+
+const sceneStripIdx = [0,2,3,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

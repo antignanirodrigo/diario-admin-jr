@@ -1,0 +1,483 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 21 · Dia 1 — NFS: o Conceito | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_20/DIA_05_DIAGNOSTICO_VLANS_MESMO_SWITCH.html'>← Semana 20, Dia 5</a><a href='#'>Semana 21</a><a href='DIA_02_NFS_EXPORTS_PERMISSOES.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 20 (VLAN):</b> Você já sabe que segmentação de rede não é
+sobre negar acesso por padrão, é sobre controlar exatamente quem alcança o quê. Hoje esse mesmo raciocínio se
+aplica a arquivos: NFS compartilha um diretório de um servidor Linux pra outras máquinas da rede — e "quem
+pode montar" é uma decisão tão deliberada quanto "quem está em qual VLAN".</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: entender o modelo cliente-servidor do NFS.</b> Você ganha o
+conceito central: um diretório do servidor é "exportado", um cliente "monta" esse diretório como se fosse
+local — mas por baixo, cada operação de arquivo ainda está trafegando pela rede, com tudo que isso implica.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 21 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>NFS: o Conceito</h1>
+  <p>um diretório remoto que parece local — até a rede lembrar você de que não é</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S21D01_NFS_CONCEITO.png' alt='Prancha em seis quadros sobre o conceito de NFS, mostrando um diretório exportado por um servidor Linux sendo montado por um cliente como se fosse um disco local'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2101: "Preciso que três servidores de aplicação compartilhem os mesmos arquivos
+  de upload, sem copiar manualmente entre eles toda hora." A resposta clássica no mundo Linux é
+  <span class="hint" data-tip="Network File System — protocolo que permite montar um diretório de outro servidor Linux/Unix como se fosse local." onclick="openGlossary(0)">NFS</span>:
+  um servidor central
+  <span class="hint" data-tip="Ação do lado servidor de disponibilizar um diretório para ser acessado remotamente por clientes autorizados." onclick="openGlossary(1)">exporta</span>
+  um diretório, e cada cliente
+  <span class="hint" data-tip="Ação do lado cliente de anexar um sistema de arquivos remoto a um ponto específico da árvore de diretórios local." onclick="openGlossary(2)">monta</span>
+  esse mesmo diretório — mudanças feitas por um aparecem instantaneamente pros outros.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que "o diretório parece local" é ao mesmo tempo a maior vantagem e a maior
+    armadilha do NFS pra quem está começando?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      É vantagem porque aplicações não precisam de nenhuma lógica especial pra usar arquivos remotos — elas só
+      leem e escrevem no caminho montado, como qualquer outro diretório. É armadilha porque essa transparência
+      esconde a rede: se a rede cair, ou o servidor NFS ficar indisponível, operações de arquivo que pareciam
+      instantâneas podem travar (não falhar rápido, travar) — porque o kernel ainda está tentando se comportar
+      como se fosse um disco local, mesmo sem conseguir alcançar o servidor.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Um servidor NFS exporta /dados/uploads. Três clientes montam esse diretório em
+  /mnt/uploads. Um dos clientes cria um arquivo novo em /mnt/uploads/foto.jpg. O que acontece nos outros dois
+  clientes?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O arquivo aparece nos outros clientes automaticamente, porque todos estão montando o MESMO diretório físico do servidor — não são cópias sincronizadas, é o mesmo dado sendo acessado remotamente por três pontos diferentes. Não existe nenhum tipo de sincronização ou replicação acontecendo; é literalmente o mesmo arquivo, visto de três lugares.')"><b>A</b> O arquivo aparece automaticamente nos outros clientes, porque todos estão acessando o mesmo diretório físico no servidor, não cópias separadas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Não é necessário nenhum comando manual de sincronização — o NFS não funciona por cópia/replicação, é acesso direto ao mesmo diretório remoto; o arquivo já está lá assim que criado, sem passo adicional.')"><b>B</b> Nada acontece automaticamente — é preciso rodar um comando de sincronização manual em cada cliente pra replicar o novo arquivo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O arquivo não fica visível só pro cliente que o criou — todos os clientes que montam o mesmo export enxergam o mesmo conteúdo, já que estão acessando o mesmo diretório remoto, não uma cópia individual.')"><b>C</b> O arquivo fica visível só pro cliente que o criou, já que cada montagem é uma cópia independente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Não é necessário nenhum reinício de serviço pra um arquivo novo aparecer — a visibilidade é imediata, já que os clientes estão lendo diretamente do mesmo diretório remoto compartilhado.')"><b>D</b> É necessário reiniciar o serviço NFS nos outros clientes pra eles perceberem o arquivo novo</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 01 NFS CONCEITO é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+    <tr><td><code>exportfs -v</code></td><td>No servidor, lista os diretórios atualmente exportados.</td></tr>
+    <tr><td><code>showmount -e &lt;servidor&gt;</code></td><td>No cliente, lista o que um servidor NFS está exportando.</td></tr>
+    <tr><td><code>mount -t nfs</code></td><td>No cliente, monta um diretório remoto localmente.</td></tr>
+  </tbody></table>
+  <pre>--- no servidor (10.10.10.50) ---
+$ exportfs -v
+/dados/uploads  10.10.10.0/24(rw,sync,no_subtree_check)
+
+--- no cliente 1 ---
+$ showmount -e 10.10.10.50
+Export list for 10.10.10.50:
+/dados/uploads 10.10.10.0/24
+
+$ sudo mount -t nfs 10.10.10.50:/dados/uploads /mnt/uploads
+$ echo "teste" > /mnt/uploads/foto.jpg
+
+--- no cliente 2, ao mesmo tempo ---
+$ ls /mnt/uploads/
+foto.jpg   ← apareceu imediatamente, mesmo sem ter sido criado ali</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje mostra o servidor NFS caindo, e o comando ls travando
+  indefinidamente num cliente, em vez de dar erro rápido</h2>
+  <p>Um colega espera que, se o servidor NFS cair, os clientes recebam um erro imediato tipo "conexão
+  recusada", como aconteceria com a maioria dos outros serviços de rede.</p>
+  <div class='box question'>Por que um comando como ls num diretório montado via NFS pode TRAVAR
+  indefinidamente quando o servidor cai, em vez de retornar um erro rápido?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Por padrão, o NFS pode ser montado em modo hard — o kernel trata o diretório remoto como se fosse essencialmente permanente, e continua tentando a operação indefinidamente até o servidor voltar, em vez de desistir. Isso é intencional pra evitar corrupção de dados em operações de escrita, mas surpreende quem espera um comportamento de rede tradicional de falha rápida.')"><b>A</b> Por padrão, o NFS pode ser montado em modo hard, onde o kernel continua tentando a operação indefinidamente até o servidor voltar, em vez de desistir rapidamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O comando ls não está com bug nesse cenário — o travamento é o comportamento esperado do modo de montagem NFS padrão diante de um servidor indisponível, não um defeito na ferramenta ls em si.')"><b>B</b> É um bug conhecido do comando ls, que trava sempre que qualquer sistema de arquivos de rede fica indisponível</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O tempo de travamento não segue um limite fixo de 30 segundos por padrão — dependendo do modo de montagem, o comando pode ficar preso indefinidamente, muito além de meio minuto, até o servidor voltar ou a montagem ser forçadamente desmontada.')"><b>C</b> Só trava por até 30 segundos, depois disso qualquer comando NFS retorna erro automaticamente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 01 NFS CONCEITO é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se eu tenho acesso root no cliente, tenho acesso root nos arquivos do servidor NFS também?"</h2>
+  <p>Um colega assume que, como root local no cliente, ele automaticamente tem os mesmos privilégios totais
+  sobre os arquivos montados via NFS.</p>
+  <div class='box question'>Por que ter root no cliente NÃO significa automaticamente ter privilégios de
+  root sobre os arquivos do export NFS?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Por padrão, o NFS aplica um mecanismo chamado root squash, que trata requisições vindas do usuário root de um cliente como se fossem de um usuário sem privilégio, geralmente nobody, no servidor — justamente pra evitar que qualquer cliente com acesso root local consiga controle total sobre os arquivos exportados. Esse comportamento é aprofundado no Dia 3 desta semana.')"><b>A</b> Por padrão, o NFS aplica root squash, tratando requisições de root do cliente como um usuário sem privilégio no servidor — uma proteção deliberada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é uma questão de versão do protocolo — root squash é uma proteção de segurança presente e configurável nas versões amplamente usadas de NFS, não uma limitação restrita a versões antigas específicas.')"><b>B</b> É só uma limitação de versões antigas do NFS; versões recentes sempre dão privilégio root total automaticamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A limitação de privilégio não depende do sistema de arquivos usado no servidor (ext4, XFS, etc.) — é uma configuração do próprio NFS (root squash), independente de qual sistema de arquivos está por baixo do diretório exportado.')"><b>C</b> Só acontece se o servidor estiver usando um sistema de arquivos diferente de ext4</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 01 NFS CONCEITO é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>No servidor, confirme o diretório exportado com exportfs -v.</li>
+    <li>No cliente, confirme o que está disponível com showmount -e &lt;servidor&gt;.</li>
+    <li>Monte o diretório remoto com mount -t nfs &lt;servidor&gt;:/caminho /ponto/de/montagem.</li>
+    <li>Teste escrita e leitura de um cliente, confirmando visibilidade imediata nos outros.</li>
+    <li>Documente qual servidor é a fonte de verdade — múltiplos clientes escrevendo no mesmo lugar exige coordenação da aplicação, não só do NFS.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM servidor de laboratório, confirme um export existente (ou peça ajuda pra criar um básico) com exportfs -v.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> diretório exportado listado com suas opções.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM cliente, rode showmount -e apontando pro IP do servidor.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista mostrando o diretório disponível pra montagem.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se showmount não retornar nada, este é o ponto onde o chat com o Sênior-IA vai te ajudar a checar se o pacote nfs-common (ou equivalente) está instalado no cliente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Monte o diretório remoto e crie um arquivo de teste.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo criado com sucesso no ponto de montagem.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Se tiver uma segunda VM cliente disponível, monte o mesmo export nela e confirme que o arquivo já aparece lá.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo visível na segunda VM, sem nenhuma ação adicional de sincronização.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>NFS deixa um diretório do servidor visível como se fosse local no cliente, através de exportar/montar.</li>
+    <li>Múltiplos clientes acessam o mesmo diretório físico, não cópias separadas.</li>
+    <li>A transparência do NFS pode esconder problemas de rede — travamento em vez de erro rápido é comportamento esperado do modo padrão.</li>
+    <li>Root no cliente não é automaticamente root no servidor NFS — root squash existe por design.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Desmontar um diretório NFS com umount é geralmente seguro e reversível — pode
+  exigir -l (lazy) ou -f (force) se o servidor estiver indisponível e a montagem travada. O cuidado real é
+  escrita concorrente: como o mesmo arquivo pode ser acessado por vários clientes ao mesmo tempo, conflitos de
+  escrita são responsabilidade da aplicação, não do NFS.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "parece local, mas ainda é rede" é o mesmo
+  alerta que já apareceu com VPN (Semana 18) — qualquer abstração que esconde a rede merece o mesmo cuidado na
+  hora de diagnosticar. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, o arquivo criado por um cliente
+  apareceu automaticamente nos outros, porque todos acessam o mesmo diretório físico exportado pelo servidor.
+  O ponto central do caso é este: um diretório remoto que parece local — até a rede lembrar você de que não é.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de entender o modelo cliente-servidor do NFS e suas implicações de
+  transparência. Amanhã você aprende a configurar exports com segurança, controlando exatamente quem pode
+  montar o quê e com quais permissões.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 21, Dia 1 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["NFS (Network File System)","Protocolo que permite montar um diretório de outro servidor Linux/Unix como se fosse um sistema de arquivos local.",
+   "É um cofre compartilhado entre escritórios diferentes — todos usam a mesma chave e veem o mesmo conteúdo, mesmo estando fisicamente em prédios diferentes."],
+  ["Exportar (servidor NFS)","Ação do lado servidor de disponibilizar um diretório para ser acessado remotamente por clientes autorizados.",
+   "É abrir uma sala específica do prédio pra visitas externas, decidindo exatamente quem pode entrar e o que pode fazer lá dentro."],
+  ["Montar (cliente NFS)","Ação do lado cliente de anexar um sistema de arquivos remoto a um ponto específico da árvore de diretórios local.",
+   "É pendurar a chave da sala compartilhada no seu próprio chaveiro — a partir daí, você acessa aquela sala como se fosse mais um cômodo da sua própria casa."],
+  ["exportfs -v","Comando executado no servidor NFS que lista todos os diretórios atualmente exportados e suas opções.",
+   "É o livro de registro do prédio mostrando quais salas estão abertas pra visita externa, e sob quais regras."],
+  ["showmount -e","Comando executado no cliente que consulta um servidor NFS e lista o que ele está disponibilizando.",
+   "É perguntar na portaria do outro prédio quais salas estão disponíveis pra visita, antes mesmo de tentar entrar em qualquer uma."],
+  ["mount -t nfs","Comando que efetivamente monta um diretório remoto NFS num ponto de montagem local.",
+   "É atravessar a ponte até a sala compartilhada e literalmente entrar nela, passando a usá-la como parte do seu próprio espaço."],
+  ["Transparência de rede (NFS)","Característica do NFS de fazer um recurso remoto se comportar, para a aplicação, como se fosse local.",
+   "É a sala compartilhada parecer exatamente como qualquer outro cômodo da sua casa — você esquece que, na verdade, ela fica em outro prédio."],
+  ["Modo hard (montagem NFS)","Modo de montagem onde o kernel continua tentando indefinidamente uma operação de arquivo até o servidor responder, em vez de desistir rapidamente.",
+   "É insistir batendo na porta da sala compartilhada até alguém atender, em vez de desistir depois de uma tentativa — pensado pra evitar perder informação no meio do caminho."],
+  ["Root squash","Mecanismo padrão de segurança do NFS que trata o usuário root de um cliente como um usuário sem privilégio no servidor.",
+   "É a sala compartilhada não reconhecer automaticamente o 'chefe' de um prédio visitante como autoridade máxima dentro dela — cada ambiente mantém suas próprias regras de hierarquia."],
+  ["/etc/exports (arquivo de configuração)","Arquivo no servidor NFS onde os diretórios exportados e suas permissões são declarados, tema aprofundado amanhã.",
+   "É o regulamento oficial da sala compartilhada, escrito e arquivado — quem pode entrar, com que permissão, vindo de onde."],
+  ["Escrita concorrente (múltiplos clientes)","Situação onde mais de um cliente pode escrever no mesmo arquivo ou diretório NFS ao mesmo tempo, exigindo coordenação da própria aplicação.",
+   "É duas pessoas de prédios diferentes escrevendo no mesmo quadro branco da sala compartilhada, ao mesmo tempo — sem uma combinação prévia, uma pode apagar o que a outra acabou de escrever."],
+  ["Ponto de montagem (mount point)","Diretório local vazio designado para receber o conteúdo de um sistema de arquivos remoto ou externo, uma vez montado.",
+   "É a porta específica da sua casa que você reserva pra dar acesso à sala compartilhada — antes de montar, é só uma porta vazia."]
+];
+
+const sceneStripIdx = [0,1,2,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

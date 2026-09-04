@@ -1,0 +1,487 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 23 · Dia 3 — Healthcheck de Rede em Bash | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_PROCESSO_E_REDE_JUNTOS.html'>← Semana 23, Dia 2</a><a href='#'>Semana 23</a><a href='DIA_04_BACKUP_RSYNC_QUEDA_REDE.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Consolidação — junta bash (Fase 1, Semana 9-10) e diagnóstico de rede (Fase 2):</b>
+Você já sabe escrever scripts bash com funções e tratamento de erro. Hoje você aplica isso especificamente a
+checagens de rede, automatizando os testes que você tem feito manualmente essa semana inteira.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: script de healthcheck que roda cada checagem
+independentemente.</b> Você ganha o padrão certo — cada teste roda e reporta seu próprio resultado, sem um
+teste que falhou impedir os outros de rodarem também.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 23 · Dia 3 — Consolidação | Nível Júnior — Redes</div>
+  <h1>Healthcheck de Rede em Bash</h1>
+  <p>um teste falhar não deveria impedir os outros de rodar e reportar também</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S23D03_HEALTHCHECK_REDE_BASH.png' alt='Prancha em seis quadros sobre escrever um script bash de healthcheck que testa DNS, porta, disco e processo, reportando cada resultado de forma independente'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2303: "Preciso de um script que eu possa rodar (ou colocar no cron) que checa DNS,
+  conectividade de porta, espaço em disco e se o processo está de pé — tudo de uma vez, com um relatório
+  claro no final." O erro mais comum ao escrever esse tipo de script é encadear os testes com
+  <span class="hint" data-tip="Operador bash que só executa o comando seguinte se o anterior teve sucesso — encadear testes com ele faz o script parar no primeiro teste que falhar." onclick="openGlossary(0)">&amp;&amp;</span>,
+  fazendo o script parar no primeiro teste que falhar, sem nunca chegar a rodar os outros.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que um healthcheck que para no primeiro teste que falha é pior do que um que
+    roda todos e reporta cada resultado?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Se o DNS falhar e o script parar ali, você nunca vai saber se a porta, o disco e o processo também
+      estavam com problema — pode ser que existam TRÊS problemas simultâneos, e você só vai descobrir o
+      segundo depois de corrigir o primeiro e rodar tudo de novo. Um healthcheck de verdade roda cada
+      checagem de forma independente, guarda o resultado de cada uma, e no final mostra um relatório
+      completo — mesmo que várias tenham falhado ao mesmo tempo.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual estrutura de script garante que TODOS os quatro testes (DNS, porta, disco,
+  processo) rodem e reportem seu resultado, mesmo que algum falhe no meio do caminho?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Chamar cada teste como uma função separada, guardando o código de saída de cada uma numa variável, sem usar && entre elas. Isso garante que cada função roda independentemente do resultado da anterior, e todos os quatro resultados ficam disponíveis pro relatório final, mesmo com falhas no meio do caminho.')"><b>A</b> Chamar cada teste como função separada, guardando o código de saída de cada uma numa variável, sem encadear com &amp;&amp;</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Encadear os quatro testes com &amp;&amp; é exatamente o erro descrito no chamado — o script para no primeiro teste que falhar, nunca rodando os testes seguintes, escondendo problemas adicionais que poderiam existir ao mesmo tempo.')"><b>B</b> teste_dns &amp;&amp; teste_porta &amp;&amp; teste_disco &amp;&amp; teste_processo, encadeados numa linha só</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar cada teste manualmente em terminais separados não é automação — o chamado pede um script único, executável de uma vez (inclusive via cron), não uma sequência de ações manuais do administrador.')"><b>C</b> Rodar cada teste manualmente em terminais separados, sem automatizar nada num script</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'set -e faz o script inteiro parar assim que QUALQUER comando retornar erro — é o oposto do comportamento desejado aqui, que é continuar rodando todos os testes mesmo com falhas intermediárias.')"><b>D</b> Usar set -e no topo do script, garantindo que ele para assim que qualquer comando falhar</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 03 HEALTHCHECK REDE BASH é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Checagem</th><th>Comando usado internamente</th></tr></thead><tbody>
+    <tr><td>DNS</td><td>dig +short (Semana 14)</td></tr>
+    <tr><td>Porta</td><td>nc -zv (Semana 23, Dia 1)</td></tr>
+    <tr><td>Disco</td><td>df -h (Fase 1)</td></tr>
+    <tr><td>Processo</td><td>systemctl is-active (Semana 23, Dia 2)</td></tr>
+  </tbody></table>
+  <pre>#!/bin/bash
+# healthcheck.sh — checagens independentes, sem &amp;&amp; entre elas
+
+teste_dns() {
+  dig +short "$1" &gt; /dev/null 2&gt;&amp;1
+  echo $?
+}
+
+teste_porta() {
+  nc -zv -w3 "$1" "$2" &gt; /dev/null 2&gt;&amp;1
+  echo $?
+}
+
+teste_disco() {
+  uso=$(df -h / | awk 'NR==2{print $5}' | tr -d '%')
+  [ "$uso" -lt 90 ] &amp;&amp; echo 0 || echo 1
+}
+
+teste_processo() {
+  systemctl is-active --quiet "$1"
+  echo $?
+}
+
+echo "=== Healthcheck $(date) ==="
+[ "$(teste_dns db-externo.empresa.com)" = "0" ] &amp;&amp; echo "DNS: OK" || echo "DNS: FALHA"
+[ "$(teste_porta 10.50.0.20 5432)" = "0" ] &amp;&amp; echo "Porta: OK" || echo "Porta: FALHA"
+[ "$(teste_disco)" = "0" ] &amp;&amp; echo "Disco: OK" || echo "Disco: FALHA"
+[ "$(teste_processo app.service)" = "0" ] &amp;&amp; echo "Processo: OK" || echo "Processo: FALHA"</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o júnior hardcodando o IP e a porta direto dentro de cada
+  função, em vez de passar como parâmetro</h2>
+  <p>Um colega escreve teste_porta() já com o IP fixo no código, achando mais simples.</p>
+  <div class='box question'>Por que passar o host e a porta como PARÂMETROS da função (em vez de fixar no
+  código) torna o script mais reutilizável?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Com parâmetros, a mesma função teste_porta serve pra checar qualquer combinação de host e porta, sem precisar duplicar o código ou editar a função toda vez que o alvo mudar. Isso é especialmente útil num healthcheck que provavelmente vai crescer pra checar mais serviços com o tempo.')"><b>A</b> Com parâmetros, a mesma função serve pra qualquer host/porta, sem precisar duplicar código toda vez que o alvo mudar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Funções com parâmetros não rodam mais rápido que funções com valores fixos — a vantagem é de reutilização e manutenção do código, não de velocidade de execução.')"><b>B</b> Não faz diferença real de reutilização — só deixa o script mais rápido de executar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Bash não exige nenhuma declaração de tipo antes de usar parâmetros de função — essa não é a razão de usar parâmetros; a razão real é reutilização do mesmo código pra alvos diferentes.')"><b>C</b> É uma exigência da sintaxe bash — funções sem parâmetros nunca funcionam corretamente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 03 HEALTHCHECK REDE BASH é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se todos os testes passarem, o script precisa retornar algum código de saída específico?"</h2>
+  <p>Um colega acha que o código de saída do script inteiro não importa, já que o relatório de texto já
+  mostra tudo.</p>
+  <div class='box question'>Por que o código de saída FINAL do script inteiro importa, mesmo já existindo
+  um relatório de texto detalhado?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Se esse script for chamado pelo cron ou por uma ferramenta de monitoramento automatizada, ninguém vai ler o texto do relatório automaticamente — essas ferramentas decidem se algo deu errado observando o código de saída do processo (0 = tudo ok, diferente de 0 = algo falhou). Sem isso, mesmo um script que reporta falhas em texto pode ser tratado como bem-sucedido por um sistema de automação.')"><b>A</b> Ferramentas de automação (cron, monitoramento) decidem sucesso ou falha pelo código de saída do processo, não lendo o texto do relatório — sem isso, falhas podem passar despercebidas por sistemas automatizados</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O código de saída não afeta a formatação visual do relatório de texto — são duas coisas completamente independentes; o código de saída é lido por outros programas, não muda como o texto aparece na tela.')"><b>B</b> O código de saída só afeta a cor do texto exibido no terminal, sem relação com automação</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe exigência de sudo pra definir o código de saída de um script bash — qualquer usuário pode definir o exit code do próprio script, independente de privilégio administrativo.')"><b>C</b> Só importa se o script for executado com privilégio de root</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 03 HEALTHCHECK REDE BASH é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Escreva cada checagem como uma função separada e independente.</li>
+    <li>Passe alvos (host, porta, serviço) como parâmetros, nunca hardcoded dentro da função.</li>
+    <li>Guarde o resultado de cada checagem, sem encadear com &amp;&amp; entre testes diferentes.</li>
+    <li>Monte um relatório final mostrando o resultado de TODAS as checagens, mesmo com falhas no meio.</li>
+    <li>Defina um código de saída final coerente (0 se tudo ok, diferente de 0 se algo falhou) pra uso em cron/monitoramento.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM de laboratório, escreva o script healthcheck.sh com as quatro funções, testando um alvo que funciona.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório mostrando OK nas quatro linhas.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Force uma falha deliberada em dois testes ao mesmo tempo (ex.: nome inexistente + porta bloqueada), e rode o script.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório mostrando FALHA nos dois testes E OK nos outros dois, tudo reportado.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se quiser adicionar mais checagens ao script (como memória ou CPU), este é o ponto onde o chat com o Sênior-IA vai te ajudar a estruturar a função nova seguindo o mesmo padrão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Confirme o código de saída do script com echo $? logo depois de rodar, nos dois cenários (tudo ok / com falha).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 0 quando tudo passa, diferente de 0 quando algo falha.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Adicione o script a uma entrada de cron de teste, e confirme execução automática registrada em log.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> execução automática confirmada, sem intervenção manual.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Testes independentes (sem &amp;&amp; entre eles) garantem que todos rodem, mesmo com falhas no meio.</li>
+    <li>Parâmetros de função tornam o script reutilizável pra diferentes alvos.</li>
+    <li>Código de saída final importa pra automação (cron, monitoramento), não só pro texto do relatório.</li>
+    <li>Um healthcheck de verdade responde "quais testes falharam", não só "algo falhou".</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>O script em si é só observação — não altera nada no sistema, sendo seguro de
+  rodar quantas vezes precisar. O cuidado real é o tempo de espera (timeout) de cada teste: sem um -w3 (ou
+  equivalente) no nc, por exemplo, um teste de porta bloqueada pode travar o script inteiro esperando resposta
+  que nunca chega.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "cada teste roda e reporta independentemente"
+  é o mesmo princípio do isolamento de camada (Semana 18 em diante), agora automatizado em código — vale
+  reforçar que automação não substitui o raciocínio de diagnóstico, só o acelera. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a estrutura certa usou funções
+  separadas com resultado guardado, sem encadear com &amp;&amp;. O ponto central do caso é este: um teste
+  falhar não deveria impedir os outros de rodar e reportar também.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de escrever um script de healthcheck de rede robusto, com testes
+  independentes e código de saída correto. Amanhã você aplica essa mesma disciplina de robustez a um backup
+  rsync que precisa sobreviver a uma queda de rede no meio da transferência.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 23, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["&amp;&amp; (encadeamento condicional)","Operador bash que só executa o comando seguinte se o anterior teve sucesso — encadear testes com ele faz o script parar no primeiro teste que falhar.",
+   "É uma corrida de revezamento onde o próximo corredor só entra se o anterior completou o trecho dele — se um cair, ninguém mais corre."],
+  ["Função bash","Bloco de código nomeado e reutilizável dentro de um script, que pode receber parâmetros e retornar um código de saída.",
+   "É uma receita padronizada guardada no caderno de receitas — você chama pelo nome sempre que precisar, sem reescrever os passos toda vez."],
+  ["Parâmetro de função","Valor passado pra uma função no momento em que ela é chamada, permitindo que o mesmo código funcione com entradas diferentes.",
+   "É a receita que pede o ingrediente principal como entrada — a mesma receita de bolo serve pra qualquer sabor, dependendo do que você fornece."],
+  ["Código de saída (exit code)","Número que um comando ou script retorna ao terminar, indicando sucesso (0) ou algum tipo de falha (diferente de 0).",
+   "É o carimbo de aprovado ou reprovado numa inspeção — outros sistemas leem esse carimbo pra decidir a próxima ação, sem precisar ler o relatório inteiro."],
+  ["set -e (contraste)","Opção bash que faz o script inteiro parar assim que qualquer comando retornar código de erro.",
+   "É uma linha de montagem que para completamente assim que qualquer peça é rejeitada — útil em alguns contextos, péssimo quando você quer inspecionar todas as peças de qualquer forma."],
+  ["Testes independentes (padrão de healthcheck)","Estrutura onde cada checagem roda e reporta seu próprio resultado, sem depender do sucesso das checagens anteriores.",
+   "É um médico fazendo vários exames diferentes numa consulta, sem cancelar os exames seguintes só porque um deu resultado alterado."],
+  ["cron (execução automática)","Serviço do Linux que executa comandos ou scripts automaticamente em horários programados, sem intervenção manual.",
+   "É um despertador configurado pra tocar todo dia no mesmo horário, disparando uma tarefa automaticamente, sem ninguém precisar lembrar."],
+  ["nc -w (timeout de teste)","Opção do netcat que define um tempo máximo de espera antes de desistir de uma tentativa de conexão.",
+   "É dar um prazo máximo de espera na porta antes de desistir e seguir pro próximo compromisso, em vez de esperar indefinidamente."],
+  ["Relatório completo (vs. parcial)","Saída de um script que mostra o resultado de TODAS as checagens realizadas, mesmo quando várias falharam ao mesmo tempo.",
+   "É o boletim escolar mostrando a nota de todas as matérias, não só parando de mostrar depois da primeira matéria com nota baixa."],
+  ["Automação que acelera, não substitui, diagnóstico","Princípio de que um script de healthcheck automatiza testes já compreendidos manualmente, sem eliminar a necessidade de entender o que cada teste realmente confirma.",
+   "É ter uma checklist automática de vistoria — ela agiliza o processo, mas quem interpreta os resultados ainda precisa entender o que cada item da checklist realmente significa."]
+];
+
+const sceneStripIdx = [0,1,3,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

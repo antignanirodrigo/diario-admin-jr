@@ -1,0 +1,534 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 15 · Dia 4 — Firewall: a Primeira Regra que Casa Vence | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_SERVICO_OU_FIREWALL.html'>← Semana 15, Dia 3</a><a href='#'>Semana 15</a><a href='DIA_05_TESTE_SEGURO_SEGUNDA_SESSAO.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 2 (nftables básico):</b> Você já sabe que rules são avaliadas
+de cima pra baixo. Hoje aparece o efeito colateral disso: uma regra genérica ANTES de uma específica mascara
+a decisão fina — a regra certa até existe no firewall, mas nunca chega a ser avaliada.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: reconhecer o padrão "regra certa no lugar errado".</b> Você
+ganha a prova com handle (nft -a list) pra identificar exatamente qual regra está "roubando" a decisão de
+outra, e o procedimento de reordenar com evidência, testando dos dois lados depois.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 15 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>Firewall: a Primeira Regra que Casa Vence</h1>
+  <p>firewall não lê intenção; ele lê ordem, condição e ação</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S15D04_ORDEM_REGRAS_FIREWALL.png' alt='Prancha em seis quadros sobre a ordem de avaliação de regras de firewall, o problema de regra genérica antes de específica, e correção com handle e teste dos dois lados'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Eu limitei SSH para 192.168.10.20, mas todo mundo ainda entra!" A regra específica
+  existe no firewall — mas está na posição 2, DEPOIS de uma regra genérica (ALLOW TCP 22 ANY → ANY) na
+  posição 1. Como a genérica casa primeiro, a específica nunca chega a ser avaliada.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um colega jurava que tinha restrito SSH só pra um IP específico, mas um teste de auditoria mostrou
+    qualquer origem conseguindo entrar. Ele mostrou a regra: <code>ip saddr 192.168.10.20 tcp dport 22
+    accept</code> — existia, estava certa. O problema era outra regra, mais acima na chain:
+    <code>tcp dport 22 accept</code>, sem restrição de origem nenhuma, que já tinha sido adicionada meses
+    antes num teste rápido e nunca removida. Como ela vinha primeiro, todo pacote SSH já era aceito ali —
+    a regra restritiva, tecnicamente correta, nunca chegava a ser avaliada.
+    <br><br>
+    O ponto que fica: firewall não lê intenção, lê ordem, condição e ação. Uma regra genérica antes de uma
+    específica mascara a decisão fina, mesmo que a específica esteja perfeita no papel. É o mesmo tipo de
+    bug que aparece quando um clone de configuração herda uma regra ampla e ninguém percebe que ela esconde
+    erros mais específicos por trás.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que revela</th></tr></thead><tbody>
+    <tr><td><code>nft -a list chain</code></td><td>Mostra as regras com seus handles (identificadores únicos), permitindo referência exata.</td></tr>
+    <tr><td><code>nft delete rule ... handle N</code></td><td>Remove uma regra específica pelo handle.</td></tr>
+    <tr><td><code>nft insert rule ... position 0</code></td><td>Insere uma regra no topo da chain, garantindo avaliação prioritária.</td></tr>
+  </tbody></table>
+  <pre>$ sudo nft -a list chain inet filter input
+chain input {
+    type filter hook input priority 0; policy drop;
+    tcp dport 22 accept                              # handle 3
+    ip saddr 192.168.10.20 tcp dport 22 accept        # handle 7
+}
+
+--- correção com evidência ---
+$ sudo nft delete rule inet filter input handle 3
+$ sudo nft insert rule inet filter input position 0 \
+    ip saddr 192.168.10.20 tcp dport 22 accept
+$ sudo nft add rule inet filter input tcp dport 22 drop
+$ sudo nft -a list chain inet filter input
+
+--- teste dos dois lados ---
+# from 192.168.10.20
+$ ssh admin@192.168.10.50
+admin@srv-app-01:~$
+
+# from 192.168.10.99
+$ ssh admin@192.168.10.50
+Connection timed out</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: crie deliberadamente uma regra genérica antes de uma específica pra mesma porta.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 22 accept
+$ sudo nft add rule inet filter input ip saddr 192.168.10.20 tcp dport 22 accept
+$ sudo nft -a list chain inet filter input</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nft -a list mostra as duas regras, na ordem errada.</div>
+      <div class="lab-why"><b>Por quê:</b> reproduzir a armadilha de propósito é o que ensina a reconhecer o padrão "regra restritiva existe mas não funciona" num caso real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> não anotar os handles logo de cara — sem eles, fica mais difícil referenciar a regra certa depois.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: teste o acesso de uma origem NÃO listada na regra específica.</div></div>
+      <div class="lab-cmd">$ ssh admin@IP_DA_VM   # de uma origem diferente de 192.168.10.20</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida, mesmo de origem não autorizada — confirma a armadilha.</div>
+      <div class="lab-why"><b>Por quê:</b> ver a falha acontecer na prática, com a regra "certa" presente, é o que prova que ordem importa mais do que existência da regra.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só da origem autorizada e concluir que "está tudo certo" — sem testar de fora, a mascaração passa despercebida.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: anote os handles e delete a regra genérica.</div></div>
+      <div class="lab-cmd">$ sudo nft -a list chain inet filter input
+$ sudo nft delete rule inet filter input handle N</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> regra genérica removida, chain com uma regra a menos.</div>
+      <div class="lab-why"><b>Por quê:</b> usar o handle exato (não a posição visual) é o que garante deletar a regra certa, sem ambiguidade.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> deletar pela posição numérica "na cabeça" sem confirmar o handle real via -a — os números podem mudar entre listagens.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se após reordenar o acesso legítimo também parar de funcionar, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a condição da regra específica.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: insira a específica na posição 0 e adicione um drop explícito depois.</div></div>
+      <div class="lab-cmd">$ sudo nft insert rule inet filter input position 0 ip saddr 192.168.10.20 tcp dport 22 accept
+$ sudo nft add rule inet filter input tcp dport 22 drop</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> chain reordenada, específica agora avaliada primeiro.</div>
+      <div class="lab-why"><b>Por quê:</b> o drop explícito depois da específica fecha o comportamento pretendido — qualquer outra origem em SSH é rejeitada, não só "não aceita por acaso".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o drop explícito e confiar só na policy padrão da chain — funciona, mas fica menos legível pra quem revisar depois.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: teste dos dois lados — autorizado e não autorizado.</div></div>
+      <div class="lab-cmd"># de 192.168.10.20: deve conectar
+# de qualquer outro IP: deve dar timeout</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> comportamento correto confirmado para ambas as origens — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> testar só o lado autorizado prova metade da história — o bloqueio do lado não autorizado é o próprio objetivo da regra restritiva.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> considerar a correção "pronta" testando só a origem que deve funcionar, sem confirmar que as outras estão de fato bloqueadas.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que acontece, na prática, quando o pacote entra e uma regra genérica está
+    ANTES de uma regra mais específica que faz o mesmo tipo de correspondência?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Quando uma regra
+      <span class="hint" data-tip="Regra de firewall que casa com um conjunto amplo de tráfego, sem restrições específicas de origem." onclick="openGlossary(0)">casa</span>
+      com o pacote, a avaliação PARA ali — as regras seguintes, mesmo mais restritivas, nunca são
+      consultadas pra aquele pacote. Uma regra genérica antes de uma
+      <span class="hint" data-tip="Regra de firewall que restringe o tráfego a uma condição precisa, como um IP de origem específico." onclick="openGlossary(1)">específica</span>
+      "mascara" a decisão fina, mesmo que a específica esteja tecnicamente certa e presente no firewall.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>nft -a list chain mostra: regra 1 "tcp dport 22 accept" (handle 3), regra 2 "ip
+  saddr 192.168.10.20 tcp dport 22 accept" (handle 7). Você quer que SÓ 192.168.10.20 acesse SSH. Qual é a
+  correção correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Remover a regra genérica (handle 3) e inserir a regra específica na posição 0 (topo), garantindo que ela seja avaliada primeiro. Como a genérica aceitava qualquer origem e vinha antes, ela mascarava a específica — reordenar corretamente resolve, mantendo ambas as regras funcionalmente corretas, só na ordem certa.')"><b>A</b> Deletar a regra genérica (handle 3) e inserir a regra específica na posição 0 (topo da chain)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Deletar a regra específica (handle 7) removeria justamente a regra que você quer que funcione — o problema não é ela estar errada, é a genérica estar mascarando-a por vir antes.')"><b>B</b> Deletar a regra específica (handle 7), já que ela não está funcionando mesmo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Adicionar uma terceira regra igual à específica não resolve nada — a regra genérica (handle 3) continuaria vindo antes na ordem de avaliação, mascarando qualquer regra específica adicional da mesma forma.')"><b>C</b> Adicionar uma terceira regra idêntica à específica, torcendo para que uma das três funcione</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Trocar a policy padrão da chain não resolve o problema de ordem entre as duas regras existentes — o policy só se aplica quando NENHUMA regra casa, e nesse caso a regra genérica sempre casa primeiro.')"><b>D</b> Trocar a policy da chain de drop para reject, sem mexer na ordem das regras existentes</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 ORDEM REGRAS FIREWALL é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Após reordenar, você testa de 192.168.10.20 (deve entrar) e de 192.168.10.99 (não deve entrar)</h2>
+  <p>O painel 6 da prancha de hoje mostra exatamente esse teste dos dois lados.</p>
+  <div class='box question'>Por que testar SÓ a origem autorizada não é suficiente pra validar a correção?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Testar só a origem autorizada confirma que ela consegue entrar — mas não prova que outras origens estão BLOQUEADAS, que é o objetivo real da regra restritiva. Testar também de uma origem não autorizada confirma que o bloqueio realmente funciona, fechando a validação completa.')"><b>A</b> Testar só a origem autorizada confirma que ela entra, mas não prova que outras origens estão bloqueadas — que é o próprio objetivo da regra restritiva</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A questão não é sobre velocidade de conexão — é sobre confirmar completamente o comportamento pretendido da regra (permitir uma origem, bloquear as demais), o que exige testar os dois lados.')"><b>B</b> Não é necessário — se a origem autorizada entra, isso já garante automaticamente que as outras estão bloqueadas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O teste da origem não autorizada não é sobre economizar tempo de teste — é sobre validar completamente que o objetivo real da regra (restringir acesso) foi realmente alcançado.')"><b>C</b> É necessário só pra economizar tempo de teste depois, caso alguém pergunte</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 ORDEM REGRAS FIREWALL é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se as duas regras (genérica e específica) permitem SSH, não importa qual vem primeiro?"</h2>
+  <p>Um colega acha que, já que as duas fazem "accept", a ordem entre elas é irrelevante.</p>
+  <div class='box question'>Por que a ordem importa mesmo quando as duas regras têm a mesma ação (accept)?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A ordem importa porque a CONDIÇÃO de cada regra é diferente — a genérica aceita qualquer origem, a específica só uma. Se a genérica vier primeiro, TODO tráfego SSH é aceito antes mesmo de a condição mais restritiva ser avaliada, tornando a regra específica funcionalmente inútil, mesmo com a mesma ação (accept) nas duas.')"><b>A</b> A condição de cada regra é diferente (qualquer origem vs. uma origem específica) — se a genérica vem primeiro, ela aceita tudo antes da condição restritiva ser avaliada, tornando a específica inútil</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A ordem entre elas importa muito mesmo com a mesma ação — porque a CONDIÇÃO (quem pode entrar) é diferente entre as duas regras, e é isso que a ordem afeta.')"><b>B</b> Não importa mesmo, já que ambas resultam em accept — o resultado final seria idêntico de qualquer forma</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A ordem entre as duas regras não depende do dia da semana — é uma questão fixa de como o firewall avalia regras sequencialmente, sempre da mesma forma, independente de quando isso acontece.')"><b>C</b> Só importa em dias específicos da semana, por causa de políticas de rotação de regras</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 ORDEM REGRAS FIREWALL é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Ao suspeitar de ordem de regras, use nft -a list pra ver os handles exatos.</li>
+    <li>Identifique regras genéricas que podem estar mascarando regras mais específicas.</li>
+    <li>Reordene com evidência: delete a genérica, insira a específica na posição correta.</li>
+    <li>Teste dos dois lados: a origem autorizada entra, e a não autorizada é bloqueada.</li>
+    <li>Documente a mudança com os handles antes e depois, pra rastreabilidade.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Ao revisar qualquer firewall herdado (de clone, template ou configuração antiga), procure
+  ativamente por regras genéricas no topo da chain que possam estar mascarando regras específicas mais
+  abaixo — esse padrão se repete sempre que configurações são copiadas sem auditoria completa da ordem.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O handle de cada regra foi identificado antes de qualquer alteração.</li>
+    <li>A regra genérica que mascarava a específica foi removida corretamente.</li>
+    <li>A regra específica foi posicionada antes de qualquer regra mais ampla equivalente.</li>
+    <li>O teste dos dois lados (autorizado e não autorizado) confirmou o comportamento esperado.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Reordenar regras via delete + insert é reversível, desde que você tenha anotado
+  os handles e o conteúdo original antes de mudar (ou, melhor ainda, um backup completo do ruleset, como no
+  Dia 2). O cuidado real é sempre confirmar com nft -a list o handle exato antes de deletar qualquer regra.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "primeira regra que casa vence" conecta com a
+  Semana 8 (grep -qF idempotência, ordem de verificação importa) — mesma disciplina de que ordem de avaliação
+  muda o resultado, mesmo com as mesmas regras presentes. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a correção certa foi <b>deletar a
+  regra genérica (handle 3) e inserir a específica na posição 0</b>. O ponto central do caso é este: firewall
+  não lê intenção; ele lê ordem, condição e ação.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de reconhecer e corrigir o problema de ordem de regras que mascara
+  uma regra mais específica. Amanhã fecha a Semana 15 com um protocolo essencial pra qualquer mudança de
+  firewall remota: nunca confiar em uma sessão só — abrir uma segunda sessão de segurança antes do primeiro
+  Enter que pode te trancar fora.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 15, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Regra genérica","Regra de firewall que casa com um conjunto amplo de tráfego, sem restrições específicas de origem ou condição.",
+   "É uma autorização de entrada tipo 'qualquer pessoa pode passar' — vale pra praticamente todo mundo, sem exceção."],
+  ["Regra específica","Regra de firewall que restringe o tráfego a uma condição precisa, como um IP de origem específico.",
+   "É uma autorização nominal — 'só esta pessoa, com este nome exato, pode passar', sem valer pra mais ninguém."],
+  ["Handle (nftables)","Identificador único atribuído a cada regra dentro de uma chain, usado para referenciá-la com precisão em operações como delete.",
+   "É o número de protocolo de um documento específico — permite apontar exatamente pra aquele item, sem confundir com outro parecido."],
+  ["nft insert rule ... position N","Comando que insere uma nova regra numa posição específica da chain, controlando exatamente onde ela será avaliada.",
+   "É colocar um novo item exatamente numa posição específica da fila, não simplesmente no final dela."],
+  ["Ordem de avaliação (para na primeira que casa)","Comportamento de firewalls como nftables de avaliar regras sequencialmente e parar assim que uma delas corresponde ao pacote.",
+   "É a fila de triagem: assim que uma condição bate, a decisão é tomada ali — as regras seguintes nem chegam a ser lidas para aquele caso."],
+  ["Mascaramento de regra (rule shadowing)","Situação em que uma regra mais ampla, posicionada antes, impede que uma regra mais restritiva seguinte seja avaliada.",
+   "É uma placa genérica 'todos podem entrar' pendurada na frente de uma placa mais específica 'só fulano pode entrar' — a de trás nunca é vista."],
+  ["Correção com evidência (handle)","Aplicar uma correção referenciando precisamente qual regra está sendo alterada, usando seu identificador único.",
+   "É corrigir exatamente a linha 47 do documento, não 'algo por ali perto' — precisão que evita mexer na coisa errada."],
+  ["Teste dos dois lados (positivo e negativo)","Validar tanto que o acesso permitido funciona quanto que o acesso restrito realmente é bloqueado.",
+   "É testar a fechadura nova tanto com a chave certa (deve abrir) quanto com uma chave errada (não deve abrir) — as duas confirmações juntas provam que funciona."],
+  ["Condição vs. ação (regra de firewall)","Distinção entre O QUE a regra verifica (condição, como origem ou porta) e O QUE ela faz quando a condição bate (ação, como accept ou drop).",
+   "É a diferença entre o critério de seleção (quem pode entrar) e a instrução de execução (abrir ou não abrir a porta) — duas partes de uma mesma regra."],
+  ["Rastreabilidade de mudança","Prática de documentar handles, comandos e resultados de uma alteração de firewall, permitindo reconstruir exatamente o que foi feito depois.",
+   "É o registro detalhado de manutenção — permite que qualquer pessoa, olhando depois, entenda exatamente o que foi alterado e por quê."],
+  ["Ação idêntica, condição diferente","Duas regras podem ter a mesma ação final (como accept), mas produzir resultados completamente diferentes dependendo da condição e da ordem.",
+   "É dois convites de festa dizendo 'entre' — um vale pra qualquer pessoa, o outro só pra uma específica; a ordem em que são checados muda tudo."],
+  ["Regra restritiva (allowlist)","Regra de firewall projetada para permitir acesso apenas a uma condição estreita e específica, negando implicitamente o resto.",
+   "É a lista VIP de uma festa — só quem está nominalmente na lista entra, todo o resto fica de fora por padrão."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

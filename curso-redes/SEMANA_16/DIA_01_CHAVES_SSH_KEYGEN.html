@@ -1,0 +1,529 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 16 · Dia 1 — Chaves SSH: Privada Não se Compartilha | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_15/DIA_05_TESTE_SEGURO_SEGUNDA_SESSAO.html'>← Semana 15, Dia 5</a><a href='#'>Semana 16</a><a href='DIA_02_SSH_CONFIG_PROXYJUMP.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 15 inteira:</b> Você já sabe proteger o CAMINHO até o
+servidor (firewall). Hoje você protege a PRÓPRIA IDENTIDADE de quem entra — chaves SSH, e a regra mais
+simples e mais violada de toda a segurança: a chave privada nunca sai da sua máquina, nunca, por conveniência
+nenhuma.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: gerar e usar chaves SSH com disciplina profissional.</b>
+Você ganha a distinção entre chave pública (pode ir pro servidor) e privada (fica só com você), o comando
+certo de instalação (ssh-copy-id) e o protocolo de revogação se uma chave privada vazar.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 16 · Dia 1 | Nível Júnior — Redes</div>
+  <h1>Chaves SSH: Privada Não se Compartilha</h1>
+  <p>chave pública abre a porta; chave privada prova que você é você</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S16D01_CHAVES_SSH_KEYGEN.png' alt='Prancha em seis quadros sobre geração de chaves SSH, a diferença entre chave pública e privada, instalação segura e revogação em caso de vazamento'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"Vou colocar minha chave na pasta da equipe para facilitar." Alerta vermelho: id_ed25519
+  (sem .pub) sendo arrastado pra uma pasta compartilhada. Chave privada NUNCA se compartilha — é o crachá com
+  biometria, não um passe genérico. Compartilhar a privada é compartilhar a própria identidade digital.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um estagiário queria facilitar o acesso da equipe e arrastou <code>id_ed25519</code> (sem .pub) pra uma
+    pasta compartilhada no servidor de arquivos — "assim todo mundo usa a mesma chave". Eu pedi pra apagar
+    na hora e expliquei: chave privada é o crachá com biometria, não um passe genérico que se empresta.
+    Compartilhá-la é compartilhar a própria identidade digital. Mas apagar a cópia não foi o fim da história
+    — durante os dias em que ficou ali, qualquer pessoa com acesso à pasta pôde tê-la copiado silenciosamente,
+    sem deixar rastro.
+    <br><br>
+    A resposta correta não foi só apagar: rotacionamos a chave — gerei um par novo, removi a entrada antiga
+    do <code>authorized_keys</code>. O ponto que fica: credencial exposta exige rotação, não só remoção. É
+    a mesma disciplina da Semana 10 com segredos em scripts — nunca assumir que "ninguém deve ter visto",
+    sempre tratar como visto e trocar.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+    <tr><td><code>ssh-keygen -t ed25519 -C "comentário"</code></td><td>Gera um novo par de chaves (privada + pública).</td></tr>
+    <tr><td><code>ssh-copy-id usuário@host</code></td><td>Instala a chave pública no authorized_keys remoto, com segurança.</td></tr>
+    <tr><td><code>chmod 600</code> (na privada)</td><td>Garante que só o dono pode ler o arquivo da chave privada.</td></tr>
+  </tbody></table>
+  <pre>$ ssh-keygen -t ed25519 -C "juniorjr@empresa"
+Your identification has been saved in /home/adminjr/.ssh/id_ed25519
+Your public key has been saved in /home/adminjr/.ssh/id_ed25519.pub
+
+$ ls -l ~/.ssh/id_ed25519*
+-rw-------  id_ed25519      &lt;-- 600, privada, só o dono lê
+-rw-r--r--  id_ed25519.pub  &lt;-- pode ser copiada livremente
+
+$ ssh-copy-id adminjr@192.168.10.50
+Number of key(s) added: 1
+
+$ ssh adminjr@192.168.10.50
+adminjr@srv-app-01:~$ [login sem senha]
+
+--- se a privada vazar ---
+$ rm ~/shared/id_ed25519
+$ ssh-keygen -t ed25519 -C "junior@empresa-rotated"
+$ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: gere um par de chaves.</div></div>
+      <div class="lab-cmd">$ ssh-keygen -t ed25519 -C "lab@teste"</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> dois arquivos criados, id_ed25519 e id_ed25519.pub.</div>
+      <div class="lab-why"><b>Por quê:</b> o comentário (-C) identifica de onde veio a chave — útil quando você tem várias e precisa saber qual remover depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> deixar a passphrase em branco em chaves usadas fora de laboratório — sem ela, quem tiver o arquivo da chave privada tem acesso direto.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: confirme as permissões dos dois arquivos.</div></div>
+      <div class="lab-cmd">$ ls -l ~/.ssh/id_ed25519*</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> -rw------- na privada (600), -rw-r--r-- na pública.</div>
+      <div class="lab-why"><b>Por quê:</b> permissões erradas na privada (legível por outros usuários) fazem o próprio SSH recusar usá-la — é uma proteção embutida.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> copiar a chave privada entre máquinas com scp/rsync sem preservar permissões, e depois perder tempo descobrindo por que o SSH recusa a chave.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: instale a chave pública num destino de teste.</div></div>
+      <div class="lab-cmd">$ ssh-copy-id adminjr@IP_DA_VM</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "Number of key(s) added: 1".</div>
+      <div class="lab-why"><b>Por quê:</b> ssh-copy-id cuida de criar o diretório .ssh e ajustar permissões no destino automaticamente — mais seguro que copiar manualmente.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tentar copiar a chave PRIVADA por engano com scp — releia o nome do arquivo (sem .pub) antes de confirmar qualquer cópia.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o login ainda pedir senha após ssh-copy-id, este é o ponto onde o chat com o Sênior-IA vai ajudar a checar permissões de ~/.ssh no destino.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: teste o login sem senha.</div></div>
+      <div class="lab-cmd">$ ssh adminjr@IP_DA_VM</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> login direto, sem prompt de senha.</div>
+      <div class="lab-why"><b>Por quê:</b> testar o login antes de considerar "concluído" é o que confirma que a instalação realmente funcionou, não só que o comando não deu erro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> considerar a tarefa pronta só porque ssh-copy-id não mostrou erro — sempre teste o login de fato.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: pratique o protocolo de rotação de chave.</div></div>
+      <div class="lab-cmd">$ ssh-keygen -t ed25519 -C "lab@teste-rotated"
+$ sed -i '/lab@teste$/d' ~/.ssh/authorized_keys
+$ ssh-copy-id -i ~/.ssh/id_ed25519_rotated.pub adminjr@IP_DA_VM</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> chave antiga sem mais acesso, nova chave funcionando — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> praticar a rotação num ambiente seguro é o que te deixa confiante pra fazer isso rápido quando for um caso real de vazamento.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> remover a chave antiga do authorized_keys ANTES de confirmar que a nova já está funcionando — isso pode te trancar fora sem querer.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual chave vai pro servidor, qual fica só com você, e por que a senha nunca
+    "viaja" na autenticação por chave?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      A
+      <span class="hint" data-tip="Metade do par de chaves que pode ser copiada livremente para servidores — só permite verificar, não autenticar sozinha." onclick="openGlossary(0)">chave pública</span>
+      (.pub) vai pro servidor, em authorized_keys. A
+      <span class="hint" data-tip="Metade secreta do par de chaves, que nunca deve sair da máquina do usuário — é ela que prova a identidade." onclick="openGlossary(1)">chave privada</span>
+      fica só com você, nunca é enviada. A autenticação usa
+      <span class="hint" data-tip="Mecanismo onde o servidor envia um desafio que só quem tem a chave privada consegue responder corretamente, sem revelar a chave em si." onclick="openGlossary(2)">challenge/response</span>
+      — o servidor desafia, você responde assinando com a privada, e a senha nunca precisa trafegar pela rede.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você gerou um par de chaves com ssh-keygen. Qual arquivo você deve copiar para
+  o servidor de destino, e com qual comando?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'ssh-copy-id copia especificamente a chave PÚBLICA (id_ed25519.pub) para o arquivo authorized_keys do servidor de destino — nunca a privada. É o comando correto e seguro para instalar seu acesso sem precisar copiar a chave privada manualmente.')"><b>A</b> ssh-copy-id adminjr@servidor — copia automaticamente a chave pública para o authorized_keys do servidor</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Copiar a chave privada (id_ed25519, sem .pub) para o servidor é exatamente o erro do painel 1 da prancha de hoje — a privada nunca deve sair da sua máquina, nem para o próprio servidor que você está acessando.')"><b>B</b> scp id_ed25519 adminjr@servidor:~/.ssh/ — copiar a chave privada diretamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Compartilhar a chave privada com a equipe via pasta compartilhada é exatamente o erro que a prancha de hoje mostra como armadilha — nunca é uma prática correta, independente da conveniência.')"><b>C</b> Colocar ambas as chaves numa pasta compartilhada da equipe, para facilitar o acesso de todos</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ssh-keygen -t ed25519 gera um NOVO par de chaves — não é o comando de instalação da chave já gerada num servidor; usá-lo de novo criaria um par diferente, sem instalar nada.')"><b>D</b> ssh-keygen -t ed25519 novamente no servidor, para gerar uma cópia da mesma chave lá</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 01 CHAVES SSH KEYGEN é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Você descobre que uma cópia da sua chave privada foi acidentalmente colocada numa pasta
+  compartilhada por alguns dias</h2>
+  <p>O painel 6 da prancha de hoje mostra a ação correta: apagar a cópia e rotacionar a chave.</p>
+  <div class='box question'>Por que apenas apagar a cópia compartilhada não é suficiente — por que é
+  necessário também gerar uma chave nova (rotacionar)?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Apagar a cópia compartilhada não desfaz o fato de que, durante o tempo em que ficou exposta, qualquer pessoa com acesso àquela pasta pôde copiá-la silenciosamente. Rotacionar (gerar uma chave nova e remover a antiga do authorized_keys) garante que mesmo uma cópia não detectada da chave antiga se torne inútil.')"><b>A</b> Apagar a cópia não desfaz o fato de que ela pode já ter sido copiada silenciosamente durante a exposição — rotacionar torna qualquer cópia não detectada inútil</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Apagar a cópia da pasta compartilhada não impede que alguém já tenha feito sua própria cópia da chave antes da exclusão — é justamente por isso que só apagar não é suficiente, e a rotação é necessária.')"><b>B</b> Não é necessário rotacionar — apagar a cópia já resolve completamente o problema</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Rotacionar a chave não tem relação com liberar espaço em disco — é uma medida de segurança para invalidar qualquer cópia não detectada da chave exposta, não uma questão de armazenamento.')"><b>C</b> É necessário rotacionar só para liberar espaço em disco, sem relação com segurança</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 01 CHAVES SSH KEYGEN é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Se a chave pública pode ser vista por qualquer pessoa, isso não é uma falha de segurança?"</h2>
+  <p>Um colega estranha que a chave pública possa ser "pública" mesmo, sem risco.</p>
+  <div class='box question'>Por que a chave pública ser visível não compromete a segurança do sistema?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'A chave pública sozinha não permite autenticar como o usuário — ela só permite verificar uma assinatura feita com a chave privada correspondente. Sem a privada, ter a pública não dá acesso a nada; é matematicamente inviável derivar a privada a partir da pública com a criptografia usada.')"><b>A</b> A chave pública sozinha não permite autenticação — ela só verifica uma assinatura feita com a privada correspondente, que é matematicamente inviável de derivar a partir dela</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é verdade que a pública é insegura — sua natureza compartilhável é justamente o ponto: ela não permite acesso sozinha, sem a privada correspondente.')"><b>B</b> É verdade, a chave pública sendo visível é uma falha real de segurança que deveria ser corrigida</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não há relação entre ser vista por poucas pessoas e segurança da chave pública — ela é projetada para ser distribuída livremente, sua segurança não depende de sigilo.')"><b>C</b> Só não é falha se poucas pessoas tiverem acesso a ela, o segredo precisa ser relativo</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 01 CHAVES SSH KEYGEN é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Gere o par de chaves com ssh-keygen, escolhendo um comentário identificável.</li>
+    <li>Confirme as permissões: 600 na privada, pública pode ser lida por outros.</li>
+    <li>Instale a chave pública com ssh-copy-id, nunca copiando a privada manualmente.</li>
+    <li>Teste o login antes de considerar a instalação concluída.</li>
+    <li>Se a privada vazar (mesmo que suspeita), rotacione imediatamente — nunca só apague a cópia.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Trate qualquer chave privada fora de ~/.ssh (pasta compartilhada, e-mail, chat, repositório)
+  como vazada, mesmo que a intenção fosse "só facilitar" — rotacione por padrão, nunca assuma que ninguém
+  copiou enquanto esteve exposta.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A chave privada nunca foi compartilhada, copiada ou enviada para nenhum outro lugar.</li>
+    <li>Apenas a chave pública foi instalada no servidor, via ssh-copy-id.</li>
+    <li>As permissões da chave privada foram confirmadas como 600.</li>
+    <li>O protocolo de rotação foi entendido e testado, não apenas "apagar a cópia".</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Remover uma entrada de authorized_keys é reversível adicionando a chave pública
+  de volta, se necessário. O cuidado real é irreversível na outra direção: uma chave privada vazada não pode
+  "não ter vazado" — a única resposta correta é rotacionar, nunca assumir que ninguém a copiou.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "credencial vazada exige rotação, não só remoção"
+  conecta com a Semana 10 (segredos via --defaults-extra-file, nunca hardcoded) — mesma disciplina de tratar
+  credenciais como algo que precisa ser trocado, não só escondido de novo. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, o comando certo foi <b>ssh-copy-id</b>,
+  instalando apenas a chave pública, nunca a privada. O ponto central do caso é este: chave pública abre a
+  porta; chave privada prova que você é você.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de gerar, instalar e proteger chaves SSH com disciplina
+  profissional. Amanhã você aprende a organizar múltiplos acessos SSH com ~/.ssh/config e a acessar servidores
+  internos através de um bastion host, sem digitar a cadeia de saltos manualmente toda vez.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 16, Dia 1 de ~250 — abre a Semana 16 (SSH avançado). Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Chave pública","Metade do par de chaves que pode ser copiada livremente para servidores — só permite verificar, não autenticar sozinha.",
+   "É a fechadura instalada na porta — qualquer um pode ver e examinar, mas sozinha ela não abre nada sem a chave certa."],
+  ["Chave privada","Metade secreta do par de chaves, que nunca deve sair da máquina do usuário — é ela que prova a identidade.",
+   "É a chave física de casa — só existe uma cópia legítima, e entregá-la a alguém é dar a essa pessoa o seu próprio acesso."],
+  ["Challenge/response (SSH)","Mecanismo onde o servidor envia um desafio que só quem tem a chave privada consegue responder corretamente, sem revelar a chave em si.",
+   "É o segurança pedindo pra você assinar um papel com sua caligrafia única — ele reconhece a assinatura sem precisar guardar sua identidade completa."],
+  ["ssh-keygen","Comando que gera um novo par de chaves criptográficas (privada e pública) para autenticação SSH.",
+   "É a máquina que corta uma chave física nova e, ao mesmo tempo, registra o molde da fechadura correspondente."],
+  ["ssh-copy-id","Comando que instala automaticamente a chave pública no arquivo authorized_keys de um servidor remoto.",
+   "É o serviço de correio que entrega só a cópia da fechadura pro prédio novo, nunca a chave física original."],
+  ["authorized_keys","Arquivo no servidor que lista as chaves públicas autorizadas a acessar uma conta específica.",
+   "É a lista de fechaduras compatíveis instaladas na porta — qualquer chave que combine com uma delas pode entrar."],
+  ["Permissão 600 (chave privada)","Configuração de permissão que restringe a leitura e escrita de um arquivo apenas ao seu dono.",
+   "É guardar a chave física de casa dentro de um cofre que só você tem a combinação — ninguém mais pode nem ver que ela está ali."],
+  ["Rotação de chave (key rotation)","Prática de substituir uma chave por uma nova e revogar a antiga, geralmente após suspeita de exposição.",
+   "É trocar a fechadura da porta depois de perder o controle sobre quem tinha cópia da chave antiga — a chave velha simplesmente para de funcionar."],
+  ["Comentário de chave (-C)","Texto identificador anexado a uma chave SSH, útil para saber a origem e o propósito dela mais tarde.",
+   "É a etiqueta gravada na chave física — ajuda a lembrar qual porta ela abre, entre um molho cheio de chaves parecidas."],
+  ["Vazamento de credencial","Situação em que uma chave privada ou senha se torna acessível a alguém não autorizado, mesmo que por descuido.",
+   "É deixar a chave de casa caída na calçada — mesmo sem saber se alguém pegou, o risco já existe e precisa ser tratado."],
+  ["Compartilhamento indevido (armadilha comum)","Erro de colocar credenciais sensíveis em locais de acesso amplo por conveniência, achando que 'só a equipe vai ver'.",
+   "É deixar a chave-mestra do prédio pendurada num gancho na entrada 'pra facilitar' — conveniência que vira risco assim que alguém indevido passa por ali."],
+  ["Identidade digital (SSH)","O conjunto de credenciais criptográficas que provam, de forma verificável, quem está se conectando a um sistema.",
+   "É o seu passaporte digital — algo que só você deveria conseguir apresentar, e que identifica você de forma única perante o sistema."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,488 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 17 · Dia 4 — NAT ou Firewall? | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_DNAT_PORT_FORWARDING.html'>← Semana 17, Dia 3</a><a href='#'>Semana 17</a><a href='DIA_05_TESTE_PONTA_A_PONTA.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> Você já sabe que DNAT e forward são coisas separadas. Hoje
+aparece o cenário mais confuso de todos: um MESMO sintoma (timeout externo) pode ter causa em qualquer uma
+das duas — e a evidência real (não achismo) é o que separa qual delas é a culpada.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: diagnosticar NAT vs firewall com evidência forense.</b> Você
+ganha o método de comparar as regras NAT e firewall lado a lado, separando as duas perguntas (tradução está
+certa? permissão está certa?) antes de aplicar qualquer correção.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 17 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>NAT ou Firewall?</h1>
+  <p>timeout externo não aponta culpado sozinho; compare NAT e firewall separadamente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S17D04_NAT_OU_FIREWALL.png' alt='Prancha em seis quadros sobre diagnosticar se um timeout externo é causado por regra DNAT errada ou por firewall bloqueando, comparando as duas evidências separadamente'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"De fora dá timeout. Mas isso é NAT errado ou firewall bloqueando?" Mesmo sintoma, causas
+  possíveis diferentes. A investigação forense compara as duas evidências lado a lado: porta pública mapeada?
+  Contador de DNAT incrementa? Regra forward existe? Contador de forward incrementa?</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais são as duas perguntas separadas que você precisa responder pra diagnosticar
+    um timeout externo num serviço publicado?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      1) A
+      <span class="hint" data-tip="Confirmar se a regra de tradução de destino (DNAT) está configurada corretamente, apontando pro IP e porta certos." onclick="openGlossary(0)">tradução (NAT)</span>
+      está apontando pro destino certo? 2) A
+      <span class="hint" data-tip="Confirmar se existe uma regra de firewall permitindo o tráfego traduzido atravessar até o destino." onclick="openGlossary(1)">permissão (firewall)</span>
+      deixa esse tráfego passar? Primeiro confirme a tradução, depois confirme a permissão — nessa ordem, sem
+      pular nenhuma.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>nft list chain ip nat prerouting mostra: dnat to 192.168.10.50:8081. O serviço
+  real está na porta 8080, não 8081. nft list chain inet filter forward mostra a regra de permissão correta
+  pra 192.168.10.50:8080. Qual é a causa real do timeout?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'A regra DNAT está traduzindo pra porta errada (8081 em vez de 8080, onde o serviço realmente escuta). Mesmo com a permissão de forward correta pra porta 8080, o pacote é traduzido pra 8081 (sem serviço nenhum ali) antes de chegar na etapa de forward — a causa está na tradução, não na permissão.')"><b>A</b> A tradução (DNAT) está apontando pra porta errada (8081 em vez de 8080) — corrigir o destino da regra DNAT resolve, mesmo com o forward já correto</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A regra de forward já foi confirmada como correta pra porta 8080 — o problema não está na permissão, está na tradução DNAT apontando pra porta errada.')"><b>B</b> A regra de forward está errada e precisa ser recriada para a porta 8081</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O serviço não precisa escutar em ambas as portas — o problema é a regra DNAT apontar pra uma porta (8081) onde nada está escutando, quando deveria apontar pra 8080, onde o serviço realmente está.')"><b>C</b> O serviço precisa ser configurado para escutar em ambas as portas simultaneamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O firewall externo (do lado do cliente que está testando) não tem relação com essa configuração — o problema está inteiramente na configuração do servidor, na regra DNAT apontando pra porta errada.')"><b>D</b> É um problema de firewall do lado do cliente externo que está testando o acesso</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 NAT OU FIREWALL é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Evidência</th><th>Comando</th><th>O que revela</th></tr></thead><tbody>
+    <tr><td>Regra DNAT</td><td><code>nft list chain ip nat prerouting</code></td><td>Pra onde o tráfego está sendo traduzido de verdade.</td></tr>
+    <tr><td>Regra forward</td><td><code>nft list chain inet filter forward</code></td><td>Se existe permissão pro destino traduzido.</td></tr>
+    <tr><td>Contador da regra</td><td><code>nft -a list chain ...</code></td><td>Se a regra específica está sendo usada pelo tráfego real.</td></tr>
+  </tbody></table>
+  <pre>--- evidência NAT ---
+$ sudo nft list chain ip nat prerouting
+chain prerouting {
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8081
+}
+
+--- evidência firewall ---
+$ sudo nft list chain inet filter forward
+chain forward {
+    type filter hook forward priority 0; policy drop;
+    ip daddr 192.168.10.50 tcp dport 8080 accept
+}
+--- Firewall permite 8080, mas NAT manda pra 8081. ---
+
+--- correção do destino ---
+$ sudo nft delete rule ip nat prerouting handle 12
+$ sudo nft add rule ip nat prerouting \
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8080
+
+--- teste de fora ---
+$ curl http://203.0.113.5:8080/health
+OK app-test healthy</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra: "Não culpe a última camada que você aprendeu. Primeiro
+  confirme para onde o NAT está mandando o pacote; depois confirme se o firewall deixa passar"</h2>
+  <p>Um colega, tendo acabado de aprender sobre forward ontem, já quer mexer só nas regras de firewall.</p>
+  <div class='box question'>Por que investigar sempre pela ORDEM do caminho do pacote (NAT primeiro, depois
+  firewall) é melhor do que ir direto pra camada que você aprendeu por último?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O pacote passa PRIMEIRO pela tradução NAT, e só DEPOIS pela decisão de forward — seguir essa ordem real de processamento garante que você não pule uma causa possível só porque é mais familiar. Investigar pela ordem do caminho do pacote, não pela ordem que você aprendeu os conceitos, evita viés de investigação.')"><b>A</b> O pacote passa por NAT antes de forward na ordem real de processamento — seguir essa ordem evita pular uma causa possível só por familiaridade recente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A ordem de investigação não é sobre gastar mais tempo — é sobre seguir o caminho real do pacote (NAT antes de forward), evitando viés de pular direto pro que você aprendeu por último.')"><b>B</b> Não faz diferença real — qualquer ordem de investigação chega no mesmo resultado igualmente rápido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A ordem de investigação não tem relação com senioridade da equipe — é sobre seguir o caminho técnico real do pacote através do sistema, aplicável a qualquer pessoa investigando.')"><b>C</b> É importante só para equipes juniores; sêniores podem pular direto pra qualquer camada</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 NAT OU FIREWALL é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se as duas evidências (NAT e firewall) parecerem certas à primeira vista, o problema está em
+  outro lugar?"</h2>
+  <p>Um colega, revisando rapidamente as duas regras, acha que ambas "parecem OK" e já quer procurar outra
+  causa.</p>
+  <div class='box question'>Por que revisar as regras com atenção aos detalhes exatos (porta, IP) é mais
+  confiável do que uma checagem superficial de "parece certo"?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Erros como o do exemplo de hoje (porta 8081 em vez de 8080) são fáceis de passar despercebidos numa leitura rápida — os dois blocos de regra parecem corretos à primeira vista, mas o detalhe exato do número da porta é o que realmente importa. Comparar valor por valor, não só a presença da regra, é o que revela a causa real.')"><b>A</b> Erros de detalhe (como um número de porta errado) passam despercebidos numa leitura rápida — comparar valor por valor, não só a presença da regra, é o que revela a causa real</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Parecer certo numa leitura rápida não é a mesma coisa que estar de fato correto em cada detalhe — erros pequenos como um número de porta errado exigem comparação cuidadosa, não confiança na primeira impressão.')"><b>B</b> Não há diferença real — se as regras existem e parecem coerentes, o problema realmente está em outro lugar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A causa de um erro de porta não tem relação com o número de regras totais no firewall — mesmo com poucas regras, um detalhe específico errado (como a porta) pode passar despercebido numa checagem superficial.')"><b>C</b> Só é necessário comparar com atenção se o firewall tiver mais de cem regras cadastradas</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 NAT OU FIREWALL é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Diante de timeout externo num serviço publicado, separe as duas perguntas: NAT e firewall.</li>
+    <li>Confirme a regra DNAT primeiro, seguindo a ordem real do caminho do pacote.</li>
+    <li>Confirme a regra de forward depois, comparando os valores exatos (IP, porta) com a DNAT.</li>
+    <li>Não confie em "parece certo" — compare valor por valor entre as duas evidências.</li>
+    <li>Corrija a camada exata que estiver errada, documentando qual era a causa real.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Em VM de laboratório, configure DNAT e forward corretamente, confirmando que o acesso externo funciona.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> acesso bem-sucedido, estabelecendo o cenário base saudável.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Deliberadamente altere a porta de destino na regra DNAT pra uma porta diferente da real, sem mexer no forward.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> timeout externo, mesmo com o forward ainda correto.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Compare as duas regras (nat prerouting e filter forward) lado a lado, valor por valor.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> divergência identificada entre a porta do DNAT e a porta do forward.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se as portas coincidirem mas o acesso ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar se o serviço realmente está escutando na porta esperada.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Corrija a regra DNAT pra porta correta e teste de novo o acesso externo.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> acesso restaurado, confirmando a causa real.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Documente a causa exata (NAT com porta errada, não firewall) — reproduzindo o painel 6 da prancha de hoje.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro claro atribuindo a causa à camada certa.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>As regras de NAT e firewall foram comparadas separadamente, valor por valor.</li>
+    <li>A ordem de investigação seguiu o caminho real do pacote (NAT antes de forward).</li>
+    <li>A causa foi atribuída à camada certa, com evidência exata, não achismo.</li>
+    <li>A correção foi aplicada só na regra realmente errada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Corrigir uma regra DNAT (delete + add com o valor certo) é reversível, desde que
+  você tenha anotado a configuração original antes de mudar. O cuidado real é nunca comparar regras "de
+  memória" — sempre ler o valor exato de cada uma antes de concluir qual está errada.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "não culpe a última camada aprendida" conecta
+  com a Semana 13 (não confundir causa mais recente com causa real) — mesma disciplina de investigar pela
+  ordem do sistema, não pela ordem do seu aprendizado. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a causa certa foi <b>DNAT apontando
+  pra porta errada</b>, mesmo com o forward correto. O ponto central do caso é este: timeout externo não
+  aponta culpado sozinho; compare NAT e firewall separadamente.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de diagnosticar com precisão entre NAT e firewall quando o sintoma é
+  o mesmo. Amanhã fecha a Semana 17 com um checklist de teste ponta a ponta — validando um port forward do
+  jeito que o usuário real vai usar, não por um atalho que pode mentir sobre o resultado.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 17, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Tradução (NAT) — pergunta 1","Confirmar se a regra de tradução de destino (DNAT) está configurada corretamente, apontando pro IP e porta certos.",
+   "É conferir se o endereço escrito no envelope de redirecionamento está correto, antes de qualquer outra checagem."],
+  ["Permissão (firewall) — pergunta 2","Confirmar se existe uma regra de firewall permitindo o tráfego traduzido atravessar até o destino.",
+   "É conferir se a portaria vai deixar aquela entrega específica passar, depois de já confirmar que o endereço está certo."],
+  ["Ordem real de processamento (NAT antes de forward)","Sequência efetiva em que um pacote é processado pelo sistema: primeiro tradução, depois decisão de permissão.",
+   "É a ordem real da esteira de produção — a peça passa pela estação de pintura antes da estação de embalagem, nessa ordem física, não na ordem que você decidiu aprender sobre elas."],
+  ["Comparação valor por valor","Prática de conferir cada campo específico (IP, porta) entre duas regras relacionadas, em vez de uma checagem superficial de presença.",
+   "É comparar número por número dois formulários preenchidos, em vez de só checar que os dois campos existem."],
+  ["Viés de investigação (última camada aprendida)","Tendência de suspeitar primeiro da causa mais recentemente aprendida, em vez de seguir a ordem lógica real do sistema.",
+   "É o médico suspeitar primeiro da doença que acabou de estudar num curso, em vez de seguir o protocolo de diagnóstico padrão."],
+  ["Handle (nftables)","Identificador único atribuído a cada regra dentro de uma chain, usado para referenciá-la com precisão em operações como delete.",
+   "É o número de protocolo de um documento específico — permite apontar exatamente pra aquele item, sem confundir com outro parecido."],
+  ["Evidência forense de rede","Coleta sistemática de dados objetivos (regras, contadores, testes reais) para determinar a causa exata de um incidente de rede.",
+   "É a perícia técnica reunindo provas concretas da cena, em vez de confiar em suposições sobre o que 'provavelmente' aconteceu."],
+  ["curl para /health (endpoint de saúde)","Testar um endpoint específico projetado para confirmar que um serviço está funcionando corretamente, além de apenas responder.",
+   "É perguntar diretamente 'você está bem?' pro serviço, em vez de só confirmar que alguém atendeu o telefone."],
+  ["Causa real vs. suposição inicial","Diferença entre a explicação que parece mais óbvia à primeira vista e a causa efetivamente confirmada pela evidência coletada.",
+   "É a diferença entre o primeiro suspeito de um caso e quem realmente é culpado, confirmado só depois da investigação completa."],
+  ["Registro de causa raiz","Documentação que especifica exatamente qual camada e qual valor estavam incorretos, servindo de referência para incidentes futuros semelhantes.",
+   "É o laudo técnico final apontando exatamente qual peça específica falhou, não só 'o sistema parou'."],
+  ["dnat to (sintaxe nftables)","Sintaxe da regra nftables que especifica o IP e porta de destino para onde um pacote deve ser redirecionado.",
+   "É o endereço de redirecionamento escrito explicitamente na etiqueta de reencaminhamento da correspondência."],
+  ["Diagnóstico sem achismo","Prática de basear toda conclusão de causa em evidência coletada e comparada, nunca em suposição ou familiaridade recente com um tema.",
+   "É seguir só as digitais encontradas na cena do crime, nunca apontar o suspeito que 'parece mais culpado' à primeira vista."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

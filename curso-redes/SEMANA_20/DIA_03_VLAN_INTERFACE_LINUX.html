@@ -1,0 +1,482 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 20 · Dia 3 — VLAN numa Interface Linux | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_VLAN_TAGGING_TRUNK_ACCESS.html'>← Semana 20, Dia 2</a><a href='#'>Semana 20</a><a href='DIA_04_ISOLAMENTO_ENTRE_VLANS.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 2 (trunk e tagging):</b> Você já sabe que um link trunk carrega
+várias VLANs com tags 802.1Q. Hoje você aprende que um servidor Linux ligado numa porta trunk também precisa
+saber ler essas tags — e isso se faz criando uma subinterface Linux específica pra cada VLAN.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: criar uma subinterface VLAN no Linux.</b> Você ganha a
+capacidade de fazer um único servidor, com uma única placa de rede física, participar de várias VLANs ao mesmo
+tempo — cada uma com seu próprio IP, isolada das outras dentro do mesmo sistema operacional.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 20 · Dia 3 | Nível Júnior — Redes</div>
+  <h1>VLAN numa Interface Linux</h1>
+  <p>uma placa de rede física, várias identidades lógicas — cada uma numa VLAN diferente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S20D03_VLAN_INTERFACE_LINUX.png' alt='Prancha em seis quadros sobre criar uma subinterface VLAN no Linux usando ip link add type vlan, conectando um servidor a múltiplas VLANs através de uma porta trunk'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2003: "O servidor está ligado numa porta trunk do switch, carregando VLAN 10 e
+  VLAN 20 — mas o Linux só enxerga uma interface eth0 normal, sem separação nenhuma entre as duas VLANs." O
+  Linux precisa de uma
+  <span class="hint" data-tip="Interface de rede virtual criada sobre uma interface física, associada a uma VLAN específica via tag 802.1Q." onclick="openGlossary(0)">subinterface VLAN</span>
+  pra cada VLAN que ele precisa participar — a interface física sozinha não faz essa separação automaticamente.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que criar uma subinterface como eth0.10 é diferente de simplesmente atribuir
+    um IP direto na interface física eth0?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Atribuir um IP direto em eth0 trataria TODO o tráfego daquela interface como se fosse de uma única rede,
+      sem distinguir VLANs. A subinterface eth0.10 diz explicitamente ao kernel: "todo tráfego que passa por
+      aqui deve levar (ou ser interpretado com) a tag 802.1Q da VLAN 10". Assim, eth0.10 e eth0.20 podem
+      coexistir na mesma placa física, cada uma com seu próprio IP, cada uma isolada na sua VLAN — exatamente
+      como duas portas access diferentes num switch, só que dentro do mesmo servidor.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>O servidor tem uma única placa física eth0, ligada numa porta trunk permitindo
+  VLAN 10 e VLAN 20. Você precisa que o servidor tenha um IP em cada uma dessas VLANs. Qual é o procedimento
+  correto?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Criar duas subinterfaces VLAN, eth0.10 e eth0.20, cada uma associada à VLAN correspondente, e atribuir um IP diferente a cada uma. O kernel Linux cuida de adicionar e interpretar as tags 802.1Q automaticamente nessas subinterfaces, permitindo que a mesma placa física participe das duas VLANs simultaneamente, de forma isolada.')"><b>A</b> Criar duas subinterfaces VLAN, eth0.10 e eth0.20, cada uma com seu próprio IP correspondente à VLAN</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Atribuir dois IPs diretamente na mesma eth0 não separa o tráfego por VLAN — os dois IPs ficariam misturados na mesma interface física, sem nenhuma tag 802.1Q sendo aplicada, o que não corresponde ao comportamento esperado de um link trunk.')"><b>B</b> Atribuir dois endereços IP diretamente na mesma interface eth0, um de cada VLAN</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Instalar uma segunda placa de rede física é uma solução possível, mas desnecessária e mais cara — o Linux já suporta múltiplas VLANs numa única placa física através de subinterfaces, sem precisar de hardware adicional.')"><b>C</b> Instalar uma segunda placa de rede física no servidor, uma exclusiva pra cada VLAN</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Trocar a porta do switch pra access resolveria apenas UMA VLAN, exatamente como visto no Dia 2 — o chamado precisa das DUAS VLANs simultaneamente, o que exige trunk, não access.')"><b>D</b> Pedir pra trocar a porta do switch de trunk pra access, simplificando a configuração do lado do servidor</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 03 VLAN INTERFACE LINUX é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+    <tr><td><code>ip link add link eth0 name eth0.10 type vlan id 10</code></td><td>Cria a subinterface VLAN 10 sobre eth0.</td></tr>
+    <tr><td><code>ip addr add 10.10.10.5/24 dev eth0.10</code></td><td>Atribui um IP à subinterface.</td></tr>
+    <tr><td><code>ip link set eth0.10 up</code></td><td>Ativa a subinterface.</td></tr>
+  </tbody></table>
+  <pre>$ sudo ip link add link eth0 name eth0.10 type vlan id 10
+$ sudo ip addr add 10.10.10.5/24 dev eth0.10
+$ sudo ip link set eth0.10 up
+
+$ sudo ip link add link eth0 name eth0.20 type vlan id 20
+$ sudo ip addr add 10.20.20.5/24 dev eth0.20
+$ sudo ip link set eth0.20 up
+
+$ ip -br a
+eth0        UP
+eth0.10     UP             10.10.10.5/24
+eth0.20     UP             10.20.20.5/24
+
+$ ping -c 2 -I eth0.10 10.10.10.100
+2 packets transmitted, 2 received, 0% packet loss
+
+$ ping -c 2 -I eth0.20 10.20.20.200
+2 packets transmitted, 2 received, 0% packet loss</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o técnico esquecendo de configurar a porta do switch como
+  trunk, mesmo já tendo criado as subinterfaces certas no Linux</h2>
+  <p>Um colega cria eth0.10 e eth0.20 corretamente no servidor, mas a porta do switch onde o servidor está
+  ligado continua configurada como access.</p>
+  <div class='box question'>Por que as subinterfaces corretas no Linux não são suficientes sozinhas, se a
+  porta do switch ainda estiver como access?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'As duas pontas do link precisam concordar: se a porta do switch está como access numa única VLAN, ela nunca vai entregar (nem aceitar) tráfego com tags 802.1Q de outras VLANs — mesmo que o Linux esteja perfeitamente configurado do lado do servidor, o switch vai descartar ou rejeitar o tráfego taggeado que não espera receber ali.')"><b>A</b> As duas pontas do link precisam concordar — uma porta access no switch não aceita nem entrega tráfego taggeado, mesmo com as subinterfaces certas configuradas no servidor</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O Linux não corrige automaticamente uma configuração incompatível do lado do switch — as subinterfaces continuam existindo e tentando enviar tráfego taggeado, mas isso não resolve o descompasso com uma porta configurada como access do outro lado.')"><b>B</b> Não há problema real — o Linux detecta automaticamente a configuração access do switch e ajusta suas subinterfaces sozinho</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A ordem de criação das subinterfaces (eth0.10 antes de eth0.20, ou vice-versa) não tem relação com o problema — o descompasso é entre a configuração do switch (access) e a expectativa de tráfego taggeado das subinterfaces, independente da ordem de criação.')"><b>C</b> O problema é a ordem de criação das subinterfaces — eth0.20 deveria ter sido criada antes de eth0.10</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 03 VLAN INTERFACE LINUX é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "A interface eth0 física precisa ter IP próprio também?"</h2>
+  <p>Um colega não sabe se deve deixar a interface eth0 física sem IP nenhum, já que só as subinterfaces
+  eth0.10 e eth0.20 estão sendo usadas.</p>
+  <div class='box question'>Por que é normal e esperado que a interface física eth0 fique sem IP configurado
+  diretamente, quando todo o tráfego é organizado por VLANs em subinterfaces?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Quando toda a comunicação relevante acontece através de VLANs específicas (eth0.10, eth0.20), a interface física eth0 funciona como um carregador de tráfego taggeado — ela não precisa de IP próprio porque nenhuma comunicação está sendo endereçada diretamente a ela, sem tag. Deixá-la sem IP é o padrão esperado nesse tipo de configuração de trunk.')"><b>A</b> A interface física funciona como carregadora de tráfego taggeado; sem tráfego endereçado diretamente a ela, não precisa de IP próprio</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é um erro de configuração deixar eth0 sem IP nesse cenário — é o comportamento esperado quando toda a comunicação é organizada por VLANs em subinterfaces específicas; a interface física continua funcional como portadora do tráfego.')"><b>B</b> É sempre um erro — toda interface física precisa obrigatoriamente ter um IP configurado, mesmo com subinterfaces VLAN ativas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'As subinterfaces VLAN não têm uma performance reduzida por padrão em relação à interface física sem tag — a diferença entre elas é de organização lógica de tráfego, não de velocidade de transmissão.')"><b>C</b> Só é aceitável se a velocidade da placa de rede for menor que 1 Gbps</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 03 VLAN INTERFACE LINUX é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme que a porta do switch onde o servidor está ligado está configurada como trunk, permitindo as VLANs necessárias.</li>
+    <li>Crie uma subinterface VLAN pra cada VLAN necessária, com ip link add link eth0 name eth0.&lt;id&gt; type vlan id &lt;id&gt;.</li>
+    <li>Atribua um IP específico a cada subinterface, dentro da sub-rede correta daquela VLAN.</li>
+    <li>Ative cada subinterface individualmente com ip link set &lt;interface&gt; up.</li>
+    <li>Teste conectividade em cada VLAN separadamente, com ping -I &lt;interface&gt; pro IP de destino relevante.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de interfaces e IPs antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM de laboratório, crie uma subinterface VLAN com ip link add link eth0 name eth0.10 type vlan id 10.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> interface eth0.10 aparecendo em ip -br a.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Atribua um IP à subinterface e ative-a com ip link set eth0.10 up.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> eth0.10 com status UP e IP visível em ip -br a.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a subinterface não subir, este é o ponto onde o chat com o Sênior-IA vai te ajudar a checar se a interface física eth0 já está UP primeiro.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Crie uma segunda subinterface, eth0.20, com um IP em outra sub-rede.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> duas subinterfaces ativas simultaneamente na mesma placa física.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Capture tráfego na interface física eth0 com tcpdump (Semana 19) e observe as tags de VLAN nos pacotes.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> tcpdump mostrando "vlan 10" ou "vlan 20" no início de cada linha relevante.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Subinterfaces VLAN permitem que uma única placa física participe de várias VLANs.</li>
+    <li>Cada subinterface tem seu próprio IP, isolada logicamente das demais.</li>
+    <li>A porta do switch precisa estar como trunk, concordando com as subinterfaces do lado Linux.</li>
+    <li>A interface física pode ficar sem IP próprio quando todo o tráfego é organizado por VLAN nas subinterfaces.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Remover uma subinterface VLAN com ip link delete eth0.10 é rápido e reversível —
+  basta recriá-la se precisar. O cuidado real está em produção: remover uma subinterface em uso derruba
+  imediatamente qualquer serviço escutando naquele IP específico, sem nenhum aviso prévio pros clientes
+  conectados.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "uma placa física, várias identidades lógicas"
+  é o mesmo padrão de virtualização que você já viu em containers, VMs e agora VLANs — vale reforçar esse
+  padrão geral de abstração sobre hardware físico. O Anki vai conectar os três.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a solução foi criar duas
+  subinterfaces VLAN, eth0.10 e eth0.20, cada uma com seu IP correspondente. O ponto central do caso é este: uma
+  placa de rede física, várias identidades lógicas — cada uma numa VLAN diferente.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de configurar subinterfaces VLAN no Linux, conectando um servidor a
+  múltiplas redes lógicas através de uma única placa física. Amanhã você confirma na prática que o isolamento
+  entre VLANs realmente funciona como esperado — e como validar isso com evidência, não com suposição.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 20, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Subinterface VLAN","Interface de rede virtual criada sobre uma interface física, associada a uma VLAN específica via tag 802.1Q.",
+   "É um ramal telefônico específico dentro de uma linha física única — a linha é uma só, mas cada ramal atende um departamento diferente."],
+  ["ip link add type vlan","Comando Linux que cria uma subinterface VLAN sobre uma interface física existente, associada a um ID de VLAN específico.",
+   "É instalar um novo ramal na central telefônica, associando-o a um departamento específico da empresa."],
+  ["eth0.10 (nomenclatura de subinterface)","Convenção comum de nomear uma subinterface VLAN combinando o nome da interface física com o ID da VLAN.",
+   "É o número do ramal já indicando de qual departamento ele é, só de olhar o próprio número."],
+  ["ip -br a (visão resumida)","Comando que lista as interfaces de rede do sistema de forma resumida, incluindo interfaces físicas e subinterfaces VLAN.",
+   "É a lista telefônica resumida da central, mostrando cada ramal e seu status, sem precisar abrir cada ficha individual."],
+  ["ping -I (interface específica)","Flag do ping que força o teste a sair por uma interface específica, útil pra testar cada subinterface VLAN isoladamente.",
+   "É discar especificamente pelo ramal de um departamento, em vez de deixar a central escolher qualquer linha disponível."],
+  ["Concordância switch/servidor (trunk)","Necessidade de que a configuração da porta do switch (trunk, VLANs permitidas) corresponda ao que o servidor Linux espera nas suas subinterfaces.",
+   "É a central telefônica e o aparelho do usuário precisarem concordar sobre quais ramais existem — se um lado não sabe do ramal, a ligação não completa."],
+  ["Interface física sem IP direto","Configuração onde a interface física (eth0) fica sem endereço IP próprio, servindo apenas como portadora do tráfego taggeado das subinterfaces.",
+   "É o cabo principal da central telefônica não tendo um número de telefone próprio — ele só carrega os ramais, não atende chamadas diretamente."],
+  ["tcpdump vlan (leitura de tag)","Capacidade do tcpdump de mostrar explicitamente qual VLAN um pacote pertence, quando capturado na interface física que carrega o trunk.",
+   "É a operadora conseguindo ver, na própria linha principal, pra qual ramal cada ligação específica estava destinada."],
+  ["ip link delete (remoção de subinterface)","Comando que remove uma subinterface VLAN previamente criada, revertendo a configuração.",
+   "É desligar um ramal específico da central — os outros continuam funcionando normalmente, só aquele deixa de existir."],
+  ["Isolamento lógico via subinterface","Separação de tráfego por VLAN mantida mesmo dentro de um único sistema operacional, replicando o isolamento visto no switch físico.",
+   "É cada ramal só conseguir se conectar aos números do seu próprio departamento, mesmo todos compartilhando a mesma central física."],
+  ["ID de VLAN (na subinterface)","Número que associa uma subinterface Linux à VLAN correspondente configurada no switch, precisando bater exatamente dos dois lados.",
+   "É o número do departamento escrito tanto na central quanto no aparelho do ramal — os dois números precisam ser exatamente o mesmo."],
+  ["Virtualização de rede (padrão geral)","Princípio de criar múltiplas identidades lógicas independentes sobre um único recurso físico compartilhado.",
+   "É o mesmo princípio de várias VMs rodando num único servidor físico, aplicado agora a interfaces de rede em vez de máquinas inteiras."]
+];
+
+const sceneStripIdx = [0,1,4,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

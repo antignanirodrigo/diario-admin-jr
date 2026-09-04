@@ -1,0 +1,534 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 7 · Dia 3 — Jobs em Background: &, nohup, disown | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_NICE_RENICE.html'>← Dia 2</a><a href='#'>Semana 7</a><a href='DIA_04_TMUX.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com os dois últimos dias:</b> kill encerra, renice ajusta prioridade —
+ambos assumem que o processo continua na sua sessão. Hoje o problema é outro: como rodar algo longo via SSH
+sem que ele morra quando você fecha o laptop pro almoço.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: rodar jobs longos que sobrevivem à queda da sessão SSH.</b>
+Você ganha o hábito de usar nohup + disown pra desacoplar de verdade um job da sessão que o iniciou.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 7 · Dia 3 | Nível Júnior</div>
+  <h1>Jobs em Background: &, nohup, disown</h1>
+  <p>segundo plano não é independência total — & sozinho não sobrevive a uma sessão que cai</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S07D03_BACKGROUND_NOHUP.png' alt='Prancha em seis quadros sobre jobs em background, nohup e disown'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você inicia uma migração longa via SSH com <code>./migracao.sh &</code> e sai pro almoço.
+  Ao voltar e reconectar, <code>jobs -l</code> mostra <code>No such job</code> — o processo morreu junto com
+  a sessão que caiu.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Quarta-feira, Semana 7</span>
+    Nos últimos dois dias você aprendeu a encerrar processos com o sinal certo e a ajustar prioridade sem
+    matar nada — mas os dois assumiam que o processo continuava dentro da sua sessão. Hoje o problema é
+    diferente: como rodar algo longo via SSH e não perder tudo quando você fecha o laptop pro almoço.<br><br>
+    Aprendi essa lição da pior forma possível, num sábado de manutenção. Iniciei uma migração de dados que
+    levaria cerca de duas horas, com um simples <code>./migracao.sh &</code>. Achei que o
+    <code>&</code> já tinha resolvido — o job foi pro segundo plano, o prompt voltou, tudo parecia certo.
+    Fui almoçar tranquilo. Minha conexão de internet caiu no meio do almoço (coisa besta, roteador
+    reiniciando), a sessão SSH morreu — e junto com ela, a migração inteira. Voltei, reconectei, rodei
+    <code>jobs -l</code>, e a resposta foi um seco "No such job". Duas horas de progresso, evaporadas.<br><br>
+    O que eu não sabia é que <code>&</code> só manda o job pro segundo plano DENTRO da mesma sessão — ele
+    continua vinculado a ela. Quando a sessão morre, o shell manda um sinal <code>SIGHUP</code> (hang up,
+    literalmente "desligar o telefone") pra todos os processos filhos, e a maioria morre junto, sem chance
+    de terminar. <code>nohup</code> existe exatamente pra isso: faz o processo ignorar o SIGHUP, como se
+    tivesse contrato próprio, independente de quem o iniciou. E <code>disown</code> completa o trabalho,
+    tirando o job da lista de responsabilidades do shell — duas camadas diferentes de proteção, não
+    redundância.<br><br>
+    Hoje você pratica exatamente o que eu deveria ter feito naquele sábado: iniciar com
+    <code>nohup</code>, redirecionar a saída pra um log, aplicar <code>disown -h</code>, e testar de
+    verdade — desconectando e reconectando — antes de considerar o job seguro.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>nohup comando > log 2>&1 &</code></td><td>Ignora SIGHUP e salva toda a saída (normal e de erro) num arquivo de log.</td></tr>
+    <tr><td><code>disown -h %1</code></td><td>Remove o job da tabela de jobs do shell, desvinculando completamente.</td></tr>
+    <tr><td><code>ps -p PID -o pid,stat,cmd</code></td><td>Confirma que o processo continua rodando mesmo depois de reconectar.</td></tr>
+  </tbody></table>
+  <pre>$ nohup ./migracao.sh > migracao.log 2>&1 &
+[1] 6201
+$ disown -h %1
+$ jobs -l
+[1]+  6201  Running    ./migracao.sh &
+
+--- depois de reconectar ---
+$ ps -p 6201 -o pid,stat,cmd
+6201  S  ./migracao.sh
+$ tail -f migracao.log
+progresso: 73%</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um script de teste que roda por alguns minutos, imprimindo progresso.</div></div>
+      <div class="lab-cmd">$ cat > teste.sh << 'EOF'
+#!/bin/bash
+for i in $(seq 1 30); do echo "progresso: $i/30"; sleep 5; done
+EOF
+$ chmod +x teste.sh</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> script de teste criado e executável, rodando por ~2.5 minutos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> um script simples com progresso visível é o que permite testar de verdade se a proteção contra queda de sessão está funcionando.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar um comando curto demais no teste — sem tempo suficiente rodando, você não consegue testar a desconexão real no meio da execução.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> inicie o script com nohup e disown, redirecionando a saída pra um log.</div></div>
+      <div class="lab-cmd">$ nohup ./teste.sh > teste.log 2>&1 &
+$ disown -h %1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> job rodando em background, com PID confirmado, desvinculado do shell atual.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é exatamente a sequência que teria salvo a migração da história — nohup no processo, disown no shell, as duas camadas juntas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o redirecionamento (> teste.log 2>&1) — sem ele, a saída do processo pode travar ou se perder quando a sessão original cai.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> feche a sessão SSH de propósito (ou simule com exit) e reconecte.</div></div>
+      <div class="lab-cmd">$ exit
+# reconecte via SSH de novo</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nova sessão aberta, job original ainda deve estar rodando — o teste real que faltou na história do sábado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> testar de verdade, não só assumir que vai funcionar, é a diferença entre confiança real e esperança — a mesma lição do restore testado (Semana 6).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular esse teste achando "óbvio que vai funcionar" — é exatamente esse pulo que causou a perda de progresso na história de hoje.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o job morrer mesmo com nohup, este é o ponto onde o chat com o Sênior-IA vai ajudar a diagnosticar o motivo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> confirme com ps -p que o processo sobreviveu, e acompanhe o log pra ver o progresso.</div></div>
+      <div class="lab-cmd">$ ps -p &lt;PID&gt; -o pid,stat,cmd
+$ tail -f teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> processo confirmado vivo, log mostrando progresso contínuo (não travado no mesmo número).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ps -p confirma existência, mas só o log confirma progresso real — a distinção que a Questão 2 vai testar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar só no ps -p e fechar o chamado — um processo pode existir e estar travado ao mesmo tempo, sem o log você não sabe qual é o caso.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente comando usado, teste de desconexão realizado, resultado confirmado.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Comando: nohup ./teste.sh > teste.log 2>&1 & + disown -h
+Teste de desconexão: sessão fechada e reaberta, processo sobreviveu
+Progresso confirmado via: tail -f teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse registro é o que prova, da próxima vez, que a proteção nohup+disown foi de fato testada — não só assumida.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "usei nohup", sem registrar que o teste de desconexão real foi feito — sem esse detalhe, a documentação não prova nada de verdade.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que <code>&</code> sozinho não protege um job de uma sessão SSH que cai?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Executa um comando em segundo plano, mas ainda vinculado à sessão do shell atual." onclick="openGlossary(0)">&</span> só manda o job pro
+      segundo plano DENTRO da mesma sessão — se a sessão SSH cai, o shell envia
+      <span class="hint" data-tip="Sinal enviado ao processo quando o terminal/sessão que o controla é encerrado." onclick="openGlossary(1)">SIGHUP</span> e
+      o job pode morrer junto.
+      <span class="hint" data-tip="Comando que faz um processo ignorar o sinal SIGHUP, sobrevivendo ao fechamento da sessão." onclick="openGlossary(2)">nohup</span>
+      existe justamente pra fazer o processo ignorar esse sinal.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa iniciar uma migração longa via SSH que deve continuar rodando mesmo
+  se a sessão cair. Qual é a forma correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'& sozinho não protege contra a sessão SSH caindo — o job ainda está vinculado ao shell, que pode enviar SIGHUP e matá-lo junto se a conexão cair.')"><b>A</b> Rodar ./migracao.sh &, já que & já manda o job pro segundo plano</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'nohup ./migracao.sh > migracao.log 2>&1 & faz o processo ignorar SIGHUP e salva a saída em log, e disown -h remove o job da lista do shell — juntos, garantem que o job sobrevive de verdade a uma queda de sessão.')"><b>B</b> Rodar nohup ./migracao.sh > migracao.log 2>&1 &, seguido de disown -h pra desvincular completamente do shell</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Ficar com o SSH conectado o tempo inteiro, sem nunca desconectar, não é uma solução prática — o objetivo é justamente poder desconectar com segurança.')"><b>C</b> Rodar ./migracao.sh normalmente e nunca fechar a sessão SSH até terminar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Dividir o script em partes manuais só pra evitar o problema de sessão não resolve a causa raiz, e complica desnecessariamente uma tarefa que já tem solução direta.')"><b>D</b> Dividir o script em pedaços pequenos e rodar cada um manualmente, sem usar nohup</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O operador '&' no final do comando coloca a tarefa em segundo plano, mas se você fechar o terminal, ela morre; o 'nohup' coloca tampões de ouvido nela contra o sinal de fechamento (SIGHUP).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Depois de reconectar, ps -p confirma o PID rodando — isso é suficiente pra fechar o chamado?</h2>
+  <p><code>ps -p 6201</code> confirma que o processo ainda está ativo, mesmo depois da desconexão e
+  reconexão do SSH.</p>
+  <div class='box question'>O que ainda falta confirmar antes de considerar a migração bem-sucedida?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Confirmar que o processo ainda existe (ps -p) prova só que ele sobreviveu, não que está progredindo corretamente — acompanhar o log (tail -f migracao.log) é o que confirma que o trabalho está de fato avançando, não travado.')"><b>A</b> Acompanhar o conteúdo do log (tail -f migracao.log) pra confirmar que o progresso está avançando, não só que o processo existe</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'ps -p confirma existência do processo, mas não prova progresso — um processo pode estar rodando e mesmo assim travado sem avançar, sem checar o log você não sabe qual dos dois é o caso.')"><b>B</b> Nada mais, ps -p mostrando o PID já é prova suficiente de sucesso completo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Matar e reiniciar um processo que já está rodando e (possivelmente) progredindo normalmente descarta trabalho já feito sem nenhum motivo técnico.')"><b>C</b> Matar o processo e reiniciar do zero, só pra ter certeza absoluta</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O arquivo 'nohup.out' é o gravador que fica ligado na sala vazia: captura todas as saídas e erros do script para você ler com calma no dia seguinte.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "nohup e disown fazem a mesma coisa, só um é redundante?"</h2>
+  <p>Um colega acha que usar <code>nohup</code> e <code>disown</code> juntos é redundante, já que os dois
+  parecem "desconectar" o job de alguma forma.</p>
+  <div class='box question'>Essa suposição está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta — nohup faz o PROCESSO ignorar o sinal SIGHUP (proteção no nível do processo), enquanto disown remove o job da TABELA DE JOBS DO SHELL (organização no nível do shell). São duas camadas diferentes de proteção, e usar as duas juntas é a prática mais robusta, não redundância.')"><b>A</b> Não — nohup faz o processo ignorar SIGHUP (proteção do processo); disown remove o job da tabela de jobs do shell (organização do shell); são camadas diferentes, complementares</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'nohup e disown atuam em camadas diferentes (processo vs. shell) — não são a mesma proteção repetida duas vezes, cada um resolve uma parte diferente do problema.')"><b>B</b> Sim — os dois fazem exatamente a mesma coisa, usar só um já seria suficiente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A escolha entre nohup e disown não depende do tamanho do job — a combinação dos dois é uma boa prática independente de quão grande ou pequeno o processo seja.')"><b>C</b> Sim, mas só nohup é necessário pra jobs pequenos; disown só importa pra jobs grandes</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'jobs' e 'fg' são como a bandeja de abas minimizadas: mostram quais tarefas estão rodando no fundo e trazem uma delas de volta para a sua frente.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique se o job precisa sobreviver a uma queda de sessão.</li>
+    <li>Use nohup, redirecionando saída e erro pra um arquivo de log.</li>
+    <li>Use disown -h pra desvincular completamente do shell atual.</li>
+    <li>Teste desconectando e reconectando de verdade, confirmando com ps -p.</li>
+    <li>Acompanhe o log pra confirmar progresso, não só existência do processo.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Crie um alias ou template padrão de equipe (ex.: `run-longo comando`) que já embute
+  nohup + redirecionamento + disown automaticamente. Isso remove a dependência de lembrar a sequência
+  completa toda vez que alguém for iniciar um job longo via SSH.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>nohup foi usado, não só &, pra jobs que precisam sobreviver à sessão.</li>
+    <li>disown -h foi aplicado pra desvincular completamente do shell.</li>
+    <li>O teste de desconexão real foi feito, não só assumido que funcionaria.</li>
+    <li>O progresso foi confirmado pelo log, não só a existência do processo.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Se o job precisar ser interrompido depois de nohup+disown, ele ainda pode ser
+  encontrado com ps e encerrado com kill normalmente — desvincular do shell não significa perder controle
+  total sobre o processo.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "camadas diferentes de proteção" conecta com
+  lvextend+resize2fs (Semana 6) — sempre duas etapas complementares, nunca uma sozinha sendo suficiente. O
+  Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>rodar nohup
+  ./migracao.sh > migracao.log 2>&1 &, seguido de disown -h</b>. O ponto central do caso é este: pra job longo
+  via SSH, salve saída em log e prove que ele sobrevive ao desconectar.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de rodar jobs longos que sobrevivem a quedas de sessão SSH. Amanhã
+  você aprende tmux — pra quando você precisa não só rodar e esquecer, mas voltar e continuar interagindo
+  depois.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 7, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["& (background)","Executa um comando em segundo plano, mas ainda vinculado à sessão do shell atual.",
+   "É deixar a torneira aberta enquanto você faz outra coisa na mesma casa — mas se a casa for demolida, a torneira vai junto."],
+  ["SIGHUP","Sinal enviado ao processo quando o terminal/sessão que o controla é encerrado.",
+   "É o aviso de despejo enviado automaticamente quando o dono do apartamento (a sessão) vai embora."],
+  ["nohup","Comando que faz um processo ignorar o sinal SIGHUP, sobrevivendo ao fechamento da sessão que o iniciou.",
+   "É dar ao processo um contrato de aluguel próprio, que não depende mais do dono original do apartamento."],
+  ["disown","Comando que remove um job da tabela de jobs do shell atual, desvinculando-o completamente.",
+   "É tirar o nome do processo da lista de responsabilidades do shell, mesmo que ele continue rodando."],
+  ["Redirecionamento (> e 2>&1)","Técnica de enviar a saída padrão e de erro de um comando para um arquivo, em vez da tela.",
+   "É anotar tudo que aconteceu numa caderneta, em vez de só falar em voz alta e deixar se perder."],
+  ["Sessão SSH","Conexão remota autenticada que permite executar comandos num servidor à distância.",
+   "É a ligação telefônica com o servidor — quando ela cai, tudo que dependia diretamente dela pode cair junto."],
+  ["jobs -l","Comando que lista os jobs (processos) associados à sessão atual do shell, com seus PIDs.",
+   "É a lista de tarefas que o shell atual está de olho, cada uma com seu número de identificação."],
+  ["Job desvinculado (detached)","Um processo que continua rodando independentemente da sessão ou shell que o originou.",
+   "É o balão que se soltou da mão — continua no ar, mas ninguém mais está segurando a linha dele."],
+  ["Log de execução","Arquivo que registra a saída e o progresso de um processo em execução, útil para acompanhamento posterior.",
+   "É o diário de bordo escrito automaticamente enquanto a viagem acontece, pra você poder conferir depois."],
+  ["Teste de desconexão real","Verificar de fato que um processo sobrevive a uma queda de sessão, em vez de apenas assumir que funcionaria.",
+   "É realmente puxar o cabo pra testar o gerador de emergência, não só confiar que ele vai funcionar quando precisar."],
+  ["Confirmação de progresso vs. existência","Confirmar que um processo está avançando é diferente de confirmar que ele apenas ainda existe.",
+   "É a diferença entre ver que o carro ainda está ligado e ver que ele realmente está se movendo na estrada."],
+  ["Sobrevivência de processo","Capacidade de um processo continuar em execução independente de eventos externos como quedas de conexão.",
+   "É a planta que continua crescendo mesmo que a pessoa que a plantou tenha ido embora — ela ganhou vida própria."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

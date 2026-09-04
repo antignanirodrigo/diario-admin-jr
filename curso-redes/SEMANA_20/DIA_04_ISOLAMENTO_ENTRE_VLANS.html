@@ -1,0 +1,479 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 20 · Dia 4 — Validando Isolamento entre VLANs | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_VLAN_INTERFACE_LINUX.html'>← Semana 20, Dia 3</a><a href='#'>Semana 20</a><a href='DIA_05_DIAGNOSTICO_VLANS_MESMO_SWITCH.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 3 (subinterface Linux):</b> Você já sabe criar eth0.10 e eth0.20
+convivendo na mesma placa física. Hoje você aprende a validar formalmente que o isolamento entre elas está
+funcionando — e por que "não conseguir pingar" às vezes é a prova de sucesso, não de falha.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: transformar isolamento em algo verificável, não presumido.</b>
+Você ganha o checklist de validação que separa "acho que está isolado" de "confirmei com evidência que está
+isolado" — a mesma disciplina de ANTES DE ALTERAR, OBSERVE aplicada à segurança de rede.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 20 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>Validando Isolamento entre VLANs</h1>
+  <p>ping falhando entre VLANs diferentes pode ser a prova de que tudo está funcionando certo</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S20D04_ISOLAMENTO_ENTRE_VLANS.png' alt='Prancha em seis quadros sobre validar formalmente o isolamento entre VLANs, testando conectividade dentro e entre segmentos, e documentando os resultados como evidência de segurança'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2004: "Preciso de uma auditoria formal confirmando que a VLAN de visitantes
+  realmente não alcança a VLAN interna, antes de liberar o Wi-Fi de visitantes pro evento de amanhã." Não basta
+  "eu acho que está isolado" — é preciso um
+  <span class="hint" data-tip="Registro estruturado de testes realizados e seus resultados, usado como prova formal de que uma configuração de segurança está funcionando como esperado." onclick="openGlossary(0)">teste de validação documentado</span>,
+  com evidência de cada tentativa de conexão testada.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quais DOIS testes, no mínimo, você precisa fazer pra validar de verdade que o
+    isolamento entre duas VLANs está funcionando — não só um?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Primeiro: testar conectividade DENTRO da mesma VLAN (ex.: dois dispositivos na VLAN de visitantes se
+      pingando) — isso confirma que a rede está funcionando normalmente, não que está tudo quebrado por outro
+      motivo. Segundo: testar conectividade ENTRE VLANs diferentes (visitante tentando pingar a rede interna) —
+      isso confirma o isolamento em si. Testar só o segundo, sem o primeiro, deixa uma dúvida: será que o
+      "isolamento" que você viu não era, na verdade, uma rede simplesmente quebrada por outro motivo qualquer?
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você testa apenas um cenário: um notebook na VLAN de visitantes tentando pingar
+  um servidor na VLAN interna, e o ping falha. Você já pode concluir com confiança que o isolamento está
+  funcionando corretamente?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Não sozinho — é preciso confirmar também que a rede de visitantes está funcionando normalmente entre dispositivos da MESMA VLAN. Sem esse segundo teste, o ping falhando entre VLANs pode ser tanto isolamento correto quanto uma rede de visitantes simplesmente quebrada por outro motivo (cabo, switch, configuração de IP) — os dois cenários produzem exatamente o mesmo sintoma de falha.')"><b>A</b> Não — é preciso também confirmar que a rede de visitantes funciona normalmente entre dispositivos da mesma VLAN, pra descartar que a falha seja por outro motivo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Um único teste de falha não distingue entre duas causas possíveis com o mesmo sintoma: isolamento funcionando corretamente, ou uma rede simplesmente quebrada. Sem o teste de controle (dentro da mesma VLAN), não há como diferenciar as duas hipóteses.')"><b>B</b> Sim — se o ping entre VLANs falhou, isso já é prova suficiente e definitiva de isolamento funcionando corretamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Múltiplos IPs de origem não substituem o teste de controle necessário — testar vários IPs na VLAN de visitantes ainda não confirma que a rede deles está funcionando normalmente, só multiplica o mesmo teste incompleto.')"><b>C</b> Sim, mas só se o teste for repetido com pelo menos três IPs de origem diferentes na VLAN de visitantes</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O ping por si só já é evidência válida de conectividade (ou falta dela) — a ferramenta não é o problema aqui, o problema é a falta de um segundo teste de controle pra distinguir as duas causas possíveis do mesmo sintoma.')"><b>D</b> Não, porque ping nunca é uma ferramenta confiável pra esse tipo de validação de segurança</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 ISOLAMENTO ENTRE VLANS é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Teste</th><th>Confirma</th></tr></thead><tbody>
+    <tr><td>Dentro da mesma VLAN</td><td>Que a rede em si funciona normalmente (teste de controle).</td></tr>
+    <tr><td>Entre VLANs diferentes</td><td>Que o isolamento esperado está realmente ativo.</td></tr>
+    <tr><td>tcpdump nos dois lados</td><td>Confirma se o pacote sequer tentou atravessar, ou foi descartado no caminho.</td></tr>
+  </tbody></table>
+  <pre>--- teste 1: controle, dentro da mesma VLAN de visitantes ---
+$ ping -c 3 192.168.50.20    # outro dispositivo, mesma VLAN 50
+3 packets transmitted, 3 received, 0% packet loss
+✅ rede de visitantes está funcionando normalmente
+
+--- teste 2: entre VLANs, visitante tentando alcançar rede interna ---
+$ ping -c 3 10.10.10.100     # servidor na VLAN 10 (interna)
+3 packets transmitted, 0 received, 100% packet loss
+✅ isolamento confirmado (porque o teste 1 já provou que a rede funciona)
+
+--- relatório de validação ---
+Data: 2026-09-01
+VLAN 50 (visitantes) → VLAN 50: OK (controle)
+VLAN 50 (visitantes) → VLAN 10 (interna): BLOQUEADO (esperado)
+Conclusão: isolamento validado com evidência, liberado para o evento.</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje mostra o sênior insistindo em rodar o teste de controle ANTES do
+  teste de isolamento, nunca depois</h2>
+  <p>Um colega prefere testar primeiro entre VLANs, e só depois (se der tempo) testar dentro da mesma VLAN.</p>
+  <div class='box question'>Por que faz mais sentido, na prática, rodar o teste de controle (dentro da mesma
+  VLAN) ANTES do teste de isolamento (entre VLANs)?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Fazer o teste de controle primeiro garante que você já sabe, antes de testar o isolamento, se a rede está minimamente saudável. Se você testasse entre VLANs primeiro e desse falha, ficaria sem saber se é isolamento funcionando ou rede quebrada — precisando voltar e testar o controle de qualquer forma. Testar o controle primeiro elimina essa ambiguidade desde o início.')"><b>A</b> Testar o controle primeiro elimina a ambiguidade desde o início — você já sabe se a rede está saudável antes de interpretar o resultado do teste de isolamento</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O ping não fica mais lento com o uso repetido — não existe essa relação de desgaste técnico entre os dois testes; a ordem importa por clareza de interpretação, não por desempenho da ferramenta.')"><b>B</b> Não faz diferença real de interpretação — é só uma questão de ping ficar mais lento se testado depois de muitas tentativas anteriores</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Não existe limite técnico de dois pings por minuto imposto pela ferramenta padrão — essa restrição não é real; a razão de ordenar os testes é puramente sobre clareza da conclusão, não sobre uma limitação técnica do ping.')"><b>C</b> É uma limitação técnica do comando ping, que só permite dois testes consecutivos por minuto</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 ISOLAMENTO ENTRE VLANS é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se ping falha entre VLANs, isso prova que NENHUM tráfego atravessa, de nenhum tipo?"</h2>
+  <p>Um colega assume que ping falhando entre duas VLANs já garante que absolutamente nenhum outro tipo de
+  tráfego (como uma porta TCP específica) consegue atravessar.</p>
+  <div class='box question'>Por que só testar com ping (ICMP) pode não ser suficiente pra uma validação de
+  isolamento realmente completa?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Ping testa especificamente tráfego ICMP — é possível, em configurações mais complexas com regras específicas de firewall entre VLANs, que ICMP esteja bloqueado enquanto outro tipo de tráfego (como uma porta TCP específica) ainda passe. Uma validação completa deveria testar também com uma ferramenta como tcpdump ou uma tentativa de conexão numa porta específica (Semana 19), não só ping.')"><b>A</b> Ping testa só tráfego ICMP; regras mais complexas de firewall entre VLANs podem bloquear ICMP mas deixar passar outro tipo de tráfego, como uma porta TCP específica</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe garantia automática de que qualquer isolamento de VLAN bloqueie TODOS os protocolos igualmente — a validação completa depende de testar os protocolos relevantes especificamente, não presumir que ICMP representa todos os outros.')"><b>B</b> Está errado pensar assim — ping sempre bloqueia automaticamente qualquer outro tipo de tráfego também, sem exceção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A quantidade de VLANs configuradas no switch não determina se ping é suficiente ou não como teste — a limitação de ping é sobre qual protocolo ele testa (ICMP), independente de quantas VLANs existem no ambiente.')"><b>C</b> Só é insuficiente em ambientes com mais de cinco VLANs configuradas simultaneamente</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 ISOLAMENTO ENTRE VLANS é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de validar isolamento, teste conectividade DENTRO da mesma VLAN (teste de controle).</li>
+    <li>Só então teste conectividade ENTRE as VLANs que deveriam estar isoladas.</li>
+    <li>Considere testar mais de um protocolo (não só ICMP/ping), especialmente se houver firewall entre VLANs.</li>
+    <li>Documente cada teste com data, origem, destino e resultado.</li>
+    <li>Registre a conclusão formal antes de liberar o ambiente pra uso, como no chamado do evento.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em ambiente de laboratório e confirme nomes de dispositivos e VLANs antes de cada teste.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Teste ping entre dois dispositivos na mesma VLAN de laboratório.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacote — a rede funciona normalmente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Teste ping de um dispositivo numa VLAN pra outro dispositivo em VLAN diferente.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 100% de perda de pacote, confirmando o isolamento.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o ping entre VLANs funcionar quando não deveria, este é o ponto onde o chat com o Sênior-IA vai te ajudar a revisar a configuração do trunk (Dia 2) e das subinterfaces (Dia 3).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Capture tráfego com tcpdump durante o teste entre VLANs, confirmando se o pacote sai da origem mesmo assim.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> pacote saindo da origem, mas nunca aparecendo na captura do destino.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Escreva um relatório curto de validação, seguindo o formato do exemplo da seção 5.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório com data, testes realizados e conclusão formal.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Um único teste de falha não prova isolamento — é preciso também um teste de controle dentro da mesma VLAN.</li>
+    <li>Testar o controle antes elimina ambiguidade na interpretação do resultado.</li>
+    <li>Ping testa só ICMP — validações mais rigorosas podem precisar testar outros protocolos também.</li>
+    <li>Um relatório de validação documentado é diferente de uma suposição informal de que "está tudo isolado".</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Os testes de validação em si são só observação, sem risco de alteração. O cuidado
+  real é de processo: liberar um ambiente (como Wi-Fi de visitantes) baseado numa validação incompleta pode
+  expor recursos internos sensíveis — o rigor da validação deve ser proporcional ao risco do que está sendo
+  liberado.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "teste de controle antes do teste principal" é
+  um princípio de método científico aplicado a redes — vale reforçar esse padrão geral de validação, não só o
+  caso específico de VLAN. O Anki vai conectar essa ideia a outros contextos de diagnóstico do curso.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a conclusão foi que um único teste de
+  falha entre VLANs não é suficiente — é preciso confirmar também que a rede funciona normalmente dentro da
+  mesma VLAN. O ponto central do caso é este: ping falhando entre VLANs diferentes pode ser a prova de que tudo
+  está funcionando certo.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de validar isolamento entre VLANs com rigor, usando teste de
+  controle antes do teste principal. Amanhã fecha a Semana 20 com o cenário mais realista: diagnosticar quando
+  duas VLANs no mesmo switch NÃO estão isoladas como deveriam.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 20, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Teste de validação documentado","Registro estruturado de testes realizados e seus resultados, usado como prova formal de que uma configuração de segurança está funcionando como esperado.",
+   "É o laudo assinado de uma vistoria — não basta olhar e achar que está tudo bem, é preciso registrar exatamente o que foi checado e o resultado de cada item."],
+  ["Teste de controle","Teste realizado dentro de um cenário conhecido e esperado (ex.: mesma VLAN), usado pra confirmar que o ambiente está saudável antes de interpretar o teste principal.",
+   "É testar se o termômetro funciona em água fervendo antes de confiar na temperatura que ele mostra pra um paciente."],
+  ["Ambiguidade de sintoma (mesmo resultado, causas diferentes)","Situação onde dois cenários completamente diferentes (isolamento funcionando vs. rede quebrada) produzem exatamente o mesmo sintoma observável.",
+   "É duas doenças diferentes causando exatamente a mesma febre — sem exame adicional, não dá pra saber qual das duas realmente está acontecendo."],
+  ["ICMP (protocolo do ping)","Protocolo usado pelo comando ping pra testar conectividade básica — distinto de outros protocolos como TCP ou UDP.",
+   "É um tipo específico de correspondência — testar só com ele é como confirmar que só as cartas registradas chegam, sem checar se encomendas normais também chegam."],
+  ["Regra de firewall entre VLANs (menção)","Configuração adicional que pode permitir ou bloquear seletivamente tipos específicos de tráfego entre VLANs, além do isolamento padrão do switch.",
+   "É um segurança adicional entre dois andares que deixa passar só certos tipos de entrega específicas, mesmo com a porta geral trancada."],
+  ["Relatório de validação (formato)","Documento estruturado com data, origem, destino, teste realizado e resultado, servindo como evidência formal de uma verificação de segurança.",
+   "É a ficha de inspeção assinada — sem ela, uma inspeção verbal não vale como prova formal perante uma auditoria."],
+  ["Falso positivo de isolamento","Situação onde um teste de falha é interpretado incorretamente como prova de isolamento funcionando, quando na verdade a rede está simplesmente quebrada por outro motivo.",
+   "É concluir que um alarme está funcionando bem só porque ele nunca disparou — sem saber se é porque não houve ameaça, ou porque o alarme está desligado."],
+  ["Rigor proporcional ao risco","Princípio de ajustar a profundidade de uma validação de acordo com a sensibilidade do recurso sendo protegido.",
+   "É inspecionar com mais cuidado a porta do cofre do que a porta do almoxarifado — o nível de verificação deveria acompanhar o que está em jogo."],
+  ["Isolamento como design, não acidente","Reconhecimento de que a separação entre VLANs é resultado de uma decisão deliberada de arquitetura, não um comportamento aleatório do sistema.",
+   "É lembrar que a porta trancada foi trancada de propósito por alguém — não é um defeito de fechadura acontecendo por acaso."],
+  ["Auditoria de rede (contexto do chamado)","Processo formal de verificar e documentar se as configurações de segurança de uma rede correspondem ao que é esperado ou exigido.",
+   "É a vistoria oficial antes de liberar um espaço pro público — confirma com evidência, não com confiança, que está tudo dentro do combinado."],
+  ["Método científico aplicado a diagnóstico","Abordagem de isolar variáveis e testar hipóteses de forma controlada, em vez de tirar conclusões de uma única observação isolada.",
+   "É o mesmo raciocínio de um experimento de laboratório: ter um grupo de controle antes de interpretar o resultado do grupo testado."],
+  ["Liberação condicionada a evidência","Prática de só autorizar o uso de um recurso ou ambiente depois de validação formal documentada, não por suposição de que está tudo certo.",
+   "É só abrir as portas do evento depois da vistoria assinada, não porque 'provavelmente está tudo bem'."]
+];
+
+const sceneStripIdx = [0,1,2,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

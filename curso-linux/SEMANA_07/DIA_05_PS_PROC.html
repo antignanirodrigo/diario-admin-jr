@@ -1,0 +1,533 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 7 · Dia 5 — ps Avançado e /proc | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_TMUX.html'>← Dia 4</a><a href='#'>Semana 7</a><a href='../SEMANA_08/DIA_01_CUT_SORT_UNIQ.html'>Semana 8, Dia 1 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a semana inteira:</b> kill, nice/renice, nohup/disown e tmux te
+ensinaram a controlar processos. Hoje fecha a Semana 7 indo mais fundo: entender de verdade o que um processo
+É, sua árvore genealógica, e onde o kernel guarda essa informação.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: investigar a árvore de processos e consultar /proc
+diretamente.</b> Você ganha o hábito de usar /proc quando ps sozinho não é suficiente pra entender a relação
+entre processos.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 7 · Dia 5 | Nível Júnior</div>
+  <h1>ps Avançado e /proc: O Processo Por Dentro</h1>
+  <p>quando ps não basta, use /proc para confirmar o que o kernel realmente sabe</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S07D05_PS_PROC.png' alt='Prancha em seis quadros sobre ps avançado e /proc'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Um ticket pede pra explicar "quem iniciou este processo" — um <code>app_worker</code>
+  suspeito. <code>ps aux</code> comum mostra o processo, mas não a família dele: quem é o pai, e como ele
+  chegou a existir.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Sexta-feira, fechando a Semana 7</span>
+    A semana toda foi sobre controlar processos — encerrar com o sinal certo, ajustar prioridade sem matar
+    trabalho, fazer jobs sobreviverem a quedas de sessão, manter sessões interativas persistentes. Hoje fecha
+    com a pergunta mais fundamental de todas: o que É, de verdade, um processo? De onde ele vem?<br><br>
+    Recebi um ticket parecido com o de hoje logo depois de virar pleno. Um processo chamado
+    <code>app_worker</code> apareceu rodando num servidor, consumindo recursos, e ninguém sabia explicar a
+    origem dele. O gestor de segurança perguntou, direto: "quem iniciou isso?". Rodei
+    <code>ps aux</code>, vi o processo na lista — nome, PID, uso de CPU. Mas a lista plana não contava a
+    história nenhuma. Não dava pra saber se era um serviço automático do sistema, um script de cron, ou
+    alguém que tinha aberto manualmente via SSH.<br><br>
+    Foi aí que um colega mais experiente me mostrou <code>ps -ef --forest</code>. A mesma lista, mas agora
+    em árvore, com indentação mostrando quem é filho de quem. De repente ficou visível: <code>sshd</code>
+    (o serviço SSH) tinha um filho <code>bash</code> (a sessão do usuário admin), que por sua vez tinha um
+    filho <code>app_worker</code>. A cadeia inteira contava a história: alguém logou via SSH como admin, e
+    de dentro daquela sessão, iniciou o processo manualmente. Não era automação, era ação humana direta —
+    e agora eu tinha como provar isso com evidência, não suposição.<br><br>
+    Quando a árvore não é suficiente, existe uma camada ainda mais profunda: <code>/proc</code>. É um
+    sistema de arquivos virtual — não existe em disco, é uma janela ao vivo pro que o kernel sabe sobre cada
+    processo, atualizada em tempo real. <code>cat /proc/PID/status</code> confirma PPID, memória, estado,
+    exatamente como o kernel enxerga aquele processo naquele instante. Hoje você pratica exatamente essa
+    investigação: subir a árvore genealógica de um processo até a raiz, e confirmar cada elo com /proc.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>ps -ef --forest</code></td><td>Mostra a árvore de processos com indentação, revelando pai e filho.</td></tr>
+    <tr><td><code>cat /proc/PID/status</code></td><td>Mostra detalhes exatos do kernel sobre um processo: nome, PPID, memória, estado.</td></tr>
+  </tbody></table>
+  <pre>$ ps -ef --forest
+UID    PID  PPID  CMD
+root     1     0  /sbin/init
+root   900     1  sshd
+admin 1200   900  \_ bash
+admin 4821  1200      \_ app_worker
+
+$ cat /proc/4821/status
+Name:  app_worker
+State: S (sleeping)
+Pid:   4821
+PPid:  1200
+VmRSS: 184320 kB
+Threads: 4</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> veja a árvore completa de processos e identifique um que você mesmo iniciou.</div></div>
+      <div class="lab-cmd">$ ps -ef --forest</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> árvore visível com indentação, mostrando a cadeia até um processo seu (ex.: seu shell, ou algo que você abriu nele).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver sua própria árvore de processos é o exemplo mais fácil de entender — você já sabe a resposta certa (foi você que abriu), então pode confirmar visualmente que a árvore está contando a verdade.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir a indentação — cada nível mais fundo (mais \_) é um filho mais recente na cadeia, não o contrário.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> leia o status detalhado desse processo direto do kernel, via /proc.</div></div>
+      <div class="lab-cmd">$ cat /proc/&lt;PID&gt;/status | head -10</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> campos Name, State, Pid, PPid, VmRSS visíveis, compreendidos um a um.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> /proc é a fonte primária, direto do kernel — é o que você consulta quando precisa da verdade mais exata possível, além do que ps já resume.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tentar abrir /proc/PID/status num editor de texto achando que pode editar — é gerado dinamicamente só pra leitura, editar não faz nada (você vai confirmar isso na Questão 3).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> compare o PPid mostrado no /proc com o que aparece na árvore do ps --forest, confirmando que batem.</div></div>
+      <div class="lab-cmd">$ ps -ef --forest | grep &lt;PID&gt;
+$ cat /proc/&lt;PID&gt;/status | grep PPid</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> os dois métodos confirmando exatamente a mesma relação de pai/filho — o PPid do /proc bate com o pai visível na árvore.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> cruzar as duas fontes (árvore visual e leitura direta do kernel) é o mesmo tipo de validação cruzada que você já praticou com pvs/vgs/lvs (Semana 5) — duas fontes concordando é evidência mais forte que uma só.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confiar só na árvore visual sem cruzar com /proc quando o caso for realmente sensível (investigação de segurança) — a árvore pode ficar confusa com muitos processos, /proc é sempre exato.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma árvore de processos parecer complexa demais pra interpretar, este é o ponto onde o chat com o Sênior-IA vai ajudar a explicar cada nível.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> explore outros arquivos disponíveis dentro de /proc/PID/ sem alterar nada.</div></div>
+      <div class="lab-cmd">$ ls /proc/&lt;PID&gt;/
+$ cat /proc/&lt;PID&gt;/cwd 2>/dev/null
+$ ls /proc/&lt;PID&gt;/fd</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> familiaridade com a estrutura de /proc além do status — cwd (diretório de trabalho), fd (arquivos abertos), environ (variáveis de ambiente).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> saber que /proc tem muito mais que status é o que te prepara pra investigações mais profundas no futuro — cwd e fd, por exemplo, ajudam a entender o que um processo suspeito está realmente acessando.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tentar acessar /proc/PID de um processo de outro usuário sem sudo — vários arquivos ali exigem privilégio elevado pra leitura, por conterem informação sensível.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente a árvore completa de um processo, fechando a Semana 7.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Processo: [nome] (PID [x])
+Árvore: init -> sshd -> bash -> [processo]
+PPid confirmado via /proc: [ppid]
+Origem: humana (via SSH) / automática (systemd/cron)</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> relatório completo reproduzindo o painel 6 da prancha de hoje, fechando o toolkit de controle de processos da semana.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse tipo de registro é exatamente o que um ticket de investigação de segurança precisa como evidência — árvore completa, confirmada por duas fontes, com conclusão sobre a origem.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só o PID e nome do processo, sem a cadeia completa — é justamente a cadeia que prova (ou refuta) a origem suspeita.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que é <code>/proc</code>, e por que ele não é um arquivo "de verdade" no
+    disco?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Sistema de arquivos virtual que expõe informações do kernel sobre processos e sistema em tempo real." onclick="openGlossary(0)">/proc</span> é um
+      sistema de arquivos VIRTUAL — não guarda dados em disco, é uma janela ao vivo pro que o kernel sabe
+      sobre cada <span class="hint" data-tip="Identificador do processo pai que originou outro processo." onclick="openGlossary(1)">PPID</span>
+      e processo, atualizada em tempo real conforme o sistema muda.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>O ticket pede pra explicar a origem completa de um processo suspeito. Qual é a
+  abordagem correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ps aux comum mostra os processos numa lista plana, sem deixar clara a relação de hierarquia entre pai e filho — não é suficiente pra explicar origem completa.')"><b>A</b> Rodar só ps aux de novo, com mais atenção à lista</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'ps auxf (ou ps -ef --forest) mostra a árvore de processos com indentação, revelando pai e filho claramente; cat /proc/PID/status complementa com detalhes exatos do kernel, incluindo PPID — juntos, explicam a origem completa.')"><b>B</b> Rodar ps auxf (ou ps -ef --forest) pra ver a árvore de processos, e complementar com cat /proc/PID/status pros detalhes exatos</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Matar o processo sem entender sua origem primeiro descarta justamente a informação que o ticket está pedindo pra investigar.')"><b>C</b> Matar o processo direto, já que "suspeito" já é motivo suficiente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Perguntar pra outra pessoa sem tentar investigar primeiro não usa as ferramentas técnicas disponíveis exatamente pra esse tipo de pergunta.')"><b>D</b> Perguntar pra cada colega se alguém iniciou esse processo</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O diretório virtual '/proc' é a janela de vidro para dentro do cérebro do kernel: cada número de pasta (/proc/1234) contém as entranhas e conexões abertas daquele PID em tempo real.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 A árvore mostra app_worker filho de bash, que é filho de sshd — o que isso confirma?</h2>
+  <p>A árvore completa mostra: <code>sshd (900) → bash (1200, admin) → app_worker (4821)</code>.</p>
+  <div class='box question'>Qual é a conclusão correta sobre a origem desse processo?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'A cadeia completa confirma que app_worker foi iniciado manualmente pelo usuário admin, numa sessão bash aberta via SSH — não é um processo de sistema automático nem algo iniciado por outro serviço, é uma ação humana direta e rastreável.')"><b>A</b> app_worker foi iniciado manualmente pelo usuário admin, numa sessão bash aberta via SSH — uma ação humana direta, não automática</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A árvore mostra claramente que app_worker é filho do bash do usuário admin, não do systemd/init diretamente — a cadeia intermediária (sshd → bash) é justamente a evidência de origem humana.')"><b>B</b> app_worker foi iniciado automaticamente pelo systemd na inicialização do sistema</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A árvore de processos não indica nada sobre corrupção — ela só mostra a relação legítima de pai e filho entre processos, uma estrutura normal do sistema.')"><b>C</b> A árvore está corrompida, processos não deveriam ter mais de dois níveis de profundidade</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O arquivo '/proc/PID/cmdline' é a certidão de nascimento do processo: mostra a linha de comando exata com todos os parâmetros usados no momento do lançamento.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "/proc/PID/status é um arquivo de configuração que posso editar pra mudar o processo?"</h2>
+  <p>Um colega tenta editar <code>/proc/4821/status</code> com um editor de texto, achando que pode alterar
+  as propriedades do processo dessa forma.</p>
+  <div class='box question'>Essa abordagem funciona?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não funciona dessa forma — /proc/PID/status é gerado dinamicamente pelo kernel pra LEITURA, refletindo o estado real do processo em tempo real. Não é um arquivo de configuração editável; ele muda porque o processo muda, não o contrário. Editar esse arquivo não altera o processo.')"><b>A</b> Não — /proc/PID/status é gerado pelo kernel só pra leitura, refletindo o estado real do processo; editá-lo não muda o processo, é o processo que determina o conteúdo dele</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Editar /proc/PID/status não altera propriedades do processo — é o kernel que gera esse conteúdo com base no estado real do processo, não o contrário.')"><b>B</b> Sim — editar esse arquivo e salvar altera diretamente as propriedades do processo em execução</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A questão não é sobre travar o sistema — é que o arquivo simplesmente não funciona como configuração editável, é uma leitura gerada dinamicamente pelo kernel.')"><b>C</b> Sim, mas só root pode fazer isso com segurança, sem travar o sistema</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'ps aux' varre o /proc e organiza em tabela: exibe o consumo de memória (RSS), usuário dono e tempo acumulado de CPU de cada processo ativo.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Use ps -ef --forest pra ver a árvore completa de pai e filho.</li>
+    <li>Complemente com cat /proc/PID/status pra detalhes exatos do kernel.</li>
+    <li>Rastreie a cadeia completa até a origem (login, serviço, script).</li>
+    <li>Distinga origem humana (via shell/SSH) de origem automática (systemd, cron).</li>
+    <li>Documente a árvore completa como evidência no ticket.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Para processos críticos de produção, documente antecipadamente qual é a árvore
+  "esperada" (via systemd, cron, ou serviço conhecido). Isso torna qualquer processo fora desse padrão
+  imediatamente identificável como anômalo, sem precisar investigar do zero cada vez.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A árvore de processos foi consultada com ps --forest, não só uma lista plana.</li>
+    <li>/proc foi usado pra confirmar detalhes exatos do kernel.</li>
+    <li>A origem completa (humana ou automática) foi corretamente identificada.</li>
+    <li>Nenhuma tentativa de "editar" /proc foi feita, entendendo que é só leitura.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>ps e /proc são somente leitura pra fins de investigação — não existe rollback.
+  O limite real é não confundir /proc com um arquivo de configuração editável, o que não funciona e pode
+  confundir a investigação.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "quando a ferramenta padrão não basta, vá mais
+  fundo" fecha a Semana 7 conectando com dmesg (Semana 3) — sempre existe uma camada mais profunda pra
+  consultar quando a superficial não explica tudo. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi usar
+  <b>ps -ef --forest pra ver a árvore, e cat /proc/PID/status pros detalhes exatos</b>. O ponto central do
+  caso é este: quando ps não basta, use /proc para confirmar o que o kernel realmente sabe.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Toolkit completo de controle de processos — sinais, prioridade, background
+  persistente, e inspeção profunda — fechando a Semana 7. Semana 8 abre um novo bloco: ferramentas de texto
+  que vão alimentar a automação em bash que começa na Semana 9.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 7, Dia 5 de ~250 — fecha a Semana 7. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["/proc","Sistema de arquivos virtual que expõe informações do kernel sobre processos e sistema em tempo real.",
+   "É uma janela de vidro pra sala de máquinas — você vê o que está acontecendo lá dentro sem precisar entrar."],
+  ["PPID","Identificador do processo pai que originou outro processo.",
+   "É o nome do responsável que autorizou aquele funcionário específico a começar a trabalhar."],
+  ["ps -ef --forest","Comando que lista todos os processos em formato de árvore, mostrando claramente a relação pai-filho.",
+   "É o organograma da empresa, mostrando quem reporta pra quem, não só uma lista solta de nomes."],
+  ["Processo raiz (PID 1)","O primeiro processo iniciado pelo kernel no boot, ancestral de todos os outros processos do sistema.",
+   "É o fundador da empresa — todo mundo, direta ou indiretamente, descende dele na estrutura."],
+  ["/proc/PID/status","Arquivo virtual que mostra o estado detalhado de um processo específico: nome, memória, estado, PPid.",
+   "É o prontuário médico completo daquele processo específico, atualizado em tempo real."],
+  ["Estado do processo (S, R, D, Z)","Código que indica se um processo está dormindo (S), rodando (R), em espera de I/O (D) ou zumbi (Z).",
+   "É o status do funcionário no crachá: trabalhando, em pausa, esperando material, ou já dispensado mas ainda no sistema."],
+  ["VmRSS","Quantidade de memória RAM fisicamente em uso por um processo (Resident Set Size).",
+   "É o espaço físico que aquele funcionário realmente está ocupando na sala agora, não o espaço reservado no papel."],
+  ["Origem humana vs. automática","Diferenciar um processo iniciado manualmente por uma pessoa de um iniciado automaticamente pelo sistema.",
+   "É a diferença entre alguém abrir a porta manualmente e a porta abrir sozinha por um sensor automático."],
+  ["Sistema de arquivos virtual","Um sistema de arquivos que não armazena dados em disco, mas gera conteúdo dinamicamente sob demanda.",
+   "É um placar eletrônico que mostra o placar ao vivo — não é um documento gravado, é gerado no momento que você olha."],
+  ["Árvore de processos","A estrutura hierárquica completa mostrando como cada processo se relaciona com seu pai, avô e ancestrais.",
+   "É a árvore genealógica de um processo — de onde ele veio, geração por geração."],
+  ["Threads","Linhas de execução independentes dentro de um mesmo processo, compartilhando memória.",
+   "É uma equipe de pessoas trabalhando na mesma mesa (memória compartilhada), cada uma fazendo sua parte da tarefa."],
+  ["Investigação de origem de processo","Prática de rastrear como e por quem um processo específico foi iniciado, usando árvore e /proc.",
+   "É a investigação de paternidade técnica — provar de onde exatamente aquele processo veio, com evidência, não suposição."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

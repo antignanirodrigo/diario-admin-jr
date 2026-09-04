@@ -1,0 +1,478 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 21 · Dia 4 — NFS no fstab: _netdev e nofail | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_NFS_MOUNT_UID_GID.html'>← Semana 21, Dia 3</a><a href='#'>Semana 21</a><a href='DIA_05_NFS_DIAGNOSTICO_ESCRITA.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 12 (fstab quebrado):</b> Você já viu uma entrada de fstab mal
+configurada travar o boot inteiro numa emergency shell. Hoje o mesmo risco reaparece com um sabor novo: um
+NFS no fstab, sem a opção certa, pode travar o boot esperando um servidor de rede que talvez nem esteja de pé
+ainda quando o sistema tenta montar.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: montar NFS de forma persistente sem arriscar o boot.</b>
+Você ganha as duas opções que resolvem esse risco — _netdev (espera a rede subir antes de tentar montar) e
+nofail (não trava o boot mesmo se a montagem falhar) — e por que as duas juntas são o padrão recomendado.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 21 · Dia 4 | Nível Júnior — Redes</div>
+  <h1>NFS no fstab: _netdev e nofail</h1>
+  <p>um mount remoto no fstab sem cuidado pode travar o boot esperando por uma rede que ainda não chegou</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S21D04_NFS_FSTAB_NOFAIL.png' alt='Prancha em seis quadros sobre configurar uma entrada NFS no fstab com as opções _netdev e nofail, evitando que o boot trave esperando um servidor de rede indisponível'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2104: "Adicionei o NFS no fstab pra montar sempre no boot. Ontem o servidor NFS
+  ficou fora do ar por manutenção, e TODOS os clientes que dependiam dele travaram no boot, mesmo os que não
+  precisavam do NFS pra nada crítico." O fstab tentou montar um recurso de REDE antes mesmo da rede estar
+  pronta, e sem a opção
+  <span class="hint" data-tip="Opção de montagem que impede uma falha naquela entrada específica de travar o restante do processo de boot." onclick="openGlossary(1)">nofail</span>,
+  qualquer falha ali vira bloqueio total.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é a diferença de função entre _netdev e nofail — por que as duas juntas, e
+    não só uma?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Opção de montagem que sinaliza ao sistema que o dispositivo depende da rede estar disponível antes de tentar montar." onclick="openGlossary(0)">_netdev</span>
+      resolve a ORDEM: garante que o systemd só tente montar depois que a rede já estiver de pé — sem isso, o
+      sistema pode tentar montar um recurso de rede ANTES da própria rede existir, o que sempre falharia.
+      nofail resolve o QUE FAZER SE FALHAR: mesmo com a ordem certa, o servidor remoto pode estar fora do ar
+      por outro motivo — nofail garante que essa falha específica não trave o boot inteiro. Uma resolve a
+      ordem, a outra resolve a tolerância a falha; as duas são necessárias, não intercambiáveis.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual linha de /etc/fstab monta /dados/uploads do servidor 10.10.10.50 de forma
+  persistente, sem travar o boot se o servidor estiver indisponível?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'10.10.10.50:/dados/uploads /mnt/uploads nfs defaults,_netdev,nofail 0 0 — combina _netdev (espera a rede subir antes de tentar) com nofail (não trava o boot se a montagem falhar mesmo assim), exatamente a combinação necessária pra montagem NFS persistente e segura no boot.')"><b>A</b> 10.10.10.50:/dados/uploads /mnt/uploads nfs defaults,_netdev,nofail 0 0</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Sem _netdev nem nofail, essa linha corre o risco exato descrito no chamado: tentar montar antes da rede estar pronta, e travar o boot inteiro se a montagem falhar por qualquer motivo, incluindo servidor fora do ar.')"><b>B</b> 10.10.10.50:/dados/uploads /mnt/uploads nfs defaults 0 0</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'_netdev sozinho, sem nofail, resolve só a ORDEM de montagem — se o servidor NFS estiver genuinamente indisponível mesmo com a rede já de pé, a montagem ainda falha e ainda pode travar o boot, porque falta a tolerância a falha do nofail.')"><b>C</b> 10.10.10.50:/dados/uploads /mnt/uploads nfs defaults,_netdev 0 0</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'nofail sozinho, sem _netdev, não resolve o problema de ordem — o sistema ainda pode tentar montar antes da rede estar pronta; nofail só evita o travamento do boot, mas não corrige a causa raiz de tentar montar cedo demais.')"><b>D</b> 10.10.10.50:/dados/uploads /mnt/uploads nfs defaults,nofail 0 0</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 04 NFS FSTAB NOFAIL é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Opção</th><th>Resolve</th></tr></thead><tbody>
+    <tr><td><code>_netdev</code></td><td>A ORDEM — espera a rede subir antes de tentar montar.</td></tr>
+    <tr><td><code>nofail</code></td><td>A TOLERÂNCIA — não trava o boot se a montagem falhar mesmo assim.</td></tr>
+    <tr><td><code>mount -a</code></td><td>Testa todas as entradas do fstab sem precisar reiniciar.</td></tr>
+  </tbody></table>
+  <pre>--- /etc/fstab correto do chamado #2104 ---
+10.10.10.50:/dados/uploads  /mnt/uploads  nfs  defaults,_netdev,nofail  0  0
+
+$ sudo mount -a
+$ mount | grep uploads
+10.10.10.50:/dados/uploads on /mnt/uploads type nfs4 (rw,relatime,...)
+
+--- simulando servidor fora do ar ---
+$ sudo systemctl stop nfs-server   # no servidor, simulando indisponibilidade
+$ sudo reboot                       # no cliente
+
+--- pós-boot no cliente ---
+$ systemctl status
+● system — running   ← boot completou normalmente, sem travar
+
+$ mount | grep uploads
+(nada aparece — a montagem falhou, mas isso não impediu o resto do boot)</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje mostra o técnico achando que nofail sozinho já resolveria tudo,
+  sem precisar de _netdev</h2>
+  <p>Um colega remove _netdev, mantendo só nofail, achando que basta não travar o boot.</p>
+  <div class='box question'>Mesmo com nofail sozinho evitando o travamento do boot, por que ainda vale a
+  pena manter _netdev junto?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Sem _netdev, o sistema pode tentar montar o NFS antes da rede estar realmente pronta, o que quase sempre falha nessa tentativa inicial — mesmo não travando o boot (graças ao nofail), a montagem simplesmente NÃO acontece automaticamente depois, exigindo intervenção manual (mount -a) mesmo em cenários onde o servidor estava perfeitamente disponível, só que um pouco depois da tentativa inicial.')"><b>A</b> Sem _netdev, a tentativa de montagem pode acontecer antes da rede estar pronta e falhar mesmo com o servidor disponível — nofail evita o travamento, mas não corrige essa tentativa mal cronometrada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'nofail e _netdev não são a mesma opção com nomes diferentes — cada uma resolve um problema distinto (tolerância a falha vs. ordem de dependência), e usar só uma delas deixa a outra causa sem cobertura.')"><b>B</b> Não faz diferença real — _netdev e nofail fazem exatamente a mesma coisa, é redundante usar as duas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A velocidade do boot não é o motivo de manter _netdev — a razão é a ordem correta de dependência (rede antes de montagem remota), não uma questão de performance de inicialização.')"><b>C</b> _netdev só é necessário pra deixar o boot mais rápido, sem relação com a montagem funcionar corretamente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 04 NFS FSTAB NOFAIL é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Se o boot não travou, isso significa que a montagem funcionou?"</h2>
+  <p>Um colega vê o sistema bootar normalmente com nofail configurado, e assume que isso já confirma que o
+  NFS foi montado com sucesso.</p>
+  <div class='box question'>Por que o boot completar sem travar, com nofail configurado, NÃO é garantia de
+  que a montagem realmente aconteceu?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'nofail garante especificamente que uma FALHA de montagem não trave o boot — não garante que a montagem tenha tido SUCESSO. Se o servidor estiver indisponível, o boot completa normalmente (graças ao nofail), mas o diretório simplesmente fica vazio, sem o NFS montado ali. É preciso checar explicitamente com mount ou df -h depois do boot pra confirmar.')"><b>A</b> nofail garante que uma falha não trave o boot, mas não garante que a montagem teve sucesso — é preciso checar explicitamente com mount ou df -h depois</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O systemd não gera automaticamente um pop-up visual de erro de montagem no boot — a checagem precisa ser feita ativamente pelo administrador, com comandos como mount ou df -h, não por um aviso automático na tela.')"><b>B</b> Sim, é garantia total — se o boot não travou, o systemd sempre mostra um aviso visual confirmando que a montagem específica funcionou</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é uma questão de tempo de espera de 60 segundos — nofail simplesmente não bloqueia o boot diante de uma falha de montagem, independente de quanto tempo a tentativa de conexão levou antes de desistir.')"><b>C</b> Só é garantia se o boot demorar mais de 60 segundos pra completar, sinalizando que a montagem foi tentada</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 04 NFS FSTAB NOFAIL é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Ao adicionar um mount NFS no fstab, sempre inclua _netdev e nofail juntos.</li>
+    <li>Teste com mount -a antes de confiar que a linha está correta, sem precisar reiniciar.</li>
+    <li>Simule indisponibilidade do servidor (parando o serviço NFS nele) e confirme que o cliente ainda bota normalmente.</li>
+    <li>Depois de qualquer boot, confirme explicitamente com mount ou df -h que a montagem realmente aconteceu.</li>
+    <li>Documente qual serviço/aplicação depende desse mount, pra saber o impacto se ele falhar silenciosamente.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Adicione uma linha NFS no fstab de uma VM cliente de laboratório, com _netdev,nofail.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> mount -a monta o diretório sem erro.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Pare o serviço NFS na VM servidor, e reinicie a VM cliente.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> boot completa normalmente, sem travar em emergency shell.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o boot travar mesmo assim, este é o ponto onde o chat com o Sênior-IA vai te ajudar a checar se as duas opções estão realmente na linha do fstab.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Depois do boot, confirme com mount ou df -h se a montagem NFS realmente aconteceu.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> montagem ausente (já que o servidor estava fora do ar) — boot ok, montagem não.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Suba o serviço NFS de novo no servidor, e rode mount -a manualmente no cliente.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> montagem bem-sucedida agora, sem precisar reiniciar o cliente.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>_netdev garante que a montagem só é tentada depois da rede estar pronta.</li>
+    <li>nofail garante que uma falha de montagem não trave o boot inteiro.</li>
+    <li>As duas opções resolvem problemas diferentes — nenhuma substitui a outra.</li>
+    <li>Boot sem travar não é garantia de montagem bem-sucedida — sempre confirme com mount ou df -h.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Editar o fstab é reversível — sempre teste com mount -a antes de reiniciar de
+  verdade, exatamente como a disciplina já vista na Semana 12. O risco real é confiar demais no nofail:
+  aplicações que dependem daquele diretório podem falhar silenciosamente se ele não for montado, sem nenhum
+  aviso explícito além de checar manualmente.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "testar com mount -a antes de reiniciar de
+  verdade" é exatamente a mesma disciplina da Semana 12 (fstab quebrado) — vale reforçar esse hábito como
+  padrão permanente, não só pra esse tipo específico de entrada. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a linha correta combinou _netdev e
+  nofail juntos. O ponto central do caso é este: um mount remoto no fstab sem cuidado pode travar o boot
+  esperando por uma rede que ainda não chegou.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de configurar NFS persistente no fstab sem arriscar o boot. Amanhã
+  fecha a Semana 21 com um diagnóstico em camadas: por que uma escrita pode falhar mesmo com tudo aparentemente
+  certo — export, permissão, UID e fstab — juntando tudo que você aprendeu essa semana.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 21, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["_netdev","Opção de montagem que sinaliza ao sistema que o dispositivo depende da rede estar disponível antes de tentar montar.",
+   "É esperar o correio da manhã realmente chegar antes de mandar alguém checar a caixa de correspondência — sem essa espera, a checagem sempre encontraria a caixa vazia."],
+  ["nofail","Opção de montagem que impede uma falha naquela entrada específica de travar o restante do processo de boot.",
+   "É continuar abrindo o resto da casa normalmente mesmo se uma porta específica, de um cômodo emprestado, não puder ser aberta naquele momento."],
+  ["mount -a","Comando que tenta montar todas as entradas do /etc/fstab de uma vez, sem precisar reiniciar o sistema.",
+   "É testar todas as chaves do chaveiro de uma vez, sem precisar sair de casa e voltar pra cada teste."],
+  ["Ordem de dependência de boot","Sequência em que serviços e recursos precisam estar disponíveis antes de outros tentarem usá-los durante a inicialização.",
+   "É a ordem certa de abrir as portas de um prédio pela manhã — abrir o portão principal antes das salas internas, não o contrário."],
+  ["Tolerância a falha (nofail)","Capacidade de um sistema continuar funcionando mesmo quando um componente específico falha, em vez de travar tudo.",
+   "É o prédio continuar funcionando normalmente mesmo se um elevador específico estiver quebrado — as escadas e os outros elevadores continuam disponíveis."],
+  ["Montagem silenciosamente ausente","Situação onde o boot completa sem erro, mas um mount específico não aconteceu, sem nenhum aviso óbvio disso.",
+   "É a sala emprestada aparecer trancada sem nenhum aviso na porta — só quem for verificar percebe que ela não está disponível hoje."],
+  ["df -h (confirmação de montagem)","Comando que mostra o uso de disco de cada sistema de arquivos montado, útil pra confirmar se um mount específico realmente aconteceu.",
+   "É o mapa atualizado do prédio mostrando exatamente quais salas estão realmente disponíveis agora, não só as que deveriam estar."],
+  ["Emergency shell (contraste, Semana 12)","Modo de recuperação que o sistema entra quando uma entrada crítica do fstab falha sem nofail — já visto na Semana 12 com discos locais.",
+   "É o prédio inteiro sendo evacuado por causa de uma única sala emprestada não poder ser aberta — o cenário que nofail existe pra evitar."],
+  ["Simulação de indisponibilidade (teste deliberado)","Prática de derrubar propositalmente um serviço ou servidor em ambiente de laboratório, pra confirmar o comportamento esperado antes de confiar nele em produção.",
+   "É testar deliberadamente o que acontece se uma porta específica travar, antes de depender dela numa emergência real."],
+  ["Documentação de dependência (mount → aplicação)","Registro de quais serviços ou aplicações dependem de um mount específico, útil pra entender o impacto real se ele falhar.",
+   "É manter um mapa de quem usa cada sala emprestada, pra saber exatamente quem é afetado se ela ficar indisponível."]
+];
+
+const sceneStripIdx = [0,1,4,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,499 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 18 · Dia 3 — Primeiro Túnel WireGuard | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_WIREGUARD_CHAVES_PEER.html'>← Semana 18, Dia 2</a><a href='#'>Semana 18</a><a href='DIA_04_ALLOWEDIPS_ROTA.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 2 (chaves e peers):</b> Você já gerou os pares de chave e trocou
+apenas as públicas entre os dois lados. Hoje essas chaves entram de fato num arquivo wg0.conf, e você sobe o
+primeiro túnel funcional entre dois sites.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: montar e validar um túnel WireGuard ponta a ponta.</b> Você
+ganha a estrutura completa de wg0.conf, o comando que sobe a interface, e o critério real pra saber se o túnel
+está de pé — não é só o comando não ter dado erro.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 18 · Dia 3 | Nível Júnior — Redes</div>
+  <h1>Primeiro Túnel WireGuard</h1>
+  <p>quem tem endereço estável espera; quem está atrás de IP dinâmico é quem liga</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S18D03_PRIMEIRO_TUNEL_WIREGUARD.png' alt='Prancha em seis quadros sobre configurar wg0.conf nos dois sites, subir o túnel com wg-quick up, e validar com wg show e ping'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #1803: "Configurei o WireGuard nos dois sites, subi a interface nos dois, e não
+  conecta." Site A é o datacenter, com IP público fixo 203.0.113.10. Site B é uma filial pequena, atrás de um
+  roteador doméstico com IP dinâmico — hoje é um endereço, semana que vem pode ser outro. O técnico colocou um
+  <span class="hint" data-tip="Campo do bloco [Peer] com o IP:porta público do outro lado, usado para iniciar a conexão." onclick="openGlossary(4)">Endpoint</span>
+  no arquivo do Site A apontando pro último IP dinâmico observado do Site B. Isso é o erro raiz do dia.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> quando um dos dois lados tem IP público fixo e o outro tem IP dinâmico (atrás de
+    NAT), qual dos dois deveria ter o campo Endpoint configurado apontando pro outro, e por quê?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Só o lado com IP dinâmico (Site B) deve ter Endpoint configurado, apontando pro IP fixo do Site A. O lado
+      fixo (Site A) não precisa de Endpoint pro peer dinâmico — ele simplesmente espera o handshake chegar,
+      porque tentar iniciar contra um endereço que muda é uma corrida perdida. Quem tem endereço estável espera;
+      quem está atrás de IP dinâmico é quem liga.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>No wg0.conf do Site A, o técnico colocou Endpoint = ultimo_ip_dinamico_do_B:51820
+  no bloco [Peer] do Site B. O túnel falha de forma intermitente. Qual é a correção certa?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O bloco [Peer] do Site A para o Site B não deve ter Endpoint — o IP de B muda, então A não tem como saber pra onde iniciar. Quem precisa de Endpoint é o Site B, apontando pro 203.0.113.10:51820 fixo do Site A. B inicia a conexão; A apenas escuta e responde ao handshake que chega.')"><b>A</b> Remover o Endpoint do bloco [Peer] em A; configurar Endpoint = 203.0.113.10:51820 no bloco [Peer] em B</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Configurar Endpoint nos dois lados não resolve o problema de fundo: o Endpoint em A continua apontando pra um IP dinâmico que já pode ter mudado no momento seguinte. O lado sem endereço estável nunca deve ser o destino de um Endpoint.')"><b>B</b> Manter o Endpoint em A e adicionar também um Endpoint em B, apontando pro IP fixo de A</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Trocar as chaves públicas não resolve nada aqui — as chaves já estão corretas desde o Dia 2. O problema é estrutural: qual lado tem um endereço estável o bastante pra ser usado como destino de conexão.')"><b>C</b> Gerar um novo par de chaves nos dois sites, já que o handshake está falhando</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aumentar o AllowedIPs não muda quem consegue alcançar quem — esse campo define o que passa pelo túnel depois de estabelecido, não resolve o problema de um Endpoint apontando pra um IP que já mudou.')"><b>D</b> Aumentar o AllowedIPs do Site A para 0.0.0.0/0, liberando toda a rede</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 03 PRIMEIRO TUNEL WIREGUARD é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que faz</th></tr></thead><tbody>
+    <tr><td><code>wg-quick up wg0</code></td><td>Sobe a interface, aplica endereço e rotas a partir do arquivo de configuração.</td></tr>
+    <tr><td><code>wg-quick down wg0</code></td><td>Derruba a interface e remove as rotas associadas.</td></tr>
+    <tr><td><code>wg show</code></td><td>Mostra o estado do túnel: peers, latest handshake, bytes transferidos.</td></tr>
+  </tbody></table>
+  <pre>--- /etc/wireguard/wg0.conf no Site A (IP fixo 203.0.113.10) ---
+[Interface]
+PrivateKey = site_a_private_key
+Address = 10.99.0.1/32
+ListenPort = 51820
+
+[Peer]
+PublicKey = site_b_public_key
+AllowedIPs = 10.99.0.2/32
+# sem Endpoint aqui: A não sabe (e não precisa saber) o IP dinâmico de B
+
+--- /etc/wireguard/wg0.conf no Site B (IP dinâmico, atrás de NAT) ---
+[Interface]
+PrivateKey = site_b_private_key
+Address = 10.99.0.2/32
+ListenPort = 51820
+
+[Peer]
+PublicKey = site_a_public_key
+AllowedIPs = 10.99.0.1/32
+Endpoint = 203.0.113.10:51820
+PersistentKeepalive = 25
+
+$ wg-quick up wg0
+$ wg show
+interface: wg0
+  peer: site_b_public_key (truncado)
+    endpoint: 198.51.100.7:51820
+    latest handshake: 12 seconds ago
+    transfer: 1.2 KiB received, 1.4 KiB sent
+
+$ ping -c 3 10.99.0.2
+3 packets transmitted, 3 received, 0% packet loss</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 5 da prancha de hoje traz a analogia do sênior: o comando não deu erro nenhum, mas isso ainda
+  não é prova de nada</h2>
+  <p>Um colega roda wg-quick up wg0 nos dois lados, não vê nenhuma mensagem de erro no terminal, e já marca a
+  tarefa como concluída.</p>
+  <div class='box question'>Além de wg-quick up não ter retornado erro, o que precisa ser verificado antes de
+  considerar o túnel realmente funcional?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Rodar wg show nos dois lados e confirmar um latest handshake recente (segundos ou poucos minutos atrás), e então testar ping pelo IP do túnel (Address do outro lado). Ausência de erro no wg-quick up só confirma que a interface subiu e as rotas foram aplicadas — não confirma que os dois lados realmente trocaram um handshake criptográfico.')"><b>A</b> Rodar wg show nos dois lados, confirmar latest handshake recente, e testar ping pelo IP do túnel</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A interface aparecer como UP no ip a confirma só que a interface de rede existe e foi configurada localmente — não confirma que ela conseguiu trocar handshake com o outro lado.')"><b>B</b> Só confirmar que a interface aparece como UP na saída do comando ip a</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Reiniciar o serviço sem verificar nada antes é pular a etapa de diagnóstico — se o problema for estrutural (como um Endpoint errado), reiniciar sozinho não resolve e ainda mascara o sintoma temporariamente.')"><b>C</b> Reiniciar o serviço wg-quick@wg0 mais uma vez, só por precaução</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 03 PRIMEIRO TUNEL WIREGUARD é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Posso salvar a configuração com qualquer nome de arquivo?"</h2>
+  <p>Um colega salva o arquivo de configuração como config-site-b.conf e depois roda wg-quick up wg0, esperando
+  que funcione.</p>
+  <div class='box question'>Por que o arquivo precisa se chamar exatamente wg0.conf dentro de
+  /etc/wireguard/, e não qualquer outro nome?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'O comando wg-quick up wg0 procura especificamente pelo arquivo /etc/wireguard/wg0.conf — o nome do arquivo precisa bater exatamente com o nome da interface passada como argumento. Um arquivo com outro nome nunca vai ser encontrado por esse comando, mesmo com o conteúdo correto.')"><b>A</b> O nome do arquivo precisa bater exatamente com o nome da interface, porque wg-quick up wg0 procura por wg0.conf</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O nome do arquivo não precisa bater com o hostname da máquina — os dois conceitos são independentes; o que importa é o nome da interface passada ao comando wg-quick up.')"><b>B</b> O nome precisa bater com o hostname da máquina onde o WireGuard está instalado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O nome do arquivo é lido pelo comando wg-quick up para localizar a configuração certa — não é apenas uma convenção estética sem efeito prático.')"><b>C</b> É só uma convenção de organização, sem efeito nenhum sobre o funcionamento do comando</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 03 PRIMEIRO TUNEL WIREGUARD é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Escreva /etc/wireguard/wg0.conf em cada site, com [Interface] (PrivateKey, Address, ListenPort) e [Peer] (PublicKey, AllowedIPs).</li>
+    <li>Configure Endpoint SÓ no lado sem endereço estável, apontando pro IP fixo do outro lado.</li>
+    <li>Adicione PersistentKeepalive no lado atrás de NAT, pra manter a sessão de NAT ativa.</li>
+    <li>Suba os dois lados com wg-quick up wg0.</li>
+    <li>Confirme com wg show que existe latest handshake recente, e teste ping pelo IP do túnel.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Crie /etc/wireguard/wg0.conf em cada uma das duas VMs de laboratório, usando as chaves geradas no Dia 2.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo presente e com permissão 600 nas duas VMs.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Configure Endpoint apenas no lado que simula estar atrás de NAT (a VM sem IP fixo).</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> a outra VM (a de IP fixo) sem nenhum Endpoint no bloco [Peer].</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você errar e colocar Endpoint nos dois lados, este é o ponto onde o chat com o Sênior-IA vai te mostrar por que isso não quebra na hora, mas fica frágil.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Suba as duas interfaces com wg-quick up wg0.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> comando sem erro, interface wg0 visível em ip a nas duas VMs.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Rode wg show nas duas VMs e confirme latest handshake recente.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> handshake de poucos segundos ou minutos atrás, nos dois lados.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Teste ping de um lado pro Address do outro lado, pelo IP do túnel.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacote entre os dois IPs do túnel.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Apenas o lado sem endereço estável tem Endpoint configurado no bloco [Peer].</li>
+    <li>PersistentKeepalive está ativo no lado atrás de NAT.</li>
+    <li>wg show confirma latest handshake recente nos dois lados.</li>
+    <li>Ping pelo IP do túnel funciona nas duas direções, sem perda de pacote.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>wg-quick down wg0 reverte a interface e as rotas de forma limpa e imediata — é uma
+  operação segura de refazer quantas vezes precisar. O ponto real de atenção é confundir qual lado deveria
+  iniciar a conexão: isso não trava o comando, só produz um túnel instável e intermitente, difícil de
+  diagnosticar sem olhar o wg show com atenção.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "quem tem IP dinâmico é quem inicia a conexão"
+  conecta com qualquer cenário cliente-servidor atrás de NAT que você já viu — o lado sem endereço estável nunca
+  pode ser o destino de uma conexão de entrada confiável. O Anki vai reforçar esse padrão.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a correção foi remover o Endpoint do
+  lado de IP fixo e configurá-lo apenas no lado dinâmico, apontando pro IP fixo do outro. O ponto central do caso
+  é este: quem tem endereço estável espera; quem está atrás de IP dinâmico é quem liga.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de montar e validar o primeiro túnel WireGuard real entre dois sites,
+  sabendo exatamente qual lado configura Endpoint e por quê. Amanhã você aprofunda o AllowedIPs — que não é só
+  uma regra de firewall, é também a rota que decide o que entra no túnel.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 18, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["wg0.conf","Arquivo de configuração da interface WireGuard, normalmente localizado em /etc/wireguard/.",
+   "É a planta baixa do túnel — descreve quem você é, onde escuta e com quem se conecta, tudo num único arquivo."],
+  ["[Interface] (bloco)","Seção do arquivo que define a identidade local: chave privada, endereço do túnel e porta de escuta.",
+   "É o crachá de identificação da própria máquina dentro do túnel — quem eu sou e por onde eu recebo chamadas."],
+  ["Address (campo)","IP atribuído à própria interface do túnel, usado para tráfego dentro da rede virtual criada pelo WireGuard.",
+   "É o número da sua sala dentro do prédio do túnel — diferente do endereço da rua (o IP público real)."],
+  ["ListenPort","Porta UDP em que a interface WireGuard escuta por pacotes de handshake e dados recebidos.",
+   "É o número do ramal telefônico específico que essa máquina atende — sem ele, ninguém sabe pra qual porta ligar."],
+  ["Endpoint (campo)","IP:porta público e estável do outro lado da conexão, usado para iniciar o handshake.",
+   "É o endereço fixo que você discaria pra ligar pro outro lado — só faz sentido configurar quando esse endereço não muda."],
+  ["PersistentKeepalive","Intervalo em segundos de pacotes de manutenção enviados para manter a sessão de NAT aberta no roteador intermediário.",
+   "É a ligação curta que você faz de tempos em tempos só pra manter a linha do outro lado aberta, mesmo sem assunto novo."],
+  ["wg-quick up","Comando que sobe a interface, aplica o endereço e as rotas, e ativa o túnel a partir do arquivo de configuração.",
+   "É apertar o botão de ligar que já vem com o manual de instruções embutido — ele aplica tudo que está escrito no arquivo de uma vez."],
+  ["wg-quick down","Comando que derruba a interface e remove as rotas associadas a ela.",
+   "É desligar tudo de forma organizada — desfaz exatamente o que o wg-quick up montou, sem deixar resíduo."],
+  ["wg show","Comando que exibe o estado atual do túnel: peers configurados, latest handshake e volume de tráfego trocado.",
+   "É o painel de status do túnel — mostra se realmente está acontecendo conversa, não só se a porta está aberta."],
+  ["latest handshake","Marca de tempo do último aperto de mão criptográfico bem-sucedido entre dois peers.",
+   "É a prova de que os dois lados realmente se cumprimentaram recentemente — sem isso, o túnel existe só no papel."],
+  ["IP dinâmico (lado sem Endpoint)","Endereço que muda periodicamente, geralmente atribuído por um provedor a um roteador doméstico ou de filial.",
+   "É um endereço de correspondência que muda toda semana — não dá pra confiar nele como destino fixo de uma carta."],
+  ["Sessão de NAT (mantida por keepalive)","Estado temporário criado num roteador de tradução de endereço, que expira se não houver tráfego por um tempo.",
+   "É a porta giratória que fica aberta enquanto tem gente passando — para de girar, e passando um tempo, ela tranca sozinha."]
+];
+
+const sceneStripIdx = [0,3,4,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

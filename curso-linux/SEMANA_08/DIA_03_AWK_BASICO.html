@@ -1,0 +1,522 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 3 — awk: Campos, Filtros e Somas | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_SED.html'>← Dia 2</a><a href='#'>Semana 8</a><a href='DIA_04_PIPES_REDIRECIONAMENTO.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 1:</b> cut recorta coluna, grep acha linha. Mas nenhum dos dois
+CALCULA nada em cima dos dados. Hoje você aprende awk — a ferramenta certa quando a pergunta exige filtrar
+por coluna E fazer uma conta em cima do resultado.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: filtrar e calcular dados de log com awk.</b> Você ganha a
+capacidade de responder perguntas que envolvem soma, média ou contagem condicionada por coluna.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 3 | Nível Júnior</div>
+  <h1>awk: Campos, Filtros e Somas</h1>
+  <p>awk é ótimo quando a pergunta exige filtro por coluna e cálculo</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S08D03_AWK_BASICO.png' alt='Prancha em seis quadros sobre awk'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Ticket: "some os bytes das respostas HTTP 200" no <code>access.log</code>. grep acha
+  linhas com status 200, mas não soma nada. cut recorta a coluna de bytes, mas não filtra por status. Você
+  precisa de uma ferramenta que faça as duas coisas ao mesmo tempo.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Quarta-feira, Semana 8</span>
+    Ontem você aprendeu a alterar texto com sed, sempre com prévia e backup. Hoje o problema é outro: você
+    precisa filtrar E calcular ao mesmo tempo, e nenhuma ferramenta que você já viu faz as duas coisas
+    juntas.<br><br>
+    O chamado que me ensinou isso foi um ticket simples na aparência: "some os bytes das respostas HTTP
+    200" num <code>access.log</code> com milhares de linhas. Tentei primeiro com o que já conhecia:
+    <code>grep "200" access.log</code> encontrava as linhas certas, mas não somava nada — eu ficaria com uma
+    lista enorme de linhas e teria que somar na mão. <code>cut</code> extraía a coluna de bytes direitinho,
+    mas não filtrava por status — eu somaria bytes de respostas 404 e 500 junto com as 200, um número sem
+    sentido.<br><br>
+    Foi meu primeiro contato de verdade com <code>awk</code>, e a virada de chave foi entender como ele
+    "pensa" cada linha: divide tudo em campos numerados ($1, $2... até onde a linha tiver), permite uma
+    condição de filtro ($9==200, "só processe se o campo 9 for 200") e uma ação pra cada linha que passa
+    (soma += $10, "acumule o campo 10 numa variável"). Filtro e cálculo, na mesma passada, linha por
+    linha.<br><br>
+    O detalhe que quase me pegou: <code>$9</code> só era a coluna de status NESSE log específico. Cada
+    formato de log tem sua própria estrutura de colunas — antes de escrever qualquer condição, é preciso
+    confirmar o formato, com um <code>print $0</code> simples pra ver a linha inteira primeiro. Hoje você
+    pratica exatamente essa disciplina: confirmar os campos, construir o filtro isolado, e só depois
+    adicionar o cálculo por cima.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento do awk</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>$9==200</code></td><td>Condição de filtro — só processa a linha se o campo 9 (status) for igual a 200.</td></tr>
+    <tr><td><code>{soma += $10}</code></td><td>Ação — acumula o valor do campo 10 (bytes) na variável soma, linha por linha.</td></tr>
+    <tr><td><code>END {print soma}</code></td><td>Executa só uma vez, depois de processar todas as linhas, imprimindo o total final.</td></tr>
+  </tbody></table>
+  <pre>$ awk '$9==200 {soma += $10} END {print soma}' access.log
+98423120</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um arquivo de log de teste com algumas linhas simulando status e tamanho de resposta.</div></div>
+      <div class="lab-cmd">$ cat > teste.log << 'EOF'
+10.0.0.1 - - [01/Jan] "GET /home" 200 1024
+10.0.0.2 - - [01/Jan] "GET /login" 404 512
+10.0.0.1 - - [01/Jan] "GET /about" 200 2048
+EOF</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo de teste pronto, com colunas identificáveis, resultado esperado conhecido (200+200 = 3072 bytes).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> saber a resposta certa de antemão (3072) é o que permite validar cada etapa da cadeia com confiança, exatamente como você já fez com cut/sort/uniq.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar direto num log real de produção sem saber a resposta esperada — sem isso, fica impossível confirmar se a lógica do awk está certa.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> confirme a linha completa, depois identifique manualmente qual campo é qual.</div></div>
+      <div class="lab-cmd">$ awk '{print $0}' teste.log
+$ awk '{print NF, $7, $8}' teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> mapeamento correto — status é o campo 7, bytes é o campo 8, nesse formato específico de log.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> confirmar o formato antes de escrever qualquer condição é o que evita o erro do "$9 sempre é status" — cada log tem sua própria numeração de campos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> copiar um número de campo de outro log/tutorial sem confirmar no arquivo real que você está processando.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> construa o filtro isoladamente e confirme que só as linhas certas aparecem.</div></div>
+      <div class="lab-cmd">$ awk '$7==200 {print}' teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> só as duas linhas com status 200 aparecem, confirmando que o filtro está correto antes de somar qualquer coisa.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> testar o filtro sozinho primeiro é a "camada" que a Questão 2 vai testar — confirmar visualmente antes de confiar num número final.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pra soma sem confirmar o filtro primeiro — se o filtro estiver errado, a soma final "parece" plausível mas está tecnicamente incorreta.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se um cálculo do awk não bater com o esperado, este é o ponto onde o chat com o Sênior-IA vai ajudar a debugar a expressão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione a soma por cima do filtro já validado.</div></div>
+      <div class="lab-cmd">$ awk '$7==200 {soma += $8} END {print soma}' teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 3072 — batendo exatamente com o cálculo manual que você já sabia (1024 + 2048).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o resultado bater com a conta manual é a prova final de que a lógica está certa, antes de rodar a mesma expressão num log real de milhares de linhas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> mudar o filtro E adicionar a soma ao mesmo tempo, sem testar cada mudança separadamente — se algo der errado, fica mais difícil saber qual parte falhou.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente comando completo, campo usado como filtro, campo somado, resultado final.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Comando: awk '$7==200 {soma += $8} END {print soma}' teste.log
+Filtro: campo 7 (status) == 200
+Somado: campo 8 (bytes)
+Resultado: 3072 (validado contra cálculo manual)</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> documentar qual campo é qual, além do comando, é o que permite reaplicar a mesma lógica corretamente num log diferente, sem repetir a investigação de formato do zero.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só o comando, sem anotar quais campos correspondem a quê — sem isso, reaplicar a mesma lógica noutro log exige investigar tudo de novo.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> como o <code>awk</code> "pensa" cada linha de um log?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      awk divide cada linha em
+      <span class="hint" data-tip="Cada pedaço de uma linha, separado por espaço, numerado $1, $2, $3..." onclick="openGlossary(0)">campos</span> numerados
+      ($1, $2, $9, $10...), permite uma
+      <span class="hint" data-tip="Regra de filtro que decide se uma linha deve ser processada pela ação do awk." onclick="openGlossary(1)">condição</span> (ex: $9==200)
+      e uma <span class="hint" data-tip="O que fazer com cada linha que passa na condição, como somar um valor." onclick="openGlossary(2)">ação</span> (ex: soma
+      += $10) — filtro e cálculo, juntos, linha por linha.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa somar os bytes transferidos só nas respostas com status 200, num
+  log com milhares de linhas. Qual é a ferramenta e comando corretos?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'grep encontra linhas que combinam com um padrão, mas não soma valores numéricos de uma coluna — não é a ferramenta certa quando a pergunta exige cálculo.')"><b>A</b> Usar grep "200" access.log e contar os bytes manualmente depois</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'awk \'$9==200 {soma += $10} END {print soma}\' access.log filtra só as linhas com status 200 (campo 9) e soma o valor de bytes (campo 10) de cada uma, imprimindo o total no final — exatamente filtro e cálculo juntos.')"><b>B</b> Rodar awk \'$9==200 {soma += $10} END {print soma}\' access.log, filtrando por status e somando bytes na mesma passada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'cut sozinho extrai a coluna de bytes, mas não filtra por status 200 nem soma os valores — falta tanto o filtro quanto o cálculo.')"><b>C</b> Usar cut pra extrair só a coluna de bytes, ignorando o filtro de status</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Abrir o arquivo inteiro num editor e somar manualmente não escala pra milhares de linhas, e aumenta muito a chance de erro humano na soma.')"><b>D</b> Abrir o log inteiro e somar os valores manualmente linha por linha</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O 'awk' é a planilha eletrônica do terminal Linux: entende o texto automaticamente separado em colunas ($1, $2, $3) e permite fazer cálculos matemáticos e filtros condicionais.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O resultado é 98423120 bytes — como validar esse número antes de reportar?</h2>
+  <p>O comando retorna um único número grande. Antes de reportar no ticket, é preciso confirmar que o
+  cálculo está correto.</p>
+  <div class='box question'>Qual é a estratégia de validação correta?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Construir a solução em camadas — primeiro só imprimir os campos ($9, $10) sem filtro, depois adicionar o filtro de status, e só então adicionar a soma no END — permite confirmar visualmente que cada etapa está correta antes de confiar no número final.')"><b>A</b> Construir o comando em camadas: primeiro print $9,$10 sem filtro, depois com o filtro $9==200, e só então adicionar a soma</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Um número plausível não é validação — sem checar as etapas intermediárias, um erro na condição ou no campo referenciado pode gerar um total incorreto que ainda assim parece razoável.')"><b>B</b> Aceitar o número direto, já que awk é confiável e não precisa de validação extra</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Trocar de ferramenta sem entender se o awk estava certo ou errado não valida nada — o problema pode estar na lógica da condição, não na ferramenta em si.')"><b>C</b> Rodar o mesmo cálculo com outra ferramenta completamente diferente, sem entender por quê</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A variável '$NF' no awk é como a última cadeira da fila: aponta automaticamente para a última coluna da linha, não importa quantos espaços ou palavras existam antes.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "$9 sempre vai ser a coluna de status, em qualquer log?"</h2>
+  <p>Um colega usa <code>$9==200</code> num log diferente, com formato distinto, e o filtro simplesmente não
+  funciona como esperado.</p>
+  <div class='box question'>Por que isso acontece?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'O número do campo depende inteiramente do FORMATO específico daquele log — $9 é status só porque, NESSE access.log específico, o status é o nono campo separado por espaço. Um log com formato diferente pode ter o status em outra posição, e é preciso confirmar isso antes de assumir o número do campo.')"><b>A</b> O número do campo depende do formato específico do log — $9 só é status nesse log específico; outro log pode ter o status em posição diferente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe um padrão universal fixo de posição de campo entre todos os tipos de log — cada formato de log tem sua própria estrutura de colunas.')"><b>B</b> $9 é sempre status em qualquer log, é um padrão universal do awk</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A causa não é sobre o awk precisar ser instalado separadamente para cada tipo de log — awk funciona igual em qualquer texto, o que muda é a estrutura de campos de cada arquivo.')"><b>C</b> awk precisa ser reconfigurado pra cada tipo de log antes de usar</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O bloco 'awk '$5 > 90 {print $1, $5}'' é o alarme automático da planilha: filtra apenas os discos cuja quinta coluna de uso ultrapassou noventa por cento.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique o formato do log e confirme qual campo é qual (print $0 pra ver a linha inteira primeiro).</li>
+    <li>Construa a condição de filtro isoladamente e teste.</li>
+    <li>Adicione a ação de cálculo (soma, contagem) por cima do filtro já validado.</li>
+    <li>Use END pra imprimir só o resultado final, depois de processar tudo.</li>
+    <li>Documente o comando completo como evidência do cálculo.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Documente o formato de cada log padrão da equipe (numeração de campos) num README
+  compartilhado. Isso elimina a necessidade de redescobrir "qual campo é qual" toda vez que alguém precisar
+  escrever um novo comando awk contra o mesmo tipo de log.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O formato do log foi confirmado antes de assumir número de campo.</li>
+    <li>O filtro foi testado isoladamente antes de adicionar cálculo.</li>
+    <li>O resultado foi construído e validado em camadas, não de uma vez só.</li>
+    <li>O comando completo foi documentado como evidência.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>awk usado só pra leitura/cálculo é somente leitura sobre o arquivo original — não
+  existe rollback necessário. O risco real é confiar num número sem validar a lógica que o gerou.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "escolher a ferramenta certa pra pergunta certa"
+  conecta com grep vs find (Semana 2) — cut recorta, grep acha, awk filtra E calcula, cada um com seu papel
+  específico. O Anki vai conectar os três.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi rodar
+  <b>awk '$9==200 {soma += $10} END {print soma}' access.log</b>, filtrando e somando na mesma passada. O
+  ponto central do caso é este: awk é ótimo quando a pergunta exige filtro por coluna e cálculo.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de filtrar e calcular dados de log com awk. Amanhã você aprende
+  pipes, tee e redirecionamento avançado — pra investigar e provar evidência ao mesmo tempo.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 8, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Campo ($1, $2...)","Cada pedaço de uma linha, separado por espaço (ou outro delimitador), numerado a partir de 1.",
+   "É cada coluna de uma planilha impressa, numerada da esquerda pra direita."],
+  ["Condição (awk)","Regra de filtro que decide se uma linha deve ser processada pela ação do awk.",
+   "É o critério de triagem — só quem passa nesse teste segue pra próxima etapa."],
+  ["Ação (awk)","O que fazer com cada linha que passa na condição, como somar um valor ou imprimir algo.",
+   "É a instrução dada depois da triagem — o que fazer com quem passou no critério."],
+  ["awk","Linguagem de processamento de texto orientada a campos, capaz de filtrar e fazer cálculos ao mesmo tempo.",
+   "É uma calculadora que também sabe ler colunas de uma planilha, tudo numa ferramenta só."],
+  ["END {}","Bloco especial do awk que executa uma única vez, depois de todas as linhas terem sido processadas.",
+   "É o resumo final do relatório, escrito só depois de terminar de somar tudo, não linha por linha."],
+  ["soma += $10","Sintaxe que acumula o valor do campo 10 numa variável, linha após linha.",
+   "É ir colocando moedas num cofrinho, uma de cada vez, até chegar no total final."],
+  ["Formato de log (posição de campo)","A estrutura específica de colunas de um arquivo de log, que determina qual número corresponde a qual dado.",
+   "É o layout específico daquela planilha — a coluna 3 pode ser 'nome' numa e 'data' em outra, depende do formato."],
+  ["Validação em camadas","Construir e testar uma solução complexa em etapas pequenas, confirmando cada uma antes de avançar.",
+   "É montar uma receita provando cada ingrediente antes de misturar tudo, não só confiar no resultado final."],
+  ["Cálculo condicionado","Uma soma, contagem ou média que só considera linhas que atendem a um critério específico.",
+   "É somar só as notas de quem passou na prova, ignorando quem não atende ao critério da pergunta."],
+  ["print $0","Comando do awk que imprime a linha inteira, sem nenhum filtro ou processamento aplicado.",
+   "É olhar a página inteira do documento antes de decidir qual parágrafo específico interessa."],
+  ["Ferramenta certa pra pergunta certa","Escolher entre grep, cut, awk ou outra ferramenta com base no tipo exato de pergunta que precisa ser respondida.",
+   "É escolher a chave de fenda certa entre um jogo de ferramentas — cada uma resolve um tipo específico de parafuso."],
+  ["Evidência de cálculo (comando documentado)","Registrar o comando exato usado para chegar a um resultado numérico, permitindo reprodução e verificação.",
+   "É anexar a fórmula usada numa planilha, não só o número final — permite conferir e repetir o cálculo depois."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

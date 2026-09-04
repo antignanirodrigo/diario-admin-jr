@@ -1,0 +1,521 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 4 — Pipes, tee e Redirecionamento | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_AWK_BASICO.html'>← Dia 3</a><a href='#'>Semana 8</a><a href='DIA_05_AMBIENTE_SHELL.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a semana inteira:</b> cut, sed e awk te deram ferramentas de
+processamento. Hoje você aprende a costurar tudo isso numa investigação real — vendo o resultado na tela E
+guardando como evidência ao mesmo tempo, sem escolher entre um ou outro.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: investigar e documentar ao mesmo tempo com tee.</b> Você
+ganha o hábito de nunca perder evidência de uma investigação só porque escolheu ver em vez de guardar.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 4 | Nível Júnior</div>
+  <h1>Pipes, tee e Redirecionamento Avançado</h1>
+  <p>em diagnóstico, o que você viu precisa poder ser provado depois</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S08D04_PIPES_REDIRECIONAMENTO.png' alt='Prancha em seis quadros sobre pipes, tee e redirecionamento'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Investigação do ticket #4821: você precisa ver os erros do app em tempo real na tela, MAS
+  também precisa guardar tudo num arquivo pra anexar como evidência. Usar <code>></code> esconde da tela; só
+  olhar na tela não guarda nada.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Quinta-feira, Semana 8</span>
+    A semana inteira te deu ferramentas de processamento — cut, sort, uniq, sed, awk. Hoje você costura tudo
+    isso numa situação bem real: uma investigação onde você precisa ver E guardar ao mesmo tempo, sem
+    escolher entre um ou outro.<br><br>
+    Era madrugada, ticket de produção aberto, aplicação lançando erros intermitentes. Eu precisava
+    acompanhar o log em tempo real pra entender o padrão do erro — mas também sabia que, no fim, teria que
+    anexar evidência concreta no ticket, prova do que realmente aconteceu. Meu primeiro instinto foi usar
+    <code>></code> pra salvar tudo num arquivo. Rodei o comando, redirecionei a saída, e a tela ficou muda —
+    <code>></code> manda TUDO pro arquivo, nada aparece na tela. Fiquei cego durante a investigação mais
+    crítica, sem conseguir acompanhar o que estava acontecendo ao vivo.<br><br>
+    Foi aí que um colega mais experiente me apresentou <code>tee</code>. O nome vem literalmente de "T" —
+    imagine uma torneira em formato de T: a água que entra sai por dois lados ao mesmo tempo. Um fluxo de
+    dados vira dois: continua aparecendo na tela E é gravado num arquivo, simultaneamente. Não é escolher
+    entre ver e guardar — é fazer as duas coisas juntas, exatamente o que uma investigação real
+    precisa.<br><br>
+    E tem um detalhe que quase me pegou de novo mais tarde: <code>tee</code> sem <code>-a</code>
+    sobrescreve o arquivo do zero a cada execução. Numa investigação de várias etapas, isso apaga tudo que
+    você já tinha capturado antes. <code>tee -a</code> (append) acrescenta, sem perder o histórico. Hoje
+    você pratica exatamente essa combinação: <code>2>&1</code> pra não perder nenhuma mensagem de erro,
+    <code>grep</code> pra filtrar o ruído, e <code>tee -a</code> pra nunca mais escolher entre ver e provar.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>2>&1</code></td><td>Une a saída de erro (2) com a saída padrão (1), garantindo que nenhuma mensagem se perca no pipe.</td></tr>
+    <tr><td><code>tee -a arquivo</code></td><td>Mostra na tela E acrescenta (-a, append) ao arquivo, sem sobrescrever o que já existia.</td></tr>
+  </tbody></table>
+  <pre>$ journalctl -u app --since '1 hour ago' 2>&1 | grep -i error | tee -a ticket4821.log
+Aug 31 app[2210]: ERROR timeout
+Aug 31 app[2210]: ERROR db unavailable</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> rode um comando de teste com saída simples usando tee (sem -a) e confirme o arquivo criado.</div></div>
+      <div class="lab-cmd">$ echo "primeira investigação" | tee investigacao.log
+$ cat investigacao.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> saída visível na tela E gravada no arquivo, os dois mostrando "primeira investigação".</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver tee funcionar num caso simples primeiro é o que confirma o comportamento básico antes de complicar com pipes e filtros.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir que tee só grava, sem perceber que ele também imprime na tela — é exatamente esse "dos dois ao mesmo tempo" que resolve o dilema da história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> rode o mesmo comando de novo, sem -a, e confirme que o conteúdo anterior foi sobrescrito.</div></div>
+      <div class="lab-cmd">$ echo "segunda investigação" | tee investigacao.log
+$ cat investigacao.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo com só "segunda investigação" — "primeira investigação" desapareceu, sobrescrita.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir de propósito o erro do colega da segunda investigação é o que fixa, na prática, por que -a é essencial em investigações de várias etapas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> assumir por padrão que tee sempre acrescenta — o comportamento padrão (sem -a) é sobrescrever, exatamente o oposto do que muita gente espera.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> repita o teste agora usando tee -a, confirmando que o conteúdo se acumula.</div></div>
+      <div class="lab-cmd">$ echo "primeira investigação" | tee -a investigacao2.log
+$ echo "segunda investigação" | tee -a investigacao2.log
+$ cat investigacao2.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo com as duas linhas, "primeira" e "segunda", acumuladas — nada perdido dessa vez.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o -a preservar as duas execuções, lado a lado com o teste anterior que perdeu a primeira, é a comparação mais clara possível do porquê dessa flag importar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir -a do tee com -a de outros comandos (como ls -a) — aqui -a significa append, "acrescentar ao final".</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma cadeia com 2>&1 e grep não capturar o esperado, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a ordem dos redirecionamentos.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> monte uma cadeia completa de investigação, combinando erro+saída, filtro e tee.</div></div>
+      <div class="lab-cmd">$ journalctl -u ssh --since '1 hour ago' 2>&1 | grep -i fail | tee -a ssh_investigacao.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> cadeia funcionando, mostrando na tela e gravando filtrado no arquivo simultaneamente.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a cadeia completa exatamente como você usaria numa investigação real — 2>&1 garante que nada se perde, grep reduz ruído, tee -a preserva evidência sem cegar a tela.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> colocar o 2>&1 na posição errada da cadeia — ele precisa vir logo depois do comando original, antes do primeiro pipe, senão pode não capturar os erros esperados.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente comando completo, arquivo gerado, confirmação de que tela e arquivo batem.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+Comando: journalctl -u ssh --since '1 hour ago' 2>&1 | grep -i fail | tee -a ssh_investigacao.log
+Arquivo: ssh_investigacao.log
+Conferido: conteúdo do arquivo bate exatamente com o que apareceu na tela</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa confirmação de que "arquivo bate com tela" é exatamente o passo de validação que a Questão 2 vai testar — não basta gerar o arquivo, é preciso confirmar que ele é fiel.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> anexar o arquivo ao ticket sem essa conferência final — presumir que tee "sempre funciona certo" é o tipo de suposição que uma investigação séria não pode se dar ao luxo de fazer.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que <code>tee</code> resolve o dilema entre "ver na tela" e "guardar num
+    arquivo"?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Comando que envia a saída simultaneamente para a tela e para um arquivo." onclick="openGlossary(0)">tee</span> é uma
+      torneira em T — um fluxo de dados vira dois ao mesmo tempo: continua aparecendo na tela E é gravado num
+      arquivo. Não é escolher entre ver e guardar, é fazer as duas coisas juntas, exatamente o que uma
+      investigação real precisa.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa ver os erros do app em tempo real E guardar tudo como evidência
+  anexável. Qual é a combinação correta de ferramentas?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'> sozinho redireciona a saída SÓ pro arquivo, escondendo da tela — você perde a visão em tempo real que também precisa durante a investigação.')"><b>A</b> Usar só > pra salvar num arquivo, e depois abrir o arquivo pra ver o conteúdo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'journalctl -u app --since \'1 hour ago\' 2>&1 | grep -i error | tee -a ticket4821.log junta erro e saída padrão (2>&1), filtra por erro (grep), e usa tee -a pra mostrar na tela E gravar no arquivo ao mesmo tempo — exatamente o que a investigação com evidência precisa.')"><b>B</b> Usar journalctl -u app --since '1 hour ago' 2>&1 | grep -i error | tee -a ticket4821.log, combinando filtro com tee</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Sem nenhum redirecionamento nem tee, você só vê na tela e perde tudo assim que a sessão fechar — não tem como anexar evidência ao ticket depois.')"><b>C</b> Rodar o comando normalmente, só olhando a tela, sem nenhum redirecionamento</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Copiar e colar manualmente da tela é lento, propenso a erro, e não escala pra uma investigação com muitas linhas de log.')"><b>D</b> Copiar e colar manualmente cada linha de erro que aparece na tela</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O operador Pipe (|) é a esteira de fábrica interligando duas máquinas: a saída de peças da primeira máquina entra diretamente como matéria-prima da segunda máquina.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O ticket4821.log foi gerado — como confirmar que ele tem exatamente o que apareceu na tela?</h2>
+  <p>Depois de rodar o comando com <code>tee -a</code>, você precisa anexar o arquivo como evidência no
+  ticket.</p>
+  <div class='box question'>Qual é o passo de validação correto antes de anexar?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Comparar (com cat ou less) o conteúdo do arquivo com o que apareceu na tela confirma que tee capturou tudo corretamente, sem perder nenhuma linha — validação simples que garante que a evidência é fiel ao que foi realmente observado.')"><b>A</b> Ler o conteúdo do arquivo (cat ou less ticket4821.log) e comparar com o que apareceu na tela, confirmando que bate</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Anexar sem conferir o conteúdo real do arquivo assume que tee funcionou perfeitamente sem nenhuma verificação — um passo simples de conferência evita anexar evidência incompleta.')"><b>B</b> Anexar direto sem checar, já que tee sempre grava tudo corretamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Rodar o comando de novo gera um NOVO resultado, que pode ser diferente do momento original investigado — não confirma se a evidência já capturada está correta.')"><b>C</b> Rodar o comando de novo, sem tee, só pra comparar visualmente</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O operador '>' sobrescreve o arquivo destruindo o conteúdo anterior; o operador '>>' é como anexar uma nova página no final do livro de registros sem apagar o passado.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "tee sem -a e tee com -a fazem a mesma coisa?"</h2>
+  <p>Um colega usa <code>tee ticket4821.log</code> (sem <code>-a</code>) numa segunda investigação do mesmo
+  ticket, e percebe que o conteúdo da primeira investigação sumiu do arquivo.</p>
+  <div class='box question'>O que aconteceu?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Sem -a, tee SOBRESCREVE o arquivo do zero a cada execução, apagando o que já estava lá antes — com -a (append), o novo conteúdo é ACRESCENTADO ao final, preservando o histórico anterior. Pra investigações que acontecem em várias etapas, -a é essencial.')"><b>A</b> Sem -a, tee sobrescreve o arquivo do zero — apagou o conteúdo da primeira investigação; -a acrescentaria ao invés de substituir</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'tee sem -a não anexa por padrão — o comportamento padrão é sobrescrever, e -a é justamente a flag que muda esse comportamento pra acrescentar.')"><b>B</b> Não deveria ter acontecido nada, tee sempre acrescenta por padrão, com ou sem -a</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O conteúdo não foi corrompido — ele foi sobrescrito de propósito pelo comportamento padrão do tee sem -a, um comportamento previsível, não um erro de corrupção.')"><b>C</b> O arquivo foi corrompido por um bug do tee, não tem relação com -a</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O redirecionamento '2>&1' é juntar o cano de esgoto com o de água pluvial: canaliza as mensagens de erro (stderr) e as normais (stdout) para o mesmo arquivo de log.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Combine 2>&1 quando erro e saída normal precisam ser capturados juntos.</li>
+    <li>Filtre com grep antes de passar pro tee, reduzindo ruído.</li>
+    <li>Use tee -a pra preservar investigações anteriores no mesmo arquivo.</li>
+    <li>Confira o conteúdo do arquivo gerado antes de anexar como evidência.</li>
+    <li>Documente o comando completo junto com o arquivo de log.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Estabeleça a convenção de equipe de sempre usar tee -a (nunca tee sem -a) em investigações
+  de ticket, e nomear os arquivos de log com o número do ticket (ex.: ticketXXXX.log). Isso elimina o risco
+  de sobrescrita acidental e mantém evidência organizada e rastreável.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>tee foi usado pra ver e guardar ao mesmo tempo, não um no lugar do outro.</li>
+    <li>-a foi usado quando havia necessidade de preservar investigação anterior.</li>
+    <li>O conteúdo do arquivo foi conferido antes de anexar como evidência.</li>
+    <li>A cadeia completa (filtro + tee) foi documentada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>tee sem -a sobrescreve sem aviso — não existe "rollback" pro conteúdo perdido dessa
+  forma, a menos que você tenha outro backup dele. É por isso que -a é a escolha mais segura por padrão em
+  investigações contínuas.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "ver e guardar ao mesmo tempo" conecta com o
+  princípio do painel 6 de toda semana — documentar evidência é parte do trabalho, não um extra opcional. O
+  Anki vai conectar com Semana 3 (relatório de incidente).</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi usar
+  <b>journalctl ... 2>&1 | grep -i error | tee -a ticket4821.log</b>, combinando filtro com tee. O ponto
+  central do caso é este: em diagnóstico, o que você viu precisa poder ser provado depois.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de investigar e documentar simultaneamente, sem perder evidência.
+  Amanhã fecha a Semana 8: entender PATH, alias e .bashrc — o ambiente de shell que vai sustentar os scripts
+  que começam na Semana 9.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 8, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["tee","Comando que envia a saída simultaneamente para a tela e para um arquivo.",
+   "É uma torneira em T — a água (dados) continua saindo pra pia (tela) e ainda enche o balde (arquivo) ao mesmo tempo."],
+  ["> (redirecionamento simples)","Envia a saída de um comando para um arquivo, sobrescrevendo o conteúdo anterior.",
+   "É substituir o conteúdo de uma caixa inteira por algo novo, jogando fora o que estava lá antes."],
+  [">> (append)","Envia a saída de um comando para um arquivo, acrescentando ao final sem apagar o conteúdo existente.",
+   "É adicionar uma página nova ao final do caderno, sem rasgar as páginas anteriores."],
+  ["2>&1","Redireciona a saída de erro (descritor 2) para o mesmo destino da saída padrão (descritor 1).",
+   "É juntar duas correspondências separadas (normal e urgente) na mesma caixa de entrada, pra não perder nenhuma."],
+  ["tee -a","Opção do tee que acrescenta ao arquivo em vez de sobrescrever, preservando conteúdo anterior.",
+   "É a torneira em T que enche o balde por cima do que já tinha, em vez de esvaziar e reabastecer do zero."],
+  ["stdout / stderr","Saída padrão (stdout, descritor 1) e saída de erro (stderr, descritor 2) — dois canais separados de um comando.",
+   "É a diferença entre o megafone principal (stdout) e o alarme de emergência (stderr) de um prédio — dois canais distintos de comunicação."],
+  ["Pipe (|)","Símbolo que conecta a saída de um comando à entrada do próximo, formando uma cadeia de processamento.",
+   "É um cano que leva a água de uma torneira direto pra próxima etapa do sistema, sem precisar de balde no meio."],
+  ["Evidência de investigação","Registro concreto e reproduzível do que foi observado durante uma investigação técnica.",
+   "É a gravação da câmera de segurança — prova do que realmente aconteceu, não só uma descrição de memória."],
+  ["Sobrescrever vs. acrescentar","Sobrescrever substitui todo o conteúdo anterior; acrescentar mantém o antigo e adiciona o novo depois.",
+   "É apagar o quadro branco inteiro versus escrever numa parte nova, mantendo o que já estava escrito."],
+  ["Filtro antes de gravar","Aplicar grep ou outra ferramenta de filtro ANTES de gravar num arquivo, reduzindo ruído na evidência.",
+   "É peneirar antes de guardar — só o que realmente interessa vai pro arquivo final, não tudo indiscriminadamente."],
+  ["Cadeia de investigação (multi-etapa)","Uma sequência de comandos conectados que juntos formam uma investigação completa e documentada.",
+   "É a linha de investigação de um detetive — cada pista conectada à próxima, até formar o caso completo."],
+  ["Anexo de ticket","Arquivo de evidência incluído formalmente num chamado de suporte, comprovando o que foi encontrado.",
+   "É o documento anexado ao processo — prova concreta que sustenta o que está sendo relatado."]
+];
+
+const sceneStripIdx = [0,3,4,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

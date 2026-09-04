@@ -1,0 +1,522 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 13 · Dia 2 — IP e CIDR | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);padding:20px;margin:16px 0;border-radius:0 6px 6px 0}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{color:var(--gold);font-weight:900;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+.lab-cmd{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:12px 14px;border-radius:4px;font-family:Consolas,monospace;font-size:13px;margin-top:8px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_MODELO_TCPIP.html'>← Semana 13, Dia 1</a><a href='#'>Semana 13</a><a href='DIA_03_PING_ICMP.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você aprendeu que a camada de rede usa endereçamento
+IP. Hoje você aprende o detalhe que confunde todo iniciante: dois IPs parecidos NÃO significa que estão na
+mesma rede — só a máscara (CIDR) revela isso de verdade.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: decifrar um endereço IP com máscara.</b> Você ganha a
+capacidade de olhar para algo como 192.168.10.15/24 e saber exatamente até onde a rede vai — e por que "os
+números parecem iguais" é uma armadilha, não uma prova de que dois hosts se falam direto.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 13 · Dia 2 | Nível Júnior — Redes</div>
+  <h1>IP e CIDR</h1>
+  <p>IP sem máscara é endereço incompleto — CIDR define quem está perto e quem precisa de rota</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S13D02_IP_CIDR_SUBREDE.png' alt='Prancha em seis quadros sobre CIDR, máscara de sub-rede e como determinar se dois hosts estão na mesma rede'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>"192.168.10.15 e 192.168.20.30... começam parecido. Devem se falar direto!" — essa suposição
+  é a armadilha central de hoje. Endereço IP sem máscara engana: só o CIDR (a máscara) mostra onde a rede
+  realmente termina, e os dois IPs acima estão em sub-redes diferentes.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Semana passada, outro ticket</span>
+    Um estagiário migrou um servidor de aplicação pra uma VLAN nova e configurou o IP como
+    172.16.10.40/24 — "parecido" com o gateway 172.16.10.1 que ele viu anotado num post-it, então achou que
+    tava certo. O servidor nunca conseguiu falar com o banco de dados em 172.16.20.15, e ele passou a tarde
+    inteira reiniciando serviços achando que era firewall. Eu perguntei uma coisa só: "qual é o endereço de
+    rede dos dois, calculado com a máscara?" Ele nunca tinha calculado — só olhado os números e achado
+    parecido. 172.16.10.0/24 e 172.16.20.0/24: redes diferentes, sem rota configurada entre elas.
+    <br><br>
+    O ponto que fica: "os números parecem próximos" não é evidência de rede — é a mesma armadilha de olhar
+    hostname parecido e assumir que é o mesmo servidor. Só o cálculo com a máscara (ou o ping, como segunda
+    confirmação) prova onde a rede realmente termina.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Notação</th><th>Máscara</th><th>Significado</th></tr></thead><tbody>
+    <tr><td><code>/24</code></td><td>255.255.255.0</td><td>24 bits de rede + 8 bits de host — sub-rede menor.</td></tr>
+    <tr><td><code>/16</code></td><td>255.255.0.0</td><td>16 bits de rede + 16 bits de host — sub-rede maior.</td></tr>
+  </tbody></table>
+  <pre>server-a$ ip -br addr show ens160
+ens160    UP    192.168.10.15/24
+→ Rede de A: 192.168.10.0/24
+
+server-b$ ip -br addr show ens160
+ens160    UP    192.168.20.30/24
+→ Rede de B: 192.168.20.0/24
+
+--- cálculo AND ---
+IP       11000000.10101000.00001010.00001111  (192.168.10.15)
+MÁSCARA  11111111.11111111.11111111.00000000  (/24)
+REDE     11000000.10101000.00001010.00000000  (192.168.10.0)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: configure IPs na mesma sub-rede em duas VMs de laboratório.</div></div>
+      <div class="lab-cmd">vm-a$ ip addr add 192.168.10.15/24 dev ens160
+vm-b$ ip addr add 192.168.10.40/24 dev ens160
+$ ip -br addr</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ambos os IPs visíveis, com o mesmo prefixo /24.</div>
+      <div class="lab-why"><b>Por quê:</b> começar com um caso "mesma rede" confirmado dá uma base pra comparar com o caso "redes diferentes" mais adiante.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir IP configurado temporariamente (via <code>ip addr add</code>) com IP persistente — sem editar o arquivo de configuração, isso some no reboot.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: calcule manualmente o endereço de rede de cada IP usando a máscara /24.</div></div>
+      <div class="lab-cmd"># 192.168.10.15 AND 255.255.255.0 = 192.168.10.0
+# 192.168.10.40 AND 255.255.255.0 = 192.168.10.0</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ambos resultam em 192.168.10.0/24 — mesma rede.</div>
+      <div class="lab-why"><b>Por quê:</b> o cálculo é a evidência teórica — antes de testar na prática, você já sabe o que esperar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular esse passo achando "parece que bate" — é exatamente esse hábito que causa erro de sub-rede em produção.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: rode ping entre as duas VMs pra confirmar na prática.</div></div>
+      <div class="lab-cmd">vm-a$ ping -c 4 192.168.10.40</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacotes.</div>
+      <div class="lab-why"><b>Por quê:</b> o ping é a segunda evidência — cálculo teórico batendo com teste prático é o que fecha a confirmação, não um ou outro isolado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> um firewall bloqueando ICMP pode dar falso negativo — se o ping falhar mas o cálculo bateu, verifique regras de firewall antes de assumir que a rede está errada.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o cálculo manual e o teste de ping não baterem, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a matemática binária.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: reconfigure uma VM para uma sub-rede diferente e recalcule.</div></div>
+      <div class="lab-cmd">vm-b$ ip addr add 192.168.20.30/24 dev ens160
+# 192.168.20.30 AND 255.255.255.0 = 192.168.20.0</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> 192.168.20.0/24 — rede diferente da primeira VM.</div>
+      <div class="lab-why"><b>Por quê:</b> ver o caso "rede diferente" lado a lado com o caso "mesma rede" é o que fixa a diferença — não basta ler a teoria uma vez.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover o IP antigo antes de adicionar o novo — a VM pode ficar com dois IPs simultâneos e mascarar o teste.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Ação: documente a conclusão comparando os dois casos testados.</div></div>
+      <div class="lab-cmd"># caso 1: 192.168.10.15/24 + 192.168.10.40/24 → mesma rede → ping OK
+# caso 2: 192.168.10.15/24 + 192.168.20.30/24 → redes diferentes → precisa de roteador</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> anotação clara distinguindo os dois casos — reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar os dois cenários lado a lado é o que você vai consultar da próxima vez que dois IPs "parecerem" da mesma rede.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> anotar só a conclusão ("são redes diferentes") sem o cálculo — sem o raciocínio registrado, você vai precisar refazer tudo da próxima vez.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> como você determina, com certeza, se dois IPs estão na mesma sub-rede?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Aplique a
+      <span class="hint" data-tip="Notação que expressa quantos bits do endereço IP pertencem à parte de rede, como /24." onclick="openGlossary(0)">máscara (CIDR)</span>
+      a cada IP com uma operação
+      <span class="hint" data-tip="Operação bit a bit: o resultado só é 1 quando ambos os bits comparados são 1." onclick="openGlossary(1)">AND</span>
+      — se o resultado (o endereço de rede) for igual pros dois IPs, eles estão na mesma sub-rede. Se for
+      diferente, mesmo com números parecidos, eles precisam de um roteador pra se falar.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Servidor A tem IP 192.168.10.15/24. Servidor B tem IP 192.168.20.30/24. Eles
+  conseguem se comunicar diretamente, sem passar por um roteador?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Aplicando /24 (255.255.255.0) aos dois IPs: a rede de A é 192.168.10.0/24, a rede de B é 192.168.20.0/24 — redes diferentes. Mesmo com os três primeiros octetos parecendo próximos, o terceiro octeto (10 vs 20) já está fora da parte de rede coberta pelo /24, então eles precisam de um roteador/gateway para se falar.')"><b>A</b> Não — com /24, a rede de A é 192.168.10.0/24 e a rede de B é 192.168.20.0/24, redes diferentes que precisam de roteador</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Os três primeiros octetos parecerem próximos não é o critério — com /24, apenas o terceiro octeto já define uma rede diferente entre 192.168.10.x e 192.168.20.x, então eles não estão na mesma sub-rede.')"><b>B</b> Sim — como os três primeiros números do IP são parecidos (192.168), eles certamente estão na mesma rede</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A máscara /24 já foi informada explicitamente para ambos — não é necessário assumir nada, o cálculo com a máscara dada já responde a pergunta com certeza.')"><b>C</b> Não é possível saber sem mais informação, porque a máscara de sub-rede não foi informada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O prefixo /24 não indica automaticamente redes classe C tradicionais no sentido histórico — o cálculo real de rede/host é o que determina a resposta, não uma suposição de classe.')"><b>D</b> Sim, porque ambos os IPs começam com 192, o que sempre indica a mesma classe de rede</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A máscara de sub-rede /24 é como o CEP do bairro: define quais computadores são seus vizinhos de calçada (rede local) e quem está em outra cidade (precisa de gateway).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Servidor C tem IP 192.168.10.40/24. Você quer confirmar se ele está na mesma rede que o Servidor A
+  (192.168.10.15/24), sem só assumir pelos números</h2>
+  <p>O ping é uma forma de testar isso na prática.</p>
+  <div class='box question'>Por que um ping bem-sucedido de A para C, junto com o cálculo de rede batendo,
+  confirma que estão na mesma sub-rede?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O cálculo com /24 mostra que ambos pertencem à rede 192.168.10.0/24 (mesmo endereço de rede), e o ping bem-sucedido confirma na prática que a comunicação direta funciona — as duas evidências juntas (cálculo + teste real) validam que estão na mesma sub-rede, sem depender de suposição.')"><b>A</b> O cálculo de rede (AND com a máscara) confirma teoricamente que ambos pertencem à mesma rede, e o ping bem-sucedido confirma isso na prática — evidência dupla, não suposição</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Um ping bem-sucedido não prova nada sobre a velocidade da rede — ele confirma alcançabilidade (a camada de rede responde), que é o que está sendo validado aqui, não desempenho.')"><b>B</b> O ping bem-sucedido prova que a rede é rápida o suficiente para produção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O ping não tem relação com a quantidade de hosts na rede — ele testa se um host específico responde, não quantos dispositivos existem na sub-rede.')"><b>C</b> O ping confirma quantos outros hosts existem na mesma sub-rede</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O endereço de Broadcast (.255 em /24) é o megafone da praça: uma mensagem enviada para ele é ouvida por todas as máquinas daquele segmento de rede ao mesmo tempo.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Um prefixo /16 tem uma rede MAIOR ou MENOR que um prefixo /24?"</h2>
+  <p>Um colega, vendo o número maior (16 vs 24), acha que /16 é uma rede menor.</p>
+  <div class='box question'>Qual é a relação correta entre o tamanho do prefixo e o tamanho da sub-rede?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Quanto MAIOR o número do prefixo (mais bits dedicados à parte de rede), MENOR é a sub-rede resultante (menos bits sobram para hosts). /16 reserva só 16 bits para rede, deixando 16 bits para hosts — uma sub-rede muito maior que /24, que reserva 24 bits para rede e só 8 para hosts.')"><b>A</b> Mais bits de rede (prefixo maior, como /24) resultam em sub-redes MENORES; menos bits de rede (prefixo menor, como /16) resultam em sub-redes MAIORES</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não é uma relação direta simples entre o número do prefixo e o tamanho da rede sem inverter — o prefixo maior (mais bits de rede) na verdade resulta numa sub-rede menor, não maior.')"><b>B</b> Prefixos maiores (como /24) sempre resultam em sub-redes maiores que prefixos menores (como /16)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O tamanho da sub-rede não tem relação com a velocidade de conexão — CIDR define exclusivamente quantos endereços a sub-rede comporta, não a velocidade de transmissão de dados.')"><b>C</b> O tamanho do prefixo não afeta o tamanho da rede, só a velocidade de conexão disponível</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A notação CIDR (/28, /29) é o loteamento de um terreno grande: fatia um bloco de IPs em condomínios menores para não desperdiçar endereços públicos caros.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Nunca assuma "mesma rede" só porque os primeiros números do IP parecem iguais.</li>
+    <li>Sempre calcule o endereço de rede usando a máscara (CIDR) de cada host.</li>
+    <li>Compare os endereços de rede resultantes — só assim você sabe se são a mesma sub-rede.</li>
+    <li>Valide na prática com ping, quando possível, além do cálculo.</li>
+    <li>Se as redes forem diferentes, lembre que a comunicação vai depender de um roteador/gateway.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Antes de configurar qualquer IP novo numa VLAN ou sub-rede diferente, calcule o endereço de
+  rede primeiro — nunca copie um IP "parecido" com o gateway achando que está certo. Um checklist de duas
+  linhas (cálculo + ping) evita horas de diagnóstico errado numa VLAN nova.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Nenhuma suposição de "mesma rede" foi feita sem o cálculo com a máscara.</li>
+    <li>O endereço de rede foi calculado corretamente para cada host envolvido.</li>
+    <li>A comunicação foi testada na prática com ping, confirmando a teoria.</li>
+    <li>A diferença entre /24 e /16 foi entendida corretamente (mais bits de rede = sub-rede menor).</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Os comandos de hoje (ip -br addr, ping) são de leitura/teste, sem risco. O cuidado
+  real é na interpretação: um erro de cálculo de sub-rede pode levar a diagnósticos errados mais adiante,
+  então vale sempre confirmar com uma segunda evidência (como o ping) antes de agir com base só no cálculo.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "não confie só na aparência, confirme com
+  evidência" conecta com a Semana 12 (comparar UUID real via blkid, não confiar de memória) — mesma disciplina
+  aplicada a IPs. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a resposta certa foi <b>não — com
+  /24, A e B estão em redes diferentes (192.168.10.0/24 e 192.168.20.0/24)</b>, precisando de um roteador
+  entre eles. O ponto central do caso é este: IP sem máscara é endereço incompleto — CIDR define quem está
+  perto e quem precisa de rota.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de calcular e comparar sub-redes com confiança, sem cair na
+  armadilha dos "números parecidos". Amanhã você aprende a diferença entre um ping que responde e uma
+  aplicação que realmente funciona — e por que "ping OK" nunca é suficiente pra fechar um chamado.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 13, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["CIDR (máscara de sub-rede)","Notação que expressa quantos bits do endereço IP pertencem à parte de rede, como em /24.",
+   "É a linha demarcando até onde vai o terreno do seu bairro — sem ela, você não sabe onde o seu quarteirão termina e o vizinho começa."],
+  ["Operação AND (bit a bit)","Operação lógica onde o resultado só é 1 quando ambos os bits comparados são 1 — usada para calcular o endereço de rede.",
+   "É sobrepor dois moldes vazados: só passa luz onde os dois moldes têm buraco no mesmo lugar."],
+  ["/24 (255.255.255.0)","Prefixo que reserva 24 bits para a parte de rede e 8 bits para hosts — sub-rede relativamente pequena (até 254 hosts úteis).",
+   "É um condomínio de até 254 casas — grande o bastante pra maioria dos bairros, mas com limite bem definido."],
+  ["/16 (255.255.0.0)","Prefixo que reserva 16 bits para a parte de rede e 16 bits para hosts — sub-rede bem maior (até 65 mil hosts úteis).",
+   "É uma cidade inteira em vez de um condomínio — comporta muito mais endereços dentro da mesma rede."],
+  ["Endereço de rede","Resultado da operação AND entre um IP e sua máscara — identifica a rede à qual aquele IP pertence.",
+   "É o nome do bairro impresso no envelope — não identifica a casa exata, mas já diz em qual região procurar."],
+  ["Roteador / Gateway","Dispositivo que encaminha tráfego entre redes diferentes, permitindo comunicação além da sub-rede local.",
+   "É o posto de fronteira entre duas cidades — sem ele, ninguém de uma cidade consegue chegar até a outra."],
+  ["Mesma sub-rede vs. sub-redes diferentes","Distinção entre hosts que se comunicam diretamente (mesma rede) e hosts que precisam de um roteador no meio (redes diferentes).",
+   "É a diferença entre duas casas na mesma rua (conversam pela janela) e duas casas em cidades diferentes (precisam de estrada e sinalização)."],
+  ["ip -br addr show","Comando que mostra o endereço IP com prefixo (CIDR) configurado numa interface de rede específica.",
+   "É ler o endereço completo, com bairro e número, impresso na fachada da casa."],
+  ["Bits de rede vs. bits de host","Divisão do endereço IP de 32 bits entre a parte que identifica a rede e a parte que identifica o host dentro dela.",
+   "É a diferença entre o CEP do bairro (bits de rede) e o número da casa dentro dele (bits de host)."],
+  ["Suposição por aparência (armadilha)","Erro de assumir que dois endereços são relacionados só porque parecem semelhantes visualmente, sem calcular de fato.",
+   "É achar que duas pessoas são parentes só porque têm sobrenomes parecidos, sem checar a árvore genealógica real."],
+  ["Notação decimal com pontos","Forma de escrever um endereço IPv4 como quatro números de 0 a 255 separados por pontos, representando 32 bits.",
+   "É escrever um número de telefone longo em blocos separados por hífen — mais fácil de ler, mesmo sendo a mesma sequência de dígitos por trás."],
+  ["Validação dupla (cálculo + teste real)","Prática de confirmar uma conclusão teórica (cálculo de rede) com um teste prático real (como ping), antes de agir.",
+   "É conferir a matemática do orçamento no papel E contar o dinheiro físico de novo, antes de fechar a conta como certa."]
+];
+
+const sceneStripIdx = [0,1,2,4];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

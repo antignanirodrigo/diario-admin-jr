@@ -1,0 +1,544 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 10 · Dia 3 — Cron e PATH | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_HEALTHCHECK.html'>← Dia 2</a><a href='#'>Semana 10</a><a href='DIA_04_ENV_CONFIG_EXTERNO.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com Semana 8, Dia 5:</b> você já aprendeu que PATH é a lista de pastas
+onde o shell procura comandos. Hoje a pegadinha aparece num contexto novo: o mesmo script que funciona
+perfeitamente rodado manualmente pode falhar quando agendado, porque o cron usa um PATH completamente diferente.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: agendar scripts com cron de forma confiável.</b> Você ganha
+o hábito de sempre declarar PATH explicitamente dentro do script, nunca confiar no PATH herdado do ambiente
+onde foi testado.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 10 · Dia 3 | Nível Júnior</div>
+  <h1>Cron e PATH: Tarefa Agendada Sem Log é Chute</h1>
+  <p>cron exige caminho claro, saída registrada e validação depois</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S10D03_CRON_PATH.png' alt='Prancha em seis quadros sobre cron e PATH'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você testa <code>/home/adminjr/backup.sh</code> manualmente e funciona perfeito. Agenda
+  no crontab pra rodar às 2h da manhã. No dia seguinte, ticket #8421: "backup agendado falhou, nenhum backup
+  gerado" — mesmo o script tendo "funcionado" no teste manual.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Quarta-feira, Semana 10</span>
+    Ontem você aprendeu que um healthcheck não pode confiar só no último resultado. Hoje a pegadinha é
+    parecida em espírito, mas muda de terreno: o mesmo script que funciona perfeitamente quando você testa
+    manualmente pode falhar sozinho, de madrugada, sem ninguém olhando.<br><br>
+    Testei um <code>backup.sh</code> na mão, rodando <code>rsync</code> pra sincronizar dados. Funcionou
+    liso. Agendei no crontab pra rodar às 2h da manhã, satisfeito. No dia seguinte, ticket na fila:
+    "backup agendado falhou, nenhum backup gerado" — o mesmo script que "funcionou no teste" simplesmente
+    não rodou. Fui direto no log e vi a explicação: <code>rsync: command not found</code>, saída 127.<br><br>
+    O <code>rsync</code> estava lá, instalado, funcionando — eu tinha acabado de usá-lo no teste manual. O
+    problema era que o <code>cron</code> não herda o mesmo <code>PATH</code> completo do meu shell
+    interativo. O ambiente do cron é mínimo, geralmente só <code>/usr/bin:/bin</code> — e o
+    <code>rsync</code> estava numa pasta (<code>/usr/local/bin</code>) que não fazia parte dessa lista curta.
+    Meu teste manual "provava" que o script funcionava, mas provava isso num ambiente diferente do que o
+    cron realmente usa pra executar.<br><br>
+    A correção é declarar <code>PATH</code> explicitamente logo no topo do script — ou usar caminhos
+    absolutos pros comandos críticos — pra nunca depender do ambiente de quem (ou o quê) está chamando o
+    script. E sempre redirecionar toda a saída pra um log: sem ele, uma tarefa agendada que falha de
+    madrugada é praticamente invisível até alguém sentir falta do resultado. Hoje você pratica exatamente
+    essa disciplina: nunca confiar que "funcionou no teste manual" significa "vai funcionar agendado".
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Elemento</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>tail -n 20 /var/log/backup_cron.log</code></td><td>O log é a única evidência do que aconteceu numa execução agendada — sem ele, é chute.</td></tr>
+    <tr><td><code>PATH=...</code> no topo do script</td><td>Declara explicitamente onde procurar comandos, independente do ambiente que chamou o script.</td></tr>
+    <tr><td><code>0 2 * * * /caminho/script.sh >> /log 2>&1</code></td><td>Linha do crontab, sempre com saída (normal e erro) redirecionada pra um log.</td></tr>
+  </tbody></table>
+  <pre>$ tail -n 20 /var/log/backup_cron.log
+/bin/sh: rsync: command not found
+saída 127
+
+--- corrigido ---
+#!/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+set -euo pipefail
+/usr/bin/rsync -a /dados/ /backup/dados/
+
+$ crontab -e
+0 2 * * * /home/adminjr/backup.sh >> /var/log/backup_cron.log 2>&1</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> compare o PATH do seu shell interativo com o PATH que o cron realmente usa.</div></div>
+      <div class="lab-cmd">$ echo $PATH
+$ (crontab -l 2>/dev/null; echo "* * * * * echo \$PATH > /tmp/cronpath.txt") | crontab -
+$ sleep 65 && cat /tmp/cronpath.txt</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> os dois PATHs claramente diferentes — o do cron bem mais curto que o do shell interativo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver essa diferença com os próprios olhos, no seu próprio sistema, é o que torna concreto o que causou o incidente da história — não é teoria, é o ambiente real do cron.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover essa linha de teste do crontab depois — ela roda a cada minuto indefinidamente se não for removida.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> remova a linha de teste, escreva um script que usa um comando fora do PATH mínimo do cron, e confirme que ele falha quando agendado.</div></div>
+      <div class="lab-cmd">$ crontab -l | grep -v cronpath | crontab -
+$ cat > teste.sh << 'EOF'
+#!/bin/bash
+rsync --version
+EOF
+$ chmod +x teste.sh
+$ (crontab -l 2>/dev/null; echo "* * * * * $HOME/teste.sh >> /tmp/teste.log 2>&1") | crontab -
+$ sleep 65 && cat /tmp/teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> "command not found" no log — reproduzindo exatamente o sintoma da história, mesmo com rsync funcionando perfeitamente no terminal.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> sentir esse "funciona no terminal, falha no cron" na prática é o que fixa a lição — não é intuitivo até você ver acontecer.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só manualmente e nunca confirmar a execução agendada real — foi exatamente esse pulo que causou o ticket na história.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> adicione PATH explícito no início do script e teste de novo.</div></div>
+      <div class="lab-cmd">$ cat > teste.sh << 'EOF'
+#!/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+rsync --version
+EOF
+$ sleep 65 && cat /tmp/teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> execução agendada bem-sucedida — a saída da versão do rsync aparece no log, comando encontrado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a correção exata que resolveu o ticket da história — declarar PATH explicitamente resolve o problema na raiz, não importa quem chame o script depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> copiar um PATH genérico da internet sem confirmar se ele realmente cobre onde os comandos do SEU sistema estão instalados.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma tarefa agendada continuar falhando mesmo com PATH declarado, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar outras diferenças de ambiente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> confirme que o redirecionamento completo captura tudo, inclusive erros, removendo a tarefa de teste ao final.</div></div>
+      <div class="lab-cmd">$ crontab -l | grep -v teste.sh | crontab -
+$ cat /tmp/teste.log</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> log completo com a saída real da execução, tarefa de teste removida do crontab pra não continuar rodando.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> o log é a única evidência de uma execução agendada — sem ele, você está adivinhando o que aconteceu de madrugada, sem ninguém olhando.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de limpar as tarefas de teste do crontab — elas continuam consumindo recursos e gerando log indefinidamente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente PATH do shell vs. PATH do cron, correção aplicada, validação da execução agendada.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+PATH shell: /usr/local/bin:/usr/bin:/bin:...
+PATH cron: /usr/bin:/bin (bem mais curto)
+Correção: PATH explícito declarado no topo do script
+Validado: execução agendada real confirmada, não só teste manual</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> documentar os dois PATHs lado a lado é o que prova, pra qualquer revisão futura, exatamente qual era a diferença e por que a correção funciona.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "corrigido", sem registrar os dois PATHs comparados — sem esse contraste, fica difícil explicar a causa raiz pra outra pessoa.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que um script que funciona manualmente pode falhar quando rodado pelo
+    <code>cron</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      O <span class="hint" data-tip="Agendador de tarefas do Linux que executa comandos em horários pré-definidos, com um ambiente mínimo próprio." onclick="openGlossary(0)">cron</span> não carrega
+      o mesmo <span class="hint" data-tip="Lista de pastas onde o shell procura comandos, geralmente mais completa numa sessão interativa." onclick="openGlossary(1)">PATH</span> completo do
+      seu shell interativo — o PATH do cron é bem mais curto (geralmente só <code>/usr/bin:/bin</code>), então
+      comandos em pastas fora dessa lista (como <code>rsync</code> em <code>/usr/local/bin</code>) simplesmente
+      não são encontrados.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>O backup agendado falhou, mas funciona perfeitamente quando rodado manualmente.
+  O log mostra "rsync: command not found". Qual é a causa e a correção correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Corrigir a instalação não resolve nada se o rsync já está instalado e funciona manualmente — o problema não é a ferramenta faltando, é o cron não conseguir encontrá-la com seu PATH mínimo.')"><b>A</b> Reinstalar o rsync, já que ele parece ter sido desinstalado desde o teste manual</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O cron usa um PATH mínimo, diferente do shell interativo — declarar PATH explicitamente no início do script (ou usar caminho absoluto como /usr/bin/rsync) garante que o comando seja encontrado, não importa quem ou o que esteja executando o script.')"><b>B</b> Declarar PATH explicitamente no início do script (ou usar caminho absoluto pros comandos), já que o cron usa um PATH mínimo diferente do shell interativo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar o script manualmente todo dia às 2h contradiz o próprio objetivo de automatizar com cron, e não resolve o problema real de PATH.')"><b>C</b> Abandonar o agendamento e rodar o script manualmente todos os dias às 2h</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Mudar o horário não tem relação com o ambiente de PATH do cron — o mesmo problema aconteceria em qualquer horário, já que a causa é o ambiente mínimo, não o momento da execução.')"><b>D</b> Mudar o horário do agendamento pra um horário em que alguém esteja de plantão</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O ambiente de execução do Cron tem um PATH minimalista (/usr/bin:/bin): se você não declarar o caminho absoluto (/usr/local/bin/comando), ele finge que o programa não existe.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Depois da correção, o log mostra "rsync concluído" e "Backup finalizado: OK" — isso é suficiente pra fechar o ticket?</h2>
+  <p>A execução seguinte, com PATH explícito, gera um log limpo confirmando cada etapa do backup.</p>
+  <div class='box question'>Qual é o passo final antes de considerar o chamado realmente resolvido?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Confirmar que o backup vai continuar rodando corretamente nas próximas execuções agendadas (não só numa execução manual de teste) é o que realmente fecha o ciclo — validar com o monitoramento de que o backup diário está OK, como mostrado na cena final, é a prova de que a correção funciona no cenário real, agendado.')"><b>A</b> Confirmar, através do monitoramento, que o backup diário agendado continua rodando corretamente nas execuções seguintes, não só numa execução manual de teste</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Um log limpo numa única execução de teste manual não garante que a correção realmente resolveu o problema no contexto real do cron — é preciso confirmar que funciona quando agendado de verdade.')"><b>B</b> Fechar o ticket imediatamente, já que o log de uma execução de teste já mostrou sucesso</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Rodar manualmente todos os dias contradiz o objetivo de ter um backup agendado automaticamente — a correção deveria fazer o AGENDAMENTO funcionar, não substituir por execução manual.')"><b>C</b> Configurar um lembrete pra rodar o script manualmente todos os dias, por segurança</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O redirecionamento '>> /var/log/meuscript.log 2>&1' no crontab é a secretária anotando recados: evita que os erros se percam no limbo do sistema.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Testar o script manualmente já garante que ele vai funcionar no cron também?"</h2>
+  <p>Um colega assume que, se um script roda sem erro quando testado manualmente no terminal, ele com certeza
+  vai funcionar do mesmo jeito quando agendado no cron.</p>
+  <div class='box question'>Essa suposição está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta — é exatamente o erro que causou o incidente de hoje. O ambiente do cron é mínimo (PATH curto, sem as variáveis do shell interativo), então um script pode funcionar perfeitamente no terminal e falhar no cron por depender de algo do ambiente interativo que o cron não fornece.')"><b>A</b> Não — o ambiente do cron é mínimo e diferente do shell interativo; um script pode funcionar no terminal e falhar no cron por depender de algo que só existe no ambiente interativo</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O teste manual sozinho não garante compatibilidade com o cron — os dois ambientes têm diferenças reais (PATH, variáveis) que podem fazer o mesmo script se comportar diferente.')"><b>B</b> Sim — se funciona no terminal, o comportamento no cron é sempre idêntico</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença de comportamento entre terminal e cron não depende de root ou usuário comum — mesmo scripts de root podem ter esse problema de PATH mínimo no ambiente do cron.')"><b>C</b> Sim, mas só se o script for executado como root em ambos os casos</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Testar um script no terminal rodando com 'env -i /bin/bash script.sh' é simular a sala vazia do cron: garante que o script funciona sem depender das suas variáveis pessoais do terminal.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Sempre declare PATH explicitamente no início de scripts que serão agendados.</li>
+    <li>Use caminhos absolutos para comandos críticos quando possível.</li>
+    <li>Redirecione toda a saída (normal e erro) pra um log com 2>&1.</li>
+    <li>Agende com set -euo pipefail no script, pra falhar visivelmente em erro.</li>
+    <li>Valide a execução agendada de verdade, não só o teste manual.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Crie um template padrão de script agendável, já com PATH explícito e set -euo pipefail
+  no topo, e copie dele sempre que um script novo for destinado ao cron. Isso remove a possibilidade de
+  esquecer essa declaração, o mesmo esquecimento que gerou o ticket #8421 da história.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>PATH foi declarado explicitamente no script, não confiado no ambiente do cron.</li>
+    <li>Toda a saída da execução agendada é registrada em log.</li>
+    <li>O script foi validado rodando de verdade pelo cron, não só manualmente.</li>
+    <li>A causa raiz (diferença de ambiente) foi corretamente identificada e documentada.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Declarar PATH e redirecionar log não são mudanças destrutivas — não existe
+  rollback necessário. O risco real evitado é justamente NÃO ter essas proteções, deixando um backup crítico
+  falhando silenciosamente todas as noites.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "ambiente de teste ≠ ambiente de execução real"
+  conecta com PATH da Semana 8 e set -e da Semana 9 — a mesma disciplina de nunca assumir, sempre confirmar.
+  O Anki vai conectar os três.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>declarar
+  PATH explicitamente no início do script (ou usar caminho absoluto)</b>, já que o cron usa um PATH mínimo
+  diferente do shell interativo. O ponto central do caso é este: tarefa agendada sem log é chute — cron exige
+  caminho claro, saída registrada e validação depois.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de agendar scripts com cron de forma confiável, evitando a
+  pegadinha clássica de PATH. Amanhã você aprende a manter segredos (senhas, credenciais) fora do código do
+  script, protegidos e documentados.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 10, Dia 3 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["cron","Agendador de tarefas do Linux que executa comandos em horários pré-definidos, com um ambiente mínimo próprio.",
+   "É o despertador automático da fábrica, que aciona a máquina sozinho, mas só conhece o essencial do ambiente ao redor."],
+  ["PATH do cron vs. shell","O PATH usado pelo cron é geralmente muito mais curto e restrito do que o PATH de uma sessão interativa de terminal.",
+   "É a diferença entre o mapa completo que você carrega andando pela cidade e o mapa resumido deixado pro robô entregador."],
+  ["crontab -e","Comando que abre o editor de agendamentos do usuário atual, onde tarefas periódicas são configuradas.",
+   "É a agenda pessoal onde você anota os compromissos recorrentes, cada um com seu horário e instrução."],
+  ["command not found (saída 127)","Erro que indica que o shell não conseguiu localizar o comando solicitado em nenhuma pasta do seu PATH.",
+   "É o mensageiro voltando de mãos vazias porque não encontrou o endereço na lista de ruas que ele conhecia."],
+  ["Ambiente mínimo (cron)","O conjunto reduzido de variáveis e configurações disponíveis quando um script roda via cron, comparado a um shell interativo completo.",
+   "É a mochila de emergência, com só o essencial — bem menor que a bagagem completa que você levaria numa viagem normal."],
+  ["Redirecionamento no crontab (>> log 2>&1)","Prática de salvar toda a saída (normal e de erro) de uma tarefa agendada num arquivo de log.",
+   "É deixar uma câmera gravando a tarefa automática, já que ninguém está olhando ao vivo quando ela acontece."],
+  ["set -euo pipefail","Combinação de opções do bash que torna o script mais rigoroso: para em erro, em variável não definida, e em falha de pipe.",
+   "É o conjunto completo de travas de segurança, não só uma — cobrindo mais tipos de problema de uma vez."],
+  ["Caminho absoluto para comandos","Especificar o endereço completo de um comando (como /usr/bin/rsync) em vez de confiar que o PATH vai encontrá-lo.",
+   "É dar o endereço completo com CEP, em vez de confiar que o entregador vai adivinhar o caminho certo."],
+  ["Teste manual vs. execução agendada","A diferença entre rodar um script diretamente no terminal e deixá-lo ser executado automaticamente pelo cron.",
+   "É a diferença entre você mesmo cozinhar a receita e entregá-la pra um robô seguir sozinho, com menos recursos disponíveis."],
+  ["Log de execução agendada","Registro que captura o que aconteceu durante uma execução automática, essencial já que ninguém observa em tempo real.",
+   "É a caixa-preta do avião — a única forma de saber o que aconteceu quando ninguém estava olhando ao vivo."],
+  ["Validação de tarefa recorrente","Confirmar que uma tarefa agendada continua funcionando corretamente ao longo do tempo, não só numa execução isolada.",
+   "É verificar que o despertador realmente toca todo dia, não só confirmar que tocou uma vez no teste."],
+  ["Diferença de contexto de execução","O fato de um mesmo script poder se comportar diferente dependendo de quem ou o que o está executando.",
+   "É o mesmo ator dando uma performance diferente dependendo do palco e do público — o roteiro é igual, o contexto muda o resultado."]
+];
+
+const sceneStripIdx = [0,1,3,7];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

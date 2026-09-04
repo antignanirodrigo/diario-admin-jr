@@ -1,0 +1,517 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 7 · Dia 2 — nice e renice | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_KILL_SIGNALS.html'>← Dia 1</a><a href='#'>Semana 7</a><a href='DIA_03_BACKGROUND_NOHUP.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> kill encerra um processo. Mas nem todo processo pesado
+precisa morrer — às vezes ele só precisa ceder espaço pros outros. Hoje você aprende a ajustar prioridade sem
+matar nada.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: ajustar prioridade de processos com nice e renice.</b> Você
+ganha o hábito de dar prioridade baixa a jobs pesados, deixando o resto do servidor responsivo sem cancelar
+nenhum trabalho.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 7 · Dia 2 | Nível Júnior</div>
+  <h1>nice e renice: Prioridade Sem Travar Tudo</h1>
+  <p>nem todo problema se resolve matando processo — às vezes basta ajustar prioridade</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S07D02_NICE_RENICE.png' alt='Prancha em seis quadros sobre nice e renice'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você iniciou <code>relatorio_pesado.sh</code> e o servidor inteiro ficou lento — colegas
+  reclamando. O job precisa terminar, mas não precisa competir de igual pra igual com o resto do sistema.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Terça-feira, Semana 7</span>
+    Ontem você aprendeu a escalada de sinais — pedir educadamente antes de forçar. Hoje o chamado é
+    parecido, mas com uma virada: às vezes o processo não precisa morrer, só precisa ceder espaço.<br><br>
+    Lembro de um colega júnior que, no lugar de <code>kill</code>, matava tudo — literalmente. Um job de
+    geração de relatório (<code>relatorio_pesado.sh</code>) estava deixando o servidor inteiro lento,
+    colegas reclamando no chat. A reação dele foi matar o processo e reiniciar mais tarde, fora do horário
+    comercial. Só que aquele job já estava rodando havia 40 minutos, processando uma quantidade enorme de
+    dados — e todo esse progresso foi pro lixo com um único <code>kill -9</code>.<br><br>
+    Um sênior mais experiente parou ele antes da próxima tentativa e perguntou: "o job precisa morrer, ou
+    só precisa parar de atrapalhar os outros?". A resposta era óbvia depois de perguntada: o job só
+    precisava de menos prioridade, não de ser cancelado. <code>renice 15 -p [PID]</code> resolveu na hora —
+    o job continuou rodando até o fim, só cedendo CPU quando havia disputa por recursos, e o resto do
+    servidor voltou a responder normalmente.<br><br>
+    A escala do <code>nice</code> confunde todo mundo no começo, porque é invertida: quanto maior o número
+    (até 19), menor a prioridade — mais educado, cede espaço. Quanto menor o número (até -20), maior a
+    prioridade — mais agressivo. Hoje você pratica isso na prática: dar prioridade baixa a jobs pesados sem
+    nunca precisar matar o trabalho que já foi feito.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>nice -n 15 ./script.sh &</code></td><td>Inicia um novo processo já com prioridade baixa, desde o começo.</td></tr>
+    <tr><td><code>sudo renice 15 -p PID</code></td><td>Ajusta a prioridade de um processo que JÁ está rodando.</td></tr>
+    <tr><td><code>ps -o pid,ni,pcpu,comm -p PID</code></td><td>Confirma o valor de nice (NI) atual e o consumo de CPU do processo.</td></tr>
+  </tbody></table>
+  <pre>$ sudo renice 15 -p 4821
+4821 (process ID) old priority 0, new priority 15
+$ top
+app.service responde normal</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> inicie um processo de teste de carga e observe seu uso de CPU.</div></div>
+      <div class="lab-cmd">$ yes > /dev/null &
+$ top</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> processo consumindo CPU alta, visível no top.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ter um processo de carga controlado, gerado por você, é o que permite praticar renice sem afetar nada de importante.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer esse processo rodando depois do lab — ele consome CPU indefinidamente até ser encerrado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> aplique renice 19 no PID desse processo e confirme a mudança.</div></div>
+      <div class="lab-cmd">$ sudo renice 19 -p &lt;PID&gt;
+$ ps -o pid,ni,pcpu,comm -p &lt;PID&gt;</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> valor de NI mudado pra 19, confirmado na coluna ni da saída do ps.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o NI mudar de 0 pra 19 na prática é o que fixa a escala invertida do nice — número alto, prioridade baixa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de confirmar com ps depois do renice — a mensagem do comando confirma o valor, mas checar de novo garante que ficou aplicado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> inicie um segundo processo de teste, dessa vez já com prioridade baixa desde o início.</div></div>
+      <div class="lab-cmd">$ nice -n 19 yes > /dev/null &
+$ ps -o pid,ni,pcpu,comm -p $!</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> segundo processo já nascendo com NI=19, sem precisar de um renice depois.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa é a diferença prática entre nice (define desde o nascimento) e renice (ajusta um processo já vivo) — os dois resolvem o mesmo problema em momentos diferentes.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir os dois comandos — nice só funciona ao iniciar um processo novo, renice é o único que ajusta um já em execução.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você tiver dúvida sobre qual valor de nice usar num cenário real, este é o ponto onde o chat com o Sênior-IA vai ajudar a decidir.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> encerre os dois processos de teste, aplicando a escalada de sinais do Dia 1.</div></div>
+      <div class="lab-cmd">$ kill -15 &lt;PID1&gt; &lt;PID2&gt;</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> ambiente de teste limpo, sem processos de carga rodando.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> encerrar corretamente os processos de teste é o que evita deixar CPU consumida à toa depois do laboratório — conecta direto com o que você praticou ontem.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fechar o terminal sem matar os processos — eles continuam rodando em background mesmo depois do terminal fechado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> documente PID, prioridade antes, prioridade depois, e impacto observado.</div></div>
+      <div class="lab-cmd"># anote no seu diário de bordo:
+PID: [x] | NI antes: 0 | NI depois: 19 | impacto: servidor voltou a responder normal</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> registrar o "antes e depois" é o que prova, numa auditoria futura, que o ajuste de prioridade realmente resolveu o problema sem perder trabalho.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> documentar só "ajustei a prioridade", sem registrar os valores exatos — sem o antes/depois, ninguém consegue confirmar que a mudança teve o efeito esperado.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> na escala do <code>nice</code>, o que significa <code>-20</code> e o que
+    significa <code>19</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Valor de nice mais agressivo — prioridade máxima, disputa CPU com força total." onclick="openGlossary(0)">-20</span> é
+      prioridade MÁXIMA (mais agressivo, exige privilégio elevado).
+      <span class="hint" data-tip="Valor de nice mais educado — prioridade mínima, cede espaço pros outros processos." onclick="openGlossary(1)">19</span> é
+      prioridade MÍNIMA (mais educado, cede espaço). Jobs pesados que não são urgentes devem usar valores
+      altos, próximos de 19.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Um job pesado (relatorio_pesado.sh) já está rodando e deixando o servidor lento
+  pra todo mundo. Qual é a ação correta?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Matar o job perde todo o trabalho já processado até agora — se o objetivo é só reduzir o impacto no resto do servidor, existe uma solução que não descarta o progresso.')"><b>A</b> Matar o processo com kill e reiniciá-lo depois, fora do horário comercial</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'sudo renice 15 -p PID ajusta a prioridade de um processo já em execução, sem interrompê-lo — o job continua até o final, mas cede CPU pra outros processos mais importantes, exatamente o que resolve a lentidão sem perder trabalho.')"><b>B</b> Rodar sudo renice 15 -p [PID do job], baixando a prioridade sem interromper o trabalho já em andamento</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Adicionar mais CPU à VM sem entender que o problema é de prioridade, não de capacidade total, pode nem resolver — o job continuaria competindo igualmente pelos recursos novos.')"><b>C</b> Adicionar mais vCPUs à VM até o job terminar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Pedir pra todos pararem de usar o servidor por causa de UM job específico é desproporcional — existe uma ferramenta específica pra resolver isso sem afetar ninguém.')"><b>D</b> Pedir pra todo mundo parar de usar o servidor até o job terminar</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O valor de 'nice' no Linux é o grau de gentileza do processo: quanto maior o número (+19), mais educado ele é, dando preferência na fila da CPU para os outros processos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Depois do renice, o job continua rodando — isso significa que ele parou de funcionar?</h2>
+  <p>Depois de <code>renice 15 -p 4821</code>, o colega vê que o job ainda está em execução, com prioridade
+  reduzida, e pergunta se isso significa que o script parou de funcionar direito.</p>
+  <div class='box question'>Qual é a explicação correta pra essa dúvida?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'renice não cancela nem pausa o trabalho — ele só ajusta a prioridade de disputa por CPU. O job continua até o final normalmente, só cede espaço pra outros processos quando há disputa por recursos, sem nenhum efeito no resultado final do trabalho.')"><b>A</b> O job continua funcionando normalmente até o fim — renice só muda a prioridade de disputa por CPU, não pausa nem cancela o trabalho</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'renice não interrompe a execução do processo — ele continua rodando e processando, só com prioridade diferente na fila de CPU.')"><b>B</b> Sim, renice pausa o processo até que a prioridade normal seja restaurada manualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A velocidade de execução pode ser afetada em cenários de disputa por CPU, mas isso não significa que o job quebrou — ele continua processando corretamente, só mais devagar quando há concorrência.')"><b>C</b> Sim, mudar a prioridade sempre quebra a lógica interna do script</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Valores negativos de nice (-20) são como o carro de polícia com sirene ligada: furam a fila dos processos comuns e ganham prioridade máxima nos ciclos de clock da CPU.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Quanto maior o número do nice, mais prioridade o processo tem, certo?"</h2>
+  <p>Um colega assume que <code>nice -n 19</code> dá MAIS prioridade que <code>nice -n 0</code>, porque 19 é
+  um número maior.</p>
+  <div class='box question'>Essa suposição está correta?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Não está correta — a escala do nice é invertida: quanto MAIOR o número, MENOR a prioridade (mais educado, cede espaço). Quanto MENOR o número (até -20), MAIOR a prioridade (mais agressivo). 19 é a prioridade mais baixa possível, não a mais alta.')"><b>A</b> Não — a escala é invertida: número maior significa prioridade MENOR (mais educado); número menor (até -20) significa prioridade MAIOR</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A escala do nice funciona ao contrário do que pareceria intuitivo — número maior não significa mais prioridade, significa menos.')"><b>B</b> Sim — quanto maior o número, mais prioridade o processo recebe, como numa nota de prova</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A relação entre o número do nice e a prioridade não depende de root ou não — a escala inversa (maior número = menor prioridade) vale sempre, independente de quem está rodando.')"><b>C</b> Depende se é root ou não — pra root a escala é direta, pra usuário comum é invertida</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'renice -n 10 -p PID' é como pedir para um caminhão pesado andar pela faixa da direita: reduz a prioridade de uma rotina pesada sem precisar matá-la.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Identifique o job pesado e confirme seu PID.</li>
+    <li>Se ainda não iniciado, use nice -n desde o começo. Se já rodando, use renice.</li>
+    <li>Use valores próximos de 19 pra jobs de baixa urgência.</li>
+    <li>Confirme com ps -o pid,ni,pcpu que a mudança foi aplicada.</li>
+    <li>Valide que o resto do servidor voltou a responder normalmente.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Adicione nice -n 19 diretamente na definição de jobs batch recorrentes (cron, scripts de
+  relatório) desde a criação — assim o problema de prioridade nunca chega a acontecer, em vez de precisar de
+  um renice de emergência depois que colegas já reclamaram da lentidão.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>O job pesado teve a prioridade ajustada, sem ser interrompido.</li>
+    <li>O valor de nice usado foi apropriado (próximo de 19 pra baixa urgência).</li>
+    <li>A mudança foi confirmada com ps antes de considerar resolvido.</li>
+    <li>O resto do servidor foi validado como responsivo depois da mudança.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Rollback de um renice é simplesmente aplicar o valor de prioridade anterior de
+  novo — não é destrutivo. O cuidado real é escolher o valor certo pra situação, não zero critério.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "ajustar sem destruir" conecta com lvextend
+  (Semana 6) — uma solução que resolve o problema sem descartar o trabalho já feito. O Anki vai conectar os
+  dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>rodar sudo
+  renice 15 -p [PID], baixando a prioridade sem interromper o trabalho</b>. O ponto central do caso é este:
+  nem todo problema se resolve matando processo — às vezes basta ajustar prioridade.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de ajustar prioridade de processos sem interromper trabalho em
+  andamento. Amanhã você aprende a rodar jobs em background que sobrevivem a uma queda de conexão SSH — &,
+  nohup e disown.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 7, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["-20 (nice)","Valor de nice mais agressivo — prioridade máxima, disputa CPU com força total, exige privilégio elevado.",
+   "É passar na frente de todo mundo na fila, com autorização especial."],
+  ["19 (nice)","Valor de nice mais educado — prioridade mínima, cede espaço pros outros processos.",
+   "É deixar todo mundo passar na frente, entrando na fila por último de propósito."],
+  ["nice","Comando que inicia um novo processo já com uma prioridade de CPU específica definida.",
+   "É já entrar na fila sabendo qual posição você vai ocupar, desde o primeiro passo."],
+  ["renice","Comando que altera a prioridade de um processo que já está em execução.",
+   "É pedir pra trocar de posição numa fila em que você já está, sem precisar sair e entrar de novo."],
+  ["Prioridade de CPU","O quanto um processo é favorecido na disputa por tempo de processamento quando há concorrência.",
+   "É a posição na fila de atendimento — quem tem prioridade alta é chamado primeiro quando há espera."],
+  ["NI (nice value)","Coluna do ps que mostra o valor atual de nice de um processo.",
+   "É o número visível do lugar na fila, impresso no crachá de cada processo."],
+  ["Job pesado (batch job)","Um processo que consome recursos significativos por um período, geralmente sem necessidade de resposta imediata.",
+   "É a faxina pesada da casa — precisa ser feita, mas não precisa atrapalhar quem está tentando trabalhar ao mesmo tempo."],
+  ["Disputa por recursos (contention)","Situação em que múltiplos processos competem pelo mesmo recurso limitado ao mesmo tempo.",
+   "É várias pessoas tentando usar o mesmo elevador ao mesmo tempo — a prioridade decide quem entra primeiro."],
+  ["Impacto sem interrupção","Resolver um problema de desempenho sem cancelar ou pausar o trabalho já em andamento.",
+   "É ajustar o volume da música sem desligar o som — o efeito incômodo para, a música continua tocando."],
+  ["sudo (para renice)","Privilégio necessário para reduzir o valor de nice de um processo (aumentar sua prioridade) ou renice em processo de outro usuário.",
+   "É precisar de autorização especial só pra dar a alguém mais prioridade do que o padrão permite."],
+  ["Prioridade padrão (0)","O valor de nice inicial de qualquer processo, antes de qualquer ajuste manual.",
+   "É a posição neutra na fila — nem passa na frente, nem cede espaço, o ponto de partida de todo mundo."],
+  ["Responsividade do sistema","Capacidade do servidor de continuar respondendo rapidamente a outros processos e usuários.",
+   "É o atendimento continuar rápido mesmo com uma tarefa grande sendo processada em paralelo, sem travar tudo."]
+];
+
+const sceneStripIdx = [0,1,2,3];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

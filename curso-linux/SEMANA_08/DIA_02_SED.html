@@ -1,0 +1,527 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 2 — sed: Alterar Texto Sem Estragar | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_CUT_SORT_UNIQ.html'>← Dia 1</a><a href='#'>Semana 8</a><a href='DIA_03_AWK_BASICO.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com ontem:</b> cut, sort e uniq leem e organizam texto. Hoje você aprende a
+ALTERAR texto em massa — e a regra de ouro que evita desastre: sempre ver a prévia antes de aplicar de verdade.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: editar arquivos em massa com sed, com segurança.</b> Você
+ganha autorização pra usar sed -i em produção — sempre com backup e prévia conferida antes.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 2 | Nível Júnior</div>
+  <h1>sed: Alterar Texto Sem Estragar</h1>
+  <p>antes de editar em massa, gere prévia e guarde caminho de volta</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S08D02_SED.png' alt='Prancha em seis quadros sobre sed'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você precisa trocar <code>porta_antiga</code> por <code>porta_nova</code> em
+  <code>config.conf</code>, em duas linhas diferentes. Editar linha por linha manualmente com nano aumenta a
+  chance de erro — é hora de uma ferramenta feita pra substituição em massa.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">Terça-feira, Semana 8</span>
+    Ontem você aprendeu a ler e organizar texto com cut, sort e uniq. Hoje a diferença é sutil mas
+    perigosa: você vai ALTERAR texto em massa, não só olhar pra ele. E toda ferramenta que altera arquivos
+    de verdade merece o mesmo respeito que você já aprendeu a ter com <code>--delete</code> do rsync lá na
+    Semana 6.<br><br>
+    Lembro de um colega que precisava trocar <code>porta_antiga</code> por <code>porta_nova</code> em um
+    <code>config.conf</code> de produção, em duas linhas diferentes do arquivo. Ele conhecia
+    <code>sed</code>, sabia a sintaxe de cor, e rodou direto: <code>sed -i 's/porta_antiga/porta_nova/g'
+    config.conf</code>. Sem prévia, sem backup, confiando que a sintaxe estava certa — e estava, o comando
+    funcionou perfeitamente. O problema é que ele só descobriu depois, quando o serviço não subiu, que a
+    string <code>porta_antiga</code> também aparecia num comentário explicativo no meio do arquivo, e a
+    substituição bagunçou aquele comentário de um jeito que quebrou o parser de configuração.<br><br>
+    Nada que um backup não resolvesse rapidinho — mas ele não tinha um. <code>sed</code> sem <code>-i</code>
+    só MOSTRA como o resultado ficaria, sem alterar nada — é a prévia antes da caneta permanente. E
+    <code>-i.bak</code>, em vez de só <code>-i</code>, aplica a mudança de verdade E cria automaticamente
+    uma cópia do arquivo original, no mesmo comando. Meu colega tinha os dois recursos disponíveis e não
+    usou nenhum.<br><br>
+    Hoje você pratica exatamente o ritual que evita esse tipo de sábado perdido: rodar sem <code>-i</code>
+    primeiro, revisar a prévia com atenção, e só então aplicar com <code>-i.bak</code>, sempre com um
+    caminho de volta garantido.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>sed 's/antigo/novo/g' arquivo</code></td><td>Mostra a prévia na tela, sem alterar o arquivo original.</td></tr>
+    <tr><td><code>sed -i.bak 's/antigo/novo/g' arquivo</code></td><td>Aplica de verdade, criando um backup .bak automaticamente antes.</td></tr>
+    <tr><td><code>diff -u arquivo.bak arquivo</code></td><td>Confirma exatamente o que mudou, comparando backup com resultado.</td></tr>
+  </tbody></table>
+  <pre>$ sed 's/porta_antiga/porta_nova/g' config.conf
+server_port=porta_nova
+backup_port=porta_nova
+
+$ sed -i.bak 's/porta_antiga/porta_nova/g' config.conf
+$ diff -u config.conf.bak config.conf
+--- config.conf.bak
++++ config.conf
+-server_port=porta_antiga
++server_port=porta_nova
+ backup_port=porta_nova</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> crie um arquivo de teste com uma palavra repetida, inclusive duas vezes na mesma linha.</div></div>
+      <div class="lab-cmd">$ cat > teste.conf << 'EOF'
+server_port=porta_antiga
+backup_port=porta_antiga
+# comentario: porta_antiga era usada antes, agora é porta_antiga tambem aqui
+EOF</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo pronto pra testar substituição, com uma linha (o comentário) tendo "porta_antiga" duas vezes.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> incluir de propósito uma linha com múltiplas ocorrências é o que te prepara pra observar o comportamento real do /g, evitando o susto do colega da história.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar só com linhas de uma ocorrência cada — assim você nunca descobre o comportamento de sed sem /g até encontrar isso em produção.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> rode sed sem -i pra ver a prévia da substituição, sem alterar o arquivo.</div></div>
+      <div class="lab-cmd">$ sed 's/porta_antiga/porta_nova/g' teste.conf</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> prévia mostrada na tela com todas as ocorrências trocadas, arquivo original ainda intacto no disco.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> essa prévia é exatamente o passo que o colega da história pulou — é ela que revela, antes de qualquer dano, exatamente como o comentário ficaria afetado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ler a prévia rápido demais e não notar que ela afetou uma linha que não devia (como um comentário) — revise linha por linha, não só "parece certo".</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> aplique de verdade com -i.bak e confirme que o backup foi criado.</div></div>
+      <div class="lab-cmd">$ sed -i.bak 's/porta_antiga/porta_nova/g' teste.conf
+$ ls teste.conf*</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> teste.conf modificado, e teste.conf.bak preservando a versão original intacta.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> -i.bak faz num só comando o que o colega da história esqueceu de fazer em dois passos separados — aplicar E preservar um caminho de volta.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar só -i sem o .bak — funciona igual pra aplicar a mudança, mas sem nenhum backup automático, você perde exatamente a rede de segurança que faz a diferença.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se uma expressão do sed não fizer a substituição esperada, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a sintaxe.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> compare o backup com o arquivo modificado, confirmando exatamente o que mudou.</div></div>
+      <div class="lab-cmd">$ diff -u teste.conf.bak teste.conf</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> diff mostrando as 3 linhas alteradas, cada uma com porta_antiga trocada por porta_nova (inclusive as duas ocorrências no comentário).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> diff é a confirmação final e objetiva — não é "parece que mudou certo", é a prova exata linha por linha do que foi alterado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular esse diff achando que a prévia já foi confirmação suficiente — a prévia mostra o que vai acontecer, o diff confirma o que realmente aconteceu.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> teste a diferença entre sed com e sem /g, na linha com múltiplas ocorrências.</div></div>
+      <div class="lab-cmd">$ echo "porta_antiga e porta_antiga de novo" | sed 's/porta_antiga/porta_nova/'
+$ echo "porta_antiga e porta_antiga de novo" | sed 's/porta_antiga/porta_nova/g'</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> sem /g, só a primeira ocorrência muda; com /g, as duas mudam — a comparação lado a lado prova a diferença.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver essa diferença ao vivo, num teste isolado e simples, é o que fixa a regra pra sempre — é exatamente o que a Questão 3 vai testar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o /g em arquivos com múltiplas ocorrências por linha — o comando "funciona" (não dá erro), mas troca só parcialmente, um bug silencioso.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> o que acontece quando você roda <code>sed 's/antigo/novo/g' arquivo</code> SEM a
+    flag <code>-i</code>?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Sem <span class="hint" data-tip="Aplica a mudança diretamente no arquivo, em vez de só mostrar na tela." onclick="openGlossary(0)">-i</span>,
+      o <span class="hint" data-tip="Ferramenta de edição de texto em fluxo, baseada em padrões de busca e substituição." onclick="openGlossary(1)">sed</span> só
+      MOSTRA na tela como o resultado ficaria — o arquivo original continua intacto. É a
+      <span class="hint" data-tip="Visualização do resultado de uma mudança antes de aplicá-la de verdade." onclick="openGlossary(2)">prévia</span>
+      antes da caneta permanente.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa trocar porta_antiga por porta_nova em config.conf, em produção.
+  Qual é a sequência correta e segura?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Editar manualmente com nano, linha por linha, num arquivo de produção aumenta o risco de erro humano — exatamente o problema que sed resolve com precisão e consistência.')"><b>A</b> Abrir config.conf no nano e trocar cada ocorrência manualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Rodar sed sem -i primeiro (só prévia, sem alterar nada), revisar o resultado, e só então aplicar com sed -i.bak (criando backup automático) é a sequência segura — prévia antes da caneta permanente, com backup garantido.')"><b>B</b> Rodar sed sem -i primeiro pra ver a prévia, revisar, e só então aplicar com sed -i.bak pra manter um backup</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Aplicar sed -i direto, sem prévia nem backup, remove qualquer chance de conferir o resultado antes de comprometer o arquivo de produção.')"><b>C</b> Rodar sed -i direto, sem prévia, já que sed é confiável e não precisa de conferência</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Apagar o arquivo e recriar do zero é desproporcional pra uma simples substituição de texto, e perde toda a configuração existente que não precisava mudar.')"><b>D</b> Apagar o arquivo e recriar do zero com os valores corretos</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O 'sed' (Stream Editor) é o comando Localizar e Substituir (Ctrl+H) em linha de comando: altera palavras em milhões de linhas de log em milissegundos sem abrir o arquivo na tela.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 diff mostra que só server_port mudou, backup_port aparece igual nos dois — isso é esperado?</h2>
+  <p>O <code>diff -u</code> mostra uma linha com <code>-</code> e <code>+</code> só pra
+  <code>server_port</code>; <code>backup_port</code> aparece sem marcação, igual nos dois arquivos.</p>
+  <div class='box question'>Como interpretar corretamente essa saída do diff?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'diff mostrando uma linha sem marcação de +/- significa que ela é IDÊNTICA nos dois arquivos — se backup_port já tinha porta_nova antes da mudança (por exemplo, alguém já tinha corrigido manualmente), o sed não precisou alterá-la, o que é o comportamento correto, não um erro.')"><b>A</b> É um erro do sed, ele deveria ter alterado as duas linhas igualmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Uma linha sem marcação de +/- no diff significa que ela já estava idêntica antes e depois — nesse caso, backup_port provavelmente já continha porta_nova antes da execução do sed, então não havia nada pra substituir ali, o que é o comportamento correto e esperado.')"><b>B</b> backup_port provavelmente já tinha o valor porta_nova antes da execução — o sed não alterou porque não havia nada pra substituir ali</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'diff comparando o mesmo arquivo em dois momentos não tem relação com permissão de leitura — a ausência de marcação significa igualdade de conteúdo, não um problema de acesso.')"><b>C</b> O diff está com problema de permissão e não conseguiu ler a segunda linha</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag '/g' (global) no comando 'sed s/antigo/novo/g' é o botão 'Substituir Todas': se você esquecer o /g, o sed só troca a primeira ocorrência encontrada em cada linha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "sed sem o /g no final já troca todas as ocorrências da linha, certo?"</h2>
+  <p>Um colega roda <code>sed 's/antigo/novo/' arquivo</code> (sem o <code>g</code> no final) numa linha que
+  tem a palavra "antigo" duas vezes, esperando que as duas sejam trocadas.</p>
+  <div class='box question'>O que realmente acontece sem o /g?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Sem o /g (global), sed troca só a PRIMEIRA ocorrência de cada linha, não todas — se a palavra aparece duas vezes na mesma linha, só a primeira é substituída, a segunda permanece igual. O /g é o que garante substituir todas as ocorrências daquela linha.')"><b>A</b> Sem /g, sed troca só a primeira ocorrência de cada linha — a segunda ocorrência na mesma linha permanece sem alteração</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A ausência de /g não significa que nada muda — a primeira ocorrência de cada linha é substituída normalmente, só as ocorrências seguintes na mesma linha que ficam intactas.')"><b>B</b> Sem /g, sed não faz nenhuma substituição, o comando simplesmente não funciona</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O comportamento do /g não depende do tamanho do arquivo — a regra (primeira ocorrência por linha sem /g, todas com /g) vale igual pra qualquer tamanho.')"><b>C</b> Sem /g, sed troca todas as ocorrências, mas só em arquivos pequenos</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A flag 'sed -i.bak' é o seguro contra acidentes: cria uma cópia de segurança com final .bak antes de aplicar a substituição diretamente dentro do arquivo original.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Rode sed sem -i primeiro, revisando a prévia com atenção.</li>
+    <li>Confirme que a substituição afeta exatamente o que deveria, nada a mais.</li>
+    <li>Aplique com sed -i.bak, sempre gerando um backup automático.</li>
+    <li>Compare o resultado com diff -u contra o backup.</li>
+    <li>Valide que o serviço que usa o arquivo continua funcionando depois da mudança.</li>
+  </ol>
+  <h3>Prevenção</h3>
+  <div class='box'>Crie um alias de equipe (ex.: <code>safe-sed</code>) que sempre roda a prévia primeiro,
+  pausa pra confirmação, e só então aplica com -i.bak. Isso remove a possibilidade de pular a prévia por
+  excesso de confiança na sintaxe, como aconteceu na história de hoje.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>A prévia (sed sem -i) foi conferida antes de qualquer aplicação real.</li>
+    <li>O backup (.bak) foi criado automaticamente com -i.bak.</li>
+    <li>diff confirmou exatamente o que mudou, nada além do esperado.</li>
+    <li>O serviço afetado foi validado como funcionando após a mudança.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Rollback de uma mudança com sed -i.bak é simplesmente copiar o .bak de volta por
+  cima do arquivo modificado — rápido e confiável, exatamente por isso o backup nunca é opcional.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "prévia antes da caneta permanente" conecta com
+  --dry-run do rsync (Semana 6) — o mesmo princípio de simular antes de executar, aplicado agora a edição de
+  texto. O Anki vai conectar os dois.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>rodar sed
+  sem -i primeiro pra ver a prévia, revisar, e só então aplicar com sed -i.bak</b>. O ponto central do caso é
+  este: antes de editar em massa, gere prévia e guarde caminho de volta.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de editar texto em massa com segurança, sempre com prévia e backup.
+  Amanhã você aprende awk — pra quando a pergunta exige filtro por coluna E cálculo, não só busca.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 8, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["-i (sed)","Opção que aplica a mudança diretamente no arquivo, em vez de só mostrar o resultado na tela.",
+   "É trocar a prévia de impressão pela impressão de verdade em papel — sem -i, é só rascunho na tela."],
+  ["sed","Ferramenta de edição de texto em fluxo, baseada em padrões de busca e substituição.",
+   "É um corretor automático que aplica a mesma correção em todo o documento de uma vez, seguindo uma regra."],
+  ["Prévia (dry-run de edição)","Visualização do resultado de uma mudança antes de aplicá-la de verdade no arquivo.",
+   "É experimentar a roupa antes de comprar — ver como fica, sem ainda ter comprometido nada."],
+  ["s/procurar/substituir/g","Sintaxe padrão do sed: s de substituição, o que procurar, o que colocar no lugar, g pra todas as ocorrências.",
+   "É a fórmula de busca e troca — encontre isso, troque por aquilo, em todas as vezes que aparecer."],
+  ["-i.bak","Combinação que aplica a mudança de verdade E cria automaticamente um arquivo de backup com extensão .bak.",
+   "É fazer a reforma e guardar uma foto de como era antes, tudo no mesmo movimento."],
+  ["/g (flag global)","Modificador que faz a substituição valer para TODAS as ocorrências numa linha, não só a primeira.",
+   "É corrigir cada instância do erro no texto, não só a primeira vez que ele aparece na frase."],
+  ["diff -u","Formato de diff que mostra as diferenças entre dois arquivos com contexto, marcando + e - por linha.",
+   "É o modo 'controle de alterações' de um documento — mostra exatamente o que foi removido e o que foi adicionado."],
+  ["Edição em massa","Alterar múltiplas ocorrências de um padrão de texto de uma só vez, em vez de uma por uma manualmente.",
+   "É trocar todas as etiquetas de preço da loja numa passada só, em vez de ir loja por prateleira."],
+  ["Backup automático (via -i.bak)","Cópia de segurança criada automaticamente pela própria ferramenta antes de aplicar uma mudança.",
+   "É o sistema tirando uma foto de segurança sozinho, sem você precisar lembrar de fazer isso manualmente."],
+  ["Substituição consistente","Garantir que a mesma mudança seja aplicada de forma idêntica em todo o arquivo, sem erro de digitação variável.",
+   "É a máquina copiando exatamente a mesma correção em cada cópia, sem o risco de errar diferente a cada vez."],
+  ["Arquivo de configuração (config.conf)","Arquivo de texto que define parâmetros de funcionamento de um serviço ou aplicação.",
+   "É o manual de ajustes da máquina — mudar um valor ali muda como o serviço se comporta."],
+  ["Verificação pós-edição","Confirmar que um serviço continua funcionando corretamente depois de uma mudança de configuração.",
+   "É ligar o aparelho depois de trocar uma peça, pra confirmar que a troca funcionou de verdade."]
+];
+
+const sceneStripIdx = [0,2,4,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

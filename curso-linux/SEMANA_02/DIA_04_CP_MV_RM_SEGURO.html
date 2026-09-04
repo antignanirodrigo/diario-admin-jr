@@ -1,0 +1,521 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 4 — cp/mv/rm com Segurança + tar/gzip | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 1 — LINUX, DO BÁSICO AO AVANÇADO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_GREP_FIND.html'>← Dia 3</a><a href='#'>Semana 2</a><a href='DIA_05_REDE_AGENDAMENTO_LEITURA.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com Semana 1, Dia 4:</b> lá você aprendeu a identificar o que estava
+consumindo espaço, sem apagar nada. Hoje você finalmente ganha permissão pra apagar de verdade — e junto com
+ela, o ritual que existe justamente porque rm não tem lixeira.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: mover, copiar e apagar arquivos, com ritual de segurança
+obrigatório.</b> Você ganha autorização pra usar cp, mv e rm em produção — mas nunca sem confirmar caminho,
+alvo e backup antes.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 4 | Nível Júnior</div>
+  <h1>cp, mv, rm com Segurança + tar/gzip</h1>
+  <p>pwd → ls -la → backup → comando → validação — nessa ordem, sempre, sem exceção</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S02D04_CP_MV_RM_SEGURO.png' alt='Prancha em seis quadros sobre cp, mv, rm com segurança e tar/gzip'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Uma pasta de cache antiga (<code>cache_old/</code>) precisa ser removida pra liberar espaço.
+  Seu dedo já está perto do Enter em cima de <code>rm -rf ../cache_old/</code> — mas você ainda não confirmou
+  se está na pasta certa, nem fez backup de nada.</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior precisava apagar uma pasta de cache antiga pra liberar espaço. O dedo dele já estava quase
+    em cima do Enter, em cima de <code>rm -rf ../cache_old/</code> — mas ele ainda não tinha confirmado se
+    estava na pasta certa, nem feito backup de nada. Segurei a mão dele bem na hora.<br><br>
+    Expliquei uma coisa que ele nunca tinha pensado assim: <code>rm</code> não tem lixeira. Não existe
+    "restaurar" depois. É diferente de tudo que ele fez até agora nesta semana — restart de serviço reverte
+    (para de novo), permissão errada reverte (chmod de volta), mas um arquivo apagado sem backup está apagado
+    pra sempre. Por isso existe um ritual fixo, sempre na mesma ordem: confirmar onde está, listar o que tem
+    ali, fazer backup, só então executar, e validar depois.<br><br>
+    E teve o detalhe que quase pegou ele: <code>../cache_old/</code> é um caminho RELATIVO — depende de onde
+    você está no momento exato em que aperta Enter. Se ele tivesse mudado de pasta um comando antes sem
+    perceber, esse mesmo comando apagaria outra coisa completamente diferente. Foi por isso que ensinei: nunca
+    caminho relativo apressado em comando destrutivo — sempre caminho absoluto, confirmado por pwd primeiro.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>pwd</code> / <code>ls -la</code></td><td>Confirma onde você está e o que existe ali antes de qualquer ação.</td></tr>
+    <tr><td><code>tar -czf backup.tgz pasta/</code></td><td>Cria uma cópia compactada do alvo antes de tocar nele.</td></tr>
+    <tr><td><code>rm -rf /caminho/absoluto/confirmado/</code></td><td>Remove de fato — sempre com caminho absoluto e já confirmado, nunca ../ apressado.</td></tr>
+  </tbody></table>
+  <pre>$ pwd
+/var/tmp/app
+$ ls -la
+drwxr-xr-x 3 adminjr adminjr 4096 mai 20 10:10 cache_old
+drwxr-xr-x 3 adminjr adminjr 4096 mai 20 10:12 cache_new
+$ tar -czf backup-cache_old.tgz cache_old/
+$ ls -lh backup-cache_old.tgz
+-rw-r--r-- 1 adminjr adminjr 42M mai 20 10:16 backup-cache_old.tgz
+$ rm -rf /var/tmp/app/cache_old/
+$ ls
+backup-cache_old.tgz  cache_new</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie uma pasta de teste com alguns arquivos dentro.</div></div>
+      <div class="lab-cmd">mkdir teste_cache
+touch teste_cache/a.txt teste_cache/b.txt</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> pasta criada com 2 arquivos, confirmada com ls.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de um alvo descartável de verdade pra praticar o ritual completo sem risco — nunca pratique comando destrutivo em algo que importa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> praticar num diretório que também tem arquivos reais misturados — isole sempre o teste numa pasta própria, vazia antes de começar.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Confirme onde está e o que existe ali, como ritual, antes de qualquer ação.</div></div>
+      <div class="lab-cmd">pwd
+ls -la</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> caminho absoluto confirmado, conteúdo da pasta visível.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse é o passo que a história de hoje mostrou que quase falhou — confirmar ANTES é o que evita usar caminho relativo apontando pro lugar errado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar pwd uma vez no início da sessão e confiar nesse resultado horas depois — confirme de novo, sempre, logo antes do comando destrutivo, não só no começo do dia.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Faça backup da pasta de teste antes de tocar nela.</div></div>
+      <div class="lab-cmd">tar -czf backup_teste.tgz teste_cache/
+ls -lh backup_teste.tgz</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> arquivo backup_teste.tgz criado, confirmado com ls -lh.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> rm não tem lixeira — o backup É o rollback. Sem esse passo, não existe "desfazer" possível depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fazer o backup mas não confirmar que ele realmente foi criado com conteúdo (ls -lh mostrando tamanho > 0) — um backup vazio ou corrompido dá falsa sensação de segurança.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você tiver dúvida sobre se algo é seguro de apagar, este é o ponto onde o chat com o Sênior-IA vai ajudar a pensar no risco antes de agir.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Remova a pasta de teste usando o caminho absoluto completo, confirmado pelo pwd do passo 2.</div></div>
+      <div class="lab-cmd">rm -rf /caminho/absoluto/confirmado/teste_cache/</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> pasta removida, backup ainda existe intacto.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> caminho absoluto (começando com /) sempre aponta pro mesmo lugar, não importa de onde você rodou o comando — elimina o risco de ../ apontar pro lugar errado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> copiar e colar um caminho relativo (../teste_cache/) de um comando anterior sem adaptar pro absoluto — é exatamente esse tipo de descuido que causa remoção no lugar errado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Valide o resultado final e documente o ritual completo.</div></div>
+      <div class="lab-cmd">ls
+# registro: alvo confirmado (pwd/ls), backup criado (tar), alvo removido (rm), sistema íntegro (ls final)</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> um registro de 4 linhas reproduzindo exatamente o painel 6 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> validar depois é o que fecha o ciclo — sem essa checagem final, você não tem prova de que o ritual funcionou como esperado, só a expectativa de que funcionou.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> considerar a tarefa terminada assim que o rm roda sem erro — "não deu erro" não é o mesmo que "validei que o resultado é o esperado".</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> qual é a sequência completa do ritual antes de qualquer comando destrutivo?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      <span class="hint" data-tip="Mostra em qual diretório você está agora." onclick="openGlossary(0)">pwd</span> →
+      <span class="hint" data-tip="Lista todos os arquivos, incluindo ocultos, com detalhes." onclick="openGlossary(1)">ls -la</span> →
+      <span class="hint" data-tip="Cópia de segurança do alvo, feita antes de qualquer ação destrutiva." onclick="openGlossary(2)">backup</span> →
+      comando executado com cuidado → validação do resultado. Pular qualquer etapa é convite pro desastre.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Você precisa remover a pasta cache_old/ pra liberar espaço em disco. Qual é a
+  sequência correta de passos?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Rodar rm -rf direto, sem confirmar o caminho nem fazer backup, é exatamente o cenário de risco que o ritual existe pra evitar — rm não tem lixeira, e um caminho errado apaga a coisa errada pra sempre.')"><b>A</b> Rodar rm -rf cache_old/ direto, já que o objetivo é liberar espaço rápido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Confirmar onde está com pwd, listar o conteúdo com ls -la, fazer um backup com tar/gzip, só então rodar o rm com o caminho absoluto confirmado, e validar o resultado depois — essa sequência completa é o ritual que protege contra apagar a coisa errada.')"><b>B</b> Confirmar o caminho com pwd, listar com ls -la, fazer backup com tar/gzip, executar o rm com o caminho confirmado, e validar o resultado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Renomear a pasta com mv não libera espaço em disco nenhum — o conteúdo continua ocupando o mesmo espaço, só mudou de nome.')"><b>C</b> Renomear a pasta com mv pra "cache_apagar" e deixar assim, já que o nome já indica a intenção</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Pedir pra outra pessoa apagar não resolve o chamado que é seu, e não substitui o hábito que você precisa construir de fazer isso com segurança.')"><b>D</b> Pedir pra outra pessoa da equipe apagar, já que é sua primeira vez usando rm</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Criar um backup com extensão .bak antes de editar é como colocar a rede de proteção antes de andar na corda bamba: se o arquivo corromper, você volta em 2 segundos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O backup foi feito, mas alguém pede pra pular essa etapa "pra ganhar tempo"</h2>
+  <p>Um colega apressado sugere: "essa pasta é só cache, não precisa de backup, pode apagar direto e ganhar
+  tempo".</p>
+  <div class='box question'>Qual é a resposta tecnicamente correta pra essa sugestão?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Fazer o backup continua sendo a decisão certa mesmo quando a pasta parece descartável — cache pode acabar guardando algo que não deveria (configuração, dado temporário importante), e o custo do backup é muito menor que o custo de um rm errado sem nenhuma cópia.')"><b>A</b> Fazer o backup mesmo assim — mesmo pastas que parecem descartáveis podem guardar algo inesperado, e o custo do backup é sempre menor que o custo de um erro sem cópia nenhuma</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Só cache é uma suposição, não uma confirmação — sem checar o conteúdo de verdade, você não tem garantia nenhuma do que está ali dentro.')"><b>B</b> Concordar e pular o backup, já que "só cache" já garante que não tem nada importante</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Apagar metade da pasta sem critério nenhum não reduz risco de forma real, só cria um resultado inconsistente sem resolver o problema de fundo.')"><b>C</b> Fazer um meio-termo: apagar metade dos arquivos da pasta sem fazer backup, pra "arriscar menos"</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O comando 'rm -rf' no Linux é como incinerar documentos sem lixeira: não existe botão 'Desfazer'; o que foi apagado desapareceu do sistema de arquivos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "rm -rf ../cache_old/ e rm -rf /var/tmp/app/cache_old/ são a mesma coisa, né?"</h2>
+  <p>Um colega acha que caminho relativo (<code>../cache_old/</code>) e caminho absoluto
+  (<code>/var/tmp/app/cache_old/</code>) sempre apontam pro mesmo lugar.</p>
+  <div class='box question'>Por que essa suposição é perigosa num comando destrutivo como rm -rf?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Caminho relativo (../cache_old/) depende de onde você está no momento em que roda o comando — se você estiver numa pasta diferente da que imagina, ../cache_old/ aponta pra um lugar completamente diferente. Caminho absoluto sempre aponta pro mesmo lugar, não importa de onde você rodou o comando. Por isso confirmar com pwd antes é obrigatório.')"><b>A</b> Caminho relativo depende de onde você está agora — se você estiver na pasta errada, ../cache_old/ pode apontar pra um lugar totalmente diferente do que você imagina</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A diferença entre os dois não tem relação com o tamanho da pasta — tem relação com se o caminho depende (relativo) ou não (absoluto) de onde você está no momento do comando.')"><b>B</b> Não tem diferença real, só muda quantos caracteres você digita</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'rm funciona normalmente com caminho relativo — o comando não recusa esse tipo de caminho, o risco é que ele pode apontar pro lugar errado sem avisar.')"><b>C</b> Caminho relativo não funciona com rm -rf, o comando exige sempre caminho absoluto</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Usar a flag '-i' (interativo) no rm ou cp é como a confirmação de transferência bancária: pede confirmação antes de sobrescrever ou destruir dados.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Confirme onde está com pwd, sempre, antes de qualquer comando destrutivo.</li>
+    <li>Liste o conteúdo com ls -la e confirme visualmente que é o alvo certo.</li>
+    <li>Faça backup com tar/gzip do alvo antes de tocar nele.</li>
+    <li>Execute o comando com caminho absoluto, nunca relativo apressado.</li>
+    <li>Valide o resultado — confirme que o alvo sumiu e que o backup existe.</li>
+  </ol>
+  <h3>Prevenção — o que evita repetir esse tipo de problema</h3>
+  <div class='box'>Padronize um alias ou script wrapper de "remoção segura" no time (que exige backup antes
+  de aceitar o rm) pra quem está começando não depender só de lembrar o ritual de cabeça. Documente a regra
+  "nunca caminho relativo em comando destrutivo" no onboarding, com o exemplo real de hoje como ilustração do
+  risco.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>pwd e ls -la foram conferidos antes de qualquer comando destrutivo.</li>
+    <li>Backup foi criado e confirmado antes da remoção.</li>
+    <li>Caminho usado no rm era absoluto e conferido, nunca relativo apressado.</li>
+    <li>Resultado final foi validado: alvo removido, backup existente, sistema íntegro.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>rm não tem lixeira — o "rollback" de uma remoção é restaurar a partir do backup
+  feito antes. Se não existir backup, não existe rollback possível. É exatamente por isso que o backup nunca
+  é opcional nesse ritual.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "confirme antes de agir" já apareceu como
+  observação (Semana 1) e como aprovação (Semana 2, Dia 1) — hoje ele vira ritual formal antes de qualquer
+  ação irreversível. O Anki vai conectar os três.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> Nesta aula, a decisão correta foi <b>confirmar o
+  caminho com pwd, listar com ls -la, fazer backup com tar/gzip, executar o rm com o caminho confirmado, e
+  validar o resultado</b>. O ponto central do caso é este: comando destrutivo só depois de caminho, alvo e
+  backup confirmados.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Autorização pra usar cp, mv e rm com segurança em produção, sempre com o ritual
+  completo. Amanhã fecha a Semana 2: uma primeira olhada em rede e agendamento, ainda só de leitura.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 1 — LINUX JÚNIOR · Semana 2, Dia 4 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["pwd","Comando que mostra o caminho absoluto do diretório onde você está agora.",
+   "É perguntar 'onde exatamente eu estou' antes de dar qualquer passo importante."],
+  ["ls -la","Lista todos os arquivos de um diretório, incluindo ocultos, com detalhes de dono e permissão.",
+   "É abrir o inventário completo da sala antes de decidir mexer em algo."],
+  ["Backup","Cópia de segurança de um arquivo ou pasta, feita antes de uma ação que pode destruí-lo.",
+   "É tirar uma foto de tudo antes de reformar o cômodo, caso precise voltar como era."],
+  ["tar -czf","Comando que compacta uma pasta inteira num único arquivo .tgz, preservando estrutura e conteúdo.",
+   "É colocar tudo numa caixa lacrada e etiquetada, pronta pra guardar ou transportar."],
+  ["rm -rf","Comando que remove arquivos e pastas de forma recursiva e forçada, sem pedir confirmação.",
+   "É a britadeira: remove tudo o que está no caminho, sem perguntar duas vezes."],
+  ["Caminho absoluto","Endereço completo de um arquivo a partir da raiz do sistema (/), sempre aponta pro mesmo lugar.",
+   "É o endereço completo com CEP — não importa de onde você parte, sempre chega no mesmo lugar."],
+  ["Caminho relativo","Endereço de um arquivo a partir da pasta onde você está agora — muda de significado conforme sua posição.",
+   "É dizer 'duas quadras pra frente' — só faz sentido se todo mundo souber exatamente de onde você está partindo."],
+  ["Irreversível","Uma ação que, uma vez feita, não pode ser desfeita sem uma cópia prévia.",
+   "É quebrar um copo — não existe 'desfazer', só existe ter uma cópia guardada antes."],
+  ["gzip","Formato/algoritmo de compressão que reduz o tamanho de arquivos, geralmente usado junto com tar.",
+   "É espremer o ar de dentro da caixa pra ela ocupar menos espaço no caminhão."],
+  ["Validação de remoção","Conferir, depois de um rm, que o alvo realmente sumiu e que nada além dele foi afetado.",
+   "É contar os pertences depois da mudança, garantindo que só o combinado saiu de casa."],
+  ["Ritual de segurança","Sequência fixa de passos (confirmar, listar, backup, agir, validar) seguida antes de qualquer ação destrutiva.",
+   "É o checklist do piloto antes da decolagem — sempre na mesma ordem, mesmo quando parece óbvio."],
+  ["mv","Comando que move ou renomeia um arquivo ou pasta, sem duplicar o conteúdo.",
+   "É trocar um móvel de cômodo — o mesmo objeto, só muda de lugar ou de nome."]
+];
+
+const sceneStripIdx = [0,2,4,5];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

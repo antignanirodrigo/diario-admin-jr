@@ -1,0 +1,480 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 23 · Dia 2 — Processo e Rede Juntos | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | FASE 2 — REDES, DO IP AO DIAGNÓSTICO</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_DNS_FIREWALL_COMBINADOS.html'>← Semana 23, Dia 1</a><a href='#'>Semana 23</a><a href='DIA_03_HEALTHCHECK_REDE_BASH.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Consolidação — junta diagnóstico de processo (Fase 1) e diagnóstico de rede
+(Fase 2):</b> Você já sabe confirmar se um processo está rodando e se uma porta está acessível, cada um na
+sua disciplina separada. Hoje os dois se juntam: "porta não responde" tem pelo menos três causas possíveis, e
+cada uma exige um comando diferente pra confirmar.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: os três testes em sequência que separam processo de
+rede.</b> Você ganha o roteiro que evita a armadilha mais comum de quem está começando: reiniciar o serviço
+por impulso, sem antes saber se o problema é o processo, o bind da porta, ou o caminho de rede até ela.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 23 · Dia 2 — Consolidação | Nível Júnior — Redes</div>
+  <h1>Processo e Rede Juntos</h1>
+  <p>"processo rodando" e "porta respondendo" são duas afirmações diferentes — confirme as duas separadamente</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_S23D02_PROCESSO_E_REDE_JUNTOS.png' alt='Prancha em seis quadros sobre diagnosticar se uma porta que não responde é causada pelo processo parado, pelo processo rodando sem escutar a porta certa, ou por bloqueio de rede'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Chamado #2302: "A aplicação na porta 8080 não responde. Já reiniciei o serviço duas vezes
+  e continua igual." Reiniciar sem diagnosticar é o erro clássico — existem pelo menos três causas
+  completamente diferentes pra "porta não responde", e reiniciar só resolve UMA delas. É preciso confirmar,
+  em ordem: o processo está rodando? Ele está de fato
+  <span class="hint" data-tip="Ação de um processo associar-se a uma porta específica, passando a escutar conexões nela." onclick="openGlossary(0)">escutando</span>
+  naquela porta? E a rede permite alcançar essa porta de fora?</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> por que um serviço pode aparecer como "active (running)" no systemctl status e
+    ainda assim não responder na porta esperada?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      systemctl status confirma que o PROCESSO está rodando — o binário foi iniciado e o systemd não o
+      considera falho. Mas isso não garante que o processo conseguiu abrir e escutar a porta esperada: ele
+      pode ter travado internamente depois de subir, pode estar configurado pra escutar noutra porta por
+      engano, ou pode ter falhado silenciosamente ao fazer o bind (porta já em uso por outro processo, por
+      exemplo). "Rodando" e "escutando na porta certa" são duas confirmações diferentes — a segunda exige
+      ss -tlnp, não só systemctl status.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>3. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>systemctl status confirma "active (running)". ss -tlnp | grep 8080 não retorna
+  nenhuma linha. O que essa combinação de evidências indica?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'O processo está rodando (confirmado pelo systemctl), mas não está escutando na porta 8080 (confirmado pela ausência de linha no ss). Isso indica um problema de configuração ou bind — o processo pode estar escutando em outra porta, ter falhado ao abrir o socket, ou não ter chegado a essa etapa da inicialização, mesmo o systemd considerando ele ativo.')"><b>A</b> O processo está rodando, mas não conseguiu (ou não está configurado a) escutar na porta 8080 — é um problema de bind/configuração, não de rede externa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'ss -tlnp sem nenhuma linha pra aquela porta indica exatamente o oposto — nada está escutando ali; se estivesse escutando corretamente, apareceria uma linha com o processo e a porta.')"><b>B</b> O processo está escutando corretamente na porta 8080, e o problema é só de firewall bloqueando de fora</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'systemctl status já mostrou active (running), confirmando diretamente que o processo está de pé — não é necessário reiniciar de novo pra confirmar isso; o comando já respondeu essa pergunta especificamente.')"><b>C</b> É preciso reiniciar o serviço mais uma vez pra confirmar se ele realmente está rodando</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'DNS não tem relação nenhuma com esse sintoma específico — o teste já foi feito localmente com ss, sem envolver resolução de nome nenhuma; a causa está em outra camada, não em DNS.')"><b>D</b> É certamente um problema de DNS, como visto no Dia 1</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O princípio fundamental de 02 PROCESSO E REDE JUNTOS é como o alicerce de sustentação de um viaduto: garante que a estrutura de comunicação suporte alto tráfego sem colapsar.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>4. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>5. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Teste</th><th>Confirma</th></tr></thead><tbody>
+    <tr><td>systemctl status</td><td>Se o processo está rodando (nível processo).</td></tr>
+    <tr><td>ss -tlnp</td><td>Se algo está de fato escutando na porta esperada (nível bind local).</td></tr>
+    <tr><td>nc -zv de fora</td><td>Se a rede permite alcançar essa porta externamente (nível rede/firewall).</td></tr>
+  </tbody></table>
+  <pre>--- teste 1: o processo está rodando? ---
+$ systemctl status app.service
+● app.service - Minha Aplicação
+     Active: active (running) since Sun 2026-09-01 16:00:00
+
+--- teste 2: está escutando na porta certa? ---
+$ ss -tlnp | grep 8080
+(nada retornado)
+❌ processo rodando, mas NADA escutando em 8080
+
+--- investigando a causa do bind ---
+$ journalctl -u app.service --since "10 min ago" | tail -5
+Sep 01 16:00:05 app[1234]: Configurado para escutar em 8081, não 8080
+❌ causa encontrada: porta errada no arquivo de configuração
+
+--- teste 3 (só seria necessário SE o teste 2 tivesse confirmado escuta) ---
+$ nc -zv 10.10.10.50 8080     # de outra máquina
+nc: connect to 10.10.10.50 port 8080 (tcp) failed: Connection refused
+# esperado, já que nada escuta ali — não é preciso investigar rede além disso</pre>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>5.1 O painel 4 da prancha de hoje mostra o júnior pulando direto pro teste de rede (nc de outra
+  máquina), sem antes confirmar localmente se algo está escutando</h2>
+  <p>Um colega testa direto de outra máquina, vê "connection refused", e já assume que é firewall.</p>
+  <div class='box question'>Por que testar direto de outra máquina, pulando o teste local com ss -tlnp,
+  pode levar a uma conclusão errada sobre a causa?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Connection refused vindo de fora pode significar tanto firewall bloqueando quanto nada estar escutando ali, com o próprio SO recusando a conexão — os dois cenários produzem exatamente o mesmo sintoma externo. Sem confirmar localmente com ss -tlnp se existe algo escutando, você não sabe qual das duas causas é a real, podendo investigar firewall por horas quando o problema real é o processo não ter feito bind na porta.')"><b>A</b> Connection refused pode significar tanto bloqueio de firewall quanto ausência total de processo escutando ali — sem teste local, os dois cenários parecem idênticos de fora</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'nc não é uma ferramenta pouco confiável — o problema não é a ferramenta, é a ordem dos testes: pular a confirmação local antes de testar de fora pode levar a interpretar mal um sintoma que tem múltiplas causas possíveis.')"><b>B</b> nc é uma ferramenta pouco confiável pra esse tipo de teste, deveria ser sempre evitada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A distância física entre as duas máquinas não é o fator relevante aqui — o problema é de ordem de investigação (testar rede antes de confirmar localmente), não de distância geográfica entre os equipamentos.')"><b>C</b> Só é um problema se as duas máquinas estiverem em cidades diferentes, por causa da latência</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Diagnosticar anomalias em 02 PROCESSO E REDE JUNTOS é como o eletricista usando o multímetro no quadro de disjuntores: mede a passagem de sinal no ponto exato da falha.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>5.2 "Reiniciar o serviço não resolve nunca?"</h2>
+  <p>Um colega, depois de ver esse chamado, pensa que reiniciar serviço é sempre a ação errada.</p>
+  <div class='box question'>Por que reiniciar o serviço PODE ser a ação certa em outros cenários, mesmo
+  tendo sido o erro específico neste chamado?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Reiniciar resolve especificamente problemas onde o processo travou ou entrou num estado ruim temporário — mas só depois de você confirmar, com evidência, que essa é realmente a causa. O erro do chamado não foi reiniciar em si, foi reiniciar SEM DIAGNOSTICAR primeiro, repetindo a mesma ação sem entender a causa raiz (porta errada na configuração), que reiniciar nunca corrigiria sozinho.')"><b>A</b> Reiniciar resolve processos travados ou em estado ruim temporário — o erro do chamado foi reiniciar sem diagnosticar antes, não reiniciar em si</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Reiniciar não é sempre inútil — em muitos cenários reais (processo travado, vazamento de memória temporário) reiniciar realmente resolve; o problema deste chamado específico era um erro de configuração, que reiniciar nunca corrigiria, mas isso não generaliza pra todo cenário.')"><b>B</b> Está errado pensar assim — reiniciar nunca resolve problema nenhum de verdade, é sempre um paliativo inútil</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Não existe uma regra fixa de esperar um número específico de tentativas de diagnóstico antes de reiniciar — a regra real é diagnosticar com evidência ANTES de agir, não contar tentativas.')"><b>C</b> Só é aceitável reiniciar depois de pelo menos três tentativas de diagnóstico documentadas</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Aplicar as boas práticas de 02 PROCESSO E REDE JUNTOS é como o protocolo de segurança da aviação: elimina pontos únicos de falha e garante previsibilidade operacional.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>6. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de reiniciar qualquer coisa, confirme com systemctl status se o processo está rodando.</li>
+    <li>Confirme com ss -tlnp se algo está de fato escutando na porta esperada.</li>
+    <li>Se não estiver escutando, investigue configuração e logs (journalctl) antes de qualquer ação.</li>
+    <li>Só teste conectividade externa (nc de outra máquina) depois de confirmar que a escuta local está ok.</li>
+    <li>Reinicie o serviço só depois de ter uma hipótese de causa que reiniciar realmente resolveria.</li>
+  </ol>
+</section>
+
+<section class='section' id='lab'>
+  <h2>7. Laboratório guiado — marca conforme for testando</h2>
+  <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
+  <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Numa VM de laboratório, configure um serviço simples pra escutar numa porta errada de propósito, e confirme com systemctl status que ele aparece como rodando.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> active (running), mesmo com a porta errada.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Confirme com ss -tlnp que a porta esperada não tem nada escutando.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> nenhuma linha retornada pra porta esperada.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não souber onde olhar a configuração de porta do serviço, este é o ponto onde o chat com o Sênior-IA vai te ajudar a localizar o arquivo certo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Corrija a porta na configuração, reaplique, e confirme com ss -tlnp que agora está escutando.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> linha aparecendo em ss -tlnp pra porta correta.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text">Teste conectividade de outra VM com nc -zv, confirmando o fluxo completo funcionando.</div></div>
+      <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida do ponto de vista externo também.</div>
+    </li>
+  </ol>
+</section>
+
+<section class='section'>
+  <h2>8. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>"Processo rodando" (systemctl) e "porta escutando" (ss) são duas confirmações diferentes.</li>
+    <li>Connection refused de fora pode ser firewall OU ausência de processo escutando — teste local primeiro.</li>
+    <li>Reiniciar sem diagnosticar é o erro, não reiniciar em si — a ação certa depende da causa confirmada.</li>
+    <li>A ordem correta é sempre: processo → escuta local → conectividade externa.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Os testes de diagnóstico (systemctl status, ss, nc) são observação pura, sem
+  risco. O cuidado real é o hábito de reiniciar por impulso: em produção, reiniciar um serviço sem entender a
+  causa pode mascarar temporariamente um problema que volta a acontecer, ou pior, derrubar conexões ativas de
+  usuários sem necessidade real.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> "confirmar cada camada separadamente antes de
+  agir" continua sendo o fio condutor do curso inteiro — hoje aplicado à dupla processo+rede, ontem a
+  DNS+firewall. O Anki vai reforçar esse padrão como preparação direta pra Missão Final da Semana 24.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: A.</strong> Nesta aula, a combinação de evidências apontou
+  processo rodando mas sem escuta na porta esperada — problema de bind/configuração, não de rede externa. O
+  ponto central do caso é este: "processo rodando" e "porta respondendo" são duas afirmações diferentes —
+  confirme as duas separadamente.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Capacidade de separar diagnóstico de processo e de rede numa investigação
+  única, evitando a armadilha de reiniciar sem entender a causa. Amanhã você automatiza parte dessa
+  verificação com um script bash de healthcheck.</div>
+</section>
+
+</div>
+</main>
+
+<dialog class='glossary-modal' id='glossary-modal'>
+  <button class='glossary-close' type='button' aria-label='Fechar' onclick='closeGlossary()'>✕</button>
+  <h2 id='glossary-title'></h2>
+  <div class='glossary-definition' id='glossary-definition'></div>
+  <div class='glossary-analogy'><b>💡 ANALOGIA DO MUNDO REAL</b><p id='glossary-analogy'></p></div>
+</dialog>
+
+<footer>FASE 2 — REDES JÚNIOR · Semana 23, Dia 2 de ~250. Mesmo padrão: glossário com
+analogia, 3 questões + 1 recall, laboratório com resultado esperado, slot reservado pro Mentor-IA (Estágio A,
+ainda não construído).</footer>
+
+<script>
+const sceneGlossary=[
+  ["Escutar numa porta (listen/bind)","Ação de um processo associar-se a uma porta específica, passando a escutar conexões nela.",
+   "É o funcionário realmente sentar na mesa do guichê de atendimento — só depois disso ele consegue atender quem chega, mesmo estando presente no prédio."],
+  ["systemctl status (revisão)","Comando que mostra se um serviço gerenciado pelo systemd está rodando, parado ou em erro.",
+   "É confirmar se o funcionário bateu ponto e está no prédio — não confirma em qual mesa específica ele está sentado."],
+  ["ss -tlnp (revisão)","Comando que lista portas TCP em modo de escuta, junto com o processo responsável por cada uma.",
+   "É a lista de guichês realmente abertos e atendendo, com o nome do funcionário sentado em cada um."],
+  ["journalctl -u (log do serviço)","Comando que mostra os logs específicos de um serviço systemd, útil pra investigar por que ele não se comportou como esperado.",
+   "É o diário de bordo do funcionário — registra exatamente o que ele estava fazendo e relatando durante o turno."],
+  ["Bind falho (silencioso)","Situação onde um processo tenta escutar numa porta mas falha, sem necessariamente derrubar o processo inteiro nem gerar um erro óbvio.",
+   "É o funcionário tentar sentar numa mesa já ocupada, e em vez de avisar claramente, simplesmente ficar sem atender ninguém, parado por perto."],
+  ["Connection refused (ambiguidade de causa)","Mensagem de erro que pode indicar tanto bloqueio de firewall quanto ausência completa de processo escutando naquela porta.",
+   "É a porta trancada — pode estar trancada porque o segurança não deixa entrar (firewall), ou porque não tem ninguém do outro lado pra abrir (nada escutando)."],
+  ["Ordem de diagnóstico (processo → escuta → rede)","Sequência lógica recomendada pra investigar porta não responde: confirmar processo, depois escuta local, só então testar rede externa.",
+   "É checar se o funcionário chegou, depois se ele está na mesa certa, e só então perguntar se os clientes conseguem chegar até ele."],
+  ["Reiniciar sem diagnosticar (antipadrão)","Prática de reiniciar um serviço repetidamente sem confirmar a causa raiz do problema, geralmente sem resolver problemas de configuração.",
+   "É desligar e ligar a máquina de novo sem checar se o problema era falta de energia ou um cabo desconectado — funciona só se a causa for a que o reinício realmente resolve."],
+  ["Estado ruim temporário (quando reiniciar ajuda)","Condição onde um processo trava ou degrada por acúmulo de estado interno, sendo genuinamente resolvida por um reinício.",
+   "É o funcionário ficar exausto depois de um turno longo demais — uma pausa (reinício) realmente resolve esse tipo específico de problema."],
+  ["Causa raiz de configuração (quando reiniciar não ajuda)","Problema originado de um valor errado na configuração do serviço, que persiste independente de quantas vezes o processo for reiniciado.",
+   "É o funcionário treinado pra sentar na mesa errada — descansar (reiniciar) não muda pra qual mesa ele foi instruído a ir."]
+];
+
+const sceneStripIdx = [0,2,5,6];
+const strip = document.getElementById('sceneStrip');
+sceneStripIdx.forEach(i=>{
+  const item = sceneGlossary[i];
+  const div = document.createElement('div');
+  div.className='scene-chip';
+  div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+  strip.appendChild(div);
+});
+
+const modal=document.getElementById('glossary-modal');
+function openGlossary(index){
+  const item=sceneGlossary[index];
+  document.getElementById('glossary-title').textContent=item[0];
+  document.getElementById('glossary-definition').textContent=item[1];
+  document.getElementById('glossary-analogy').textContent=item[2];
+  modal.showModal();
+}
+function closeGlossary(){ modal.close(); }
+modal.addEventListener('click',event=>{ if(event.target===modal) modal.close(); });
+
+const gt = document.getElementById('glossaryTriggers');
+sceneGlossary.forEach((item,i)=>{
+  const b = document.createElement('button');
+  b.className='glossary-trigger';
+  b.textContent = item[0];
+  b.onclick = ()=>openGlossary(i);
+  gt.appendChild(b);
+});
+
+function showRecall(){
+  document.getElementById('recallAns').classList.add('show');
+  document.getElementById('recallBtn').style.display='none';
+}
+
+function answerQuiz(btn, resultId, correct, why){
+  const area = btn.closest('div');
+  area.querySelectorAll('.quiz-opt').forEach(b=>b.classList.add('disabled'));
+  const card = document.getElementById(resultId);
+  card.classList.remove('correct','wrong');
+  card.classList.add(correct?'correct':'wrong');
+  card.querySelector('.quiz-result-head').textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  card.querySelector('.quiz-result-body').textContent = why;
+  card.classList.add('show');
+}
+function resetQuiz(btn, areaId, resultId){
+  document.getElementById(areaId).querySelectorAll('.quiz-opt').forEach(b=>b.classList.remove('disabled'));
+  document.getElementById(resultId).classList.remove('show');
+}
+
+function toggleLab(el){
+  const li = el.closest('li');
+  const done = li.classList.toggle('done');
+  el.textContent = done ? '✓' : '';
+}
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if(btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try{ localStorage.setItem('admin-jr-theme', next); }catch(e){}
+  applyTheme(next);
+}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>
