@@ -1,0 +1,495 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 2 — CPU e Memória: vCPUs, Tipo 'host' e a Armadilha do Ballooning | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_S02D01.html'>← Dia 1</a><a href='#'>Semana 2</a><a href='DIA_03_S02D03.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Ontem você escolheu o chipset e firmware da VM. Hoje você aloca CPU e memória: aprendendo por que o tipo padrão de CPU 'kvm64' esconde instruções vitais (AVX/AES) e por que o Memory Ballooning desregulado destrói a performance de bancos de dados.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Alocação e Otimização de Processamento e RAM.</b> Você ajusta flags de processador e modelos de entrega de memória para máxima vazão.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 2 | Nível Júnior — Máquinas Virtuais KVM</div>
+  <h1>CPU e Memória: vCPUs, Tipo 'host' e a Armadilha do Ballooning</h1>
+  <p>Extraindo 100% das instruções do processador e evitando lentidão crítica de memória</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S02D02.png' alt='Prancha em seis quadros sobre CPU e Memória: vCPUs, Tipo 'host' e a Armadilha do Ballooning'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#2002</b>: 'A equipe de engenharia de software reporta que o banco de dados Redis na VM <b>101</b> está com latência 8x maior no Proxmox do que em bare-metal. A auditoria revelou que a VM foi criada com o tipo de CPU padrão <span class="hint" data-tip="Modelo de CPU genérico antigo emulado pelo QEMU (Pentium 4 com poucas flags)." onclick="openGlossary(0)">kvm64</span> e o recurso de <span class="hint" data-tip="Driver que infla dentro do SO convidado para devolver memória ao host." onclick="openGlossary(2)">Memory Ballooning</span> está ativo com mínimo de 2GB e máximo de 16GB. O chamado exige: (1) Alterar o CPU type para <span class="hint" data-tip="Passa todas as flags físicas e instruções da CPU real do servidor para a VM." onclick="openGlossary(1)">host</span>; (2) Entender a armadilha do Ballooning em bancos de dados; e (3) Fixar a memória estática com alocação dedicada.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o desenvolvedor sênior veio reclamar que o banco de dados PostgreSQL na VM 100 estava com lentidão absurda em gravações de disco. O Júnior olhou o gráfico de CPU do host, viu 10% de uso e disse pro desenvolvedor: 'O servidor tá folgado, o problema deve ser sua consulta SQL'. Quase engasguei com o café.<br><br>Chamei o Júnior e fomos olhar a configuração de hardware da VM. O disco estava configurado com o controlador emulado IDE antigo e sem thread dedicada de I/O! Expliquei pra ele o poder do <b>VirtIO SCSI Single</b>: com a opção <code>iothread=1</code>, o QEMU cria uma thread de processamento exclusiva na CPU física para atender o disco da VM. E com a flag <code>discard=on</code>, o SO convidado avisa o storage ZFS sempre que apaga arquivos via TRIM, impedindo que o disco infle eternamente.<br><br>Alteramos o controlador com <code>qm set 100 --scsihw virtio-scsi-single</code>, ativamos o discard e o throughput do banco de dados quadruplicou na hora. O Júnior aprendeu que em virtualização, <b>driver correto vale mais do que comprar hardware novo</b>.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>qm set 101 --cpu host</code></td><td>Altera o modelo de CPU da VM para expor 100% das flags e instruções do processador físico do host.</td></tr>
+    <tr><td><code>qm set 101 --memory 16384 --balloon 0</code></td><td>Define 16GB de RAM estática e desativa o mecanismo dinâmico de ballooning (balloon=0).</td></tr>
+    <tr><td><code>lscpu (dentro da VM)</code></td><td>Audita as flags de processador visíveis pelo sistema operacional convidado.</td></tr>
+    <tr><td><code>ksmctl / systemctl status ksm</code></td><td>Gerencia o Kernel Samepage Merging (KSM), que desduplica páginas de RAM idênticas entre VMs no host.</td></tr>
+  </tbody></table>
+  <pre># Dentro da VM antes do ajuste (CPU: kvm64)
+$ lscpu | grep -i flags
+Flags: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat... (sem AES, sem AVX2)
+
+# Ajuste aplicado pelo Administrador no Proxmox
+# qm set 101 --cpu host --memory 16384 --balloon 0
+update VM 101: -balloon 0 -cpu host -memory 16384
+
+# Dentro da VM após o ajuste (CPU: host)
+$ lscpu | grep -i flags
+Flags: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 ... aes avx avx2 avx512f vaes vpclmulqdq ... rdrand</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🖥️ <b>Onde executar:</b> Terminal do Nó Proxmox para comandos <code>qm</code>; ou Console VNC da VM (acessível via Web UI > Nó > VM ID > Console).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em VMs de laboratório ou teste. Não altere parâmetros de máquinas de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Configure o controlador de disco da VM como VirtIO SCSI Single com iothread.</div></div>
+      <div class="lab-cmd">qm set 100 --scsihw virtio-scsi-single</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Identificação do parâmetro de CPU atual (ex: <code>cpu: kvm64</code>).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Configurar o controlador VirtIO SCSI com iothread=1 cria uma thread de processamento exclusiva no hypervisor para atender as requisições de I/O de disco da VM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Usar emulação IDE ou SATA legado para discos de banco de dados, desperdiçando ciclos de CPU e limitando a vazão a uma fração do desempenho real.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Ative a flag discard=on no disco virtual para suporte nativo a TRIM.</div></div>
+      <div class="lab-cmd">qm set 100 --scsi0 tank-zfs:vm-100-disk-0,discard=on,iothread=1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Configuração atualizada com sucesso sem recriação de disco.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> A flag discard=on permite que o sistema operacional convidado envie comandos TRIM para o storage subjacente, liberando blocos de disco apagados.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ativar discard em storages que não suportam thin provisioning, causando sobrecarga inútil de comandos no barramento.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Configure a interface de rede como VirtIO para máxima vazão de pacotes.</div></div>
+      <div class="lab-cmd">qm set 100 --net0 virtio,bridge=vmbr0</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Parâmetros de memória estáticos aplicados na VM.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Habilitar a placa de rede virtio (net0) entrega taxas de transferência de 10/40 Gbps através de memória compartilhada em paravirtualização pura.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Selecionar a placa e1000 por comodidade; a placa emulada consome 4x mais CPU para o mesmo tráfego de rede.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Ajuste a alocação de memória dinâmica definindo limites de ballooning.</div></div>
+      <div class="lab-cmd">qm set 100 --balloon 2048 --shares 1000</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VM reiniciada com novo mapa de instruções.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Ajustar a memória com ballooning dinâmico (shares e min) permite que o Proxmox recupere RAM ociosa quando outros serviços demandarem recursos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Definir o valor mínimo de ballooning abaixo do necessário para o sistema operacional convidado respirar, fazendo a VM entrar em kernel panic.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Valide os ganhos de latência e throughput de disco da VM otimizada.</div></div>
+      <div class="lab-cmd"># Benchmarks de I/O VirtIO homologados com sucesso.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Instruções <code>aes</code>, <code>avx</code> e <code>avx2</code> ativas no processador virtual.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Medir o desempenho de I/O após a otimização comprova o ganho de vazão e menor latência nos discos virtuais.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Fazer alterações de hardware sem comparar métricas antes e depois para comprovar a eficácia da melhoria.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Qual é o grave prejuízo de performance ao deixar uma máquina virtual com o tipo de CPU padrão 'kvm64' em vez de configurá-la como 'host'?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      O modelo 'kvm64' emula uma CPU básica e genérica de 2004 para garantir que a VM migre para qualquer hardware antigo. Com isso, ele esconde instruções modernas vitais do processador físico (como AES-NI para criptografia rápida, AVX/AVX2 para cálculos vetoriais, SSE4.2 e proteções contra Spectre/Meltdown em hardware), forçando o SO convidado a usar rotinas lentas de software.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Por que o recurso de Memory Ballooning (virtio-balloon) é considerado uma contraindicação grave para máquinas virtuais que executam Bancos de Dados (PostgreSQL, MySQL, Redis, Oracle)?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O ballooning não corrompe dados diretamente: ele aloca memória dentro do SO convidado através do driver de balão.')"><b>A</b> Porque o Ballooning corrompe automaticamente as tabelas do banco de dados no momento da escrita</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! Bancos de dados precisam de memória RAM estável e previsível. Quando o balloon driver consome a RAM livre para devolvê-la ao host, o SO da VM faz swapping agressivo, destruindo os IOPS do storage e a latência de consultas.')"><b>B</b> Porque bancos de dados alocam memória antecipadamente para buffers de cache (shared_buffers/innodb_buffer_pool); quando o host infla o balão, o SO convidado é forçado a jogar o cache do banco no disco de SWAP, gerando colapso de latência de I/O</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O impacto principal do ballooning é na pressão de memória RAM e paginação em disco de SWAP.')"><b>C</b> Porque o Ballooning consome 100% de uso de CPU em todos os núcleos da máquina física</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O driver virtio_balloon é nativo do Linux, porém deve ser dimensionado com sabedoria.')"><b>D</b> Porque o Proxmox VE não suporta drivers de ballooning em sistemas Linux</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Quorum do Corosync é a assembleia de condomínio: nenhuma decisão de emergência é válida sem a maioria absoluta (50% + 1) dos nós votando juntos.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 VM de banco de dados travando com latência extrema de SWAP</h2>
+  <p>O monitoramento reporta uso de 95% de SWAP dentro da VM 101, mesmo com o Proxmox reportando que o host tem 40% de RAM livre:</p>
+  <pre class="err">$ vmstat 1 5 (dentro da VM)
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 3  4 8388608  65412   1024  98124 2450 3120  4800  5100 8900 7400 12 45  0 43  0
+(si/so elevados: swapping violento causado por ballooning ativo)</pre>
+  <div class='box question'>Qual é a intervenção imediata para estabilizar a VM?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O swap está ocorrendo dentro da máquina virtual, não no host físico.')"><b>A</b> Desligar o swap do host físico inteiro com swapoff -a</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Exato! Desativar o balão dinâmico garante que o Proxmox nunca retire RAM da VM de banco de dados, permitindo que ela mantenha seus caches em memória física.')"><b>B</b> Fixar o balloon em 0 (ou igualar Min Memory e Max Memory) no Proxmox e desativar o swap temporário na VM após a memória estabilizar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Aumentar o swap apenas prolongará a agonia de latência lentíssima em disco.')"><b>C</b> Aumentar o disco de swap da VM para 100GB</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Fencing via Watchdog de hardware é o disjuntor de segurança: desliga o nó com falha na hora para evitar que duas máquinas gravem no mesmo disco (Split-Brain).</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Quando NÃO usar o CPU type 'host'?</h2>
+  <p>Um arquiteto de infraestrutura projeta um cluster de 3 nós Proxmox onde 2 nós usam processadores Intel Xeon e 1 nó usa AMD EPYC:</p>
+  <div class='box question'>Por que o CPU type 'host' impedirá a migração ao vivo (Live Migration) sem downtime entre nós de fabricantes diferentes?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Correto! A migração ao vivo transfere o estado de registradores e instruções da CPU em tempo real. Se a CPU de destino não possuir exatamente o mesmo conjunto de flags físicas, a aplicação sofre segmentation fault.')"><b>A</b> Porque migrar uma VM em execução com CPU 'host' de um processador Intel para um processador AMD causará crash imediato de instruções não suportadas no meio da execução; para clusters heterogêneos, deve-se usar um modelo compatível (ex: x86-64-v2-AES)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A rede funciona perfeitamente; o bloqueio é puramente na compatibilidade de instruções de CPU durante a migração de memória ao vivo.')"><b>B</b> Porque o Proxmox proíbe conexões de rede entre servidores Intel e AMD</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Processadores AMD suportam KVM nativamente com a tecnologia AMD-V (SVM).')"><b>C</b> Porque processadores AMD não suportam o hypervisor KVM</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A migração ao vivo (Live Migration) é trocar os pneus do carro em movimento: move a RAM da VM pela rede de 10Gbps sem derrubar a sessão do usuário.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Para nós isolados ou clusters com hardware de CPU 100% idêntico, configure sempre <code>cpu: host</code>.</li>
+    <li>Para clusters heterogêneos com diferentes gerações de processadores, selecione um modelo comum como <code>x86-64-v2-AES</code> ou <code>x86-64-v3</code>.</li>
+    <li>Para aplicações de alta performance (Postgres, Redis, Java, Elastic), desative o ballooning definindo <code>balloon: 0</code> e aloque RAM estática.</li>
+    <li>Utilize o Ballooning dinâmico apenas em ambientes de homologação, VDI (desktops virtuais) ou servidores web com tráfego oscilante.</li>
+    <li>Valide as flags de processador dentro do SO convidado executando <code>lscpu</code>.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Sempre instale o QEMU Guest Agent em todas as VMs para garantir desligamento limpo e use drivers VirtIO para evitar overhead de emulação de hardware.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende o ganho massivo de performance ao utilizar o CPU type 'host'.</li>
+    <li>Você sabe identificar quando o Memory Ballooning prejudica aplicações de banco de dados.</li>
+    <li>Você domina o trade-off entre CPU type 'host' (máxima performance) vs 'x86-64-v2' (migração entre CPUs diferentes).</li>
+    <li>O consumo de memória e a latência da VM foram estabilizados com sucesso.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Caso precise migrar a VM para um servidor mais antigo, altere o tipo de CPU de volta para x86-64-v2-AES ou kvm64 com <code>qm set ID --cpu x86-64-v2-AES</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> O conceito de CPU types e migração heterogênea será essencial na Semana 8 ao construir Clusters Proxmox com Live Migration.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A alternativa correta é a B: o Memory Ballooning força o SO convidado a paginar o cache do banco em disco de SWAP, destruindo a latência de I/O.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>CPU e memória dominados com precisão cirúrgica! Amanhã, no Dia 3, você mergulhará no subsistema de armazenamento virtual: configurando VirtIO SCSI Single, iothreads dedicadas e comandos Discard/TRIM para máxima taxa de transferência de disco.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

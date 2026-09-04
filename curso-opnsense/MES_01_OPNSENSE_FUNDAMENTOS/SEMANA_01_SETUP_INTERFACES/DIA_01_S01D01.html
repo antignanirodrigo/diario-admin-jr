@@ -1,0 +1,435 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 1 · Dia 1 — Kernel FreeBSD, Motor pf e Arquitetura | Diário de um Admin Jr.</title><style>
+
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#172233;border:1px solid var(--cyan);color:#7dd3fc;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--cyan);color:#051018}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--cyan)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style>
+
+<script>
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  if(next==='light'){document.documentElement.setAttribute('data-theme','light');}
+  else{document.documentElement.removeAttribute('data-theme');}
+  try{localStorage.setItem('admin-jr-theme',next);}catch(e){}
+}
+function showRecall(){
+  var a=document.getElementById('recall-answer');
+  if(a){a.classList.toggle('show');}
+}
+function toggleStep(el){
+  var li=el.closest('li');
+  if(li){li.classList.toggle('done');}
+}
+function answerQuiz(qId,optIdx,isCorrect,expText,analogyText){
+  var qBlock=document.getElementById(qId);
+  if(!qBlock)return;
+  var opts=qBlock.querySelectorAll('.quiz-opt');
+  opts.forEach(function(btn){btn.classList.add('disabled');});
+  var res=qBlock.querySelector('.quiz-result');
+  if(!res)return;
+  res.className='quiz-result show '+(isCorrect?'correct':'wrong');
+  var head=res.querySelector('.quiz-result-head');
+  var body=res.querySelector('.quiz-result-body');
+  var ref=res.querySelector('.quiz-ref');
+  if(head) head.innerHTML=isCorrect?'✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:':'❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+  if(body) body.innerHTML=expText;
+  if(ref) ref.innerHTML='<b>💡 Analogia do Sênior para Fixar:</b> '+analogyText;
+}
+function retryQuiz(qId){
+  var qBlock=document.getElementById(qId);
+  if(!qBlock)return;
+  var opts=qBlock.querySelectorAll('.quiz-opt');
+  opts.forEach(function(btn){btn.classList.remove('disabled');});
+  var res=qBlock.querySelector('.quiz-result');
+  if(res) res.className='quiz-result';
+}
+</script>
+
+</head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | OPNSENSE FIREWALL</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><span>← Início</span><a href='../../INDEX_CURSO_OPNSENSE.html'>Índice do Curso</a><a href='DIA_02_S01D02.html'>Dia 2 →</a></nav>
+</header>
+
+<div class='progress'><div class='dot now'></div><div class='dot'></div><div class='dot'></div><div class='dot'></div><div class='dot'></div></div>
+
+<div class='bridge'><b>📍 Contexto do Treinamento:</b> Módulo 01 — Fundamentos, Motor pf e Setup de Interfaces · <b>Semana 01 · Dia 1</b></div>
+<div class='privilege'><b>⚡ Nível de Acesso Requerido:</b> Console Serial / Root / Administrador WebGUI (HTTPS 443)</div>
+
+<section class='hero'>
+  <div class='eyebrow'>Semana 1 · Dia 1 — Arquitetura de Segurança</div>
+  <h1>Kernel FreeBSD, Motor pf e Arquitetura</h1>
+  <p>TICKET #8011 — PROJETO NOVO FIREWALL CORPORATIVO</p>
+  <div class='philosophy'>O firewall não é apenas um roteador: é um juiz que valida cada pacote contra a tabela de estados em milissegundos.</div>
+  <img class='comic' src='assets/PRANCHA_OPNSENSE_S01D01.png' alt='Prancha Gráfica S01D01 — Kernel FreeBSD, Motor pf e Arquitetura'>
+</section>
+
+<div class='wrap'>
+
+  <!-- SEÇÃO 1: O INCIDENTE -->
+  <section class='section'>
+    <h2>🚨 1. O Incidente de Produção</h2>
+    <div class='box warning'>
+      <pre style='margin:0;background:transparent;border:0;color:inherit;padding:0;font-size:14.5px'>TICKET #8011 — PROJETO NOVO FIREWALL CORPORATIVO
+DE: Diretoria de TI / Governança
+PARA: Administrador de Redes Júnior
+ASSUNTO: Substituição do Roteador Doméstico da Borda por Appliance OPNsense 1U
+
+'Nosso link de fibra de 1 Gbps está sofrendo quedas intermitentes porque o roteador atual da operadora trava a cada pico de conexões simultâneas da equipe. Recebemos o appliance industrial OPNsense 1U no datacenter. Sua missão é validar a inicialização do kernel HardenedBSD, inspecionar o status do motor Packet Filter (pf) e documentar a arquitetura antes de receber o tráfego da empresa.'</pre>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 2: A HISTÓRIA EM 3ª PESSOA -->
+  <section class='section'>
+    <h2>📖 2. A Bancada do Sênior e o Coração do Packet Filter</h2>
+    <div class='story'>
+      <span class='eyebrow-mini'>Crônica Técnica de Bancada</span>
+      O sol das oito da manhã entrava tímido pelas frestas do datacenter quando Júnior desembalou o chassi de metal escuro de 1U. Era um appliance de borda robusto com seis portas Gigabit Intel e uma porta de console serial destacada em azul.</p><p>Roberto, o Engenheiro Sênior, puxou a cadeira com rodinhas e apoiou uma caneca de café na bancada de testes. Olhou para Júnior, que já estava com o cabo de rede na mão pronto para plugar no switch de produção.</p><p>— *"Segura o entusiasmo, garoto"* — disse Roberto em tom calmo. — *"Antes de passar um único byte de usuário por essa caixa, você precisa entender quem realmente toma as decisões aqui dentro. Você sabe qual é a diferença entre um roteador Linux com iptables/nftables e este appliance OPNsense com FreeBSD?"*</p><p>Júnior hesitou:<br>— *"Ambos bloqueiam portas e fazem NAT, não é?"*</p><p>Roberto sorriu de lado:<br>— *"No resultado final, sim. Mas na arquitetura de kernel, o OPNsense roda sobre o **HardenedBSD** — uma derivação do FreeBSD com mitigações de memória ativas por padrão, como ASLR e proteção contra estouro de pilha. E no núcleo desse sistema vive o **pf (Packet Filter)**, criado originalmente pelo projeto OpenBSD. O pf é um motor de inspeção puramente stateful: ele não reavalia um milhão de regras para cada pacote de um streaming. Ele avalia o primeiro pacote SYN, cria uma entrada na **Tabela de Estados** na memória RAM e deixa os pacotes seguintes voarem em velocidade de hardware."*</p><p>Júnior anotou no bloco:<br>— *"Então, se a tabela de estados corromper ou estourar a memória, o firewall trava?"*</p><p>— *"Exatamente. Por isso, a primeira coisa que um bom administrador faz ao ligar a caixa no console serial é checar o kernel com `uname -mrs` e auditar a tabela de estados com `pfctl -s info`. Vamos ligar o cabo serial e ver o FreeBSD respirar."*
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3: DECODIFICADOR DE CONCEITOS -->
+  <section class='section'>
+    <h2>🧩 3. Decodificador de Conceitos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style='width:25%'>Termo Técnico</th>
+          <th style='width:45%'>O que realmente é</th>
+          <th style='width:30%'>Analogia para Fixação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+  <td><b>HardenedBSD / FreeBSD</b></td>
+  <td>Kernel Unix monolítico de alta segurança com proteções nativas de memória e escalabilidade de rede.</td>
+  <td><span class='hint' data-tip='Analogia do Sênior'>O chassi de aço reforçado e a fundação blindada do prédio.</span></td>
+</tr><tr>
+  <td><b>Motor pf (Packet Filter)</b></td>
+  <td>Mecanismo de filtragem e tradução de pacotes que opera inspecionando estados de conexão no kernel.</td>
+  <td><span class='hint' data-tip='Analogia do Sênior'>O segurança na portaria que anota quem entrou num crachá de visitante e libera a saída rápida.</span></td>
+</tr><tr>
+  <td><b>State Table (Tabela de Estados)</b></td>
+  <td>Estrutura em memória RAM que registra todas as conexões TCP/UDP ativas para acelerar o roteamento.</td>
+  <td><span class='hint' data-tip='Analogia do Sênior'>O livro de visitas da portaria que evita ter que pedir o documento toda vez que você vai ao banheiro.</span></td>
+</tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SEÇÃO 4: LABORATÓRIO GUIADO -->
+  <section class='section'>
+    <h2>🛠️ 4. Laboratório Prático "Pegue na Mão"</h2>
+    <div class='box'>
+      <b>🖥️ Onde Executar:</b> Terminal do Console Serial (<code>ttyu0</code>) / SSH do OPNsense ou WebGUI (<code>https://192.168.1.1</code>).
+    </div>
+    
+    <ol class='steps'>
+      <li>
+        <div class='lab-row'>
+          <div class='lab-box' onclick='toggleStep(this)'>✓</div>
+          <div class='lab-text'>
+            <b>Passo 1: Acessar o console do OPNsense e executar o comando de inspeção</b>
+            <div class='lab-cmd'>pfctl -s info</div>
+            <div class='lab-expect'><b>Saída Esperada:</b><br><pre style='margin:6px 0 0;padding:10px;background:#050910;border:1px solid var(--line);font-size:12.5px'>Status: Enabled for 0 days 04:12:30          Debug: Urgent
+
+State Table                          Total             Rate
+  current entries                       24               
+  searches                          148202           12.4/s
+  inserts                               48            0.0/s
+  removals                              24            0.0/s
+Counters
+  match                             148202           12.4/s
+  bad-offset                             0            0.0/s
+  fragment                               0            0.0/s
+  short                                  0            0.0/s
+  normalize                              0            0.0/s
+  memory                                 0            0.0/s</pre></div>
+            <div class='lab-why'><b>Por que fazemos isso:</b> Validar em tempo real se o subsistema de hardware e o kernel responderam com status <code>[OK]</code>.</div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class='lab-row'>
+          <div class='lab-box' onclick='toggleStep(this)'>✓</div>
+          <div class='lab-text'>
+            <b>Passo 2: Auditar logs de sistema no dmesg</b>
+            <div class='lab-cmd'>dmesg | head -n 25</div>
+            <div class='lab-why'><b>Por que fazemos isso:</b> Garantir que nenhum driver de rede ou dispositivo PCIe apresentou falha de inicialização no boot.</div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class='lab-row'>
+          <div class='lab-box' onclick='toggleStep(this)'>✓</div>
+          <div class='lab-text'>
+            <b>Passo 3: Validar a persistência da configuração</b>
+            <div class='lab-cmd'>pfctl -s rules | head -n 10</div>
+            <div class='lab-expect'><b>Esperado:</b> Exibição das regras automáticas do sistema e da regra de Anti-Lockout na LAN.</div>
+          </div>
+        </div>
+      </li>
+    </ol>
+    
+    <div class='checkpoint'>
+      <b>🎯 Checkpoint do Sênior:</b> "Se a saída do terminal retornou com status ativo e sem erros de hardware, seu nó está 100% pronto para a homologação."
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5: RECALL ATIVO -->
+  <section class='section'>
+    <h2>🧠 5. Recall Ativo de Alta Retenção</h2>
+    <div class='recall'>
+      <h3 style='margin-top:0;color:var(--ink)'>Qual é a principal vantagem do motor pf operar em modo Stateful Inspection em relação à performance de hardware?</h3>
+      <button class='recall-btn' onclick='showRecall()'>👁️ Revelar Resposta do Sênior</button>
+      <div class='recall-answer' id='recall-answer'>
+        <b>Resposta Explicada:</b><br>O pf avalia as regras de filtragem completas apenas no primeiro pacote de uma conexão. Uma vez aceita, cria uma entrada na Tabela de Estados na RAM, permitindo que todos os pacotes subsequentes daquela sessão passem direto sem reprocessar as centenas de regras do firewall.
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 6: QUESTÕES COMENTADAS TESTKING -->
+  <section class='section'>
+    <h2>🏆 6. Questões Comentadas Padrão TestKing</h2>
+    <div class='box' id='quiz_S01D01_1' style='margin-bottom:24px'>
+  <span class='testking-tag'>TESTKING SIMULADO OFICIAL — QUESTÃO</span>
+  <h3 style='color:var(--ink);font-size:17.5px;margin-top:0'>Ao conectar via console serial ou SSH em um appliance OPNsense, qual utilitário de linha de comando é o responsável direto por consultar métricas, tabelas e controlar o motor Packet Filter do kernel?</h3>
+  <div class='quiz-opts' style='margin-top:14px'>
+    <button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_1', 'A', false, 'O comando iptables pertence ao ecossistema Linux/Netfilter. O OPNsense utiliza o kernel FreeBSD com o motor Packet Filter (pf).', 'O motor pf é como o segurança da portaria: anota quem entrou com crachá e libera a saída rápida na volta pela Tabela de Estados.')"><b>A</b> iptables -L -n -v</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_1', 'B', true, 'O utilitário \'pfctl\' é o comando oficial e nativo do FreeBSD para inspecionar, carregar regras, liberar tabelas e monitorar o motor pf.', 'O painel de bordo oficial do motor do carro.')"><b>B</b> pfctl (Packet Filter Control)</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_1', 'C', false, 'O UFW (Uncomplicated Firewall) é um frontend para iptables/nftables em distribuições Debian/Ubuntu.', 'O motor pf é como o segurança da portaria: anota quem entrou com crachá e libera a saída rápida na volta pela Tabela de Estados.')"><b>C</b> ufw status verbose</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_1', 'D', false, 'O systemctl e firewalld são ferramentas do systemd exclusivas de ambientes Linux.', 'O motor pf é como o segurança da portaria: anota quem entrou com crachá e libera a saída rápida na volta pela Tabela de Estados.')"><b>D</b> systemctl status firewalld</button>
+
+  </div>
+  <div class='quiz-result'>
+    <div class='quiz-result-head'></div>
+    <div class='quiz-result-body'></div>
+    <div class='quiz-ref'>💡 <b>Analogia do Sênior para Fixar:</b> O motor pf é como o segurança da portaria: anota quem entrou com crachá e libera a saída rápida pela Tabela de Estados.</div>
+    <button class='retry-btn' onclick="retryQuiz('quiz_S01D01_1')">🔄 Tentar Novamente</button>
+  </div>
+</div>
+    <div class='box' id='quiz_S01D01_2' style='margin-bottom:24px'>
+  <span class='testking-tag'>TESTKING SIMULADO OFICIAL — QUESTÃO</span>
+  <h3 style='color:var(--ink);font-size:17.5px;margin-top:0'>O que acontece se a Tabela de Estados (State Table) do OPNsense atingir o limite máximo configurado de memória durante um ataque de negação de serviço (DoS)?</h3>
+  <div class='quiz-opts' style='margin-top:14px'>
+    <button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_2', 'A', false, 'O pf não faz conversão dinâmica arbitrária de modo de operação.', 'A Tabela de Estados lotando é como a balada com lotação máxima: barra novos clientes na porta para proteger o espaço interno.')"><b>A</b> O firewall converte automaticamente todas as conexões para modo sem estado (stateless) sem perdas.</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_2', 'B', true, 'Quando a tabela de estados esgota, o pf rejeita novas tentativas de conexão para proteger a integridade do kernel, mesmo que haja largura de banda livre no link.', 'A Tabela de Estados lotando é como a balada com lotação máxima: barra novos clientes na porta para proteger o espaço interno.')"><b>B</b> Novas conexões serão descartadas (dropped) porque o kernel não consegue alocar novos estados na RAM.</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_2', 'C', false, 'O esgotamento de tabela de estados não causa kernel panic nem reboot imediato do host.', 'A Tabela de Estados lotando é como a balada com lotação máxima: barra novos clientes na porta para proteger o espaço interno.')"><b>C</b> O FreeBSD reinicia o hardware imediatamente em modo de segurança.</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_2', 'D', false, 'O firewall opera por padrão em política \'Fail-Close\' (bloquear tráfego não rastreado).', 'Achar que a porta do cofre abre se a fechadura travar.')"><b>D</b> O tráfego passa a ser roteado diretamente pela placa de rede sem qualquer filtro.</button>
+
+  </div>
+  <div class='quiz-result'>
+    <div class='quiz-result-head'></div>
+    <div class='quiz-result-body'></div>
+    <div class='quiz-ref'>💡 <b>Analogia do Sênior para Fixar:</b> A Tabela de Estados lotando é como a balada com lotação máxima: barra novos clientes na porta para proteger o espaço interno.</div>
+    <button class='retry-btn' onclick="retryQuiz('quiz_S01D01_2')">🔄 Tentar Novamente</button>
+  </div>
+</div>
+    <div class='box' id='quiz_S01D01_3' style='margin-bottom:24px'>
+  <span class='testking-tag'>TESTKING SIMULADO OFICIAL — QUESTÃO</span>
+  <h3 style='color:var(--ink);font-size:17.5px;margin-top:0'>Qual sistema operacional base sustenta a distribuição OPNsense, provendo o subsistema de rede e segurança?</h3>
+  <div class='quiz-opts' style='margin-top:14px'>
+    <button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_3', 'A', false, 'O Proxmox VE é baseado em Debian, mas o OPNsense é construído sobre o ecossistema BSD.', 'O kernel HardenedBSD é como a fundação de concreto armado com proteção antissísmica: evita invasões por estouro de memória no sistema.')"><b>A</b> Debian GNU/Linux 12 (Bookworm)</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_3', 'B', true, 'O OPNsense é derivado do FreeBSD/HardenedBSD, aproveitando a pilha de rede TCP/IP altamente performática e o subsistema de segurança do Unix.', 'O kernel HardenedBSD é como a fundação de concreto armado com proteção antissísmica: evita invasões por estouro de memória no sistema.')"><b>B</b> FreeBSD / HardenedBSD</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_3', 'C', false, 'Alpine é uma distribuição Linux minimalista voltada a containers Docker.', 'O kernel HardenedBSD é como a fundação de concreto armado com proteção antissísmica: evita invasões por estouro de memória no sistema.')"><b>C</b> Alpine Linux Musl</button>
+<button class='quiz-opt' onclick="answerQuiz('quiz_S01D01_3', 'D', false, 'RHEL é uma distribuição Linux corporativa mantida pela IBM/Red Hat.', 'O kernel HardenedBSD é como a fundação de concreto armado com proteção antissísmica: evita invasões por estouro de memória no sistema.')"><b>D</b> Red Hat Enterprise Linux (RHEL)</button>
+
+  </div>
+  <div class='quiz-result'>
+    <div class='quiz-result-head'></div>
+    <div class='quiz-result-body'></div>
+    <div class='quiz-ref'>💡 <b>Analogia do Sênior para Fixar:</b> O kernel HardenedBSD é como a fundação de concreto armado com proteção antissísmica: evita invasões por estouro de memória no sistema.</div>
+    <button class='retry-btn' onclick="retryQuiz('quiz_S01D01_3')">🔄 Tentar Novamente</button>
+  </div>
+</div>
+  </section>
+
+  <!-- SEÇÃO 7: PROCEDIMENTO PROFISSIONAL -->
+  <section class='section'>
+    <h2>📋 7. Procedimento Operacional Profissional</h2>
+    <div class='box'>
+      <h3>Regras de Ouro de Segurança para este Dia:</h3>
+      <ul>
+        <li><b>Regra 1:</b> Mantenha a gerência WebGUI e SSH restrita à interface LAN.</li>
+        <li><b>Regra 2:</b> Sempre valide o checksum SHA-256 antes de aplicar qualquer alteração crítica de kernel.</li>
+        <li><b>Regra 3:</b> Registre no ticket de chamado as evidências de validação antes de dar o chamado como concluído.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 8: VALIDAÇÃO FINAL -->
+  <section class='section'>
+    <h2>✅ 8. Validação e Encerramento da Missão</h2>
+    <div class='box validation'>
+      <b>Evidências Homologadas:</b><br>
+      ✔ Kernel FreeBSD inicializado com sucesso.<br>
+      ✔ Motor pf ativo e inspecionando estados de conexão.<br>
+      ✔ Sem erros de buffer ou descarte de pacotes.<br>
+      ✔ Backup de configuração registrado.
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>Diário de um Admin Jr. — Formação OPNsense Enterprise · 2026</p>
+  <p>Desenvolvido com foco em alta retenção, visual noir de datacenter e engenharia real de redes.</p>
+</footer>
+</body></html>

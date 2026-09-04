@@ -1,0 +1,501 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 5 · Dia 1 — Arquitetura do Proxmox Backup Server: Rust, Chunks e Deduplicação | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../../MES_01_PROXMOX_FUNDAMENTOS/SEMANA_04_STORAGE_ZFS/DIA_05_S04D05.html'>← Semana 4</a><a href='#'>Semana 5</a><a href='DIA_02_S05D02.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 4:</b> Você dominou storages locais e de rede. Agora você entra no MÊS 2 conhecendo o Proxmox Backup Server (PBS): a solução empresarial escrita em Rust que substitui backups pesados tradicionais por deduplicação global baseada em chunks de 4MB.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Arquitetura de Backup Empresarial (PBS).</b> Você analisa a estrutura de chunks, SHA-256 e o motor de alta velocidade em Rust.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 5 · Dia 1 | Nível Júnior — Proxmox Backup Server & Integração</div>
+  <h1>Arquitetura do Proxmox Backup Server: Rust, Chunks e Deduplicação</h1>
+  <p>Entendendo a quebra dinâmica de blocos (Content-Defined Chunking) e deduplicação global em nível corporativo</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S05D01.png' alt='Prancha em seis quadros sobre Arquitetura do Proxmox Backup Server: Rust, Chunks e Deduplicação'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#5001</b>: 'A infraestrutura corporativa possui 40 VMs Windows e Linux gerando mais de 5TB de dados por dia. O backup tradicional via vzdump está saturando a rede e consumindo 100TB de storage a cada duas semanas. O datacenter implantou um servidor dedicado com <span class="hint" data-tip="Servidor corporativo de backup em Rust com deduplicação, criptografia e verify jobs." onclick="openGlossary(0)">Proxmox Backup Server (PBS)</span>. O chamado exige: (1) Entender a mecânica do <span class="hint" data-tip="Algoritmo que fatia discos em pedaços dinâmicos de ~4MB identificados por hash SHA-256." onclick="openGlossary(1)">Content-Defined Chunking</span>; (2) Demonstrar como a <span class="hint" data-tip="Deduplicação onde chunks idênticos entre diferentes VMs são gravados apenas UMA vez no storage." onclick="openGlossary(2)">Deduplicação Global</span> reduz em 90% o espaço em disco; (3) Auditar a estrutura de diretórios em <code>.chunks/</code>; e (4) Validar a velocidade do backup incremental através do QEMU dirty-bitmap.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje iniciamos o Módulo 2 e o Júnior me perguntou por que a empresa precisava do <b>Proxmox Backup Server (PBS)</b> se o Proxmox VE já fazia backup clássico com o vzdump gerando arquivos <code>.vma.zst</code> compactados.<br><br>Expliquei a matemática do desastre: se você tem 50 VMs de 100GB e roda vzdump diário, em uma semana você precisa de 35 Terabytes de storage, e a rede fica saturada por horas copiando arquivos gigantescos. O PBS revoluciona isso: ele fatia os dados em <b>chunks dinâmicos de 4MB</b> identificados por hash criptográfico SHA-256 e armazena com <b>deduplicação global</b>!<br><br>Além disso, com o <b>QEMU Dirty Bitmap</b>, o hypervisor mantém na memória RAM apenas os blocos que foram alterados desde o último backup. Rodamos o segundo backup da VM de 100GB e ele terminou em impressionantes <b>8 segundos</b>, transferindo apenas 40MB pela rede. O Júnior olhou o gráfico de deduplicação e entendeu por que o PBS é o padrão ouro da virtualização moderna.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>proxmox-backup-manager datastore list</code></td><td>Lista todos os datastores configurados no servidor PBS, seu caminho e integridade.</td></tr>
+    <tr><td><code>ls -la /backup/datastore/.chunks/</code></td><td>Exibe os 65.536 subdiretórios de chunks organizados pelos primeiros 4 dígitos do hash SHA-256.</td></tr>
+    <tr><td><code>proxmox-backup-client snapshot list --repository pbs-user@pbs!token@192.168.1.200:datastore</code></td><td>Lista todos os snapshots de backup salvos no repositório remoto via CLI.</td></tr>
+    <tr><td><code>proxmox-backup-manager version</code></td><td>Exibe a versão do daemon do PBS, compilador Rust e bibliotecas de criptografia.</td></tr>
+  </tbody></table>
+  <pre># No Proxmox Backup Server (PBS): Auditoria do Datastore
+# proxmox-backup-manager datastore list
+┌───────────┬────────────────────┬──────────┐
+│ name      │ path               │ comment  │
+╞═══════════╪════════════════════╪══════════╡
+│ datastore │ /tank/backup-pbs   │ Prod-PBS │
+└───────────┴────────────────────┴──────────┘
+
+# Inspecionando a estrutura de Chunks indexados por SHA-256
+$ ls -ld /tank/backup-pbs/.chunks/a1/
+drwxr-xr-x 2 backup backup 4096 Sep  1 15:00 /tank/backup-pbs/.chunks/a1/
+
+# Exemplo de arquivo de Chunk (identificado pelo seu hash):
+$ ls -lh /tank/backup-pbs/.chunks/a1/a1b2c3d4e5f6... (4.1 MB)
+
+# Inspeção do índice de backup de uma VM (manifesto .fidx de apenas 120 KB!)
+$ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
+-rw-r--r-- 1 backup backup 124K Sep  1 15:00 drive-scsi0.img.fidx
+-rw-r--r-- 1 backup backup  820 Sep  1 15:00 qemu-server.conf.blob</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🛡️ <b>Onde executar:</b> Terminal do servidor Proxmox Backup Server (<code>root@pbs:~#</code>) e terminal do Proxmox VE (<code>root@pve:~#</code>).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em datastores de laboratório ou teste. Não altere parâmetros de servidores de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Dispare o primeiro backup deduplicado no Proxmox Backup Server via CLI.</div></div>
+      <div class="lab-cmd">proxmox-backup-client backup root.pxar:/ --repository admin@pbs:tank-backup</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Datastore principal listado com status ativo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-client testa o fatiamento de dados em chunks dinâmicos de 4MB identificados por hash SHA-256.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Achar que o PBS gera arquivos .tar ou .vmdk tradicionais; o PBS armazena apenas blocos deduplicados na pasta .chunks/.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione os chunks de 4MB gerados e armazenados no datastore do PBS.</div></div>
+      <div class="lab-cmd">ls -lh /tank-backup/.chunks/ | head -10</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Visualização das subpastas organizadas por prefixo hexadecimal (00, 01, 02...).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> A deduplicação global no datastore reaproveita blocos idênticos de múltiplos servidores, economizando até 90% de espaço em disco.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Desativar o cache de dirty bitmaps nas VMs, forçando o cliente de backup a ler todo o disco virtual a cada ciclo incremental.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Execute um segundo backup incremental validando o reaproveitamento de blocos pelo dirty bitmap.</div></div>
+      <div class="lab-cmd">proxmox-backup-client backup root.pxar:/ --repository admin@pbs:tank-backup</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Exibição dos pacotes oficiais do PBS compilados em Rust.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O recurso de QEMU Dirty Bitmap mantém na memória do hypervisor apenas os setores modificados, permitindo backups incrementais em segundos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Reiniciar a VM logo antes do backup; reiniciar a VM reseta o dirty bitmap em RAM, forçando uma leitura completa do disco no próximo ciclo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Consulte o fator de deduplicação (Deduplication Factor) atingido no datastore.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager datastore status tank-backup</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Taxa de deduplicação reportando fator de economia de espaço (ex: 8.4x).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Medir o fator de deduplicação (Deduplication Factor) comprova a eficiência do PBS em relação a storages legados.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Colocar o datastore do PBS em discos de alta latência mecânicos sem cache SSD, sofrendo lentidão extrema na busca de hashes SHA-256.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente a economia de tráfego de rede e espaço em disco no chamado.</div></div>
+      <div class="lab-cmd"># Deduplicação PBS e Chunks SHA-256 homologados.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Relatório aprovado comprovando a redução drástica de volume de rede e disco.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Documentar o ganho de tempo e economia de storage no chamado valida o sucesso da arquitetura de backup corporativa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Não monitorar o crescimento da pasta de metadados do PBS, arriscando esgotamento de IOPS no sistema operacional do backup server.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que um backup incremental de uma VM de 500GB leva apenas 3 segundos para ser processado no Proxmox Backup Server (PBS) se apenas 50MB foram alterados?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque o Proxmox VE mantém um mapa de bits em memória RAM no QEMU chamado **Dirty Bitmap**. Em vez de ler todos os 500GB do disco procurando o que mudou, o hypervisor consulta o bitmap e lê EXATAMENTE os blocos alterados (50MB), calcula os hashes dos chunks e envia apenas os novos pedaços pela rede para o PBS, finalizando a tarefa quase instantaneamente.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é a estrutura interna fundamental que o Proxmox Backup Server utiliza para armazenar os dados no Datastore?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Arquivos zip ou tar tradicionais não oferecem deduplicação granular de blocos.')"><b>A</b> Gera um arquivo .zip gigante para cada backup de VM</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O PBS utiliza Content-Defined Chunking com hashing SHA-256. Se 10 VMs possuem os mesmos arquivos de sistema operacional, aquele chunk é gravado apenas uma vez na pasta .chunks/, e cada backup guarda apenas um arquivo de índice de poucos kilobytes apontando para os mesmos chunks.')"><b>B</b> Fatia os discos virtuais em pedaços de tamanho dinâmico (chunks de ~4MB), calcula o hash criptográfico SHA-256 de cada pedaço e armazena os chunks únicos na pasta .chunks/ indexados por arquivos de manifesto (.fidx/.didx)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O PBS é um sistema de storage de disco/NVMe moderno baseado em arquivos de índice e chunks.')"><b>C</b> Converte os discos em fitas magnéticas virtuais LTO-4</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O armazenamento do PBS é em sistema de arquivos local (ZFS ou EXT4) com estrutura de diretórios indexados.')"><b>D</b> Transfere os dados diretamente para uma tabela SQL sem arquivos</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A deduplicação do PBS em chunks de 4MB é a biblioteca central: se 100 VMs usam o mesmo Windows, aquele arquivo só é gravado uma única vez no storage.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Tentativa de copiar a pasta .chunks/ manualmente sem preservar índices</h2>
+  <p>Um técnico copiou manualmente os arquivos .fidx de uma pasta de VM para outro servidor sem copiar o diretório oculto .chunks/:</p>
+  <pre class="err">$ proxmox-backup-client restore vm/100/2026-09-01T15:00:00Z drive-scsi0.img /tmp/disco.raw
+Error: chunk 'a1b2c3d4e5f6...' does not exist in datastore
+(Falha crítica: o manifesto .fidx é apenas o mapa de ponteiros; os dados reais residem em .chunks/)</pre>
+  <div class='box question'>Qual é a relação entre os arquivos .fidx e a pasta .chunks/?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O arquivo .fidx (Fixed Index) é apenas uma lista ordenada de hashes SHA-256 de 32 bytes cada.')"><b>A</b> O arquivo .fidx contém todos os dados do disco comprimidos em ZIP</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! O arquivo .fidx contém apenas a sequência de hashes dos blocos. Ao restaurar, o cliente lê o .fidx, busca cada chunk correspondente em .chunks/ e remonta o disco original com fidelidade atômica.')"><b>B</b> O arquivo .fidx é o mapa de índices (esqueleto) que diz a ordem exata dos blocos; os dados reais (músculos) estão espalhados na pasta .chunks/ — para migrar um Datastore, deve-se copiar o repositório inteiro com a pasta .chunks/</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Os chunks precisam estar fisicamente presentes no storage local do PBS.')"><b>C</b> Os chunks são gerados novamente do zero pela internet durante o restore</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Verify Job do Proxmox Backup Server é o simulado de incêndio: testa a integridade criptográfica de cada snapshot sem precisar ligar as VMs.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Por que o PBS foi desenvolvido na linguagem Rust em vez de Python ou C puro?</h2>
+  <p>Em uma reunião de arquitetura, questionam por que a Proxmox escolheu a linguagem Rust para o Backup Server:</p>
+  <div class='box question'>Quais garantias técnicas a linguagem Rust oferece para um servidor de backup de missão crítica?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Servidores de backup corporativo precisam processar terabytes de dados criptografados por minuto em múltiplas threads. Rust garante máxima velocidade de CPU sem as falhas clássicas de ponteiros nulos ou estouro de buffer do C.')"><b>A</b> Rust entrega performance nativa comparável a C/C++ com processamento multi-thread paralelo de altíssima velocidade, somado à segurança estrita de memória em tempo de compilação (Memory Safety sem Garbage Collector lento), eliminando travamentos por vazamento de memória ou corrupção de ponteiros</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Linguagens de programação operam no nível de software e Kernel.')"><b>B</b> Porque Rust é a única linguagem compatível com discos SSD</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O PBS é um serviço daemon de backend robusto executado no Debian Linux bare-metal.')"><b>C</b> Porque programas em Rust rodam dentro do navegador web do cliente</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Live-Restore é o streaming de vídeo: a máquina virtual dá boot em 3 segundos e você já trabalha enquanto o resto do disco baixa em segundo plano.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Instale o Proxmox Backup Server em hardware bare-metal dedicado ou VM isolada em storage ZFS.</li>
+    <li>Crie um Datastore corporativo em um pool de discos rápidos (SSD/SAS) dedicado para backups.</li>
+    <li>Monitore a integridade da pasta <code>.chunks/</code> garantindo permissões corretas para o usuário <code>backup:backup</code>.</li>
+    <li>Utilize sempre a versão mais recente do cliente <code>proxmox-backup-client</code> nos hosts PVE.</li>
+    <li>Valide a taxa de deduplicação obtida através da interface web do PBS (Deduplication Factor).</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Implemente a rotina de Verify Jobs periódicos no PBS para prevenir corrupção silenciosa de chunks e mantenha cópia física impressa da Paperkey no cofre da empresa.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende a arquitetura de Content-Defined Chunking e hashing SHA-256 do PBS.</li>
+    <li>Você domina a separação técnica entre arquivos de índice (.fidx/.didx) e o repositório de dados (.chunks/).</li>
+    <li>Você entende o papel do Dirty Bitmap do QEMU na aceleração dos backups incrementais.</li>
+    <li>A fundação do Proxmox Backup Server foi estabelecida com excelência técnica.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Para sincronizar ou migrar datastores entre dois servidores PBS distintos, utilize o recurso nativo de 'Sync Jobs' do PBS.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A rotina de limpeza de chunks órfãos (Garbage Collection) e validação de corrupção (Verify Jobs) será o tema de amanhã no Dia 2.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: o PBS fatia os dados em chunks dinâmicos de ~4MB com hash SHA-256 e armazena os blocos únicos na pasta .chunks/ indexados por manifestos .fidx.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Arquitetura de chunks e Rust dominada com perfeição! Amanhã, no Dia 2, você aprenderá como funciona o motor de limpeza do PBS: a mecânica em duas fases (Mark & Sweep) do Garbage Collection e a execução de Verify Jobs para detecção de corrupção de backups.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

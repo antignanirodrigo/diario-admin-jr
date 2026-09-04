@@ -1,0 +1,500 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 3 — Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_02_S02D02.html'>← Dia 2</a><a href='#'>Semana 2</a><a href='DIA_04_S02D04.html'>Dia 4 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 2:</b> Você otimizou CPU e memória. Hoje você configura o subsistema de armazenamento da VM: entendendo por que usar IDE ou SATA virtual estrangula seus SSDs, e como o VirtIO SCSI Single com iothread e Discard entrega centenas de milhares de IOPS com economia real de espaço.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Arquitetura de Storage Virtual e Controladoras.</b> Você seleciona barramentos de disco paravirtualizados e políticas de cache empresarial.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 3 | Nível Júnior — Máquinas Virtuais KVM</div>
+  <h1>Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM</h1>
+  <p>Garantindo máxima performance de I/O e liberação de espaço não utilizado no storage</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S02D03.png' alt='Prancha em seis quadros sobre Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#2003</b>: 'O storage ZFS do <b>pve01</b> está com 92% de ocupação, mas as VMs dentro dele relatam que apagaram mais de 2TB de arquivos e o espaço livre no Proxmox nunca aumentou. Além disso, a VM de banco de dados <b>102</b> está com fila de I/O saturada em uma controladora IDE virtual. O chamado exige: (1) Migrar o barramento da VM para <span class="hint" data-tip="Controladora paravirtualizada dedicada com uma fila de I/O exclusiva por disco." onclick="openGlossary(0)">VirtIO SCSI Single</span>; (2) Habilitar <span class="hint" data-tip="Cria uma thread dedicada do Kernel no host para processar o I/O do disco sem travar a CPU da VM." onclick="openGlossary(1)">iothread=1</span>; (3) Ativar a flag <span class="hint" data-tip="Instrui o QEMU a repassar comandos TRIM do SO convidado para liberar espaço real no storage ZFS/Thin." onclick="openGlossary(2)">Discard</span> em todos os discos; e (4) Executar o comando <code>fstrim -av</code> dentro da VM.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior tentou desligar uma máquina virtual pelo painel web clicando em 'Shutdown'. Passaram-se 10 minutos e a VM continuava com status 'running'. Sem paciência, ele clicou no botão vermelho 'Stop' (o temido puxão de cabo da tomada). A VM desligou na marra, mas quando ligou de volta, a tabela do MySQL estava corrompida exigindo recuperação de emergência.<br><br>Sentei com ele e perguntei: 'Por que você acha que o Proxmox não conseguiu desligar a VM graciosamente?'. Ele não sabia. Mostrei que sem o <b>QEMU Guest Agent</b> instalado dentro do sistema operacional convidado, o hypervisor é cego: não sabe os endereços IP da VM, não consegue congelar o sistema de arquivos (fsfreeze) para snapshots seguros e depende apenas de sinais ACPI que muitas vezes o SO ignora.<br><br>Instalamos o pacote <code>qemu-guest-agent</code> dentro da VM, ativamos a flag <code>agent: 1</code> no Proxmox e testamos o canal com <code>qm guest cmd 100 ping</code>. Na hora, os IPs apareceram no painel e o shutdown gracioso passou a responder em 2 segundos. Hoje você vai blindar suas VMs com o Guest Agent.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>qm set 102 --scsihw virtio-scsi-single</code></td><td>Define a controladora de armazenamento como VirtIO SCSI Single corporativa.</td></tr>
+    <tr><td><code>qm set 102 --scsi0 local-zfs:vm-102-disk-0,discard=on,iothread=1</code></td><td>Ativa o suporte a Discard/TRIM e processamento de I/O em thread dedicada no disco scsi0.</td></tr>
+    <tr><td><code>fstrim -av (dentro da VM Linux)</code></td><td>Executa o descarte de blocos livres no sistema de arquivos, liberando espaço real no pool ZFS/Thin do Proxmox.</td></tr>
+    <tr><td><code>Optimize-Volume -DriveLetter C -Defrag -Verbose (Windows)</code></td><td>Executa a instrução TRIM manual no Windows para recuperar blocos de storage.</td></tr>
+  </tbody></table>
+  <pre># Configuração profissional aplicada na VM 102
+$ qm set 102 --scsihw virtio-scsi-single
+$ qm set 102 --scsi0 local-zfs:vm-102-disk-0,discard=on,iothread=1,ssd=1
+
+$ cat /etc/pve/qemu-server/102.conf | grep -E 'scsi'
+scsi0: local-zfs:vm-102-disk-0,discard=on,iothread=1,size=100G,ssd=1
+scsihw: virtio-scsi-single
+
+# Execução do TRIM dentro da VM Linux
+$ sudo fstrim -av
+/: 42.8 GiB (45957169152 bytes) trimmed on /dev/sda1
+/var/log: 12.1 GiB (12992286720 bytes) trimmed on /dev/sdb1
+
+# Verificação de espaço recuperado no host ZFS
+$ zfs list local-zfs/vm-102-disk-0
+NAME                         USED  AVAIL     REFER  MOUNTPOINT
+local-zfs/vm-102-disk-0     45.1G  1.82T     45.1G  -  (reduziu de 100G para 45.1G!)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🖥️ <b>Onde executar:</b> Terminal do Nó Proxmox para comandos <code>qm</code>; ou Console VNC da VM (acessível via Web UI > Nó > VM ID > Console).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em VMs de laboratório ou teste. Não altere parâmetros de máquinas de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Instale e habilite o serviço do QEMU Guest Agent dentro da VM convidada.</div></div>
+      <div class="lab-cmd"># dentro da VM:
+apt update && apt install -y qemu-guest-agent && systemctl enable --now qemu-guest-agent</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Visualização da controladora atual.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Instalar o pacote qemu-guest-agent dentro da VM habilita o canal de comunicação bidirecional com o hypervisor via soquete serial VirtIO.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Achar que o Guest Agent já vem instalado em imagens ISO limpas do Debian/Ubuntu; o pacote precisa ser explicitamente instalado e ativado.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Ative a flag do Guest Agent na configuração do Proxmox VE.</div></div>
+      <div class="lab-cmd">qm set 100 --agent 1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VirtIO SCSI Single configurado no arquivo .conf.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Habilitar a flag agent=1 no arquivo de configuração do Proxmox instrui o QEMU a abrir o canal de comunicação /dev/virtio-ports/org.qemu.guest_agent.0.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ativar agent=1 na configuração da VM mas esquecer de iniciar o serviço systemctl enable --now qemu-guest-agent dentro da VM.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Teste o canal de comunicação serial disparando um ping pelo hypervisor.</div></div>
+      <div class="lab-cmd">qm guest cmd 100 ping</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Flags de alto desempenho gravadas com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando qm guest cmd <vmid> ping testa a comunicação em tempo real e valida se o daemon está respondendo aos chamados da API.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Executar comandos de snapshot sem validar o ping do agente, arriscando gerar snapshots inconsistentes de banco de dados.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Consulte os endereços IP reais de todas as interfaces da VM via CLI.</div></div>
+      <div class="lab-cmd">qm guest cmd 100 network-get-interfaces</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Mensagem reportando a quantidade exata de GiB liberados no storage.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Consultar qm guest cmd <vmid> network-get-interfaces exibe os endereços IPv4/IPv6 reais de todas as placas da VM diretamente no painel web.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Depender de varreduras de rede ou ARP no switch para descobrir o IP de uma máquina virtual recém-criada.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Execute um desligamento gracioso com sincronização de buffers de disco.</div></div>
+      <div class="lab-cmd">qm shutdown 100</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Volume ZFS reduzido refletindo exatamente o espaço limpo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Executar o shutdown gracioso com qm shutdown valida que o sistema operacional convidado encerra os serviços e sincroniza o buffer de disco antes de desligar.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Usar 'qm stop' (equivalente a puxar o cabo da tomada) em ambientes de produção, corrompendo tabelas InnoDB do MySQL/PostgreSQL.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que quando você apaga um arquivo grande de 50GB dentro de uma máquina virtual, o storage do Proxmox VE (ZFS ou LVM-Thin) NÃO recupera esse espaço automaticamente se a opção 'Discard' estiver desmarcada?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque o sistema de arquivos da VM apenas desmarca os blocos em sua tabela interna (inodos), sem enviar zeros físicos para o disco. Sem a flag 'Discard' ativa no disco virtual, o comando TRIM do SO convidado é ignorado pelo QEMU, fazendo com que o storage do Proxmox continue considerando aqueles blocos como dados alocados.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é a combinação de arquitetura de controladora e disco recomendada pela engenharia do Proxmox para extrair a máxima performance de SSDs/NVMe e permitir liberação de espaço?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O barramento IDE emulado é extremamente lento, tem limite de 4 dispositivos e não suporta filas paralelas de I/O.')"><b>A</b> Controladora IDE antiga com Cache Writeback e Discard desativado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O 'VirtIO SCSI Single' cria uma controladora dedicada para cada disco, a flag 'iothread' isola o processamento de I/O em uma thread de CPU separada no host, e 'discard=on' repassa comandos TRIM para o storage subjacente.')"><b>B</b> Controlador SCSI tipo 'VirtIO SCSI Single', disco conectado via barramento SCSI com flags 'iothread=1' e 'discard=on' ativas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Controladoras SATA emuladas possuem sobrecarga de CPU e Write-Through penaliza gravações síncronas.')"><b>C</b> Disco SATA virtual simples com Cache tipo Write-Through em storage USB</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Discos virtuais de VMs exigem emulação de bloco local em alto desempenho.')"><b>D</b> Desativar controladoras de disco e acessar o armazenamento exclusivamente via protocolo FTP</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Storage ZFS cheio mesmo após apagar 500GB dentro da VM</h2>
+  <p>O administrador apagou uma pasta de logs de 500GB dentro da VM 102, mas o comando zfs list no host continuou mostrando o disco ocupando 100% do provisionado:</p>
+  <pre class="err">$ fstrim -v / (dentro da VM)
+fstrim: /: the discard operation is not supported
+(Erro: o QEMU não repassa o comando porque a flag discard não está ativa no disco virtual)</pre>
+  <div class='box question'>Qual é o procedimento para habilitar o suporte e liberar o espaço físico no ZFS?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Ação destrutiva que apagaria todas as VMs do datacenter.')"><b>A</b> Formatar o disco do host físico inteiro</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! Com 'discard=on' e controladora SCSI, o QEMU expõe o recurso de UNMAP/TRIM para o SO convidado, permitindo que o fstrim libere os blocos no pool ZFS subjacente.')"><b>B</b> Ativar a flag 'discard=on' nas configurações do disco da VM no Proxmox, reiniciar a VM e executar fstrim -av novamente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O recurso de trim funciona nativamente no ZFS e LVM-Thin quando configurado corretamente.')"><b>C</b> Desativar o ZFS e migrar para EXT4 sem snapshots</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Qual política de Cache de Disco usar em nós sem controladora RAID com bateria (BBU)?</h2>
+  <p>Um técnico quer configurar a política de cache de disco como 'Writeback (Unsafe)' para ganhar velocidade em um servidor que não possui no-break nem bateria BBU:</p>
+  <div class='box question'>Qual é o risco crítico de utilizar Writeback Unsafe sem proteção elétrica garantida?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Em ambientes de produção sem bateria BBU ou em storages ZFS/Ceph corporativos, a política padrão recomendada é 'Default (No cache)' ou 'Directsync', onde os comandos de flush são respeitados com segurança.')"><b>A</b> Risco severo de corrupção do sistema de arquivos e perda total de transações de banco de dados em caso de queda de energia, pois o QEMU ignora as solicitações de sincronização em disco (flush/fsync)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A memória RAM é volátil e perde 100% dos dados no momento em que a energia é cortada.')"><b>B</b> Nenhum risco, pois a memória RAM guarda os dados para sempre mesmo sem energia</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O Proxmox permite a configuração, cabendo ao administrador entender os riscos de integridade.')"><b>C</b> O Proxmox não permite ligar a VM se o cache for alterado</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Discos Virtuais: VirtIO SCSI Single, iothread e Discard/TRIM: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Defina o controlador de armazenamento da VM como <code>VirtIO SCSI Single</code> para que cada disco possua sua própria fila de I/O.</li>
+    <li>Nos discos virtuais, habilite sempre as flags <code>discard=on</code>, <code>iothread=1</code> e <code>ssd=1</code> (emula SSD para o SO convidado).</li>
+    <li>Mantenha a política de Cache em <code>Default (No cache)</code> para storages ZFS, Ceph ou LVM-Thin garantindo integridade de dados.</li>
+    <li>Dentro do sistema operacional convidado (Linux), configure um cron/timer para executar <code>fstrim -av</code> semanalmente.</li>
+    <li>No Windows, verifique se o serviço 'Otimizar Unidades' (Defrag/Trim) está ativo semanalmente.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Sempre instale o QEMU Guest Agent em todas as VMs para garantir desligamento limpo e use drivers VirtIO para evitar overhead de emulação de hardware.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você domina a arquitetura VirtIO SCSI Single e sabe por que ela supera controladoras legadas.</li>
+    <li>Você compreende o papel das iothreads na redução de latência de CPU do host.</li>
+    <li>Você configurou o fluxo de Discard/TRIM liberando espaço real no storage.</li>
+    <li>Você entende as políticas de Cache de disco e seus impactos em integridade de dados.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Se um sistema operacional legado não possuir drivers VirtIO instalados, reverta temporariamente o barramento para SATA ou IDE até que os drivers sejam atualizados.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> O mecanismo de Discard e controle de IOPS de disco reaparecerá no Módulo de Storage ZFS e LVM-Thin (Semana 4).</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: a combinação padrão da indústria é VirtIO SCSI Single com iothread=1 e discard=on.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Armazenamento virtual ajustado com excelência! Amanhã, no Dia 4, você dominará o papel vital do QEMU Guest Agent: aprendendo como o comando fsfreeze garante snapshots atômicos consistentes e sem corrupção de banco de dados.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

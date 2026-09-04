@@ -1,0 +1,507 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 6 · Dia 4 — Sync Jobs Remotos e Replicação Offsite entre Servidores PBS | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_S06D03.html'>← Dia 3</a><a href='#'>Semana 6</a><a href='DIA_05_S06D05.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 3:</b> Você dominou as técnicas de restauração local. Hoje você protege a empresa contra a destruição física do datacenter: implementando a regra 3-2-1 de backup através de Sync Jobs remotos entre múltiplos servidores PBS com criptografia TLS e limitação de banda.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Replicação Geográfica e Resiliência Offsite.</b> Você configura conexões Remote no PBS, agenda Sync Jobs e monitora replicação WAN.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 6 · Dia 4 | Nível Júnior — Estratégias de Backup, Restore & DR</div>
+  <h1>Sync Jobs Remotos e Replicação Offsite entre Servidores PBS</h1>
+  <p>Implementando a regra 3-2-1 de backup com replicação segura via WAN entre filiais e nuvem</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S06D04.png' alt='Prancha em seis quadros sobre Sync Jobs Remotos e Replicação Offsite entre Servidores PBS'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#6004</b>: 'Para atender às normas de Disaster Recovery e a <span class="hint" data-tip="3 cópias dos dados em 2 mídias diferentes, sendo 1 cópia obrigatoriamente fora do site (Offsite)." onclick="openGlossary(0)">Regra 3-2-1</span>, todos os backups do PBS Local (Matriz) devem ser sincronizados diariamente para um segundo servidor PBS Offsite (Nuvem/Filial em <b>198.51.100.50</b>). O link de internet possui 100Mbps e a sincronização não pode saturar a rede durante o horário comercial. O chamado exige: (1) Cadastrar o <span class="hint" data-tip="Conexão que define endereço, porta e credenciais do servidor PBS remoto." onclick="openGlossary(1)">Remote Endpoint</span> no PBS da Matriz; (2) Criar o <span class="hint" data-tip="Tarefa agendada que puxa apenas os chunks novos/modificados do datastore remoto via TLS." onclick="openGlossary(2)">Sync Job</span>; (3) Limitar a banda WAN com <span class="hint" data-tip="Controle de taxa máxima de transferência para não saturar a internet da empresa." onclick="openGlossary(3)">Rate Limiting (rate-in)</span>; e (4) Validar a integridade dos dados replicados.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o auditor de segurança perguntou o que aconteceria com os backups da empresa se o prédio principal sofresse um incêndio ou inundação. O Júnior respondeu que os backups estavam seguros no servidor PBS do rack ao lado. O auditor anotou 'Não-Conformidade Grave' no relatório.<br><br>Expliquei pro Júnior a sagrada <b>Regra de Backup 3-2-1</b>: você precisa ter 3 cópias dos dados, em 2 mídias diferentes, com <b>1 cópia fora do prédio (offsite)</b>. Mostrei como o PBS resolve isso de forma elegante com os <b>Sync Jobs</b>.<br><br>Configuramos um PBS secundário em outro datacenter, criamos uma tarefa de sincronização com controle de banda (<code>--rate-in 50M</code>) e replicamos apenas os chunks novos pela internet de madrugada. O Júnior viu a segunda cópia verde no dashboard e blindou a empresa contra desastres físicos.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>proxmox-backup-manager remote list</code></td><td>Lista todas as conexões remotas cadastradas no servidor PBS local.</td></tr>
+    <tr><td><code>proxmox-backup-manager sync-job create sync-cloud --remote pbs-offsite --remote-store remote-ds --store local-ds --schedule '01:00'</code></td><td>Cria um agendamento de sincronização automática entre datastores.</td></tr>
+    <tr><td><code>proxmox-backup-manager sync-job run-now sync-cloud</code></td><td>Dispara a execução manual imediata de um Sync Job.</td></tr>
+    <tr><td><code>proxmox-backup-manager datastore update local-ds --rate-in 10MB</code></td><td>Aplica limite de banda máxima de download (10 MB/s) para o Datastore.</td></tr>
+  </tbody></table>
+  <pre># 1. No PBS Matriz: Criação do Remote para o PBS Nuvem/Offsite
+# proxmox-backup-manager remote create pbs-cloud \
+    --host 198.51.100.50 \
+    --auth-id 'sync-user@pbs!synctok' \
+    --password '8f7e6d5c-4b3a-2f1e-0d9c-8b7a6f5e4d3c' \
+    --fingerprint '2b:3c:4d:5e:6f:7a:8b:9c:0d:1e:2f:3a:4b:5c:6d:7e:8f:9a:0b:1c:2d:3e:4f:5a:6b:7c:8d:9e:0f:1a'
+
+# 2. Criação do Sync Job com Rate Limiting de 50Mbps (6.25 MB/s)
+# proxmox-backup-manager sync-job create sync-diario-offsite \
+    --remote pbs-cloud \
+    --remote-store backup-cloud \
+    --store backup-local \
+    --schedule 'daily 02:00' \
+    --rate-in 6250k
+
+# 3. Execução manual e monitoramento do log de sincronização
+# proxmox-backup-manager sync-job run-now sync-diario-offsite
+TASK OK: Starting datastore sync job 'sync-diario-offsite'
+Syncing datastore 'backup-cloud' from remote 'pbs-cloud' to 'backup-local'
+group vm/100: 4 snapshots to sync
+  snapshot vm/100/2026-09-01T15:00:00Z: 142 chunks (12 new chunks to download, 130 chunks already present locally)
+  downloaded 48.2 MB in 7.8 seconds (6.17 MB/s - Rate Limited)
+group vm/101: 2 snapshots to sync (0 new chunks to download - 100% deduplicated!)
+Sync job finished successfully!</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🔄 <b>Onde executar:</b> Terminal do Nó Proxmox VE (como <code>root</code>) executando <code>qmrestore</code> e <code>proxmox-file-restore</code>.</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em agendamentos de laboratório ou teste. Não altere parâmetros de máquinas de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Configure um Remote PBS em outra localidade geográfica para replicação offsite.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager remote create pbs-offsite --server pbs.datacenter2.com --auth-id sync-bot@pbs!token --fingerprint &lt;fingerprint&gt;</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Endpoint remoto salvo com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Configurar um Remote PBS em outro datacenter e criar uma tarefa de Sync Job garante que os backups sejam replicados para fora do prédio (offsite).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Manter todos os backups no mesmo local físico da produção, violando a Regra 3-2-1 e arriscando perda total em caso de incêndio ou enchente.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie uma tarefa de Sync Job vinculada ao remote configurando limite de banda.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager sync-job create sync-remote-tank --remote pbs-offsite --remote-store tank-backup --store tank-offsite --rate-in 50M</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Sync Job programado no agendador.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O Sync Job transfere exclusivamente os chunks novos que o servidor de destino ainda não possui, minimizando o uso do link de WAN.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Fazer cópias manuais de arquivos gigantes pela rede em vez de usar os Sync Jobs otimizados do PBS.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Dispare a sincronização manual e acompanhe o tráfego exclusivo de chunks novos.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager sync-job run sync-remote-tank</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Sincronização de chunks em andamento.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> A flag --rate-in limita a largura de banda utilizada pela sincronização, impedindo que o tráfego de backup sature o link de Internet da empresa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Rodar sync jobs sem controle de banda durante o horário comercial, degradando o acesso à Internet de todos os colaboradores.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione o datastore remoto confirmando a presença da réplica 3-2-1 offsite.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager datastore status tank-offsite</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Deduplicação de tráfego comprovada com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Validar o status Quorum e saúde do datastore remoto confirma que a segunda cópia de segurança está 100% pronta para contingência.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Esquecer de monitorar o espaço em disco do PBS remoto, descobrindo que as sincronizações falharam há semanas por falta de storage.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Formalize o atendimento à Regra de Backup 3-2-1 no relatório de compliance.</div></div>
+      <div class="lab-cmd"># Replicação remota e Regra 3-2-1 homologadas.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Conformidade de segurança e DR arquivada com aprovação.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Documentar a topologia de replicação 3-2-1 no manual de compliance assegura conformidade com as normas ISO 27001 e SOC 2.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Não realizar testes de restauração a partir do servidor remoto para validar se os dados replicados estão íntegros.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que a replicação de backups via Sync Jobs entre dois servidores PBS é incomparavelmente mais rápida e eficiente do que usar rsync ou cópia de arquivos tradicional pela internet?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque o protocolo de Sync do PBS opera em **nível de Chunks e Índices**. O servidor de destino compara a lista de hashes SHA-256 que ele já possui em seu datastore com os hashes do servidor de origem: ele faz o download estritamente dos chunks que ainda não existem no destino. Se 98% dos blocos já foram sincronizados em dias anteriores, a replicação WAN de um backup de 1TB transfere apenas os 2% de chunks novos, gastando pouquíssimos megabytes de link de internet.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual comando no Proxmox Backup Server cadastra corretamente uma conexão remota (Remote) apontando para o servidor PBS offsite?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O git é um sistema de controle de versão de código-fonte, não o gerenciador de remotes do PBS.')"><b>A</b> git remote add pbs-cloud https://198.51.100.50:8007</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O utilitário proxmox-backup-manager remote create registra o endpoint remoto com seu endereço IP/FQDN, Token de autenticação seguro e o SSL Fingerprint SHA-256 para validação anti-MITM.')"><b>B</b> proxmox-backup-manager remote create pbs-offsite --host 198.51.100.50 --auth-id 'sync-user@pbs!synctoken' --password 'TOKEN_SECRET' --fingerprint 'SSL_FINGERPRINT'</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O comando cadastra storage NFS no PVE, sem relação com a replicação nativa entre servidores PBS.')"><b>C</b> pvesm add nfs remote-pbs --server 198.51.100.50</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O rsync bruto não entende a lógica de deduplicação e quebra a consistência de índices do PBS.')"><b>D</b> rsync -avz /backup/ root@198.51.100.50:/backup/</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A deduplicação do PBS em chunks de 4MB é a biblioteca central: se 100 VMs usam o mesmo Windows, aquele arquivo só é gravado uma única vez no storage.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Falha de autenticação TLS ao tentar sincronizar com o Remote</h2>
+  <p>O Sync Job falhou com a mensagem: 'SSL certificate verification failed: fingerprint mismatch':</p>
+  <pre class="err">TASK ERROR: remote connection failed: SSL fingerprint mismatch!
+expected: 2b:3c:4d...
+received: 99:aa:bb...
+(O certificado SSL do servidor PBS remoto foi renovado ou o IP está sob ataque MITM)</pre>
+  <div class='box question'>Qual é a conduta correta de segurança antes de atualizar o fingerprint?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Desativar checagem SSL expõe o tráfego de backup à interceptação.')"><b>A</b> Desativar a checagem SSL no firewall da empresa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! Divergência de fingerprint é um alerta crítico de segurança: pode indicar uma renovação legítima de certificado ou uma tentativa de interceptação Man-in-the-Middle na internet. A checagem com o responsável remoto é obrigatória antes de atualizar.')"><b>B</b> Contatar o administrador do PBS remoto por canal seguro, confirmar se o certificado TLS foi legitimamente renovado e, após a confirmação, atualizar o fingerprint no Remote com 'proxmox-backup-manager remote update pbs-cloud --fingerprint NOVO_HASH'</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Ação destrutiva sem relação com o certificado remoto.')"><b>C</b> Formatar o servidor local do PBS</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Verify Job do Proxmox Backup Server é o simulado de incêndio: testa a integridade criptográfica de cada snapshot sem precisar ligar as VMs.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Qual a diferença entre Pull Sync e Push Sync no Proxmox Backup Server?</h2>
+  <p>A equipe debate se o servidor da Matriz deve 'enviar' (Push) ou a Nuvem deve 'puxar' (Pull) os backups:</p>
+  <div class='box question'>Por que a arquitetura 'Pull' do PBS é considerada superior para segurança contra ransomware?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! No modelo Pull, o cofre remoto mantém a iniciativa da conexão. O servidor da Matriz não tem a senha nem o controle do servidor da Nuvem, tornando impossível para um invasor que tome a Matriz apagar os backups que já foram puxados para fora.')"><b>A</b> Porque no modelo Pull, o servidor de backup secundário (Offsite) conecta no servidor primário e puxa os dados; mesmo que um ransomware invada e destrua a Matriz, o atacante não possui as credenciais do servidor Offsite e não consegue apagar as cópias externas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Protocolos TCP suportam envio e recebimento normais.')"><b>B</b> Porque o modelo Push é proibido pelo protocolo TCP</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A transferência utiliza o protocolo nativo de chunks deduplicados.')"><b>C</b> Porque o modelo Pull compacta os dados em formato ZIP</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Live-Restore é o streaming de vídeo: a máquina virtual dá boot em 3 segundos e você já trabalha enquanto o resto do disco baixa em segundo plano.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Para atender a compliance de missão crítica, implemente sempre a <b>Regra 3-2-1</b> de backup com um PBS Offsite.</li>
+    <li>Cadastre o Remote Endpoint no servidor PBS de destino com Token de autenticação dedicado e SSL Fingerprint.</li>
+    <li>Crie um <b>Sync Job</b> agendado para rodar de madrugada após a conclusão dos backups locais.</li>
+    <li>Defina o parâmetro de <code>rate-in</code> para limitar a taxa de download e preservar a banda de internet corporativa.</li>
+    <li>Monitore os logs de sincronização e certifique-se de que a replicação atinge status <code>TASK OK</code> diariamente.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Execute simulados regulares de Disaster Recovery em rede isolada para homologar os tempos de RTO e RPO contratados com a diretoria.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende a eficiência extrema dos Sync Jobs em nível de Chunks e Hashes SHA-256.</li>
+    <li>Você domina a implementação da Regra 3-2-1 com PBS Offsite e modelo Pull anti-ransomware.</li>
+    <li>Você sabe como calibrar limites de banda (Rate Limiting) para links WAN corporativos.</li>
+    <li>A estratégia de replicação geográfica de backups foi homologada com sucesso.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Para pausar ou desativar um Sync Job sem deletar dados, execute <code>proxmox-backup-manager sync-job update JOBID --delete schedule</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A construção do Plano de Disaster Recovery (DR) completo e o cálculo de RTO/RPO será o tema de fechamento da Semana 6 amanhã no Dia 5.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: o comando <code>proxmox-backup-manager remote create</code> cadastra o endpoint remoto com autenticação e validação de SSL Fingerprint.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Sync Jobs remotos e Regra 3-2-1 dominados com perfeição! Amanhã, no Dia 5, você fechará a Semana 6 dominando o Plano de Disaster Recovery (DR): aprendendo a calcular RTO e RPO, desenhar playbooks de contingência e simular a recuperação de desastre após perda total de um datacenter.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

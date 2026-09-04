@@ -1,0 +1,512 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 4 — Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_03_S08D03.html'>← Dia 3</a><a href='#'>Semana 8</a><a href='DIA_05_S08D05.html'>Dia 5 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 3:</b> Você implantou o Ceph do zero. Hoje você desvenda o motor matemático que torna o Ceph invencível: o Algoritmo CRUSH (Controlled Replication Under Scalable Hashing), aprendendo como os dados são posicionados sem tabelas de alocação centralizadas e como substituir discos defeituosos a quente.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Engenharia de CRUSH Map e Manutenção de OSDs.</b> Você audita árvores CRUSH, comanda rebalanceamento de PGs e substitui OSDs danificados.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 4 | Nível Sênior — Cluster Corosync, HA & Ceph</div>
+  <h1>Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs</h1>
+  <p>O algoritmo determinístico de posicionamento de dados e troca de discos a quente sem parada</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S08D04.png' alt='Prancha em seis quadros sobre Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#8004</b>: 'O disco NVMe <b>osd.2</b> no nó <b>pve02</b> apresentou erros críticos de SMART e precisa ser substituído fisicamente sem interromper nenhuma das 30 VMs em produção. O chamado exige: (1) Compreender o funcionamento do <span class="hint" data-tip="Controlled Replication Under Scalable Hashing: algoritmo que calcula deterministicamente onde cada objeto deve ser gravado." onclick="openGlossary(0)">Algoritmo CRUSH</span>; (2) Marcar o OSD como <span class="hint" data-tip="pveceph osd stop / out: instrui o Ceph a evacuar os dados do disco para outros OSDs saudáveis." onclick="openGlossary(1)">OUT</span> para iniciar o auto-rebalanceamento; (3) Destruir o OSD antigo e substituí-lo a quente pelo novo disco; e (4) Validar o retorno do cluster ao estado <code>HEALTH_OK</code> com 100% dos Placement Groups (PGs) <code>active+clean</code>.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje simulei um dos piores pesadelos da engenharia de infraestrutura: puxei o cabo de força de um dos servidores físicos do cluster. O Júnior viu o nó sumir do painel web e gritou: 'O servidor morreu! Como o Proxmox sabe que ele não vai acordar do nada e tentar gravar no mesmo disco que o nó sobrevivente?'.<br><br>Essa foi a deixa perfeita pra ensinar o conceito mais crítico de Alta Disponibilidade: o <b>Fencing</b>. Expliquei o perigo mortal do Split-Brain: se dois servidores acharem que são donos da mesma máquina virtual ao mesmo tempo, ambos gravam no mesmo disco compartilhado e destroem o banco de dados em segundos. Para evitar isso, o Proxmox usa o <b>Hardware Watchdog</b> do kernel Linux.<br><br>O daemon de HA precisa enviar um batimento cardíaco pro chip Watchdog da placa-mãe a cada segundo. Se o nó perder o Quorum ou travar, o Watchdog não recebe o sinal e reseta a máquina física imediatamente (Self-Fencing). Só quando o cluster tem certeza matemática de que o nó morto foi isolado, o HA Manager (CRM) autoriza o nó vizinho a ligar a VM com total segurança.<br><br>Vimos o log do <code>ha-manager</code> eleger o novo líder e subir o serviço em 60 segundos com zero corrupção de dados. O Júnior entendeu que alta disponibilidade não é só religar máquina: é <b>garantir o isolamento seguro antes de qualquer recuperação</b>. Vamos colocar essa proteção em prática agora.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>ceph osd tree</code></td><td>Exibe a árvore hierárquica do CRUSH Map: nós físicos, racks, OSDs, status (up/down) e pesos (weight).</td></tr>
+    <tr><td><code>ceph osd out OSD_ID</code></td><td>Informa ao Ceph que o OSD não deve mais conter dados, disparando a evacuação e rebalanceamento automático de PGs.</td></tr>
+    <tr><td><code>pveceph osd destroy OSD_ID</code></td><td>Remove o OSD do CRUSH Map, autenticação e configuração do Ceph de forma segura.</td></tr>
+    <tr><td><code>ceph osd status</code></td><td>Exibe a lista de OSDs com estatísticas de latência de escrita/leitura e capacidade ocupada.</td></tr>
+  </tbody></table>
+  <pre># 1. Inspeção da árvore CRUSH do Ceph (ceph osd tree)
+# ceph osd tree
+ID  CLASS WEIGHT  TYPE NAME      STATUS REWEIGHT PRI-AFF
+ -1       5.86000 root default                          
+ -3       1.95300     host pve01                        
+  0   nvme 1.95300         osd.0     up  1.00000 1.00000
+ -5       1.95300     host pve02                        
+  1   nvme 1.95300         osd.1     up  1.00000 1.00000
+  2   nvme 1.95300         osd.2     up  1.00000 1.00000 (SMART Error!)
+ -7       1.95300     host pve03                        
+  3   nvme 1.95300         osd.3     up  1.00000 1.00000
+
+# 2. Evacuação e Rebalanceamento gracioso dos dados do osd.2
+# ceph osd out 2
+osd.2 marked out. Ceph is rebalancing Placement Groups (PGs)...
+
+# 3. Monitorando o rebalanceamento automático em tempo real
+# ceph -s
+  health: HEALTH_WARN
+          Degraded data redundancy: 48/128 pgs misplaced (recovering at 185 MB/s)
+(Após 2 minutos: 100% dos PGs active+clean nos demais OSDs!)
+
+# 4. Destruição do OSD antigo e criação do novo OSD pós-troca física
+# systemctl stop ceph-osd@2
+# pveceph osd destroy 2
+# pveceph osd create /dev/nvme0n1
+osd.2 created successfully on new NVMe drive!
+
+# 5. Cluster 100% saudável novamente:
+# ceph -s
+  health: HEALTH_OK (All 4 OSDs up & in, 128 pgs active+clean)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🏛️ <b>Onde executar:</b> Terminal do Nó Líder do Cluster (<code>root@pve-node1:~#</code>) e nós secundários para comandos <code>pvecm</code> e <code>ha-manager</code>.</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em clusters e storages Ceph de laboratório ou teste. Não altere parâmetros de nós em produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inicialize a rede e os monitores Ceph (MONs) em número ímpar nos nós do cluster.</div></div>
+      <div class="lab-cmd">pveceph install && pveceph init --network 10.10.20.0/24</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Árvore CRUSH exibindo hosts, OSDs e status up/in.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> A arquitetura hiperconvergente do Ceph transforma discos locais de múltiplos servidores em um pool de armazenamento distribuído unificado e redundante.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Instalar Ceph em redes de 1 Gbps; o Ceph exige redes dedicadas de 10 GbE ou superior para sincronização de dados e recuperação de OSDs sem lentidão.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie os gerenciadores de métricas Ceph MGR e crie OSDs nos discos NVMe físicos.</div></div>
+      <div class="lab-cmd">pveceph osd create /dev/nvme0n1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Ceph iniciando o rebalanceamento gracioso de PGs.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Os MONs (Monitors) mantêm o mapa mestre do cluster Ceph, os MGRs coletam métricas e os OSDs gerenciam a leitura e escrita nos discos físicos NVMe/SSD.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ter apenas 2 MONs em um cluster Ceph; monitores Ceph exigem número ímpar (mínimo de 3) para manter o quorum interno via algoritmo Paxos.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Configure um pool Ceph RBD com size=3 e min_size=2 para redundância distribuída.</div></div>
+      <div class="lab-cmd">ceph osd pool create rbd-pool 128 128 && ceph osd pool set rbd-pool size 3 && ceph osd pool set rbd-pool min_size 2</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Placement Groups realocados sem indisponibilidade.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Configurar pools Ceph com size=3 e min_size=2 garante que cada bloco seja gravado em 3 servidores físicos diferentes e continue gravando com 1 nó fora.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Definir min_size=1 em produção; se um segundo nó falhar com min_size=1, ocorrem dados inconsistentes e corrupção silenciosa no pool.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Audite a saúde do cluster hiperconvergente confirmando o estado HEALTH_OK.</div></div>
+      <div class="lab-cmd">pveceph status</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> OSD reintegrado à árvore com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando pveceph status e ceph osd status exibe o estado de saúde (HEALTH_OK), objetos degradados e velocidade de recuperação em tempo real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ignorar OSDs com status 'nearfull' (>85% de ocupação), arriscando travar todas as gravações do pool Ceph por esgotamento de espaço.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente a topologia de CRUSH Map e resiliência hiperconvergente da empresa.</div></div>
+      <div class="lab-cmd"># Storage Hiperconvergente Ceph homologado.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Procedimento de substituição de hardware homologado.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Registrar a topologia de CRUSH Map e a distribuição de OSDs conclui a entrega da infraestrutura de storage distribuído de alta performance.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Adicionar discos mecânicos lentos e SSDs rápidos no mesmo pool Ceph sem regras de CRUSH separadas, nivelando a performance por baixo.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que o Ceph não utiliza uma 'Tabela Central de Alocação de Arquivos' (como storages tradicionais) e como o algoritmo CRUSH localiza qualquer bloco instantaneamente?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque em storages com bilhões de objetos, uma tabela central de metadados torna-se um gargalo de desempenho e um ponto único de falha gigantesco. O **Algoritmo CRUSH** resolve isso através da matemática: ele é uma **função determinística**. O cliente calcula uma fórmula matemática usando o nome do objeto + mapa de topologia da rede (CRUSH Map) e obtém exatamente a lista de quais OSDs contêm aquele bloco em microssegundos, sem precisar consultar nenhum servidor mestre.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é o procedimento oficial e seguro no Proxmox VE para desativar e remover um OSD com defeito físico antes da troca do disco?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Puxar o disco sem comando força o cluster a reagir a uma falha abrupta em vez de realizar manutenção graciosa.')"><b>A</b> Puxar o disco do servidor sem rodar nenhum comando e formatar o nó</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! Essa sequência graciosa garante que todos os dados do disco defeituoso sejam evacuados e replicados nos outros OSDs saudáveis antes da destruição lógica e remoção física do hardware.')"><b>B</b> 1. Marcar o OSD como out: 'ceph osd out OSD_ID' (o cluster rebalanceia os dados para os outros discos); 2. Parar o daemon: 'systemctl stop ceph-osd@OSD_ID'; 3. Destruir o OSD: 'pveceph osd destroy OSD_ID'; 4. Trocar o disco físico; 5. Criar o novo OSD: 'pveceph osd create /dev/NOVO_DISCO'</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O comando pveceph purge destrói todo o cluster Ceph, causando perda catastrófica.')"><b>C</b> qm stop all && pveceph purge</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Desligar o switch quebra a comunicação de toda a infraestrutura.')"><b>D</b> Desligar o switch de rede Ceph</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O que significa 'misplaced objects' durante o rebalanceamento do Ceph?</h2>
+  <p>Ao marcar um OSD como out ou adicionar um novo nó, o ceph status exibe '15.000 objects misplaced':</p>
+  <pre class="err">[Ceph Recovery Status] 15420/85000 objects misplaced (18.14%)
+(Por que o Ceph reporta objetos misplaced em vez de degraded?)</pre>
+  <div class='box question'>Qual é a diferença técnica entre objetos 'Degraded' e 'Misplaced' no Ceph?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O termo é puramente de arquitetura de posicionamento de dados.')"><b>A</b> Misplaced significa que os arquivos foram roubados por hackers</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! Objetos misplaced têm 100% de segurança de cópias completas: o Ceph apenas sinaliza que está movendo os blocos em background para cumprir o equilíbrio perfeito de pesos entre os discos.')"><b>B</b> Degraded significa que existem MENOS cópias do que o exigido pela regra (ex: 2 de 3 cópias); Misplaced significa que o número total de cópias exigido (3) EXISTE e está íntegro, mas algumas cópias ainda estão em OSDs antigos aguardando serem movidas para a localização ideal calculada pelo CRUSH Map</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O Ceph opera com BlueStore nativo.')"><b>C</b> Misplaced significa que o Proxmox formatou os discos em NTFS</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Como o CRUSH Map garante que duas cópias do mesmo bloco nunca caiam no mesmo servidor físico?</h2>
+  <p>Um estudante pergunta o que impede o Ceph de gravar as 3 réplicas de um bloco no mesmo nó pve01:</p>
+  <div class='box question'>Como a regra de isolamento 'step chooseleaf host' atua no CRUSH Map?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! A hierarquia de buckets do CRUSH Map entende a topologia física (OSD -> Host -> Rack -> Datacenter), garantindo isolamento de domínio de falha em nível de máquina física ou rack inteiro.')"><b>A</b> A regra padrão do CRUSH Map utiliza a hierarquia 'step chooseleaf host', que obriga o algoritmo a selecionar nós físicos (hosts) DIFERENTES para cada uma das réplicas; mesmo que o pve01 tenha 10 discos OSDs, o CRUSH nunca grava duas cópias no mesmo host, garantindo que se o pve01 queimar inteiro, os dados estarão salvos no pve02 e pve03</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'A segregação é uma decisão matemática do algoritmo CRUSH.')"><b>B</b> O Proxmox usa cabos coloridos para separar as cópias</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O cálculo é 100% automático e determinístico em tempo real.')"><b>C</b> O administrador precisa escolher manualmente o disco de cada arquivo</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Ceph CRUSH Map, Rebalanceamento e Manutenção de OSDs: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de qualquer manutenção física em discos do Ceph, inspecione a árvore com <code>ceph osd tree</code>.</li>
+    <li>Marque o OSD a ser substituído como <code>out</code> com <code>ceph osd out OSD_ID</code> e aguarde o rebalanceamento de PGs.</li>
+    <li>Pare o serviço do OSD com <code>systemctl stop ceph-osd@ID</code> e destrua o registro com <code>pveceph osd destroy ID</code>.</li>
+    <li>Substitua o disco físico com defeito na gaveta hot-swap do servidor.</li>
+    <li>Crie o novo OSD com <code>pveceph osd create /dev/DISCO</code> e valide o retorno ao status <code>HEALTH_OK</code>.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Nunca opere clusters de 2 nós sem um QDevice externo para desempate de Quorum e utilize links de rede dedicados exclusivamente para o tráfego do Corosync.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende o funcionamento determinístico do Algoritmo CRUSH.</li>
+    <li>Você domina a diferença entre objetos degraded e misplaced durante rebalanceamentos.</li>
+    <li>Você sabe como executar a substituição a quente de OSDs defeituosos sem downtime.</li>
+    <li>A engenharia de storage distribuído do chamado #8004 foi homologada com excelência.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Caso marque um OSD como out por engano, reverta imediatamente executando <code>ceph osd in OSD_ID</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> O Grande Simulado Final de 40 Dias e a consolidação como Administrador Proxmox Sênior será o tema de encerramento amanhã no Dia 5.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: o fluxo seguro exige marcar o OSD como out, aguardar a evacuação de dados, parar o daemon, destruir o OSD no pveceph e criar o novo OSD pós-troca física.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>CRUSH Map e manutenção de OSDs dominados com precisão cirúrgica! Amanhã, no Dia 5, você fechará o MÊS 2 e todo o CURSO DE 40 DIAS no Grande Simulado Final: enfrentando uma simulação de desastre total em tempo real, onde Quorum, HA, Corosync e Ceph trabalharão juntos para manter a empresa operante!</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

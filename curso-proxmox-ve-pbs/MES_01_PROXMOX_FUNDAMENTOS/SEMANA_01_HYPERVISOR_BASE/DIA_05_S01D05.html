@@ -1,0 +1,499 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 1 · Dia 5 — Gestão do Proxmox: CLI pvesh, GUI e Logs do Sistema | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_S01D04.html'>← Dia 4</a><a href='#'>Semana 1</a><a href='../SEMANA_02_VMS_KVM/DIA_01_S02D01.html'>Semana 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 4:</b> O host está atualizado e estável. Hoje fechamos a Semana 1 dominando o coração da gestão do Proxmox VE: entendendo como a API REST comanda tudo por baixo dos panos, como usar a CLI <code>pvesh</code> para automação e como rastrear qualquer falha inspecionando tarefas (<span class="hint" data-tip="Unique Process Identifier: identificador único de tarefa assíncrona no Proxmox." onclick="openGlossary(3)">UPIDs</span>) nos logs de <code>/var/log/pve/tasks/</code>.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Automação via CLI e Diagnóstico Avançado de Tarefas.</b> Você ganha fluência na API do Proxmox via terminal para scripts e auditoria forense.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 1 · Dia 5 | Nível Júnior — Automação & Logs</div>
+  <h1>Gestão do Proxmox: CLI pvesh, GUI e Logs do Sistema</h1>
+  <p>dominando a API do Proxmox pelo terminal e diagnosticando falhas de daemons e tarefas</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S01D05.png' alt='Prancha em seis quadros sobre pvesh, API e logs de tarefas no Proxmox VE'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#1005</b>: "A equipe de monitoramento via Zabbix/Prometheus precisa coletar métricas de saúde do nó <b>pve01</b> e listar o status das tarefas via linha de comando para automação. Ao mesmo tempo, um operador relatou que a criação de um container LXC travou com a mensagem <code>TASK ERROR: command failed</code> sem mais detalhes na tela. O chamado exige: (1) Usar a ferramenta <span class="hint" data-tip="Shell de linha de comando para navegar diretamente na árvore da API REST do Proxmox." onclick="openGlossary(0)">pvesh</span> para consultar o endpoint <code>/nodes/pve01/status</code> e <code>/cluster/resources</code>; (2) Localizar o identificador <span class="hint" data-tip="UPID: formato padronizado que codifica nó, PID, timestamp e usuário da tarefa." onclick="openGlossary(3)">UPID</span> da tarefa travada; (3) Inspecionar o log detalhado no diretório de logs em <span class="hint" data-tip="Diretório onde o Proxmox armazena o histórico completo de logs de cada tarefa." onclick="openGlossary(4)">/var/log/pve/tasks/</span>; e (4) Criar um script de auditoria de 1 linha."</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Fechando a primeira semana, simulei uma pane no switch de gerência: a interface web pela porta 8006 ficou inacessível, mas tínhamos uma sessão SSH de emergência aberta. Olhei pro Júnior e disse: 'Um cliente importante precisa saber agora se a VM de banco de dados está ligada ou desligada, e você não tem navegador. O que você faz?'. Ele congelou na hora.<br><br>Apresentei pra ele a ferramenta mestra dos engenheiros seniores: o <code>pvesh</code>. Expliquei que tudo o que a interface web faz no navegador é apenas chamar a API REST interna do Proxmox. Com o comando <code>pvesh get /nodes</code> ou <code>qm list</code>, você consulta inventários, liga e desliga recursos, audita storages e lê tarefas ativas com muito mais velocidade do que clicando com o mouse.<br><br>Mostrei também como filtrar o <code>journalctl -u pveproxy</code> para ver requisições em tempo real e auditar os logs de tarefas em <code>/var/log/pve/tasks/</code>. Foi o dia em que o Júnior deixou de ser um 'clicador de botões' e virou um sysadmin que domina o hypervisor por linha de comando. É essa autonomia que você vai praticar hoje.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>pvesh get /nodes/localhost/status</code></td><td>Lê o status global do nó diretamente pela API REST do Proxmox em formato tabular ou JSON.</td></tr>
+    <tr><td><code>pvesh ls /nodes/localhost/tasks</code></td><td>Lista as tarefas recentes em execução ou finalizadas, exibindo seus UPIDs únicos e status.</td></tr>
+    <tr><td><code>journalctl -u pvedaemon -u pveproxy -e</code></td><td>Lê os eventos em tempo real dos serviços que atendem à API e processam requisições da web.</td></tr>
+    <tr><td><code>cat /var/log/pve/tasks/UPID:...</code></td><td>Exibe o log integral de saída de terminal de uma tarefa específica executada em background.</td></tr>
+  </tbody></table>
+  <pre>$ pvesh get /nodes/localhost/status
+┌──────────────────┬────────────────────────────────────────┐
+│ key              │ value                                  │
+├──────────────────┼────────────────────────────────────────┤
+│ cpu              │ 0.0381 (3.8%)                          │
+│ memory           │ 21474836480 (21.4 GB / 256 GB)         │
+│ pveversion       │ pve-manager/8.2.4/deb12                │
+│ uptime           │ 1814400 (21 days)                      │
+│ kversion         │ Linux 6.8.8-2-pve #1 SMP PREEMPT_DY... │
+└──────────────────┴────────────────────────────────────────┘
+
+$ pvesh get /nodes/localhost/tasks --limit 2
+┌────────────────────────────────────────────────────────────┬────────┬────────┐
+│ upid                                                       │ status │ type   │
+├────────────────────────────────────────────────────────────┼────────┼────────┤
+│ UPID:pve01:00003A12:00A12B34:66D4:qmstart:100:root@pam:    │ OK     │ qmstart│
+│ UPID:pve01:00003B90:00A12C50:66D4:vzcreate:200:root@pam:   │ OK     │vzcreate│
+└────────────────────────────────────────────────────────────┴────────┴────────┘</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🖥️ <b>Onde executar:</b> Terminal SSH direto no Nó físico Proxmox (logado como <code>root@pve:~#</code>) ou via console no monitor local.</div>
+  <div class='box warning'><strong>Segurança:</strong> Use apenas métodos <code>get</code> ao explorar o <code>pvesh</code> para evitar remoções acidentais de recursos.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Interaja diretamente com a API REST do Proxmox via CLI usando pvesh.</div></div>
+      <div class="lab-cmd">pvesh get /nodes</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Tabela com métricas de CPU, RAM, versão do kernel e uptime.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O utilitário pvesh permite interagir diretamente com a árvore da API REST local, listando recursos do datacenter sem depender do navegador web.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Executar métodos destrutivos como 'pvesh delete' sem validar previamente o endpoint exato da API, apagando configurações críticas do nó.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Filtre os logs de requisições web e transações da API com journalctl.</div></div>
+      <div class="lab-cmd">journalctl -u pveproxy -n 20 --no-pager</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Lista de 5 tarefas com colunas <code>upid</code>, <code>type</code>, <code>status</code> e <code>starttime</code>.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Filtrar o journalctl com -u pvedaemon e -u pveproxy isola os logs de transações administrativas e requisições HTTP, revelando a causa raiz de chamadas que deram erro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Rodar journalctl sem filtros em nós de alta carga, afogando o terminal com milhões de linhas de logs gerais do kernel.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione o histórico de tarefas administrativas em /var/log/pve/tasks/.</div></div>
+      <div class="lab-cmd">ls -lt /var/log/pve/tasks/ | head -10</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Leitura do arquivo de texto contendo a transcrição detalhada da execução.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Inspecionar o arquivo de log de tarefas em /var/log/pve/tasks/ permite auditar o histórico de criação, migração e backup de VMs com timestamp e usuário executor.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Apagar a pasta /var/log/pve/tasks/ achando que é lixo de disco; isso destrói o histórico de auditoria e tarefas em andamento do painel.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Consulte o status da assinatura corporativa do nó com pvesubscription.</div></div>
+      <div class="lab-cmd">pvesubscription get</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Mensagens de inicialização de workers e processamento de chamadas REST.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Consultar o status de assinatura com pvesubscription get valida a chave de suporte e o nível de cobertura do contrato corporativo do servidor.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ignorar alertas de licença expirada em ambientes corporativos de missão crítica, perdendo acesso ao suporte oficial da Proxmox Server Solutions.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o comando <code>pvesh</code> travar ou retornar <code>500 connection refused</code>, o Sênior-IA ajudará a diagnosticar o reinício do <code>pvedaemon</code> e a integridade do cluster filesystem em <code>/etc/pve/</code>.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Formalize o baseline da Semana 1 com relatório completo de comandos.</div></div>
+      <div class="lab-cmd"># Baseline do hypervisor concluído.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Execução de <code>pvesh get /nodes/localhost/qemu --output-format json</code> filtrando VMs com status <code>stopped</code>.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Consolidar o checklist de comandos CLI e baseline de logs conclui a homologação da Semana 1, garantindo que o nó físico está 100% pronto para receber máquinas virtuais.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Avançar para a criação de VMs na Semana 2 sem dominar os comandos de inspeção e logs do host físico.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Qual é a relação técnica direta entre um clique que você faz na interface web do Proxmox (GUI) e o comando 'pvesh' executado no terminal?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      A interface web (GUI) não executa comandos do sistema diretamente: ela faz chamadas HTTP REST (GET, POST, PUT, DELETE) para os endpoints da API servida pelo <span class="hint" data-tip="Serviço proxy reverso web." onclick="openGlossary(6)">pveproxy</span> / <span class="hint" data-tip="Daemon que processa a lógica de negócio da API." onclick="openGlossary(7)">pvedaemon</span>. O comando <code>pvesh</code> é simplesmente o cliente CLI oficial que acessa <b>exatamente a mesma árvore de endpoints da API</b> diretamente pelo terminal, sem precisar abrir o navegador.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual comando <code>pvesh</code> obtém o resumo completo de CPU, memória, versão do Kernel e uptime do nó local formatado como tabela?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O caminho /nodes/localhost/syslog exibe as linhas de log do sistema, não o resumo de CPU e memória do nó.')"><b>A</b> pvesh get /nodes/localhost/syslog</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O comando pvesh get /nodes/localhost/status consulta o endpoint da API REST de status do nó, retornando CPU, memória, swap, versão do kernel, uptime e contadores de I/O em formato estruturado.')"><b>B</b> pvesh get /nodes/localhost/status</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O comando pvesh delete destrói recursos e nunca deve ser usado para consulta de status.')"><b>C</b> pvesh delete /cluster/status</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O endpoint /cluster/firewall exibe as regras de firewall do datacenter, não o status de hardware do host.')"><b>D</b> pvesh get /cluster/firewall/rules</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Gestão do Proxmox: CLI pvesh, GUI e Logs do Sistema: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Investigando a causa raiz de um UPID com falha</h2>
+  <p>A interface web reporta <code>TASK ERROR: command 'rsync ...' failed: exit code 23</code> na tarefa <code>UPID:pve01:00004120:00B22C00:66D4:vzdump:100:root@pam:</code>:</p>
+  <div class='box question'>Onde você encontra o arquivo de log completo com cada linha executada por essa tarefa no sistema de arquivos do Proxmox?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O arquivo /tmp é volátil e não armazena os registros persistentes de auditoria de tarefas do Proxmox.')"><b>A</b> Em /tmp/tasks.log</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'O Proxmox armazena o log completo de cada tarefa em arquivos individuais dentro de /var/log/pve/tasks/ (subdivididos em diretórios hexadecimais como /var/log/pve/tasks/D/UPID:...). Consultar esse arquivo ou rodar journalctl/pvesh exibe o output integral da tarefa para diagnóstico.')"><b>B</b> Dentro da pasta de tarefas em /var/log/pve/tasks/ no arquivo com o nome exato do UPID correspondente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O arquivo /etc/pve/storage.cfg contém a definição dos storages, não os logs de execução de tarefas.')"><b>C</b> Em /etc/pve/storage.cfg</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Gestão do Proxmox: CLI pvesh, GUI e Logs do Sistema: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 "Por que o comando pvesh não exige senha de root quando executado no terminal?"</h2>
+  <p>Ao rodar <code>pvesh</code> logado como root via SSH, o sistema não pede token de autenticação nem senha:</p>
+  <div class='box question'>Por que isso ocorre e como funciona a segurança do pvesh?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'O utilitário pvesh roda localmente sob a conta de root e se comunica diretamente com o subsistema da API via socket local (/run/pvedaemon.sock ou chamadas Perl internas com privilégios de root@pam). A segurança é herdada da autenticação prévia de acesso ao sistema operacional.')"><b>A</b> Porque o pvesh executa com os privilégios do usuário local do Linux via socket interno (root@pam), herdando a autenticação segura da sessão SSH existente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O Proxmox não desativa autenticação de API; o pvesh herda a segurança do próprio root do Linux.')"><b>B</b> Porque a API do Proxmox vem com a autenticação desativada de fábrica por padrão</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O pvesh utiliza os sockets locais do pvedaemon, não dependendo de chaves SSH em loopback.')"><b>C</b> Porque o pvesh utiliza uma chave pública SSH gravada em /root/.ssh/id_rsa em loopback</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Gestão do Proxmox: CLI pvesh, GUI e Logs do Sistema: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Conecte-se ao nó Proxmox via SSH e teste a comunicação da API com <code>pvesh get /version</code>.</li>
+    <li>Consulte o inventário de recursos do nó ou cluster com <code>pvesh get /cluster/resources</code>.</li>
+    <li>Monitore tarefas em andamento executando <code>pvesh get /nodes/localhost/tasks --limit 10</code>.</li>
+    <li>Em caso de erro em tarefas, capture o <code>UPID</code> retornado e inspecione o arquivo de log em <code>/var/log/pve/tasks/</code>.</li>
+    <li>Valide os daemons do sistema (<code>pvedaemon</code>, <code>pveproxy</code> e <code>pvestatd</code>) com <code>systemctl status</code>.</li>
+    <li>Documente os endpoints da API utilizados nos scripts de automação da equipe.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Mantenha o inventário de hardware e baseline de BIOS atualizados; nunca altere parâmetros de virtualização física sem agendamento e teste em ambiente isolado.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você domina o uso da ferramenta pvesh para navegar na API do Proxmox pelo terminal.</li>
+    <li>Você entende a estrutura dos identificadores UPID e como rastrear logs de tarefas.</li>
+    <li>Você sabe auditar e solucionar falhas nos daemons centrais pvedaemon e pveproxy.</li>
+    <li>Você integrou scripts de auditoria em linha de comando sem depender exclusivamente da interface gráfica.</li>
+    <li>A Semana 1 (Fundamentos e Hypervisor Base) foi 100% concluída com excelência técnica!</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Consultas de leitura com <code>pvesh get</code> não alteram estados de VMs nem arquivos de configuração, não exigindo rollback. Ao utilizar métodos <code>set</code>, <code>create</code> ou <code>delete</code>, certifique-se dos IDs antes de confirmar.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> Os conceitos de <i>pvesh</i>, <i>UPID</i>, <i>pvedaemon</i>, <i>REST API</i> e <i>task logs</i> serão incorporados ao seu baralho Anki e serão utilizados durante toda a criação e automação de VMs na Semana 2.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> O comando <code>pvesh get /nodes/localhost/status</code> consulta o endpoint oficial da API REST e retorna o status detalhado de hardware, sistema e uptime do nó Proxmox VE.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>🏆 <b>PARABÉNS! Você concluiu a SEMANA 1 com maestria!</b> Você dominou o Hypervisor Type-1 Bare-Metal, o dimensionamento de hardware e discos, a rede Linux Bridge e o ecossistema de APIs e repositórios. Na próxima semana (<b>Semana 2 — Máquinas Virtuais KVM</b>), você começará no <b>Dia 1</b> aprendendo a escolher a arquitetura da VM: SeaBIOS vs UEFI/OVMF e os chipsets virtuais <code>q35</code> vs <code>i440fx</code> para cargas modernas!</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

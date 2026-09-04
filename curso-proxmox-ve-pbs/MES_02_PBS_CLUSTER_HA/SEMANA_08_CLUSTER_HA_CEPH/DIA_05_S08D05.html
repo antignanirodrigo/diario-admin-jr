@@ -1,0 +1,501 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 8 · Dia 5 — O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_S08D04.html'>← Dia 4</a><a href='#'>Semana 8</a><span>Fim do Curso →</span></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com toda a jornada (Dias 01 a 40):</b> Você percorreu 40 dias de engenharia profunda. Hoje você consolida sua transição de Administrador Júnior para Especialista em Proxmox VE e PBS: enfrentando o Grande Simulado Final que integra Hypervisor, KVM, LXC, ZFS, PBS, SDN, Firewall, Corosync, HA e Ceph em um cenário corporativo real.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Especialista em Infraestrutura Proxmox VE & PBS.</b> Você detém o domínio completo da virtualização corporativa open-source de ponta a ponta.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 8 · Dia 5 | Nível Sênior — Cluster Corosync, HA & Ceph</div>
+  <h1>O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total</h1>
+  <p>Consolidando a formação completa de 40 dias: da base do hypervisor ao cluster hiperconvergente de missão crítica</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S08D05.png' alt='Prancha em seis quadros sobre O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado mestre <b>#8005 (Grand Finale)</b>: 'O datacenter corporativo está sob ataque simulado de desastre: (1) O nó primário <b>pve01</b> sofreu queima total de placa-mãe; (2) O storage Ceph perdeu 1 nó físico e 2 OSDs; (3) O banco de dados na <b>VM 100</b> precisa ser recuperado pelo HA Manager em menos de 60 segundos; e (4) A filial precisa restaurar dados offsite a partir do PBS com Live-Restore. O chamado exige: (1) Auditar a manutenção do <span class="hint" data-tip="Quorum preservado pelos nós sobreviventes + QDevice garantindo escrita no pmxcfs." onclick="openGlossary(0)">Quorum do Cluster</span>; (2) Validar o <span class="hint" data-tip="HA Manager assumindo a VM 100 no nó sobrevivente sem perda de transações." onclick="openGlossary(1)">Failover de HA</span>; (3) Atestar a continuidade do <span class="hint" data-tip="Ceph operando com réplicas remanescentes sem corrupção de I/O." onclick="openGlossary(2)">Ceph Storage</span>; (4) Executar a auditoria final de encerramento; e (5) Celebrar a conclusão dos 40 Dias de Formação Comercial Oficial.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Chegamos ao último dia da nossa jornada de 8 semanas! Hoje o Júnior sentou na bancada com postura de administrador sênior, café na mão e o terminal pronto. Olhei pra ele e disse: 'Você já aprendeu KVM, LXC, ZFS, PBS, SDN e Corosync. Hoje não tem aula teórica: é o Grande Simulado de Desastre do Datacenter'.<br><br>Disparamos um teste de estresse real: simulamos a queda simultânea de um link de rede, a falha física de um disco NVMe no pool distribuído do Ceph e o isolamento de um nó do cluster sob tráfego de produção. Enquanto os alarmes piscavam na tela, em vez de se desesperar, ele abriu o <code>pvecm status</code>, checou o Quorum, auditou o estado <code>HEALTH_OK</code> dos OSDs do Ceph e acompanhou o HA recuperando os serviços sem perder um único dado.<br><br>Quando o teste terminou e todos os relatórios foram emitidos com 100% de conformidade, ele respirou fundo e sorriu. Lembrei do primeiro dia dele, quando ele não sabia nem se o VT-x estava ativo na BIOS, e vi o especialista completo em virtualização que ele se tornou.<br><br>Essa mesma jornada agora é sua. Execute este último laboratório com o rigor e a calma dos verdadeiros administradores de infraestrutura. O datacenter está sob o seu comando!
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>pvecm status</code></td><td>Auditoria de Quorum e associação de nós no cluster Corosync.</td></tr>
+    <tr><td><code>ha-manager status</code></td><td>Auditoria do estado dos recursos de Alta Disponibilidade e serviços gerenciados.</td></tr>
+    <tr><td><code>ceph -s</code></td><td>Auditoria de integridade, OSDs e Placement Groups do storage distribuído Ceph.</td></tr>
+    <tr><td><code>proxmox-backup-manager datastore status DS</code></td><td>Auditoria de deduplicação, chunks e capacidade do Proxmox Backup Server.</td></tr>
+  </tbody></table>
+  <pre># AUDITORIA MASTER DE ENCERRAMENTO (40 DIAS CONCLUÍDOS)
+# 1. Quorum do Cluster: 100% Saudável e Quorate
+$ pvecm status
+Cluster: cluster-corp | Quorum: OK (3/3 votes active)
+
+# 2. Alta Disponibilidade (HA): Operando com Failover Automático
+$ ha-manager status
+quorum OK | master pve02 (active) | all services: started & healthy
+
+# 3. Storage Ceph Hiperconvergente: Tripla Replicação Ativa
+$ ceph -s
+health: HEALTH_OK | 6 OSDs up & in | 128 pgs active+clean | 0 degraded
+
+# 4. Proxmox Backup Server: Deduplicação e Criptografia Homologadas
+$ proxmox-backup-client snapshot list --repository backup-pve@pbs...
+All backups encrypted with AES-256-GCM | Deduplication Ratio: 11.8x
+Live-Restore tested: VM booted in 2.1 seconds!
+
+# 5. RESULTADO FINAL DO SIMULADO: 100% DE APROVAÇÃO TÉCNICA! 🎓</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🏛️ <b>Onde executar:</b> Terminal do Nó Líder do Cluster (<code>root@pve-node1:~#</code>) e nós secundários para comandos <code>pvecm</code> e <code>ha-manager</code>.</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em clusters e storages Ceph de laboratório ou teste. Não altere parâmetros de nós em produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inicie o Simulado Final de Desastre isolando um nó físico e cortando o link de rede principal.</div></div>
+      <div class="lab-cmd"># Simulado iniciado: isolamento de Nó 2 e Link0 acionado.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Cluster quorate e 100% operacional.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O Grande Simulado Final integra a resposta coordenada a falhas simultâneas de nó físico, link de rede e integridade de storage em missão crítica.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Entrar em pânico durante um incidente de datacenter; o método do sysadmin júnior experiente é seguir o checklist de evidências passo a passo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Audite a resposta imediata do HA Manager e a continuidade de quorum com o QDevice.</div></div>
+      <div class="lab-cmd">pvecm status && ha-manager status</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> CRM e serviços de HA em estado 'started'.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Auditar a transição do HA Manager e a continuidade do quorum com pvecm status comprova a resiliência do control plane em situação real de desastre.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Tentar intervir manualmente reiniciando serviços enquanto o HA CRM ainda está executando a rotina automatizada de fencing e migração.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Valide a integridade dos dados e a ausência de corrupção nos pools Ceph e ZFS.</div></div>
+      <div class="lab-cmd">pveceph status && zpool status</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Status HEALTH_OK e Placement Groups 100% active+clean.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Verificar a integridade do pool ZFS/Ceph e a ausência de corrupção nos dados valida a robustez do subsistema de armazenamento da empresa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Encerrar a simulação sem inspecionar os logs de transações das aplicações para confirmar que nenhuma transação em andamento foi corrompida.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Restaure a conectividade física e acompanhe a reintrodução e rebalanceamento da carga.</div></div>
+      <div class="lab-cmd">pvecm nodes && ceph -s</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Datastore íntegro com alta taxa de deduplicação.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Executar o restabelecimento do nó recuperado e a normalização da carga equilibra os recursos do datacenter com total estabilidade operacional.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Reintroduzir um nó recuperado no cluster sem validar previamente se a placa de rede e os discos físicos estão 100% saudáveis.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Emita o Relatório Executivo Final consagrando a conquista do nível Especialista em Infraestrutura.</div></div>
+      <div class="lab-cmd"># Formação Proxmox VE & PBS concluída com excelência.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Formação de 40 dias finalizada com 100% de aproveitamento!</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Formalizar a homologação completa da Formação Proxmox VE & PBS com emissão do relatório executivo marca a conquista do nível Pleno de Infraestrutura.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Não documentar as lições aprendidas no simulado final para enriquecer a base de conhecimento e procedimentos operacionais padrão (POP) do time.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Qual é a cadeia integrada de eventos que acontece no Proxmox VE e no Ceph quando um nó físico queima e como o ambiente se recupera sozinho?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      1. O Corosync detecta a perda de heartbeats e isola o nó; 2. O Quorum é mantido pelos nós restantes + QDevice; 3. O Watchdog do nó caído desarmou garantindo Self-Fencing; 4. O CRM do HA Manager detecta a falha e ordena ao LRM do nó sobrevivente que inicie as VMs nos discos compartilhados Ceph; 5. O Ceph detecta que 1 réplica foi perdida, mas mantém o I/O 100% ativo usando as 2 cópias restantes (min_size=2) e inicia a autocura dos blocos nos demais OSDs — tudo isso sem intervenção humana e com RTO inferior a 60 segundos.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é a síntese da arquitetura de excelência corporativa implementada ao longo dos 40 dias de formação no Proxmox VE & PBS?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Anti-padrão inaceitável que causa falência de empresas em desastres.')"><b>A</b> Instalar 1 único servidor sem backup e rezar para que o disco nunca quebre</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! Esse é o estado da arte da engenharia de virtualização corporativa moderna: uma infraestrutura resiliente a falhas de hardware, imune a ransomware, com RTO em segundos e custo de licenciamento zero.')"><b>B</b> Infraestrutura Hiperconvergente em Cluster Proxmox VE (3+ nós com Corosync e Quorum) + Storage Distribuído Ceph (tripla replicação NVMe) + Redes SDN/VXLAN com Firewall perimetral em 3 níveis + Servidor Proxmox Backup Server dedicado com deduplicação em chunks de 4MB, Criptografia Client-Side AES-256 e Replicação Offsite (Regra 3-2-1) com Live-Restore</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O objetivo do curso é formar engenheiros autônomos e altamente qualificados em tecnologias open-source enterprise.')"><b>C</b> Comprar licenças proprietárias caras da concorrência e terceirizar todo o conhecimento</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Retrocesso sem cabimento.')"><b>D</b> Desligar todos os servidores e voltar a trabalhar com fichas de papel</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Qual foi a lição mais valiosa aprendida ao longo desta jornada de 40 dias?</h2>
+  <p>Em sua entrevista para vaga de Administrador de Infraestrutura Sênior, o diretor pergunta sobre a sua filosofia de trabalho:</p>
+  <pre class="err">[Filosofia do Administrador de Sistemas Proxmox]
+'Antes de alterar, observe. Depois de alterar, valide.'
+(A regra de ouro da engenharia profissional de infraestrutura)</pre>
+  <div class='box question'>Qual é a conduta que diferencia o profissional amador do engenheiro sênior?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Chutar comandos em produção é negligência técnica grave.')"><b>A</b> O amador lê documentações; o sênior chuta comandos no terminal de produção até funcionar</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! O verdadeiro especialista não apenas decora comandos: ele entende como o Linux, o QEMU, o Corosync, o ZFS e o Ceph operam na camada mais íntima do hardware, agindo com precisão, calma e responsabilidade corporativa.')"><b>B</b> O engenheiro sênior planeja a arquitetura antes da execução, entende os fundamentos matemáticos e de Kernel (Copy-on-Write, Quorum, Chunks, Namespaces), cria procedimentos de rollback testados, valida evidências com métricas reais e nunca altera nada sem observar antes e validar depois</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O sênior utiliza ferramentas diagnósticas (tcpdump, logs) para identificar a causa raiz com fatos.')"><b>C</b> O sênior culpa a rede quando algo dá errado</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 O que você construiu e dominou durante este programa de 40 dias?</h2>
+  <p>Revisão curricular dos 2 meses de imersão profunda:</p>
+  <div class='box question'>Quais pilares tecnológicos compõem a sua nova bagagem técnica?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Você completou um dos currículos mais completos, rigorosos e aprofundados sobre Proxmox VE e PBS do mercado, unindo teoria sólida, analogias do mundo real, questões de certificação e laboratórios práticos.')"><b>A</b> Mês 1 (Fundamentos, KVM do zero, CPU pinning, VirtIO SCSI, QEMU Guest Agent, Containers LXC desprivilegiados com UID Mapping, Storage Pools, ZFS, RAIDZ, Mirrors e LVM-Thin) + Mês 2 (Proxmox Backup Server em Rust, Content-Defined Chunking, Garbage Collection Mark & Sweep, Criptografia AES-256 Client-Side, Retenção GFS, Live-Restore em 2s, File-Level Restore FUSE, Sync Jobs, Redes SDN, VXLAN, VLAN-Aware, Proxmox Firewall, Cluster Corosync, Quorum 50%+1, QDevice, HA Manager Watchdog Fencing e Storage Ceph Hiperconvergente)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Sua formação abrangeu arquitetura completa de datacenters empresariais.')"><b>B</b> Apenas como ligar e desligar um computador na tomada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O foco foi 100% corporativo de missão crítica.')"><b>C</b> Como jogar videogame em servidores Linux</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em O Grande Simulado Final: Alta Disponibilidade, Ceph e Resiliência Total: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Audite todos os componentes do cluster: <code>pvecm status</code>, <code>ha-manager status</code> e <code>ceph status</code>.</li>
+    <li>Valide as rotinas de backup no Proxmox Backup Server garantindo Verify Jobs e Garbage Collection agendados.</li>
+    <li>Documente a topologia de rede física, bridges VLAN-Aware e zonas SDN em diagrama técnico oficial.</li>
+    <li>Mantenha as Paperkeys de criptografia e procedimentos de Disaster Recovery arquivados em cofre físico.</li>
+    <li>Celebre com orgulho a conclusão dos 40 dias de dedicação, estudo e maestria técnica!</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Nunca opere clusters de 2 nós sem um QDevice externo para desempate de Quorum e utilize links de rede dedicados exclusivamente para o tráfego do Corosync.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você domina a arquitetura completa do Proxmox VE e Proxmox Backup Server da base ao cluster.</li>
+    <li>Você compreende o funcionamento de Hypervisors, KVM, LXC, ZFS, PBS, SDN, Firewalls, Corosync, HA e Ceph.</li>
+    <li>Você está plenamente capacitado para planejar, implantar, manter e recuperar infraestruturas de missão crítica.</li>
+    <li>🏆 PARABÉNS! VOCÊ CONCLUIU OS 40 DIAS DO CURSO PROXMOX VE & PBS COM SUCESSO ABSOLUTO!</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Não há rollback para o conhecimento adquirido: agora você é um profissional de elite pronto para os maiores desafios de infraestrutura do mercado!</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> Revise periodicamente os conceitos de Quorum, Ceph, PBS e Redes para manter seus reflexos de engenharia sempre afiados.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: a arquitetura de excelência integra Cluster Proxmox VE + Ceph NVMe + SDN/Firewall + PBS com deduplicação, criptografia e Live-Restore.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>🎓 PARABÉNS, ESPECIALISTA EM PROXMOX VE & PBS! Você concluiu todos os 40 dias do curso 'Diário de um Administrador Júnior: Da Base ao Cluster de Alta Disponibilidade'! Você possui agora o conhecimento técnico, prático e analítico dos melhores engenheiros de infraestrutura do mercado. Parabéns pela jornada, foco e excelência!</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,224 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Índice OPNsense Enterprise | Diário de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Arial,sans-serif;letter-spacing:0}
+
+.top{position:sticky;top:0;z-index:10;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:15px;letter-spacing:.5px}
+.top nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.top nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:13.5px;transition:color .2s}
+.top nav a:hover{color:var(--cyan)}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+.wrap{width:min(1320px,94vw);margin:auto}
+.index-hero{padding:54px max(4vw,20px) 30px;max-width:1080px;margin:auto;text-align:center}
+.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px;font-size:13px}
+.index-hero h1{font-size:clamp(32px,5.5vw,56px);line-height:1.08;margin:12px 0 16px;color:var(--ink);font-weight:900}
+.index-hero p{font-size:18px;color:var(--muted);max-width:820px;margin:0 auto 20px;line-height:1.55}
+
+.stats-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:24px}
+.stat-pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:10px 22px;font-weight:900;color:var(--gold);font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.stat-pill span{color:var(--muted);font-weight:400;margin-left:6px}
+
+.jumpbar{display:flex;justify-content:center;gap:10px;margin:28px auto 0;flex-wrap:wrap}
+.jumpbar a{background:var(--panel2);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:800;font-size:13.5px;padding:10px 20px;border-radius:8px;transition:all .2s}
+.jumpbar a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+
+.phase-block{padding:48px 0;border-top:1px solid var(--line)}
+.phase-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.phase-head h2{margin:0;font-size:28px;color:var(--gold);font-weight:900}
+.phase-tag{background:var(--gold);color:#050607;font-weight:900;font-size:12px;padding:4px 12px;border-radius:4px;white-space:nowrap;letter-spacing:.3px}
+.phase-desc{color:var(--muted);margin:0 0 28px;max-width:860px;font-size:15.5px;line-height:1.55}
+
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.week-card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);border-radius:8px;padding:20px 22px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s,border-color .2s}
+.week-card:hover{transform:translateY(-2px);border-color:var(--gold)}
+.week-card h3{margin:0;color:var(--gold);font-size:17.5px;font-weight:900}
+
+.day-list{list-style:none;margin:14px 0 0;padding:0}
+.day-list li{margin:0}
+.day-list a{display:block;padding:9px 0;color:var(--ink);text-decoration:none;font-size:14.5px;border-top:1px solid var(--line);transition:color .15s,padding-left .15s}
+.day-list li:first-child a{border-top:0}
+.day-list a:hover{color:var(--cyan);padding-left:4px}
+
+footer{margin-top:30px;padding:30px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13.5px;border-top:1px solid var(--line)}
+
+/* HARMONIC LIGHT THEME */
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .stat-pill{background:var(--panel);border-color:var(--line);color:var(--gold)}
+[data-theme="light"] .jumpbar a{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .week-card{background:var(--panel);border-color:var(--line);border-left-color:var(--cyan)}
+[data-theme="light"] .day-list a{color:var(--ink);border-top-color:var(--line)}
+[data-theme="light"] .day-list a:hover{color:var(--cyan)}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+</style>
+<script>
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  if(next==='light'){document.documentElement.setAttribute('data-theme','light');}
+  else{document.documentElement.removeAttribute('data-theme');}
+  try{localStorage.setItem('admin-jr-theme',next);}catch(e){}
+}
+</script>
+</head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | OPNSENSE ENTERPRISE</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema' title='Alternar tema'>🌓</button>
+  <nav>
+    <a href='#mes1'>Mês 1 — Fundamentos & pf</a>
+    <a href='#mes2'>Mês 2 — VPNs, IDS & HA</a>
+    <a href='../INDEX.html'>Índice Master Global</a>
+  </nav>
+</header>
+
+<section class='index-hero'>
+  <div class='eyebrow'>Formação Especialista em Segurança de Redes</div>
+  <h1>OPNsense Firewall & Segurança Corporativa</h1>
+  <p>Grade completa de 8 Semanas / 40 Dias de imersão operacional em quadrinhos noir, incidentes de bancada, teoria de kernel FreeBSD, laboratórios práticos e simulados TestKing.</p>
+  <div class="stats-row">
+    <div class="stat-pill">8 <span>semanas</span></div>
+    <div class="stat-pill">40 <span>aulas práticas</span></div>
+    <div class="stat-pill">100% <span>pranchas homologadas</span></div>
+  </div>
+  <div class="jumpbar">
+    <a href="#mes1">📦 Mês 1 — Fundamentos, Motor pf e VLANs</a>
+    <a href="#mes2">🛡️ Mês 2 — VPNs, Suricata IDS/IPS e Cluster HA</a>
+  </div>
+</section>
+
+<div class="wrap">
+  <!-- MÊS 1 -->
+  <section class="phase-block" id="mes1">
+    <div class="phase-head">
+      <h2>Módulo 01 — Fundamentos, Motor pf & Segmentação</h2>
+      <span class="phase-tag">SEMANAS 01 A 04</span>
+    </div>
+    <p class="phase-desc">Domínio da arquitetura HardenedBSD, inspeção de estados do pf, criação de regras, aliases, NAT de saída/entrada, Unbound DNS e segmentação 802.1Q.</p>
+    
+    <div class="week-grid">
+      <!-- SEMANA 1 -->
+      <div class="week-card">
+        <h3>Semana 01 — Setup & Interfaces</h3>
+        <ul class="day-list">
+          <li><a href="MES_01_OPNSENSE_FUNDAMENTOS/SEMANA_01_SETUP_INTERFACES/DIA_01_S01D01.html"><b>Dia 1:</b> Kernel FreeBSD & Motor pf</a></li>
+          <li><a href="MES_01_OPNSENSE_FUNDAMENTOS/SEMANA_01_SETUP_INTERFACES/DIA_02_S01D02.html"><b>Dia 2:</b> Hardware: Placas Intel & AES-NI</a></li>
+          <li><a href="MES_01_OPNSENSE_FUNDAMENTOS/SEMANA_01_SETUP_INTERFACES/DIA_03_S01D03.html"><b>Dia 3:</b> Interfaces WAN/LAN & WebGUI</a></li>
+          <li><a href="MES_01_OPNSENSE_FUNDAMENTOS/SEMANA_01_SETUP_INTERFACES/DIA_04_S01D04.html"><b>Dia 4:</b> Servidor DHCP & Reservas MAC</a></li>
+          <li><a href="MES_01_OPNSENSE_FUNDAMENTOS/SEMANA_01_SETUP_INTERFACES/DIA_05_S01D05.html"><b>Dia 5:</b> Backup config.xml & Rollback</a></li>
+        </ul>
+      </div>
+
+      <!-- SEMANA 2 -->
+      <div class="week-card">
+        <h3>Semana 02 — O Motor pf, Regras & NAT</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> Filosofia pf & First Match Wins</a></li>
+          <li><a href="#"><b>Dia 2:</b> Regras de Filtragem LAN/WAN</a></li>
+          <li><a href="#"><b>Dia 3:</b> Aliases (Grupos Inteligentes)</a></li>
+          <li><a href="#"><b>Dia 4:</b> Outbound NAT (Masquerade)</a></li>
+          <li><a href="#"><b>Dia 5:</b> Port Forwarding & NAT Reflection</a></li>
+        </ul>
+      </div>
+
+      <!-- SEMANA 3 -->
+      <div class="week-card">
+        <h3>Semana 03 — Unbound DNS & DoT</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> Unbound DNS Recursivo vs Forward</a></li>
+          <li><a href="#"><b>Dia 2:</b> DNS over TLS (DoT) & DNSSEC</a></li>
+          <li><a href="#"><b>Dia 3:</b> Bloqueio de Anúncios por DNS</a></li>
+          <li><a href="#"><b>Dia 4:</b> Overrides & Captive DNS (Port 53)</a></li>
+          <li><a href="#"><b>Dia 5:</b> Troubleshooting com drill e dig</a></li>
+        </ul>
+      </div>
+
+      <!-- SEMANA 4 -->
+      <div class="week-card">
+        <h3>Semana 04 — VLANs 802.1Q & Zonas</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> VLANs 802.1Q & Interfaces Virtuais</a></li>
+          <li><a href="#"><b>Dia 2:</b> Zonas Corporativas (DMZ, IoT, Guest)</a></li>
+          <li><a href="#"><b>Dia 3:</b> Regras de Roteamento Inter-VLAN</a></li>
+          <li><a href="#"><b>Dia 4:</b> DHCP Multi-Subrede por VLAN</a></li>
+          <li><a href="#"><b>Dia 5:</b> Auditoria de Isolamento com pfctl</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MÊS 2 -->
+  <section class="phase-block" id="mes2">
+    <div class="phase-head">
+      <h2>Módulo 02 — VPNs, IDS/IPS, Multi-WAN & HA</h2>
+      <span class="phase-tag">SEMANAS 05 A 08</span>
+    </div>
+    <p class="phase-desc">Túneis WireGuard e IPsec, autenticação LDAP/AD, Suricata IPS em modo Inline Netmap, multi-WAN com failover dpinger, balanceamento de carga e cluster CARP/pfsync ativo/passivo.</p>
+    
+    <div class="week-grid">
+      <div class="week-card">
+        <h3>Semana 05 — VPNs Corporativas</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> WireGuard Site-to-Site</a></li>
+          <li><a href="#"><b>Dia 2:</b> WireGuard Road Warrior</a></li>
+          <li><a href="#"><b>Dia 3:</b> OpenVPN com CA Interna</a></li>
+          <li><a href="#"><b>Dia 4:</b> Autenticação Active Directory/LDAP</a></li>
+          <li><a href="#"><b>Dia 5:</b> IPsec VTI para AWS e Azure</a></li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Semana 06 — IDS/IPS Suricata & DPI</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> Suricata Modo Inline Netmap</a></li>
+          <li><a href="#"><b>Dia 2:</b> Feeds de Ameaças ET Open</a></li>
+          <li><a href="#"><b>Dia 3:</b> Ajuste Fino de Falsos Positivos</a></li>
+          <li><a href="#"><b>Dia 4:</b> Proxy Squid & Filtro de Conteúdo</a></li>
+          <li><a href="#"><b>Dia 5:</b> Inspeção SSL/TLS Intercept</a></li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Semana 07 — Multi-WAN & Traffic Shaping</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> Múltiplas WANs e Gateway Groups</a></li>
+          <li><a href="#"><b>Dia 2:</b> Monitoramento com dpinger</a></li>
+          <li><a href="#"><b>Dia 3:</b> Balanceamento & Sticky Connections</a></li>
+          <li><a href="#"><b>Dia 4:</b> Roteamento por Políticas (PBR)</a></li>
+          <li><a href="#"><b>Dia 5:</b> QoS e Algoritmo FQ-CoDel</a></li>
+        </ul>
+      </div>
+      <div class="week-card">
+        <h3>Semana 08 — Cluster HA & Simulado</h3>
+        <ul class="day-list">
+          <li><a href="#"><b>Dia 1:</b> Arquitetura CARP e pfsync</a></li>
+          <li><a href="#"><b>Dia 2:</b> Cluster Ativo/Passivo XML-RPC</a></li>
+          <li><a href="#"><b>Dia 3:</b> Teste de Failover sem Queda</a></li>
+          <li><a href="#"><b>Dia 4:</b> Hardening e 2FA/TOTP</a></li>
+          <li><a href="#"><b>Dia 5:</b> Simulado de Crise Final</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>Diário de um Admin Jr. — Formação OPNsense Enterprise · 2026</p>
+</footer>
+</body></html>

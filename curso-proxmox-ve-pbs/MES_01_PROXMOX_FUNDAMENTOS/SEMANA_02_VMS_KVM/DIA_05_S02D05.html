@@ -1,0 +1,498 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 5 — Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_04_S02D04.html'>← Dia 4</a><a href='#'>Semana 2</a><a href='../SEMANA_03_CONTAINERS_LXC/DIA_01_S03D01.html'>Semana 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 4:</b> Você domina o QEMU Guest Agent e a consistência de filesystem. Hoje você fecha a Semana 2 aprendendo a gerenciar o ciclo de vida completo de VMs corporativas: a diferença vital entre Snapshots com e sem RAM, e como transformar uma VM em Template para gerar dezenas de clones em segundos.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Gestão de Ciclo de Vida, Snapshots e Provisionamento.</b> Você cria templates imutáveis e provisiona clones vinculados com economia de disco.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 5 | Nível Júnior — Máquinas Virtuais KVM</div>
+  <h1>Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones</h1>
+  <p>Gerenciamento profissional de estados, snapshots com/sem RAM, Templates e Linked Clones</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S02D05.png' alt='Prancha em seis quadros sobre Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#2005</b>: 'A equipe de testes precisa provisionar 10 máquinas virtuais idênticas para homologação de uma nova versão de software, mas o storage possui apenas 80GB livres e cada VM completa ocupa 40GB. Além disso, antes de aplicar um patch crítico no servidor de produção <b>104</b>, o chamado exige: (1) Criar um <span class="hint" data-tip="Snapshot que salva o estado dos discos e o dump da memória RAM, permitindo restaurar a VM no mesmo milissegundo de execução." onclick="openGlossary(0)">Snapshot com RAM</span>; (2) Converter uma VM base limpa em <span class="hint" data-tip="Imagem mestre somente-leitura e imutável que serve de base para novos clones." onclick="openGlossary(1)">Template (vmtarget)</span>; (3) Entender a diferença entre <span class="hint" data-tip="Clone independente que copia todos os blocos físicos de disco." onclick="openGlossary(2)">Full Clone</span> e <span class="hint" data-tip="Clone de alta velocidade que aponta para o Template base e grava apenas as diferenças (Copy-on-Write)." onclick="openGlossary(3)">Linked Clone</span>; e (4) Provisionar os clones em menos de 10 segundos.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o time de desenvolvimento pediu autorização para aplicar uma migração de esquema de banco de dados arriscada. O Júnior criou um snapshot da VM 100, virou pros desenvolvedores e disse: 'Podem rodar a migração, se der ruim nós temos backup completo no snapshot'. Quase caí da cadeira.<br><br>Chamei o Júnior e expliquei a diferença vital entre <b>Snapshot</b> e <b>Backup</b>: um snapshot não é uma cópia separada; ele é apenas uma marcação de blocos Copy-on-Write no mesmo storage. Se o storage falhar, você perde a VM e todos os snapshots juntos! Além disso, snapshots acumulados degradam severamente os IOPS do disco.<br><br>Mostrei pra ele como usar snapshots do jeito certo: criar antes da intervenção com <code>qm snapshot</code> (salvando opcionalmente o estado da RAM com <code>vmstate=1</code>), validar o resultado da aplicação e, se tudo der certo, <b>deletar o snapshot imediatamente</b> para consolidar os blocos. Hoje você vai dominar a arte do rollback seguro em menos de 2 segundos.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>qm snapshot 104 snap_pre_patch --vmstate 1</code></td><td>Cria um snapshot do disco e salva o estado da memória RAM da VM 104 (--vmstate 1).</td></tr>
+    <tr><td><code>qm rollback 104 snap_pre_patch</code></td><td>Reverte a VM 104 instantaneamente para o estado exato do snapshot selecionado.</td></tr>
+    <tr><td><code>qm template 900</code></td><td>Converte a máquina virtual 900 em um Template imutável de provisionamento.</td></tr>
+    <tr><td><code>qm clone 900 105 --name srv-clone01</code></td><td>Cria um Linked Clone instantâneo a partir do Template 900.</td></tr>
+  </tbody></table>
+  <pre># 1. Criação de Snapshot com Memória RAM em Produção
+$ qm snapshot 104 pre_upgrade_v2 --vmstate 1 --description "Snapshot com RAM antes do patch"
+TASK OK
+
+# 2. Conversão da VM base em Template Imutável
+$ qm template 9000
+TASK OK
+
+# 3. Provisionamento instantâneo de Linked Clone em 2 segundos
+$ qm clone 9000 105 --name srv-app-qa01
+clone 9000 to 105: create linked clone 'vm-105-disk-0'
+TASK OK
+
+# 4. Inspeção do arquivo de configuração do clone vinculado
+$ cat /etc/pve/qemu-server/105.conf | grep -E 'scsi0'
+scsi0: local-zfs:base-9000-disk-0/vm-105-disk-0,discard=on,size=40G</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🖥️ <b>Onde executar:</b> Terminal do Nó Proxmox para comandos <code>qm</code>; ou Console VNC da VM (acessível via Web UI > Nó > VM ID > Console).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em VMs de laboratório ou teste. Não altere parâmetros de máquinas de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um snapshot de segurança salvando o estado do disco antes da manutenção.</div></div>
+      <div class="lab-cmd">qm snapshot 100 snap_pre_upgrade --description 'Antes da atualizacao do sistema'</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Snapshot registrado na árvore de estados da VM.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando qm snapshot cria um ponto de restauração instantâneo da VM, salvando a tabela de blocos e opcionalmente o estado da memória RAM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Usar snapshots como substituto de backup; snapshots acumulam escritas Copy-on-Write no storage e degradam o desempenho ao longo do tempo.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um segundo snapshot salvando também o estado da memória RAM.</div></div>
+      <div class="lab-cmd">qm snapshot 100 snap_com_ram --vmstate 1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Árvore hierárquica exibindo o snapshot criado e o ponteiro atual 'current'.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Marcar a opção vmstate=1 congela a memória RAM no snapshot, permitindo que a VM retorne exatamente no mesmo milissegundo de execução.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Salvar o estado da memória RAM em storages lentos durante horário de pico, pausando a VM por vários minutos durante a gravação.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Simule uma falha ou alteração indesejada no sistema operacional convidado.</div></div>
+      <div class="lab-cmd"># dentro da VM:
+touch /etc/arquivo_teste_falha.txt</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VM revertida instantaneamente para o ponto do snapshot.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Simular uma falha intencional na VM demonstra a importância de ter um ponto de retorno seguro antes de aplicar patches e migrações.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Aplicar atualizações arriscadas de pacotes ou esquemas de banco de dados sem criar um snapshot prévio de salvaguarda.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Execute o rollback instantâneo retornando a VM ao estado anterior em 2s.</div></div>
+      <div class="lab-cmd">qm rollback 100 snap_pre_upgrade</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Snapshot consolidado e excluído com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Executar o qm rollback reverte o disco e a memória da VM para o estado anterior em menos de 5 segundos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Executar rollback sem avisar a equipe de desenvolvimento, revertendo dados gravados por outros usuários após o ponto de snapshot.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Exclua o snapshot temporário consolidando os blocos de disco no storage.</div></div>
+      <div class="lab-cmd">qm delsnapshot 100 snap_pre_upgrade</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Linked Clone provisionado em menos de 3 segundos no storage ZFS.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Remover o snapshot com qm delsnapshot consolida os blocos no storage e elimina o overhead de leitura em árvores de snapshot antigas.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Acumular dezenas de snapshots antigos esquecidos por meses, esgotando o espaço em disco do storage pool.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Qual é a diferença fundamental de consumo de storage e tempo de criação entre um 'Full Clone' e um 'Linked Clone' no Proxmox VE?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Um **Full Clone** copia 100% de todos os blocos do disco da VM original, sendo totalmente independente, mas consumindo muito espaço físico e demorando minutos para ser gerado. Um **Linked Clone** exige que a VM original seja um Template imutável; ele cria apenas um disco delta de leitura/gravação (Copy-on-Write) que referencia os blocos do Template, consumindo quase zero espaço inicial e sendo provisionado em apenas 2 a 3 segundos.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Por que converter uma máquina virtual em Template é uma operação irreversível diretamente no Proxmox VE?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O sistema de arquivos não é formatado; os discos permanecem intactos no storage.')"><b>A</b> Porque o Proxmox formata os discos da VM para o padrão FAT32 imutável</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! Um Template nunca pode ser ligado ou modificado, pois se seus blocos fossem alterados, todos os Linked Clones criados a partir dele perderiam a integridade do sistema de arquivos e quebrariam instantaneamente.')"><b>B</b> Porque o Template se torna uma base de referência somente-leitura imutável para garantir que nenhum clone vinculado sofra corrupção se a imagem base fosse alterada acidentalmente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Templates de VM continuam sendo estruturas de máquinas virtuais QEMU/KVM.')"><b>C</b> Porque o comando converte a VM em um container Docker fechado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'A configuração de hardware é preservada para ser herdada pelos clones.')"><b>D</b> Porque o Proxmox apaga a placa de rede da VM impedindo novas conexões</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Snapshot com RAM travando por falta de espaço no storage</h2>
+  <p>Você tentou criar um snapshot com a opção 'Include RAM' ativa em uma VM com 64GB de memória alocada, e a tarefa falhou:</p>
+  <pre class="err">$ qm snapshot 104 snap_com_ram --vmstate 1
+TASK ERROR: VM 104 snapshot failed: not enough space in storage 'local-zfs' to save 64GB RAM state</pre>
+  <div class='box question'>Qual é a regra técnica que governa o armazenamento de snapshots com memória RAM?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A BIOS não armazena dumps de memória de máquinas virtuais.')"><b>A</b> A memória RAM da VM é gravada na BIOS do processador físico</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! Salvar o estado de execução da VM exige gravar toda a RAM ativa em um volume de disco virtual no storage. Se a VM tem 64GB de RAM, são necessários 64GB de espaço livre em disco só para a memória.')"><b>B</b> Ao marcar 'Include RAM' (--vmstate 1), o Proxmox precisa gravar um arquivo de dump de disco com o tamanho exato da memória RAM provisionada no storage, exigindo espaço livre equivalente além do tamanho do disco</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Snapshots com RAM só fazem sentido com a VM em execução; se estiver desligada, não há estado de RAM para salvar.')"><b>C</b> Snapshots com RAM só funcionam se a VM estiver desligada</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Como transformar um Linked Clone em uma VM independente se você precisar apagar o Template?</h2>
+  <p>Você criou a VM 105 como Linked Clone do Template 9000, mas agora a equipe deseja deletar o Template 9000 sem perder a VM 105:</p>
+  <div class='box question'>Qual procedimento oficial converte o disco do Linked Clone em um disco completo e desvinculado?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Ao executar 'Move Disk' na interface ou CLI, o Proxmox consolida os blocos herdados do Template com os blocos modificados do clone, gerando um volume independente e liberando o Template para exclusão.')"><b>A</b> Mover o disco virtual para outro storage (ou para o mesmo storage) utilizando o recurso 'Move Storage/Disk', o que funde os blocos do Template base no disco do clone transformando-o em um Full Clone independente</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O Proxmox bloqueia a exclusão do Template enquanto houver clones vinculados apontando para ele.')"><b>B</b> Apagar o Template diretamente com qm destroy 9000 forçado</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O desvinculo de storage é uma operação de cópia de blocos online realizada pelo QEMU/ZFS.')"><b>C</b> Reiniciar o Proxmox VE em modo monousuário</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Ciclo de Vida da VM: Start, ACPI, Snapshots e Clones: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Antes de intervenções de risco em produção, tire um Snapshot com descrição clara e registre a data e hora.</li>
+    <li>Para atualizações de aplicações sensíveis ao estado de execução, utilize <code>--vmstate 1</code> (Snapshot com RAM) garantindo retorno ao milissegundo exato.</li>
+    <li>Para padronização de SO, crie uma VM perfeita (com QEMU Guest Agent e cloud-init) e converta-a em Template imutável com <code>qm template ID</code>.</li>
+    <li>Utilize <b>Linked Clones</b> para ambientes efêmeros, laboratórios, homologação e pipelines de CI/CD com economia máxima de storage.</li>
+    <li>Utilize <b>Full Clones</b> quando a nova VM for um servidor de produção permanente e independente que não deve ter dependências com templates base.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Sempre instale o QEMU Guest Agent em todas as VMs para garantir desligamento limpo e use drivers VirtIO para evitar overhead de emulação de hardware.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você domina o ciclo de vida operacional de máquinas virtuais no Proxmox VE.</li>
+    <li>Você compreende o consumo e funcionamento de Snapshots com e sem RAM.</li>
+    <li>Você sabe quando utilizar Full Clones (independência) e Linked Clones (velocidade e economia).</li>
+    <li>A Semana 2 (Máquinas Virtuais KVM) foi concluída com 100% de aproveitamento e maestria técnica!</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Em caso de falha de teste, reverta a VM para o snapshot homologado ou destrua os clones vinculados de homologação com <code>qm destroy ID --purge</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> O conceito de Copy-on-Write e provisionamento instantâneo será aprofundado na Semana 3 com Containers de Sistema LXC e na Semana 4 com ZFS Clones.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: converter uma VM em Template é uma operação irreversível para torná-la uma base imutável e proteger todos os clones vinculados contra corrupção.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>🏆 PARABÉNS! Você concluiu a SEMANA 2 com distinção! Você domina arquiteturas SeaBIOS/OVMF, CPU host, VirtIO SCSI Single, QEMU Guest Agent e Ciclo de Vida de Snapshots e Clones. Na próxima semana (Semana 3 — Containers de Sistema LXC), você aprenderá como rodar centenas de instâncias Linux ultraleves compartilhando o Kernel com segurança corporativa!</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

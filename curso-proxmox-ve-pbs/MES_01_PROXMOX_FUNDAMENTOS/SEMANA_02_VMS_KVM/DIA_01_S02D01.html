@@ -1,0 +1,502 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 2 · Dia 1 — Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_01_HYPERVISOR_BASE/DIA_05_S01D05.html'>← Semana 1</a><a href='#'>Semana 2</a><a href='DIA_02_S02D02.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 1:</b> Você dominou o host bare-metal. Agora você começa a projetar máquinas virtuais corporativas: entendendo por que o chipset i440fx (de 1996) e o SeaBIOS limitam recursos modernos, e quando migrar para q35 e UEFI/OVMF.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Arquitetura de Máquinas Virtuais (Privilégio Convidado).</b> Você define a placa-mãe virtual, firmware e barramentos PCI antes de instalar o sistema operacional.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 2 · Dia 1 | Nível Júnior — Máquinas Virtuais KVM</div>
+  <h1>Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types</h1>
+  <p>q35 vs i440fx: escolhendo o chipset virtual e firmware corretos para Linux e Windows modernos</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S02D01.png' alt='Prancha em seis quadros sobre Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#2001</b>: 'A equipe de infraestrutura precisa homologar duas novas VMs no <b>pve01</b>: uma VM Windows Server 2022 com requisito de <span class="hint" data-tip="Virtual TPM 2.0: exigido para BitLocker e Windows 11/Server 2022." onclick="openGlossary(5)">vTPM 2.0</span> e <span class="hint" data-tip="Open Virtual Machine Firmware: implementação open-source de UEFI para QEMU." onclick="openGlossary(1)">UEFI/OVMF</span>, e uma VM Linux legada que não reconhece GPT. O chamado exige: (1) Entender a diferença entre os chipsets <span class="hint" data-tip="Chipset moderno que emula barramentos PCIe nativos e PCIe Passthrough." onclick="openGlossary(2)">q35</span> e <span class="hint" data-tip="Chipset legado baseado no Intel PCI de 1996, padrão histórico do QEMU." onclick="openGlossary(3)">i440fx</span>; (2) Criar o disco de <span class="hint" data-tip="Disco virtual EFI de 4MB onde o OVMF salva as variáveis NVRAM de boot." onclick="openGlossary(4)">EFI Storage</span>; (3) Validar a tabela de partições GPT vs MBR; e (4) Criar a VM 100 via CLI com qm.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior foi provisionar a primeira máquina virtual do setor financeiro e já ia clicando no assistente gráfico escolhendo opções padrão sem olhar. Parei ele na hora: 'Você sabe exatamente quanto de memória e qual controlador de disco está atribuindo?'. Ele disse que achava que 'o padrão do Proxmox já vinha otimizado pra tudo'.<br><br>Mostrei pra ele como um sysadmin sênior trabalha: abrimos o terminal e usamos o comando <code>qm create</code>. Expliquei cada parâmetro — a importância de definir IDs estruturados (ex: 100 para infra, 200 para bancos de dados), especificar o tipo de BIOS (SeaBIOS vs UEFI/OVMF) e inspecionar o arquivo <code>/etc/pve/qemu-server/100.conf</code> gerado no cluster file system.<br><br>Quando ele viu o arquivo <code>.conf</code> limpo com 10 linhas no terminal, percebeu que uma máquina virtual nada mais é do que um processo QEMU orquestrado por um arquivo de texto simples. Foi a virada de chave dele para automação via scripts. É esse provisionamento cirúrgico que você vai executar agora.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>qm create 100 --bios ovmf --machine q35</code></td><td>Cria a VM 100 especificando firmware UEFI (OVMF) e chipset moderno PCIe q35.</td></tr>
+    <tr><td><code>qm set 100 --efidisk0 local-zfs:0,efitype=4m,pre-enrolled-keys=1</code></td><td>Cria e anexa o disco de variáveis NVRAM da EFI com chaves Secure Boot pré-instaladas.</td></tr>
+    <tr><td><code>qm config 100</code></td><td>Exibe o arquivo de configuração textual completo da VM em /etc/pve/qemu-server/100.conf.</td></tr>
+    <tr><td><code>pveam list local</code></td><td>Lista os templates e ISOs disponíveis no storage local para inicialização.</td></tr>
+  </tbody></table>
+  <pre>$ qm create 100 --name srv-win2022 --memory 8192 --cores 4 --cpu host \
+    --bios ovmf --machine q35 \
+    --efidisk0 local-zfs:0,efitype=4m,pre-enrolled-keys=1 \
+    --tpmstate0 local-zfs:0,version=v2.0 \
+    --net0 virtio,bridge=vmbr0
+
+$ cat /etc/pve/qemu-server/100.conf
+bios: ovmf
+boot: order=scsi0;ide2;net0
+cores: 4
+cpu: host
+efidisk0: local-zfs:vm-100-disk-0,efitype=4m,pre-enrolled-keys=1,size=4M
+machine: q35
+memory: 8192
+name: srv-win2022
+net0: virtio=BC:24:11:AA:BB:CC,bridge=vmbr0
+numa: 0
+ostype: win11
+sockets: 1
+tpmstate0: local-zfs:vm-100-disk-1,size=4M,version=v2.0</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🖥️ <b>Onde executar:</b> Terminal do Nó Proxmox para comandos <code>qm</code>; ou Console VNC da VM (acessível via Web UI > Nó > VM ID > Console).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em VMs de laboratório ou teste. Não altere parâmetros de máquinas de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie a máquina virtual via CLI definindo ID, nome, vCPUs, RAM e controladora.</div></div>
+      <div class="lab-cmd">qm create 100 --name srv-db01 --memory 4096 --cores 2 --net0 virtio,bridge=vmbr0</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VM 200 criada na configuração do QEMU Server.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando qm create provisiona a máquina virtual via linha de comando, definindo parâmetros de memória, núcleos de CPU e controladoras com precisão milimétrica.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Criar VMs com IDs aleatórios sem seguir uma convenção de nomenclatura (ex: 100-199 para infra, 200-299 para banco de dados).</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione o arquivo de configuração gerado em /etc/pve/qemu-server/100.conf.</div></div>
+      <div class="lab-cmd">cat /etc/pve/qemu-server/100.conf</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Disco EFI de 4MB provisionado e vinculado no arquivo de configuração.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Inspecionar o arquivo /etc/pve/qemu-server/<vmid>.conf valida se as diretivas de hardware foram salvas corretamente no banco SQLite do pmxcfs.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Editar o arquivo .conf enquanto a VM está sendo clonada ou migrada, causando inconsistência no estado do cluster.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inicie a máquina virtual e valide seu estado de execução com qm list.</div></div>
+      <div class="lab-cmd">qm start 100 && qm list</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Estado vTPM persistente criado no storage do ZFS.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Iniciar a VM com qm start e acompanhar o status com qm list confirma a alocação dos recursos de CPU e RAM no escalonador do Linux.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Tentar iniciar uma VM que aloca mais RAM do que a memória física livre do host sem swap configurado, disparando o OOM Killer do kernel.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Monitore o consumo de CPU e RAM alocados pela VM em tempo real.</div></div>
+      <div class="lab-cmd">qm status 100 --verbose</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Parâmetros <code>bios: ovmf</code>, <code>machine: q35</code> e <code>tpmstate0</code> listados sem conflitos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Auditar a console da VM com qm terminal ou VNC confirma o boot do instalador ou do sistema operacional convidado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Esquecer de configurar a placa de vídeo ou porta serial no qm, ficando sem acesso ao console de recuperação em caso de perda de rede.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Registre a nova VM no inventário de ativos da infraestrutura.</div></div>
+      <div class="lab-cmd"># VM 100 provisionada e documentada com sucesso.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> VM de laboratório limpa sem deixar volumes órfãos no storage.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Registrar a criação da VM no inventário conclui o provisionamento formal com garantia de rastreabilidade de recursos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Subir máquinas virtuais sem registrar o responsável técnico e a finalidade no sistema de gestão de ativos.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que uma máquina virtual criada com BIOS tradicional (SeaBIOS) não consegue inicializar a partir de um disco virtual maior que 2 Terabytes como partição de boot única?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque o SeaBIOS clássico depende da tabela de partição MBR (Master Boot Record), que possui limite arquitetural de endereçamento de 32 bits (máximo de 2^32 setores de 512 bytes = 2.19 TB). Para inicializar discos maiores que 2TB e suportar partições GPT nativas e Secure Boot, é obrigatório utilizar UEFI/OVMF.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Em qual cenário corporativo a escolha do Machine Type 'q35' com firmware 'OVMF (UEFI)' é estritamente obrigatória no Proxmox VE?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Containers LXC não possuem emulação de placa-mãe, BIOS nem chipset: eles usam diretamente o Kernel do host.')"><b>A</b> Para qualquer container LXC que execute banco de dados MySQL</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O chipset q35 emula uma topologia PCIe nativa com suporte a barramentos PCIe modernos e root ports, essencial para vTPM, Secure Boot e passthrough direto de placas físicas.')"><b>B</b> Para máquinas virtuais com Windows 11 / Server 2022 com Secure Boot/vTPM, e VMs que utilizam PCIe Passthrough de GPUs ou placas de rede modernas</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O chipset q35 não tem relação com pouca memória; pelo contrário, é o chipset corporativo padrão para cargas pesadas.')"><b>C</b> Apenas para VMs que tenham menos de 512MB de memória RAM instalada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O i440fx é o chipset legado antigo (PCI de 1996); o q35 é a arquitetura moderna baseada no chipset Intel ICH9.')"><b>D</b> O q35 é obsoleto e foi descontinuado em favor do chipset i440fx clássico</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Tela de boot travada em 'UEFI Shell' ou 'Guest has not initialized display'</h2>
+  <p>Você alterou uma VM existente de SeaBIOS para OVMF (UEFI) sem adicionar o disco EFI Storage:</p>
+  <pre class="err">$ qm start 100
+TASK ERROR: can't start VM 100: QEMU exited with code 1
+kvm: -drive file=...: EFI vars drive not configured or missing efidisk0</pre>
+  <div class='box question'>Qual é a causa raiz da falha e como corrigi-la?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O erro indica explicitamente a ausência do disco de variáveis EFI (efidisk0).')"><b>A</b> O processador do host não suporta instruções de 64 bits</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! O firmware UEFI precisa de uma partição não-volátil (disco EFI de 4MB) para salvar o mapa de boot e certificados do Secure Boot.')"><b>B</b> Ao selecionar firmware OVMF (UEFI), o QEMU exige um disco virtual EFI dedicado para gravar as variáveis de inicialização NVRAM — deve-se adicionar o efidisk0 à VM</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O Proxmox suporta UEFI/OVMF nativamente através do pacote ovmf/pve-edk2-firmware.')"><b>C</b> O Proxmox não permite que máquinas virtuais utilizem firmware UEFI</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Por que o Windows Server legado não inicializa se você trocar i440fx por q35 após a instalação?</h2>
+  <p>Um técnico mudou o Machine Type de uma VM Windows antiga de i440fx para q35 e o Windows passou a apresentar Tela Azul (BSOD: INACCESSIBLE_BOOT_DEVICE):</p>
+  <div class='box question'>Por que alterar o chipset após a instalação causa falha de boot no Windows?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Mudar o chipset é o equivalente a tirar o HD de um PC de 1998 e espetar em uma placa-mãe moderna de 2024: sem os drivers corretos no registro de inicialização, o SO perde a controladora de disco.')"><b>A</b> Porque a troca de i440fx para q35 altera completamente a árvore de barramentos PCI, IDs de dispositivos e controladoras de disco da placa-mãe virtual, exigindo novos drivers de storage no boot</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O chipset q35 é amplamente suportado por Linux, Windows, FreeBSD e macOS.')"><b>B</b> Porque o chipset q35 só é compatível com distribuições Linux baseadas em Debian</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O arquivo de disco não é corrompido; a incompatibilidade é puramente no nível de drivers do SO convidado.')"><b>C</b> Porque o Proxmox corrompe os arquivos do disco virtual sempre que você altera o chipset</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Arquitetura da VM: SeaBIOS vs UEFI/OVMF e Machine Types: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Analise a carga de trabalho: sistemas modernos (Windows 11/2022, Linux GPT, passthrough PCIe) exigem <code>q35 + OVMF</code>.</li>
+    <li>Para cargas legadas antigas com MBR simples ou appliances legados, utilize <code>i440fx + SeaBIOS</code>.</li>
+    <li>Ao selecionar <code>OVMF</code>, sempre adicione um <code>EFI Disk</code> com <code>pre-enrolled-keys=1</code> para suporte a Secure Boot.</li>
+    <li>Para sistemas operacionais que exigem BitLocker ou Windows 11, adicione o dispositivo <code>vTPM 2.0</code>.</li>
+    <li>Nunca altere o Machine Type (i440fx/q35) após a instalação de sistemas Windows sem planejar a migração de drivers de controladora.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Sempre instale o QEMU Guest Agent em todas as VMs para garantir desligamento limpo e use drivers VirtIO para evitar overhead de emulação de hardware.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende a divisão de papéis entre firmware (SeaBIOS vs OVMF) e chipset (i440fx vs q35).</li>
+    <li>Você sabe quando a criação do disco efidisk0 e vTPM é obrigatória.</li>
+    <li>Você reconhece os riscos de alterar o Machine Type em sistemas operacionais já instalados.</li>
+    <li>O arquivo de configuração da VM em /etc/pve/qemu-server/ foi validado com rigor de engenharia.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Caso uma VM apresente BSOD após mudança de chipset, retorne o campo 'machine' para i440fx e 'bios' para default (seabios) no arquivo .conf correspondente.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A escolha do machine type q35 será fundamental na Semana 7 para SDN e na integração de GPUs com passthrough PCIe.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A alternativa correta é a B: q35 com OVMF é obrigatório para Windows modernos com vTPM/Secure Boot e para máquinas virtuais que utilizam PCIe Passthrough.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Arquitetura de firmware e chipset dominada! Amanhã, no Dia 2, você aprenderá como configurar CPUs virtuais (vCPUs), por que usar o tipo 'host' extrai 100% da velocidade do processador e como evitar o colapso de memória pelo temido Memory Ballooning.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

@@ -1,0 +1,499 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 4 · Dia 1 — Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2 | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_03_CONTAINERS_LXC/DIA_05_S03D05.html'>← Semana 3</a><a href='#'>Semana 4</a><a href='DIA_02_S04D02.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 3:</b> Você dominou instâncias e containers. Agora você entra no subsistema mais crítico de qualquer datacenter: o armazenamento corporativo. Hoje você desvenda a diferença entre storages baseados em arquivos (File-level) e storages de blocos brutos (Block-level).</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Arquitetura de Storage do Datacenter.</b> Você audita /etc/pve/storage.cfg e escolhe formatos de disco para alta velocidade de I/O.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 4 · Dia 1 | Nível Júnior — Storage Corporativo & ZFS</div>
+  <h1>Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2</h1>
+  <p>Entendendo Directory, NFS, LVM-Thin e ZFS no Proxmox VE para máxima performance</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S04D01.png' alt='Prancha em seis quadros sobre Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#4001</b>: 'A equipe de virtualização precisa criar um novo banco de dados transacional de alto IOPS e uma área compartilhada para ISOs e backups no <b>pve01</b>. O storage atual possui um volume Directory (EXT4) e um pool ZFS (ZPOOL). O chamado exige: (1) Entender por que armazenar discos de VM em formato <span class="hint" data-tip="Formato de arquivo que suporta snapshots no próprio arquivo mas tem sobrecarga de I/O em storages de arquivo." onclick="openGlossary(1)">QCOW2</span> sobre EXT4 gera penalidade de dupla camada de filesystem; (2) Migrar discos de alta performance para <span class="hint" data-tip="Acesso direto a blocos brutos via ZFS ZVOL ou LVM-Thin sem sistema de arquivos intermediário." onclick="openGlossary(0)">Block-level (ZFS ZVOL)</span> em formato <span class="hint" data-tip="Imagem de disco em formato binário cru com latência mínima e máximo throughput." onclick="openGlossary(2)">RAW</span>; (3) Auditar o arquivo central <b>/etc/pve/storage.cfg</b>; e (4) Validar a matriz de suporte a snapshots por tipo de storage.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior estava configurando um novo storage pool e me perguntou por que não podíamos salvar todos os discos virtuais em arquivos <code>.qcow2</code> dentro de uma pasta ext4 simples. Contei pra ele sobre as camadas invisíveis de penalidade de I/O que isso cria em servidores de banco de dados.<br><br>Expliquei a grande divisão dos storages no Proxmox: <b>File-level</b> (NFS, SMB, Diretório local) vs <b>Block-level</b> (LVM-Thin, ZFS, Ceph RBD). Em storages de bloco, o disco virtual é um volume bruto (RAW) gerenciado diretamente pelo subsistema de blocos do kernel, entregando a latência mínima e máximo throughput que bancos de dados exigem.<br><br>Mostrei também que o formato QCOW2 brilha em storages NFS por suportar snapshots Copy-on-Write em rede. Usamos o comando <code>qm move-disk</code> para migrar um disco a quente entre storages sem desligar a VM. O Júnior aprendeu a escolher o storage certo para cada carga de trabalho.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>pvesm status</code></td><td>Exibe o status de todos os storages configurados no nó/cluster, seu tipo, uso e integridade.</td></tr>
+    <tr><td><code>cat /etc/pve/storage.cfg</code></td><td>Arquivo central do cluster onde residem as definições de todos os pools de storage.</td></tr>
+    <tr><td><code>pvesm list local-zfs</code></td><td>Lista todas as imagens de disco de VMs (ZVOLs) e containers alocados no pool ZFS.</td></tr>
+    <tr><td><code>qemu-img info /var/lib/vz/images/100/vm-100-disk-0.qcow2</code></td><td>Audita os metadados internos de um arquivo de disco QCOW2.</td></tr>
+  </tbody></table>
+  <pre>$ cat /etc/pve/storage.cfg
+dir: local
+	path /var/lib/vz
+	content iso,vztmpl,backup
+
+zfspool: local-zfs
+	pool rpool/data
+	content rootdir,images
+	sparse 1
+
+$ pvesm status
+Name             Type     Status           Total            Used       Available        %
+local             dir     active       100862464        12450816        83248384   12.34%
+local-zfs     zfspool     active      1845493760       458120192      1387373568   24.82%
+
+# Comparação de formato:
+# local (Directory): Discos como arquivos (.qcow2 ou .raw) em /var/lib/vz/images/
+# local-zfs (Block-level): Discos como volumes ZVOL (/dev/zvol/rpool/data/vm-100-disk-0)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>💾 <b>Onde executar:</b> Terminal do Nó Proxmox (como <code>root</code>) com acesso direto aos pools ZFS e volumes LVM-Thin.</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em volumes e storages de laboratório. Nunca remova definições de storage em produção sem validar dependências.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione os tipos de storage cadastrados e formatos suportados no storage.cfg.</div></div>
+      <div class="lab-cmd">cat /etc/pve/storage.cfg</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Tabela exibindo nomes, tipos (dir, zfspool, lvmthin) e espaço livre.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Inspecionar /etc/pve/storage.cfg revela as propriedades dos pools (dir, lvmthin, zfspool, nfs) e seus formatos suportados (RAW vs QCOW2).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Tentar forçar o formato QCOW2 em storages de bloco puro como LVM ou ZFS, gerando erro de incompatibilidade no provisionamento.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um disco virtual em formato RAW em storage de bloco (LVM-Thin/ZFS).</div></div>
+      <div class="lab-cmd">pvesm alloc local-zfs 100 vm-100-disk-1 10G</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Mapeamento claro das flags <code>content iso,vztmpl</code> e <code>content images,rootdir</code>.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Usar formato RAW em storages de bloco elimina camadas intermediárias de arquivo e entrega a máxima performance de I/O para bancos de dados.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Usar RAW em storages baseados em diretório ou NFS tradicional se você pretende usar snapshots com estado de memória RAM.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Crie um disco virtual em formato QCOW2 com Copy-on-Write em storage NFS.</div></div>
+      <div class="lab-cmd">pvesm alloc nfs-backup 100 vm-100-disk-2.qcow2 10G --format qcow2</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Listagem dos volumes <code>vm-XXX-disk-X</code> criados diretamente como blocos brutos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Usar QCOW2 em storages NFS permite recursos de Copy-on-Write, snapshots e alocação dinâmica (thin provisioning).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Esquecer de monitorar o crescimento de arquivos QCOW2 em pastas locais, correndo risco de lotar o disco sem aviso prévio.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Mova um disco virtual a quente entre storages de bloco e arquivo com qm move-disk.</div></div>
+      <div class="lab-cmd">qm move-disk 100 scsi0 local-zfs --delete 1</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Visualização das pastas de imagens de VMs locais.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando qm move-disk <vmid> <disk> <target_storage> move discos virtuais entre storages diferentes a quente sem desligar a VM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Interromper o processo de move-disk via kill bruto no terminal, corrompendo a tabela de alocação do storage de destino.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente a matriz de storages recomendada por perfil de aplicação no datacenter.</div></div>
+      <div class="lab-cmd"># Matriz de formatos RAW vs QCOW2 homologada.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Relatório aprovado segregando storages de blocos para produção e storages de arquivos para ISOs e backups.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Registrar os storages homologados por tipo de aplicação (ZFS para BDs, NFS para backups) organiza a governança de storage da empresa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Misturar storages de alta e baixa performance na mesma VM sem critério de arquitetura.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Qual é a penalidade de I/O ao rodar uma imagem de disco QCOW2 dentro de uma pasta formatada em EXT4/XFS em comparação com rodar um volume RAW diretamente em ZFS (ZVOL) ou LVM-Thin?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Ao usar QCOW2 sobre EXT4, cada operação de escrita passa por duas camadas completas de sistema de arquivos e journals (o filesystem do SO convidado dentro do QCOW2 + o filesystem EXT4 do host), gerando 'Double Journaling' e alta latência de I/O. Em ZFS ZVOL ou LVM-Thin (Block-level), o Proxmox entrega um dispositivo de bloco bruto (RAW) diretamente ao QEMU, eliminando intermediários e entregando latência quase nativa de SSD/NVMe.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual tipo de armazenamento no Proxmox VE oferece suporte NATIVO a snapshots atômicos, compressão em tempo real e proteção contra corrupção silenciosa de dados (Bit Rot) ao nível de blocos?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'FAT32 não suporta permissões Linux, arquivos maiores que 4GB nem snapshots nativos.')"><b>A</b> Storage tipo Directory padrão formatado em FAT32</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! O ZFS integra sistema de arquivos e gerenciador de volumes lógicos com Copy-on-Write (CoW), provendo snapshots atômicos instantâneos, compressão LZ4/ZSTD e checksums em cada bloco para autocorreção.')"><b>B</b> ZFS (ZFS over ZVOL / Datasets)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O LVM tradicional não suporta snapshots ao vivo sem congelar I/O e não possui compressão nativa.')"><b>C</b> LVM Clássico tradicional sem Thin-Provisioning</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Protocolos legados não atendem requisitos corporativos de virtualização.')"><b>D</b> Compartilhamento SMB simples do Windows 98</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 Storage rejeitando upload de ISO com erro de 'content type not allowed'</h2>
+  <p>Um técnico tentou fazer upload de uma ISO do Debian para o storage 'local-zfs' e recebeu a mensagem de erro:</p>
+  <pre class="err">$ pvesm alloc local-zfs 100 debian.iso 1000M
+TASK ERROR: storage 'local-zfs' does not support content type 'iso' (allowed: rootdir, images)</pre>
+  <div class='box question'>Por que o Proxmox rejeitou o upload da ISO no storage local-zfs?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O erro é de compatibilidade de content type do storage, não de integridade do arquivo.')"><b>A</b> Porque a ISO está corrompida</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! Cada storage no Proxmox possui a diretiva 'content' que restringe o que pode ser gravado nele. Storages de blocos brutos guardam discos de VMs; storages de arquivos guardam ISOs e backups.')"><b>B</b> Porque o 'local-zfs' é um storage de blocos (zfspool) configurado exclusivamente para 'images' (discos de VM) e 'rootdir' (containers); arquivos como ISOs, templates (vztmpl) e backups exigem um storage baseado em arquivos (Directory, NFS ou SMB)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O ZFS aceita arquivos de qualquer tamanho quando configurado como dataset POSIX.')"><b>C</b> Porque o ZFS não aceita arquivos menores que 10GB</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 RAW vs QCOW2: Quando escolher cada formato de disco?</h2>
+  <p>Você está criando uma VM em um storage Directory (NFS ou pasta local) e precisa escolher o formato do disco virtual:</p>
+  <div class='box question'>Qual é a diretriz correta para a escolha do formato?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Em storages Directory/NFS, o formato RAW é mais rápido mas não suporta snapshots nativos do QEMU; o formato QCOW2 adiciona suporte a snapshots e thin provisioning no próprio arquivo.')"><b>A</b> Escolha RAW para máxima performance bruta e compatibilidade direta; escolha QCOW2 quando o storage for baseado em arquivos e você precisar do recurso de snapshots da VM dentro do próprio arquivo de imagem</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'RAW é o padrão de bloco cru universal de mais alta velocidade da indústria.')"><b>B</b> RAW é um formato obsoleto que só funciona no Windows 95</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O formato de disco não tem relação com a contagem de vCPUs.')"><b>C</b> QCOW2 é obrigatório para todos os servidores com mais de 8 vCPUs</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Arquitetura de Storage: File-level vs Block-level e RAW vs QCOW2: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Inspecione a topologia de storages cadastrada no Proxmox com <code>pvesm status</code>.</li>
+    <li>Para storages de alta performance de discos de VMs (images) e LXC (rootdir), utilize <b>ZFS Pools</b> ou <b>LVM-Thin</b>.</li>
+    <li>Para armazenamento de arquivos de instalação (ISO), templates (vztmpl) e backups (vzdump), configure storages baseados em arquivos (<b>Directory</b>, <b>NFS</b> ou <b>SMB</b>).</li>
+    <li>Mantenha a diretiva <code>content</code> rigorosamente restrita em cada entrada de <code>/etc/pve/storage.cfg</code>.</li>
+    <li>Audite a saúde dos volumes ZVOL no ZFS executando <code>zfs list</code>.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Monitore continuamente os limiares de espaço de Data e Metadata no LVM-Thin e ZFS, configurando alertas no Prometheus/Zabbix antes de atingir 80% de ocupação.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende a distinção arquitetural entre File-level e Block-level storage.</li>
+    <li>Você sabe quando utilizar o formato RAW (bloco cru) vs QCOW2 (snapshots em arquivo).</li>
+    <li>Você domina as diretivas do arquivo /etc/pve/storage.cfg e a restrição por 'content type'.</li>
+    <li>O planejamento de armazenamento corporativo foi homologado com excelência.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Para mover o disco de uma VM de um storage Directory para um pool ZFS online, utilize a opção 'Move Disk' na interface ou <code>qm move_disk ID scsi0 local-zfs</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A mecânica interna de Pools, VDEVs e Resiliência do ZFS será construída do zero amanhã no Dia 2.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: o ZFS é o storage corporativo unificado que oferece snapshots nativos, compressão LZ4 e autocorreção de dados em nível de blocos.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Arquitetura de storage compreendida com perfeição! Amanhã, no Dia 2, você dominará o ZFS do Zero: construindo Pools, dimensionando VDEVs (Mirror vs RAIDZ), configurando compressão LZ4 e extraindo o máximo de IOPS do hardware.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

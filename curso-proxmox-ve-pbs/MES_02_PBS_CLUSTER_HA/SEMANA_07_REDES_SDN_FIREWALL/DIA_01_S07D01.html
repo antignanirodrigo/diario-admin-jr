@@ -1,0 +1,541 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 7 · Dia 1 — Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='../SEMANA_06_BACKUP_RESTORE_DR/DIA_05_S06D05.html'>← Semana 6</a><a href='#'>Semana 7</a><a href='DIA_02_S07D02.html'>Dia 2 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com a Semana 6:</b> Você dominou backup, restore e DR. Agora você projeta a infraestrutura de rede que conecta todo o datacenter: aprendendo a agregar placas de rede físicas em Bonds LACP (802.3ad), criar Linux Bridges (vmbr) e aplicar alterações online com <code>ifreload -a</code> sem reiniciar o servidor.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Engenharia de Conectividade e Redundância de Rede.</b> Você projeta Bonds LACP, configura Linux Bridges e gerencia o stack ifupdown2.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 7 · Dia 1 | Nível Júnior — Redes Avançadas, SDN & Firewall</div>
+  <h1>Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP</h1>
+  <p>Agregação de links (802.3ad), alta disponibilidade de interfaces e reload com ifupdown2 sem reboot</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S07D01.png' alt='Prancha em seis quadros sobre Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#7001</b>: 'O servidor Proxmox VE <b>pve01</b> está conectado ao switch corporativo por apenas um cabo de rede de 1Gbps (<code>eno1</code>), representando um ponto único de falha (SPOF) e gargalo de tráfego. O datacenter adicionou uma segunda placa (<code>eno2</code>) conectada a uma porta LACP configurada no switch. O chamado exige: (1) Criar um <span class="hint" data-tip="Agregação de múltiplos links físicos em uma interface lógica com balanceamento e redundância." onclick="openGlossary(0)">Linux Bond (bond0)</span> no modo <span class="hint" data-tip="IEEE 802.3ad Dynamic Link Aggregation com hash layer2+3." onclick="openGlossary(1)">802.3ad (LACP)</span>; (2) Conectar a bridge virtual <span class="hint" data-tip="Switch virtual de software do Linux onde as placas de rede das VMs são plugadas." onclick="openGlossary(2)">vmbr0</span> ao bond0; (3) Aplicar as alterações sem reiniciar o host usando <span class="hint" data-tip="Comando do pacote ifupdown2 que recarrega a rede a quente sem derrubar conexões ativas." onclick="openGlossary(3)">ifreload -a</span>; e (4) Testar o failover puxando um dos cabos.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior foi configurar uma nova placa de rede de 10 GbE no servidor físico e colocou o endereço IP diretamente na interface física <code>eth0</code> em vez de colocar na Linux Bridge <code>vmbr0</code>. No segundo seguinte, todas as máquinas virtuais perderam a comunicação com o gateway e ficaram isoladas.<br><br>Fui até o rack e desenhei a topologia na lousa: no Linux/Proxmox, a placa de rede física é apenas o cabo que conecta o switch virtual (a bridge <code>vmbr0</code>) ao switch físico da sala. O IP de gerenciamento deve residir sempre na bridge! Além disso, mostrei como agregar duas placas em <b>Bonding LACP (802.3ad) com hash layer2+3</b> para dobrar a vazão e ter failover automático se um cabo quebrar.<br><br>Ensinamos o comando <code>ifreload -a</code> para aplicar as alterações de rede a quente no kernel sem precisar reiniciar o hypervisor. A rede voltou voando com 20 Gbps redundantes. O Júnior aprendeu a anatomia das bridges do Proxmox.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>ifreload -a</code></td><td>Recarrega e aplica todas as alterações do /etc/network/interfaces a quente sem reiniciar o host.</td></tr>
+    <tr><td><code>cat /proc/net/bonding/bond0</code></td><td>Exibe o status em tempo real do Bond: modo LACP, estado das portas escravas e estatísticas de pacotes.</td></tr>
+    <tr><td><code>ip link show</code></td><td>Lista todas as interfaces físicas, bridges virtuais e bonds com seus respectivos estados (UP/DOWN).</td></tr>
+    <tr><td><code>bridge link show</code></td><td>Exibe quais portas físicas ou virtuais de VMs estão conectadas a cada Linux Bridge.</td></tr>
+  </tbody></table>
+  <pre># 1. Configuração persistente em /etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+iface eno1 inet manual
+iface eno2 inet manual
+
+auto bond0
+iface bond0 inet manual
+	bond-slaves eno1 eno2
+	bond-miimon 100
+	bond-mode 802.3ad
+	bond-xmit-hash-policy layer2+3
+
+auto vmbr0
+iface vmbr0 inet static
+	address 192.168.1.50/24
+	gateway 192.168.1.1
+	bridge-ports bond0
+	bridge-stp off
+	bridge-fd 0
+
+# 2. Aplicação a quente com ifupdown2
+$ ifreload -a
+Reloading network interfaces... OK
+
+# 3. Auditoria do LACP em tempo real
+$ cat /proc/net/bonding/bond0
+Bonding Mode: IEEE 802.3ad Dynamic link aggregation
+Transmit Hash Policy: layer2+3 (2)
+MII Status: UP
+Slave Interface: eno1 (MII Status: UP, Link Failure Count: 0)
+Slave Interface: eno2 (MII Status: UP, Link Failure Count: 0)
+Aggregator ID: 1 (Partner MAC: 00:1a:2b:3c:4d:5e)</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🌐 <b>Onde executar:</b> Terminal do Nó Proxmox para comandos <code>ip</code>, <code>bridge</code>, <code>pvesdn</code> e <code>tcpdump</code>.</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em bridges e firewalls de laboratório ou teste. Não altere parâmetros de redes de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Edite o arquivo /etc/network/interfaces configurando uma Linux Bridge vmbr0.</div></div>
+      <div class="lab-cmd">nano /etc/network/interfaces</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Interfaces eno1 e eno2 listadas no sistema.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Configurar a Linux Bridge vmbr0 em /etc/network/interfaces cria o switch virtual de Camada 2 que interliga as interfaces virtuais ao mundo físico.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Colocar o endereço IP diretamente na placa de rede física (ex: eth0) em vez da bridge vmbr0, quebrando a comunicação das máquinas virtuais.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Configure a agregação de links bond0 em modo LACP 802.3ad com hash layer2+3.</div></div>
+      <div class="lab-cmd">cat &lt;&lt;EOF &gt;&gt; /etc/network/interfaces
+auto bond0
+iface bond0 inet manual
+	bond-slaves eth0 eth1
+	bond-miimon 100
+	bond-mode 802.3ad
+	bond-xmit-hash-policy layer2+3
+EOF</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Sintaxe validada com parâmetros 802.3ad e layer2+3.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Agregar duas interfaces de rede físicas em bond0 com modo 802.3ad (LACP) e xmit_hash_policy layer2+3 entrega 20 Gbps e failover automático.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ativar LACP no Proxmox sem configurar o switch físico com agregação LACP correspondente, causando bloqueio das portas por Spanning Tree.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Aplique as alterações de rede a quente no kernel sem reboot com ifreload.</div></div>
+      <div class="lab-cmd">ifreload -a</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Comando executado com retorno limpo sem interrupção de SSH.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando ifreload -a aplica as alterações de rede a quente no kernel sem exigir reboot do hypervisor nem derrubar as VMs.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Reiniciar o servidor físico para aplicar uma mudança de IP de bridge, causando indisponibilidade desnecessária em todo o nó.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inspecione a saúde e portas ativas do bond com /proc/net/bonding/bond0.</div></div>
+      <div class="lab-cmd">cat /proc/net/bonding/bond0</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Status MII: UP e ambas as interfaces ativas no agregador.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Inspecionar /proc/net/bonding/bond0 valida se as duas placas estão ativas (Up) e sincronizadas com o switch físico via protocolo LACP.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ignorar alertas de uma das placas do bond em estado 'Down', operando sem redundância física de rede sem saber.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Documente o mapa de portas físicas e agregação LACP no diagrama de rede.</div></div>
+      <div class="lab-cmd"># Agregação de Links LACP e Bridges homologadas.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Topologia homologada com redundância e agregação de 2Gbps.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Registrar a topologia de cabos e portas no diagrama de rede previne desconexões acidentais durante manutenções físicas no rack.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Não identificar os cabos de rede fisicamente no datacenter, puxando a interface errada durante uma substituição.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que o Proxmox VE utiliza o pacote 'ifupdown2' em vez do tradicional 'ifupdown' do Debian padrão?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque o **ifupdown2** (escrito em Python pelo time da Cumulus Networks) permite aplicar alterações na configuração de rede (/etc/network/interfaces) em tempo real a quente com o comando `ifreload -a`. No Debian tradicional antigo, alterar a rede exigia reiniciar o servidor inteiro ou derrubar a rede de todas as VMs ativas, causando indisponibilidade inaceitável em produção.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é a configuração correta no arquivo <code>/etc/network/interfaces</code> para agregar as interfaces eno1 e eno2 em um Bond LACP 802.3ad com hash layer2+3 e conectá-lo à bridge vmbr0?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Plugar duas placas físicas diretamente na mesma bridge sem bond causa tempestade de broadcast (loop L2) e derruba a rede.')"><b>A</b> auto vmbr0
+iface vmbr0 inet manual
+	bridge-ports eno1 eno2 (criando loop de rede)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! As interfaces físicas tornam-se escravas (slaves) do bond0 no modo 802.3ad com hash layer2+3, e a bridge virtual vmbr0 utiliza o bond0 como sua porta de uplink externa, garantindo 2Gbps agregados e failover instantâneo.')"><b>B</b> auto bond0
+iface bond0 inet manual
+	bond-slaves eno1 eno2
+	bond-miimon 100
+	bond-mode 802.3ad
+	bond-xmit-hash-policy layer2+3
+
+auto vmbr0
+iface vmbr0 inet static
+	address 192.168.1.50/24
+	gateway 192.168.1.1
+	bridge-ports bond0
+	bridge-stp off
+	bridge-fd 0</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O modo round-robin puro (mode 0) causa desordenamento severo de pacotes TCP e exige switches com balanceamento proprietário sem LACP.')"><b>C</b> auto bond0
+iface bond0 inet dhcp
+	bond-mode round-robin</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'Comandos legados do bridge-utils estão depreciados e não persistem no boot do Proxmox.')"><b>D</b> brctl addbr vmbr0 eno1 eno2</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Na arquitetura do Proxmox sobre Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP: O KVM/QEMU opera como o motorista dedicado de cada passageiro, alocando recursos virtuais em contato direto com o kernel.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O Bond LACP não sobe e fica com status Partner MAC zerado</h2>
+  <p>Você configurou o bond0 como 802.3ad, executou ifreload -a, mas o bond não transmite tráfego e exibe 'Partner MAC: 00:00:00:00:00:00':</p>
+  <pre class="err">[bond0] 802.3ad info: Aggregator ID: 1, Partner MAC: 00:00:00:00:00:00
+Warning: No LACPDU packets received from switch!
+(O Proxmox está enviando pedidos LACP, mas o switch físico não está configurado para 802.3ad naquele par de portas)</pre>
+  <div class='box question'>Qual foi o motivo da falha de negociação do LACP?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O comprimento do cabo dentro do padrão Ethernet não impede a troca de frames LACPDU.')"><b>A</b> O cabo de rede é muito comprido</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! O modo 802.3ad é um protocolo dinâmico de duas pontas: o host e o switch precisam trocar pacotes LACPDU. Se o switch for burro ou não estiver configurado, deve-se usar o modo active-backup (balance-alb) que não exige configuração no switch.')"><b>B</b> O modo 802.3ad exige que as portas correspondentes no switch físico estejam agrupadas em um Port-Channel / LAG com protocolo LACP (Active/Passive); se o switch não estiver configurado para LACP, o bond não forma canal (alternativa de contingência no host: usar mode=active-backup)</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'Interfaces de rede operam de forma totalmente independente de subsistemas gráficos.')"><b>C</b> O Proxmox VE foi instalado sem placa de vídeo</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> Ao diagnosticar problemas em Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP: É como inspecionar as conexões do storage e o barramento PCIe antes de declarar falha de software.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Por que a política de hash 'layer2+3' é superior a 'layer2' em um Bond LACP?</h2>
+  <p>Um analista pergunta por que devemos sempre configurar 'bond-xmit-hash-policy layer2+3':</p>
+  <div class='box question'>Qual é a vantagem técnica do hash layer2+3 sobre o hash layer2?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! Em ambientes de datacenter com roteamento, o MAC de destino é sempre o gateway. O hash layer2+3 inspeciona os IPs de cada conexão, garantindo que diferentes VMs e clientes utilizem ambos os cabos simultaneamente.')"><b>A</b> O hash layer2 usa apenas o MAC de destino; se todas as VMs falam com o mesmo Gateway/Roteador, todo o tráfego sairia por um único cabo. O hash layer2+3 combina o MAC com o IP de origem e destino, distribuindo os fluxos de rede de forma equilibrada entre as duas placas físicas mesmo ao falar com o gateway</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'Leis da física não são alteradas por algoritmos de hash de pacotes.')"><b>B</b> O hash layer2+3 dobra a velocidade da luz na fibra ótica</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O IP continua obrigatório para comunicação L3.')"><b>C</b> O hash layer2+3 desativa a necessidade de IP no servidor</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A governança e resiliência em Arquitetura de Rede no Proxmox: Linux Bridges, Bonds e LACP: Funciona como a política de contenção e redundância do datacenter, garantindo que o cluster nunca perca quorum.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Conecte os cabos de rede físicos nas portas correspondentes do switch já agrupadas em LACP (Port-Channel).</li>
+    <li>Edite o arquivo <code>/etc/network/interfaces</code> declarando as interfaces físicas como <code>inet manual</code>.</li>
+    <li>Crie o <code>bond0</code> com <code>bond-mode 802.3ad</code>, <code>bond-miimon 100</code> e <code>bond-xmit-hash-policy layer2+3</code>.</li>
+    <li>Associe o <code>bond0</code> na linha <code>bridge-ports bond0</code> da bridge virtual <code>vmbr0</code>.</li>
+    <li>Aplique a configuração a quente com o comando <code>ifreload -a</code>.</li>
+    <li>Valide a negociação LACP auditando o arquivo <code>/proc/net/bonding/bond0</code>.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Adote Bridges VLAN-Aware para simplificar a topologia de rede e use LACP com links redundantes em switches físicos empilhados ou com MC-LAG.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende a arquitetura de Linux Bridges e Linux Bonds no Proxmox VE.</li>
+    <li>Você domina a agregação de links LACP (802.3ad) com política de hash layer2+3.</li>
+    <li>Você sabe como utilizar o ifupdown2 para aplicar reconfigurações de rede sem reiniciar o host.</li>
+    <li>A redundância física de rede do nó foi estabelecida com excelência.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Caso uma configuração de rede errada trave o acesso, restaure o arquivo de backup com <code>cp /etc/network/interfaces.bak /etc/network/interfaces && ifreload -a</code> via console IPMI/KVM físico.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A segmentação de tráfego corporativo com VLANs 802.1Q e bridges VLAN-Aware será o tema de amanhã no Dia 2.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: a sintaxe oficial agrupa as interfaces físicas no bond0 com modo 802.3ad e conecta a bridge vmbr0 ao bond0 como porta de uplink.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Bonds LACP e Linux Bridges dominados com maestria! Amanhã, no Dia 2, você aprenderá como segmentar tráfego com VLANs 802.1Q: dominando as bridges VLAN-Aware, portas de trunking e isolamento estrito de redes DMZ, Gerência e Storage.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>

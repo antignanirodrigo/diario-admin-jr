@@ -1,0 +1,503 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Semana 5 · Dia 2 — Datastores e Garbage Collection no PBS: Chunks e Mark & Sweep | Diario de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.58 Arial,sans-serif;letter-spacing:0}
+.top{position:sticky;top:0;z-index:5;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:14px}nav a,nav span{color:var(--ink);margin-left:18px;text-decoration:none;font-weight:700;font-size:14px}nav span{opacity:.4}
+.progress{width:min(1180px,92vw);margin:14px auto 0;display:flex;gap:4px}
+.progress .dot{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress .dot.done{background:var(--green)}.progress .dot.now{background:var(--gold)}
+.bridge{width:min(1180px,92vw);margin:10px auto 0;background:#0d1f2a;border:1px solid #1f4e63;border-left:5px solid var(--cyan);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#cfeaf5}
+.bridge b{color:var(--cyan)}
+.privilege{width:min(1180px,92vw);margin:12px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.privilege b{color:var(--gold)}
+.hero{padding:26px max(4vw,20px) 26px;max-width:1500px;margin:auto}.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:8px 0 14px;max-width:1100px}.hero p{font-size:19px;color:var(--muted);max-width:900px}.philosophy{color:#050607;background:var(--gold);font-weight:900;padding:10px 16px;display:inline-block}
+.comic{display:block;width:min(1500px,94vw);height:auto;margin:18px auto 0;border:4px solid #f5f5f0;border-radius:4px}
+.scene-strip{width:min(1180px,92vw);margin:0 auto 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.scene-chip{background:var(--panel2);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:12px 14px;font-size:13px}
+.scene-chip b{color:var(--gold);display:block;margin-bottom:4px;font-size:13.5px}
+.scene-chip .more{color:var(--cyan);cursor:pointer;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.wrap{width:min(1180px,92vw);margin:auto}.section{padding:34px 0;border-top:1px solid var(--line)}h2{font-size:28px;color:var(--gold);margin:0 0 16px}h3{color:var(--cyan);margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--gold);padding:22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th{background:var(--gold);color:#050607;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top}
+code,pre{font-family:Consolas,monospace}code{color:#a8f5c6}pre{background:#020507;color:#a8f5c6;border:1px solid var(--line);padding:20px;overflow:auto;white-space:pre-wrap}
+pre.err{border-color:var(--red)}
+.steps{counter-reset:item;list-style:none;padding:0}.steps li{counter-increment:item;background:var(--panel);border-left:5px solid var(--cyan);margin:10px 0;padding:14px 16px}
+.steps li:before{content:counter(item);display:inline-grid;place-items:center;width:30px;height:30px;background:var(--cyan);color:#051018;font-weight:900;margin-right:12px}
+.warning{border-left-color:var(--red);background:#1b1117}.validation{border-left-color:var(--green)}
+footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13px}
+.hint{border-bottom:1px dotted var(--cyan);color:var(--cyan);cursor:pointer;position:relative;font-weight:700}
+.hint:hover::after{content:attr(data-tip);position:absolute;bottom:135%;left:0;background:#0d1522;border:1px solid var(--gold);padding:9px 13px;border-radius:6px;font-size:13px;width:240px;z-index:15;color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.5);font-weight:400}
+.hint:hover::before{content:'';position:absolute;bottom:118%;left:14px;border:6px solid transparent;border-top-color:var(--gold);z-index:15}
+.glossary-trigger{border:0;background:var(--panel2);border:1px solid var(--line);color:var(--cyan);font:inherit;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer;text-align:left}
+.glossary-trigger:hover{border-color:var(--cyan)}
+.glossary-modal{width:min(620px,92vw);border:2px solid var(--gold);background:#0d1522;color:var(--ink);padding:26px;border-radius:8px}
+.glossary-modal::backdrop{background:rgba(0,0,0,.82)}
+.glossary-modal h2{padding-right:42px;font-size:22px}
+.glossary-close{position:absolute;right:18px;top:14px;border:0;background:none;color:var(--muted);font-size:24px;font-weight:900;cursor:pointer}
+.glossary-definition{background:#050910;border-radius:4px;padding:16px;margin-bottom:10px}
+.glossary-analogy{background:#162338;border-left:5px solid var(--cyan);padding:16px;border-radius:0 4px 4px 0}
+.recall{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--purple);padding:20px;border-radius:0 6px 6px 0}
+.recall-btn{background:#221338;border:1px solid var(--purple);color:#e9d5ff;padding:9px 16px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:10px}
+.recall-btn:hover{background:var(--purple);color:#1a0a2e}
+.recall-answer{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted)}
+.recall-answer.show{display:block}
+.quiz-opt{display:block;width:100%;text-align:left;background:#090d13;border:2px solid var(--line);color:var(--ink);padding:16px 18px;border-radius:6px;cursor:pointer;font-size:16px;margin-bottom:10px;font-family:inherit}
+.quiz-opt:hover{border-color:var(--cyan)}
+.quiz-opt.disabled{opacity:.4;pointer-events:none}
+.quiz-opt b{display:inline-block;min-width:28px;color:var(--cyan)}
+.quiz-result{display:none;border-radius:6px;padding:18px 20px;margin-top:14px;border:2px solid var(--line)}
+.quiz-result.show{display:block}
+.quiz-result.correct{border-color:var(--green);background:#0d1a14}
+.quiz-result.wrong{border-color:var(--red);background:#1a0d10}
+.quiz-result-head{font-weight:900;margin-bottom:8px}
+.quiz-result.correct .quiz-result-head{color:var(--green)}
+.quiz-result.wrong .quiz-result-head{color:var(--red)}
+.retry-btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px 14px;border-radius:5px;font-size:13px;cursor:pointer;margin-top:12px}
+.retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.testking-tag{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:900;padding:3px 9px;border-radius:4px;letter-spacing:.5px;margin-bottom:10px}
+.quiz-ref{margin-top:12px;font-size:13px;color:var(--muted)}.quiz-ref a{color:var(--cyan)}
+.lab-row{display:flex;gap:12px;align-items:flex-start}
+.lab-box{width:22px;height:22px;flex:none;border:2px solid var(--cyan);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900;margin-top:2px}
+.steps li.done{opacity:.55}.steps li.done .lab-text{text-decoration:line-through}
+.lab-expect{margin-top:8px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;font-size:13px;color:var(--muted)}
+.lab-expect b{color:var(--green)}
+.mentor-slot{margin-top:14px;padding:14px 16px;background:#0d1522;border:1px dashed #3a4a63;border-radius:6px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.mentor-slot b{color:var(--purple)}
+.checkpoint{background:#221a08;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:0 6px 6px 0;padding:14px 18px;font-size:13.5px;color:#f4d98a;margin-top:16px}
+
+.story{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px 28px;font-size:16.5px;line-height:1.75;color:var(--ink)}
+.story b{color:var(--cyan)}
+.story .eyebrow-mini{display:block;color:var(--cyan);font-weight:900;text-transform:uppercase;font-size:12.5px;margin-bottom:10px;letter-spacing:.4px}
+.lab-cmd{margin-top:8px;background:#020507;color:#a8f5c6;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-family:Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}
+.lab-why{margin-top:8px;padding:10px 12px;background:#0d1f2a;border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;font-size:13px;color:#cfeaf5}
+.lab-why b{color:var(--cyan)}
+.lab-warn{margin-top:8px;padding:10px 12px;background:#1b1117;border-left:3px solid var(--red);border-radius:0 4px 4px 0;font-size:13px;color:#f4c6c9}
+.lab-warn b{color:var(--red)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{position:static;display:block}nav{margin-top:8px}.hero h1{font-size:32px}.comic{width:100%;border-width:2px}.wrap{width:94vw}.hint:hover::after{width:180px;left:-40px}}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1}
+.theme-toggle:hover{border-color:var(--gold)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --panel2:#f1f5f9;
+  --line:#cbd5e1;
+  --ink:#0f172a;
+  --muted:#475569;
+  --gold:#1e40af;
+  --cyan:#0284c7;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#2563eb;
+}
+
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .bridge{background:#f0fdf4;border-color:#bbf7d0;border-left:5px solid var(--green);color:#14532d}
+[data-theme="light"] .bridge b{color:#15803d}
+[data-theme="light"] .privilege{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .privilege b{color:var(--gold)}
+[data-theme="light"] .hint:hover::after{background:#ffffff;border-color:var(--gold);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+[data-theme="light"] .hint:hover::before{border-top-color:var(--gold)}
+[data-theme="light"] .scene-chip{background:var(--panel2);border-color:var(--line);border-top:3px solid var(--gold)}
+[data-theme="light"] .scene-chip b{color:var(--gold)}
+[data-theme="light"] .scene-chip .more{color:var(--cyan)}
+[data-theme="light"] .glossary-trigger{background:var(--panel2);border-color:var(--line);color:var(--cyan)}
+[data-theme="light"] .glossary-modal{background:#ffffff;border-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .glossary-definition{background:var(--panel2);color:var(--ink)}
+[data-theme="light"] .glossary-analogy{background:#eff6ff;border-left:5px solid var(--cyan);color:#1e3a8a}
+[data-theme="light"] .recall{background:var(--panel);border-color:var(--line);border-left:5px solid var(--cyan)}
+[data-theme="light"] .recall-btn{background:#e0f2fe;border-color:var(--cyan);color:#0369a1}
+[data-theme="light"] .recall-btn:hover{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .recall-answer{border-top-color:var(--line);color:var(--muted)}
+[data-theme="light"] .quiz-opt{background:#ffffff;border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .quiz-opt:hover{border-color:var(--cyan)}
+[data-theme="light"] .quiz-opt b{color:var(--cyan)}
+[data-theme="light"] .quiz-result{border-color:var(--line);background:var(--panel2)}
+[data-theme="light"] .quiz-result.correct{background:#f0fdf4;border-color:var(--green)}
+[data-theme="light"] .quiz-result.wrong{background:#fef2f2;border-color:var(--red)}
+[data-theme="light"] .quiz-result.correct .quiz-result-head{color:var(--green)}
+[data-theme="light"] .quiz-result.wrong .quiz-result-head{color:var(--red)}
+[data-theme="light"] .quiz-result-body{color:var(--ink)}
+[data-theme="light"] .quiz-ref{color:var(--muted)}
+[data-theme="light"] .retry-btn{border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .retry-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .steps li{background:var(--panel);border-left-color:var(--cyan);color:var(--ink)}
+[data-theme="light"] .steps li:before{background:var(--cyan);color:#ffffff}
+[data-theme="light"] .lab-expect{background:var(--panel2);border-left-color:var(--green);color:var(--muted)}
+[data-theme="light"] .lab-expect b{color:var(--green)}
+[data-theme="light"] .lab-why{background:#eff6ff;border-left-color:var(--cyan);color:#1e3a8a}
+[data-theme="light"] .lab-why b{color:var(--cyan)}
+[data-theme="light"] .lab-warn{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .lab-warn b{color:var(--red)}
+[data-theme="light"] .mentor-slot{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+[data-theme="light"] .mentor-slot b{color:var(--cyan)}
+[data-theme="light"] .checkpoint{background:#eff6ff;border-color:#bfdbfe;border-left:5px solid var(--gold);color:#1e3a8a}
+[data-theme="light"] .checkpoint b{color:var(--gold)}
+[data-theme="light"] .story{background:var(--panel);border-color:var(--line);color:var(--ink)}
+[data-theme="light"] .story b{color:var(--cyan)}
+[data-theme="light"] .box{background:var(--panel);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+[data-theme="light"] .warning{background:#fef2f2;border-left-color:var(--red);color:#991b1b}
+[data-theme="light"] .validation{background:#f0fdf4;border-left-color:var(--green);color:#14532d}
+[data-theme="light"] table{background:var(--panel)}
+[data-theme="light"] th{background:#e0e7ff;color:#1e1b4b;border-color:var(--line)}
+[data-theme="light"] td{border-color:var(--line);color:var(--ink)}
+[data-theme="light"] code{color:var(--green)}
+[data-theme="light"] pre{background:#0f172a;color:#a8f5c6;border-color:#334155}
+[data-theme="light"] pre code{color:#a8f5c6}
+[data-theme="light"] h2{color:var(--gold)}
+[data-theme="light"] h3{color:var(--cyan)}
+[data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+</style></head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | PROXMOX VE & PBS — DA BASE AO CLUSTER</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav><a href='DIA_01_S05D01.html'>← Dia 1</a><a href='#'>Semana 5</a><a href='DIA_03_S05D03.html'>Dia 3 →</a></nav>
+</header>
+<div class="progress">
+  <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+<div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Ontem você entendeu como os chunks são criados. Hoje você aprende como o PBS limpa blocos não utilizados quando backups são apagados: conhecendo o ciclo em duas fases (Mark & Sweep) do Garbage Collection e a proteção contra deleção acidental de backups em andamento.</div>
+
+<div class="privilege">🔓 <b>Privilégio de hoje: Manutenção de Datastore e Garbage Collection.</b> Você gerencia tarefas de GC, agenda Verify Jobs e audita chunks órfãos no PBS.</div>
+
+<main>
+<section class='hero'>
+  <div class='eyebrow'>Semana 5 · Dia 2 | Nível Júnior — Proxmox Backup Server & Integração</div>
+  <h1>Datastores e Garbage Collection no PBS: Chunks e Mark & Sweep</h1>
+  <p>Como o PBS remove blocos órfãos e valida a integridade física de backups através de Verify Jobs</p>
+  <span class='philosophy'>ANTES DE ALTERAR, OBSERVE. DEPOIS DE ALTERAR, VALIDE.</span>
+</section>
+
+<img class='comic' src='assets/PRANCHA_PVE_S05D02.png' alt='Prancha em seis quadros sobre Datastores e Garbage Collection no PBS: Chunks e Mark & Sweep'>
+
+<div class="scene-strip" id="sceneStrip"></div>
+
+<div class='wrap'>
+
+<section class='section'>
+  <h2>1. O chamado</h2>
+  <div class='box'>Você recebeu o chamado <b>#5002</b>: 'O administrador apagou 50 snapshots antigos de máquinas virtuais na interface web do PBS, mas o espaço em disco do Datastore continuou 100% ocupado. Além disso, a auditoria externa exige garantir que nenhum backup armazenado há mais de 6 meses sofreu corrupção silenciosa de hardware. O chamado exige: (1) Entender por que apagar snapshots apenas remove arquivos de índice (.fidx) sem liberar os chunks de dados imediatamente; (2) Executar o <span class="hint" data-tip="Processo em 2 etapas: Fase 1 (Mark) marca chunks em uso; Fase 2 (Sweep) apaga chunks órfãos após o tempo de carência." onclick="openGlossary(0)">Garbage Collection (GC)</span>; (3) Entender a janela de carência de 24h e 5min (Grace Period); e (4) Configurar um <span class="hint" data-tip="Varredura que lê e recalcula os hashes de todos os chunks do datastore para detectar corrupção de disco." onclick="openGlossary(1)">Verify Job</span> semanal.'</div>
+  <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
+</section>
+
+<section class='section'>
+  <h2>2. O sênior te conta</h2>
+  <div class="story">
+    <span class="eyebrow-mini">🧑‍🏫 antes dos termos técnicos, a história de hoje</span>
+    Hoje o Júnior deletou vários backups antigos de 500GB pelo painel do PBS para liberar espaço no storage, mas quando rodou <code>df -h</code>, o disco continuava com 90% de ocupação. Ele veio me perguntar se o PBS estava com bug.<br><br>Expliquei o ciclo de vida interno do PBS: quando você apaga um snapshot de backup, você está apenas deletando o arquivo de índice (manifesto). Como os chunks de 4MB podem estar sendo compartilhados por dezenas de outros backups, o PBS não apaga o bloco físico na hora. O espaço só é liberado quando o <b>Garbage Collection (GC)</b> roda suas duas fases: a Fase 1 (Mark) marca os chunks ativos, e a Fase 2 (Sweep) remove os chunks órfãos após a janela de carência de 24 horas.<br><br>Disparamos o Garbage Collection no terminal com <code>proxmox-backup-manager garbage-collection start</code> e acompanhamos o <b>Verify Job</b> recalculando os hashes SHA-256 para garantir zero bit-rot nos dados. O Júnior aprendeu a programar a manutenção preventiva do PBS com precisão cirúrgica.
+  </div>
+</section>
+
+<section class='section'>
+  <h2>3. Decodificador de conceitos</h2>
+  <p style="color:var(--muted)">Clica em qualquer termo pra ver a definição completa e uma analogia do dia a dia:</p>
+  <div class="grid" id="glossaryTriggers"></div>
+</section>
+
+<section class='section'>
+  <h2>4. Ferramentas e leitura da evidência</h2>
+  <table><thead><tr><th>Comando / Parâmetro</th><th>O que observar e por que importa</th></tr></thead><tbody>
+    <tr><td><code>proxmox-backup-manager garbage-collection start datastore</code></td><td>Inicia manualmente o processo de Garbage Collection no Datastore selecionado.</td></tr>
+    <tr><td><code>proxmox-backup-manager verify-job create verify-semanal --datastore datastore --schedule 'sat 02:00'</code></td><td>Cria um agendamento de verificação periódica de integridade de chunks.</td></tr>
+    <tr><td><code>proxmox-backup-manager datastore status datastore</code></td><td>Exibe a contagem de chunks em uso, chunks órfãos e espaço físico recuperável.</td></tr>
+    <tr><td><code>cat /etc/proxmox-backup/datastore.cfg</code></td><td>Arquivo de configuração onde residem as regras de agendamento de GC e Prune.</td></tr>
+  </tbody></table>
+  <pre># 1. Execução manual de Garbage Collection no PBS
+$ proxmox-backup-manager garbage-collection start datastore
+TASK OK: Starting garbage collection on store 'datastore'
+Start GC phase1 (mark used chunks)
+marked 1845012 chunks as in use
+Start GC phase2 (sweep unused chunks)
+removed 412500 chunks (1.68 TB freed)
+Original data: 42.10 TB
+Processed data: 6.80 TB
+Processed chunks: 1845012
+Removed chunks: 412500 (1.68 TB)
+Task finished successfully!
+
+# 2. Execução de Verify Job para auditoria de corrupção
+$ proxmox-backup-manager verify-job run-now verify-semanal
+TASK OK: verify datastore:datastore
+verify group vm/100 (1 snapshot)
+  snapshot vm/100/2026-09-01T15:00:00Z: verify ok
+verify group vm/101 (2 snapshots)
+  snapshot vm/101/2026-09-01T15:00:00Z: verify ok
+100% of chunks verified successfully without errors.</pre>
+</section>
+
+<section class='section' id='lab'>
+  <h2>5. Laboratório guiado — pegue na mão, comando por comando</h2>
+  <div class='box' style='background:var(--card-bg);border-left:4px solid var(--cyan);margin-bottom:14px'>🛡️ <b>Onde executar:</b> Terminal do servidor Proxmox Backup Server (<code>root@pbs:~#</code>) e terminal do Proxmox VE (<code>root@pve:~#</code>).</div>
+  <div class='box warning'><strong>Segurança:</strong> Execute as alterações em datastores de laboratório ou teste. Não altere parâmetros de servidores de produção sem janela homologada.</div>
+  <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Inicie a Fase 1 e Fase 2 do Garbage Collection no datastore do PBS.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager garbage-collection start tank-backup</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Exibição do total de chunks, tamanho em disco e taxa de deduplicação.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O Garbage Collection Fase 1 varre os arquivos de manifesto (.fidx/.didx) e marca todos os chunks que ainda estão em uso ativo por backups válidos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Interromper o processo de Garbage Collection no meio, deixando o datastore em estado intermediário de verificação.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Acompanhe o log da tarefa confirmando a quantidade de chunks órfãos removidos e espaço liberado.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager task log &lt;task_id&gt;</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Execução limpa das fases 1 (Mark) e 2 (Sweep).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O Garbage Collection Fase 2 remove os chunks órfãos que não foram referenciados e que ultrapassaram a janela de carência de segurança (24 horas).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Achar que o espaço em disco é liberado no segundo em que um backup é deletado; o espaço só é recuperado após o término da Fase 2 do GC.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Dispare o Verify Job para recalcular os hashes SHA-256 de todos os chunks.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager verify-job start tank-verify</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Job de verificação programado com sucesso.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-manager verify-job recalcula os hashes SHA-256 de cada chunk armazenado no disco físico, detectando corrupção silenciosa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Não rodar Verify Jobs periodicamente, descobrindo que o backup está corrompido apenas no momento crítico de um desastre real.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Valide que o relatório final acusa 100% de chunks íntegros com zero corrupção.</div></div>
+      <div class="lab-cmd">proxmox-backup-manager datastore verify tank-backup</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Validação de 100% dos hashes com status OK.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Agendar GC semanalmente e Verify mensalmente estabelece a rotina oficial de manutenção preventiva do Proxmox Backup Server.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Agendar Verify Jobs diários em datastores de dezenas de terabytes, mantendo os discos em 100% de leitura ininterrupta.</div>
+      <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    </li>
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><b>Ação:</b> Agende as rotinas de GC e Verify no agendador oficial do PBS.</div></div>
+      <div class="lab-cmd"># Rotina de GC e Verify Jobs homologada.</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> Procedimentos homologados no relatório corporativo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> Registrar o status '0 corrupt chunks' no relatório mensal comprova a integridade e conformidade dos dados da empresa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> Ignorar notificações de chunks corrompidos no log do PBS, arriscando perder pontos de restauração de sistemas legados.</div>
+    </li></ol>
+</section>
+
+<section class='section'>
+  <h2>6. Antes de ver as opções — tenta responder</h2>
+  <div class="recall">
+    🧠 <b>Recall ativo:</b> Por que quando você apaga um snapshot de backup no PBS o espaço livre no Datastore NÃO aumenta no mesmo segundo?
+    <br><button class="recall-btn" id="recallBtn" onclick="showRecall()">Tentei lembrar — ver resposta</button>
+    <div class="recall-answer" id="recallAns">
+      Porque apagar um snapshot remove apenas o arquivo de manifesto de índice (.fidx) daquele backup. Os chunks reais continuam gravados na pasta <code>.chunks/</code>, pois outros snapshots de outras VMs podem estar referenciando os mesmos blocos. O espaço físico só é liberado quando o processo de **Garbage Collection (GC)** é executado, varrendo todos os índices do datastore, identificando chunks órfãos que ninguém mais referencia e apagando-os do disco com segurança.
+    </div>
+  </div>
+</section>
+
+<section class='section' id='questao'>
+  <span class="testking-tag">QUESTÃO 1 de 3</span>
+  <h2>7. Questão comentada — clica numa alternativa</h2>
+  <div class='box question'>Qual é o funcionamento das duas fases do algoritmo de Garbage Collection (Mark & Sweep) no Proxmox Backup Server?</div>
+  <div id="quizArea1">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O GC nunca apaga todos os chunks; ele atua com extrema precisão cirúrgica de segurança.')"><b>A</b> Fase 1: apaga todos os arquivos da pasta .chunks/; Fase 2: restaura os backups a partir da internet</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',true,'Correto! Esse mecanismo elegante impede que um chunk recém-enviado por um backup que está rodando em paralelo naquele exato minuto seja apagado por engano antes de seu índice ser finalizado.')"><b>B</b> Fase 1 (Mark): percorre todos os índices (.fidx/.didx) de todos os backups válidos e atualiza o carimbo de acesso (atime) de cada chunk em uso; Fase 2 (Sweep): varre a pasta .chunks/ e apaga apenas os chunks cujo atime não foi atualizado e que são mais velhos que o tempo de carência de 24h5m</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O GC roda online com o servidor 100% em produção sem interromper novos backups.')"><b>C</b> Fase 1: desliga o servidor PBS; Fase 2: formata o pool ZFS</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult1',false,'O GC atua exclusivamente na limpeza de dados locais do Datastore.')"><b>D</b> Fase 1: compacta os arquivos em ZIP; Fase 2: envia para o Google Drive</button>
+  </div>
+  <div id="quizResult1" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> A deduplicação do PBS em chunks de 4MB é a biblioteca central: se 100 VMs usam o mesmo Windows, aquele arquivo só é gravado uma única vez no storage.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea1','quizResult1')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 2 de 3 — cenário de erro real</span>
+  <h2>7.1 O que acontece se um chunk for corrompido fisicamente no Datastore?</h2>
+  <p>Um disco do PBS sofreu falha de setor e o Verify Job encontrou um chunk com hash corrompido:</p>
+  <pre class="err">verify snapshot vm/100/2026-09-01T15:00:00Z failed:
+chunk 'b4c5d6...' digest mismatch (expected b4c5d6..., got 112233...)
+(Erro: o conteúdo físico do chunk mudou no disco - bit-rot ou falha de storage)</pre>
+  <div class='box question'>Qual é a ação que o PBS e o PVE tomam ao detectar o chunk corrompido?</div>
+  <div id="quizArea2">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'O PBS marca apenas o snapshot específico afetado como 'verify failed'.')"><b>A</b> O PBS apaga automaticamente todos os backups daquela empresa</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',true,'Correto! O Verify Job identifica o ponto exato de falha. Quando a VM roda o próximo backup, o hypervisor detecta a necessidade e retransmite aquele bloco físico, sanando a corrupção.')"><b>B</b> O PBS marca o snapshot como corrompido e alerta o administrador; no próximo backup da VM 100, o cliente PVE reenvia o chunk correto novamente pela rede para reparar o datastore</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult2',false,'A falha é restrita ao repositório de backup, sem impacto direto na execução da VM.')"><b>C</b> O Proxmox VE desliga todas as VMs do datacenter</button>
+  </div>
+  <div id="quizResult2" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Verify Job do Proxmox Backup Server é o simulado de incêndio: testa a integridade criptográfica de cada snapshot sem precisar ligar as VMs.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea2','quizResult2')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <span class="testking-tag">QUESTÃO 3 de 3 — detalhe que confunde todo iniciante</span>
+  <h2>7.2 Qual a periodicidade ideal para agendamento do Garbage Collection?</h2>
+  <p>O administrador quer agendar o Garbage Collection para rodar a cada 5 minutos:</p>
+  <div class='box question'>Por que rodar o GC a cada 5 minutos é ineficiente e inadequado?</div>
+  <div id="quizArea3">
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',true,'Exato! O GC precisa percorrer todo o catálogo de chunks. Rodar a cada 5 minutos sobrecarrega o storage e não apaga nada novo devido ao Grace Period de 24 horas.')"><b>A</b> Porque o GC exige varrer milhões de arquivos de chunks no storage (gerando alta carga de I/O de metadados) e porque o tempo de carência de segurança (24h) faz com que chunks órfãos recentes não sejam apagados imediatamente de qualquer forma — a periodicidade recomendada é semanal ou diária na madrugada</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O PBS é extremamente estável, mas boas práticas de engenharia evitam I/O desnecessário.')"><b>B</b> Porque o PBS quebra se o GC rodar mais de uma vez por mês</button>
+    <button class="quiz-opt" onclick="answerQuiz(this,'quizResult3',false,'O GC roda totalmente em segundo plano.')"><b>C</b> Porque o GC desativa a placa de rede durante a execução</button>
+  </div>
+  <div id="quizResult3" class="quiz-result">
+    <div class="quiz-result-head"></div>
+    <div class="quiz-result-body"></div>
+    <div class="quiz-ref">💡 <b>Analogia do Sênior para Fixar:</b> O Live-Restore é o streaming de vídeo: a máquina virtual dá boot em 3 segundos e você já trabalha enquanto o resto do disco baixa em segundo plano.</div>
+    <button class="retry-btn" onclick="resetQuiz(this,'quizArea3','quizResult3')">Tentar de novo</button>
+  </div>
+</section>
+
+<section class='section'>
+  <h2>8. Procedimento profissional</h2>
+  <ol class='steps'>
+    <li>Configure o agendamento do Garbage Collection (GC) para execução semanal (ex: aos sábados à noite) em cada Datastore.</li>
+    <li>Crie um <b>Verify Job</b> agendado quinzenalmente ou mensalmente para validar a integridade criptográfica de todos os snapshots.</li>
+    <li>Após grandes operações de exclusão de VMs ou limpeza de backups obsoletos, dispare o GC manualmente via terminal.</li>
+    <li>Monitore a coluna 'Verify State' na interface web do PBS para garantir que todos os backups exibam o selo verde de 'OK'.</li>
+    <li>Mantenha o Datastore sempre abaixo de 85% de ocupação física para garantir espaço para novos chunks.</li>
+  </ol>
+  
+  <h3>Prevenção</h3>
+  <div class='box'>Implemente a rotina de Verify Jobs periódicos no PBS para prevenir corrupção silenciosa de chunks e mantenha cópia física impressa da Paperkey no cofre da empresa.</div>
+</section>
+
+<section class='section'>
+  <h2>9. Validação e encerramento</h2>
+  <div class='box validation'><ul>
+    <li>Você compreende o funcionamento do algoritmo Mark & Sweep do Garbage Collection.</li>
+    <li>Você sabe por que o tempo de carência (Grace Period) protege backups concorrentes contra corrupção.</li>
+    <li>Você domina a configuração de Verify Jobs para auditoria contínua de integridade de dados.</li>
+    <li>A rotina de manutenção preventiva do PBS foi homologada com excelência.</li>
+  </ul></div>
+  <h3>Rollback e limites</h3>
+  <div class='box warning'>Para cancelar uma tarefa de Garbage Collection ou Verify Job em execução, use o comando <code>proxmox-backup-manager task cancel UPID</code>.</div>
+  <div class="checkpoint">💡 <b>Sobre repetição espaçada:</b> A integração oficial do nó Proxmox VE com o PBS via API Tokens e Fingerprints SSL será construída amanhã no Dia 3.</div>
+</section>
+
+<section class='section'>
+  <h2>10. Resposta final</h2>
+  <div class='box'><strong>Alternativa correta: B.</strong> A resposta correta é a B: o Garbage Collection atua na Fase 1 (Mark) marcando chunks em uso e na Fase 2 (Sweep) removendo chunks órfãos após o tempo de carência de 24h.</div>
+</section>
+
+<section class='section'>
+  <h2>🔓 O que você desbloqueou hoje</h2>
+  <div class='box validation'>Manutenção de datastore e Verify Jobs dominados com precisão! Amanhã, no Dia 3, você conectará o Proxmox VE ao PBS: gerando API Tokens seguros, validando Fingerprints SSL SHA-256 e configurando o storage PBS no cluster.</div>
+</section>
+
+
+<dialog id="glossary-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="glossary-title"></h3>
+      <button class="modal-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="glossary-definition"></p>
+      <div class="modal-analogy" id="glossary-analogy"></div>
+    </div>
+  </div>
+</dialog>
+
+</div></main><script>
+const sceneGlossary = [
+  ["Hypervisor Proxmox VE", "Sistema operacional bare-metal baseado em Debian Linux para virtualização empresarial.", "É o prédio de infraestrutura onde construímos as salas e escritórios."],
+  ["Máquina Virtual (KVM)", "Ambiente isolado que emula hardware completo com processador e memória dedicados.", "É uma casa completa construída dentro do condomínio fechado."],
+  ["Container (LXC)", "Instância leve que compartilha o kernel do Linux com isolamento por namespaces.", "É um apartamento privativo no mesmo prédio, usando a mesma fundação."],
+  ["Storage Pool", "Repositório estruturado de armazenamento de discos virtuais e imagens.", "É o almoxarifado onde guardamos todas as ferramentas e materiais."],
+  ["Backup PBS", "Cópia deduplicada e criptografada salva em chunks de 4MB com rastreamento incremental.", "É o cofre blindado externo com seguro contra qualquer sinistro."]
+];
+
+const sceneStripIdx = [0, 1, 2, 3];
+const strip = document.getElementById('sceneStrip');
+if (strip) {
+  strip.innerHTML = '';
+  sceneGlossary.slice(0, 4).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'scene-chip';
+    div.innerHTML = `<b>${item[0]}</b>${item[1]} <span class="more" onclick="openGlossary(${i})">ver analogia →</span>`;
+    strip.appendChild(div);
+  });
+}
+
+const modal = document.getElementById('glossary-modal');
+function openGlossary(index) {
+  if (!modal || !sceneGlossary[index]) return;
+  const item = sceneGlossary[index];
+  document.getElementById('glossary-title').textContent = item[0];
+  document.getElementById('glossary-definition').textContent = item[1];
+  document.getElementById('glossary-analogy').textContent = item[2];
+  modal.showModal();
+}
+function closeGlossary() { if (modal) modal.close(); }
+if (modal) {
+  modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+}
+
+const gt = document.getElementById('glossaryTriggers');
+if (gt) {
+  gt.innerHTML = '';
+  sceneGlossary.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.className = 'glossary-trigger';
+    b.textContent = item[0];
+    b.onclick = () => openGlossary(i);
+    gt.appendChild(b);
+  });
+}
+
+function showRecall() {
+  const ans = document.getElementById('recallAns');
+  const btn = document.getElementById('recallBtn');
+  if (ans) ans.classList.add('show');
+  if (btn) btn.style.display = 'none';
+}
+
+function answerQuiz(btn, resultId, correct, why) {
+  const area = btn.closest('div');
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) {
+    card.classList.remove('correct', 'wrong');
+    card.classList.add(correct ? 'correct' : 'wrong');
+    const head = card.querySelector('.quiz-result-head');
+    const body = card.querySelector('.quiz-result-body');
+    if (head) head.textContent = correct ? '✅ RESPOSTA CORRETA — EXPLICAÇÃO DO SÊNIOR:' : '❌ RESPOSTA INCORRETA — O QUE VOCÊ DEVE OBSERVAR:';
+    if (body) body.textContent = why;
+    card.classList.add('show');
+  }
+}
+
+function resetQuiz(btn, areaId, resultId) {
+  const area = document.getElementById(areaId);
+  if (area) {
+    area.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('disabled'));
+  }
+  const card = document.getElementById(resultId);
+  if (card) card.classList.remove('show');
+}
+
+function toggleLab(el) {
+  const li = el.closest('li');
+  if (li) {
+    const done = li.classList.toggle('done');
+    el.textContent = done ? '✓' : '';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.querySelector('.theme-toggle');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('admin-jr-theme', next); } catch(e) {}
+  applyTheme(next);
+}
+
+applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+</script>
+</body></html>
