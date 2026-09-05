@@ -392,24 +392,86 @@ $ ping -c 3 10.99.0.2
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Crie /etc/wireguard/wg0.conf em cada uma das duas VMs de laboratório, usando as chaves geradas no Dia 2.</div></div>
+      <div class="lab-cmd"># /etc/wireguard/wg0.conf no Site A (IP fixo 203.0.113.10)
+[Interface]
+PrivateKey = site_a_private_key
+Address = 10.99.0.1/32
+ListenPort = 51820
+
+[Peer]
+PublicKey = site_b_public_key
+AllowedIPs = 10.99.0.2/32
+# sem Endpoint aqui: A não sabe (e não precisa saber) o IP dinâmico de B
+
+# /etc/wireguard/wg0.conf no Site B (IP dinâmico, atrás de NAT)
+[Interface]
+PrivateKey = site_b_private_key
+Address = 10.99.0.2/32
+ListenPort = 51820
+
+[Peer]
+PublicKey = site_a_public_key
+AllowedIPs = 10.99.0.1/32
+Endpoint = 203.0.113.10:51820
+PersistentKeepalive = 25
+
+$ chmod 600 /etc/wireguard/wg0.conf</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>[Interface] Address / ListenPort</dt><dd>Address é o IP do túnel dessa própria máquina (não a LAN); ListenPort é a porta UDP em que o WireGuard escuta — 51820 nos dois lados.</dd>
+          <dt>[Peer] AllowedIPs</dt><dd>Define quais IPs de destino são roteados por esse túnel — aqui, só o IP do túnel do outro lado (/32), não uma rede inteira ainda.</dd>
+          <dt>Endpoint (só no Site B)</dt><dd>Aponta pro IP:porta público e ESTÁVEL do outro lado — só faz sentido no lado sem endereço fixo, apontando pra quem tem IP conhecido.</dd>
+          <dt>PersistentKeepalive = 25</dt><dd>Envia um pacote a cada 25 segundos pra manter a sessão de NAT do lado B ativa — sem isso, o NAT do provedor pode fechar a "porta" depois de alguns minutos de silêncio.</dd>
+          <dt>chmod 600</dt><dd>O arquivo de configuração contém a chave privada em texto — precisa da mesma proteção de leitura restrita ao dono.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo presente e com permissão 600 nas duas VMs.</div>
+      <div class="lab-why"><b>Por quê:</b> Endpoint só no lado B (atrás de NAT) é o que permite que A, que não tem como saber o IP dinâmico de B, ainda assim receba a conexão — quem inicia a chamada é sempre quem sabe o endereço fixo do outro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o chmod 600 no arquivo de configuração — ele contém a PrivateKey em texto claro, então herda a mesma exigência de permissão da chave sozinha.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Configure Endpoint apenas no lado que simula estar atrás de NAT (a VM sem IP fixo).</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> a outra VM (a de IP fixo) sem nenhum Endpoint no bloco [Peer].</div>
+      <div class="lab-why"><b>Por quê:</b> o lado com IP fixo não precisa saber o Endpoint do outro — é o lado atrás de NAT que inicia o contato, sabendo o endereço estável do primeiro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> colocar Endpoint nos dois lados — não quebra na hora (se ambos tiverem IP alcançável no momento), mas fica frágil assim que o IP dinâmico mudar e a config antiga ficar desatualizada.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você errar e colocar Endpoint nos dois lados, este é o ponto onde o chat com o Sênior-IA vai te mostrar por que isso não quebra na hora, mas fica frágil.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Suba as duas interfaces com wg-quick up wg0.</div></div>
+      <div class="lab-cmd">$ wg-quick up wg0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>wg-quick up wg0</dt><dd>Lê /etc/wireguard/wg0.conf, cria a interface wg0, aplica o Address e as rotas de AllowedIPs — tudo numa única chamada, sem precisar configurar cada peça manualmente com ip/wg.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> comando sem erro, interface wg0 visível em ip a nas duas VMs.</div>
+      <div class="lab-why"><b>Por quê:</b> ausência de erro confirma só que a interface subiu e as rotas foram aplicadas — ainda não prova que os dois lados trocaram handshake.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> salvar o arquivo com outro nome (ex: config-site-b.conf) — wg-quick up wg0 procura especificamente por /etc/wireguard/wg0.conf, o nome precisa bater exatamente com o nome da interface passada como argumento.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Rode wg show nas duas VMs e confirme latest handshake recente.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> handshake de poucos segundos ou minutos atrás, nos dois lados.</div>
+      <div class="lab-cmd">$ wg show</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>wg show</dt><dd>Mostra o estado do túnel: peer, endpoint atual, latest handshake e bytes transferidos — a evidência real de que a criptografia foi negociada com sucesso.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> handshake de poucos segundos ou minutos atrás, nos dois lados (latest handshake: 12 seconds ago).</div>
+      <div class="lab-why"><b>Por quê:</b> é o handshake recente, não a ausência de erro no wg-quick up, que realmente prova que o túnel está funcional.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver "latest handshake: (none)" e considerar normal — isso indica que os dois lados nunca trocaram uma chave de sessão, geralmente por chave pública errada ou Endpoint incorreto.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Teste ping de um lado pro Address do outro lado, pelo IP do túnel.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacote entre os dois IPs do túnel.</div>
+      <div class="lab-cmd">$ ping -c 3 10.99.0.2</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>-c 3</dt><dd>Envia exatamente 3 pacotes e para — evita um ping infinito que precisaria ser interrompido manualmente.</dd>
+          <dt>10.99.0.2</dt><dd>O Address do Site B dentro do túnel — testar por esse IP (não pelo IP público real) confirma que o tráfego está passando DENTRO do túnel WireGuard.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacote entre os dois IPs do túnel (3 packets transmitted, 3 received, 0% packet loss).</div>
+      <div class="lab-why"><b>Por quê:</b> fecha a validação completa — handshake confirma a criptografia negociada, o ping confirma que dados de verdade atravessam o túnel.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> testar ping pelo IP da LAN real de cada site em vez do IP do túnel (10.99.0.x) — isso testa outra coisa (a rede física), não o túnel WireGuard em si.</div>
     </li>
   </ol>
 </section>

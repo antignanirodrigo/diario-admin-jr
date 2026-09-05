@@ -386,24 +386,61 @@ Hello from app-test!</pre>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em VM de laboratório, configure uma regra DNAT redirecionando uma porta externa pra um serviço interno.</div></div>
+      <div class="lab-cmd">$ sudo nft add chain ip nat prerouting '{ type nat hook prerouting priority dstnat; policy accept; }'
+$ sudo nft add rule ip nat prerouting \
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:80</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>chain ... prerouting, hook prerouting, priority dstnat</dt><dd>Chain que avalia o pacote assim que ele chega, antes do roteamento — o ponto certo pra trocar o destino (DNAT), já que a decisão de rota ainda vai acontecer depois.</dd>
+          <dt>iifname wan0</dt><dd>Casa pela interface de ENTRADA (input interface) — o pacote precisa estar chegando pela WAN, vindo de fora.</dd>
+          <dt>tcp dport 8080</dt><dd>Casa pela porta pública anunciada — a porta que quem está de fora vai realmente usar.</dd>
+          <dt>dnat to 192.168.10.50:80</dt><dd>Reescreve o destino do pacote para o IP:porta do serviço interno real — é essa troca que caracteriza o DNAT.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> regra visível em nft list chain ip nat prerouting.</div>
+      <div class="lab-why"><b>Por quê:</b> é essa regra que decide qual serviço interno recebe o tráfego que chega numa porta pública específica.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir iifname (interface de entrada, usada no DNAT) com oifname (interface de saída, usada no SNAT/masquerade) — são pontos diferentes do pipeline.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Sem adicionar regra de forward, teste o acesso de uma máquina externa (ou simulada) à porta publicada.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> timeout, mesmo com a regra DNAT presente e correta.</div>
+      <div class="lab-cmd">$ curl -m 3 http://203.0.113.5:8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>-m 3</dt><dd>Timeout máximo de 3 segundos pra operação inteira — evita que o teste fique travado esperando indefinidamente quando o pacote é descartado silenciosamente pelo firewall.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> timeout, mesmo com a regra DNAT presente e correta (curl: (28) Connection timed out).</div>
+      <div class="lab-why"><b>Por quê:</b> prova na prática que DNAT sozinho não autoriza o pacote a atravessar o firewall — tradução não é a mesma coisa que permissão.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver o timeout e concluir que a regra DNAT está errada — o problema mais comum nesse ponto é falta de permissão na chain forward, não erro na tradução.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Confirme com nft list chain inet filter forward que não há regra de permissão pro destino traduzido.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> policy drop confirmada, sem regra de accept correspondente.</div>
+      <div class="lab-cmd">$ sudo nft list chain inet filter forward</div>
+      <div class="lab-expect"><b>Resultado esperado:</b> policy drop confirmada, sem regra de accept correspondente (só "ct state established,related accept").</div>
+      <div class="lab-why"><b>Por quê:</b> confirma exatamente onde está a lacuna — a chain forward está bloqueando por padrão qualquer conexão nova que não seja resposta de uma já estabelecida.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> adicionar a regra de permissão na chain input em vez da forward — input avalia tráfego destinado ao próprio roteador, forward avalia tráfego atravessando rumo a outro destino (o servidor interno).</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se mesmo após adicionar a regra de forward o acesso ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar hairpin NAT ou roteamento adicional.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Adicione a regra específica de forward e teste de novo o acesso externo.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida, serviço respondendo normalmente.</div>
+      <div class="lab-cmd">$ sudo nft add rule inet filter forward \
+    ip daddr 192.168.10.50 tcp dport 80 accept
+
+$ curl http://203.0.113.5:8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip daddr 192.168.10.50 tcp dport 80</dt><dd>Casa pelo destino JÁ TRADUZIDO — o IP e porta do serviço interno real, não a porta pública 8080 (a chain forward avalia o pacote depois do DNAT já ter acontecido).</dd>
+          <dt>accept</dt><dd>Libera especificamente esse destino, sem abrir a policy geral da chain — mantém o firewall restritivo pra tudo o mais.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida, serviço respondendo normalmente (HTTP/1.1 200 OK).</div>
+      <div class="lab-why"><b>Por quê:</b> só agora as duas etapas (tradução + permissão) estão alinhadas — é isso que realmente publica o serviço.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> mudar a policy geral da chain forward para accept em vez de adicionar uma regra específica — isso resolve o teste mas abre passagem para qualquer destino, não só o serviço que você queria publicar.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente: IP público, porta pública, destino interno, regra de firewall — reproduzindo o painel 6 da prancha de hoje.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> checklist completo de port forwarding validado.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar as duas regras juntas (NAT + forward) evita que alguém remova uma delas no futuro sem perceber que dependem uma da outra.</div>
     </li>
   </ol>
 </section>

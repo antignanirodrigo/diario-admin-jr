@@ -384,24 +384,74 @@ OK app-test healthy</pre>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em VM de laboratório, configure DNAT e forward corretamente, confirmando que o acesso externo funciona.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> acesso bem-sucedido, estabelecendo o cenário base saudável.</div>
+      <div class="lab-cmd">$ sudo nft add rule ip nat prerouting \
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8080
+$ sudo nft add rule inet filter forward \
+    ip daddr 192.168.10.50 tcp dport 8080 accept
+$ curl http://203.0.113.5:8080/health</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8080</dt><dd>Regra de DNAT com a porta pública (8080) e a porta interna real (8080) coincidindo — este é o cenário correto, usado como base antes do erro proposital do próximo passo.</dd>
+          <dt>ip daddr 192.168.10.50 tcp dport 8080 accept</dt><dd>Regra de forward liberando exatamente o mesmo destino e porta pra onde o DNAT está mandando o tráfego.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> acesso bem-sucedido, estabelecendo o cenário base saudável (OK app-test healthy).</div>
+      <div class="lab-why"><b>Por quê:</b> ter um cenário base funcionando é o que te permite reconhecer com clareza o que muda depois, quando o erro for introduzido de propósito.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> pular direto pro cenário quebrado sem confirmar antes que o cenário base realmente funciona — sem essa referência, fica mais difícil saber se a causa é a mudança recente ou algo que já estava errado.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Deliberadamente altere a porta de destino na regra DNAT pra uma porta diferente da real, sem mexer no forward.</div></div>
+      <div class="lab-cmd">$ sudo nft delete rule ip nat prerouting handle 12
+$ sudo nft add rule ip nat prerouting \
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8081
+
+$ curl -m 3 http://203.0.113.5:8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft delete rule ... handle 12</dt><dd>Remove uma regra específica pelo seu handle (identificador numérico) — obtido antes com nft -a list chain, que mostra o handle de cada regra.</dd>
+          <dt>dnat to 192.168.10.50:8081</dt><dd>Erro proposital: manda o tráfego pra porta 8081, enquanto o serviço real escuta na 80 (e o forward só libera a 8080) — simula o tipo de engano de digitação que acontece de verdade.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> timeout externo, mesmo com o forward ainda correto.</div>
+      <div class="lab-why"><b>Por quê:</b> reproduz o caso real do sênior: firewall permite a porta 8080, mas o NAT manda pra 8081 — as duas evidências "parecem certas" isoladamente.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> depois do timeout, ir direto mexer no forward (a camada aprendida mais recentemente) em vez de seguir a ordem real do caminho do pacote — NAT primeiro, depois firewall.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Compare as duas regras (nat prerouting e filter forward) lado a lado, valor por valor.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> divergência identificada entre a porta do DNAT e a porta do forward.</div>
+      <div class="lab-cmd">$ sudo nft list chain ip nat prerouting
+$ sudo nft list chain inet filter forward</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft list chain ip nat prerouting</dt><dd>Mostra a regra de DNAT atual — pra onde o tráfego está sendo traduzido de verdade (aqui, :8081).</dd>
+          <dt>nft list chain inet filter forward</dt><dd>Mostra a regra de permissão atual — qual porta o firewall realmente libera (aqui, :8080). Comparar as duas lado a lado revela a divergência.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> divergência identificada entre a porta do DNAT (8081) e a porta do forward (8080).</div>
+      <div class="lab-why"><b>Por quê:</b> comparar valor por valor, não só "a regra existe", é o que revela um erro de detalhe fácil de passar despercebido numa leitura rápida.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ler as duas regras rápido demais e concluir "as duas parecem certas" sem comparar o número exato da porta em cada uma.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se as portas coincidirem mas o acesso ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar se o serviço realmente está escutando na porta esperada.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Corrija a regra DNAT pra porta correta e teste de novo o acesso externo.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> acesso restaurado, confirmando a causa real.</div>
+      <div class="lab-cmd">$ sudo nft delete rule ip nat prerouting handle 12
+$ sudo nft add rule ip nat prerouting \
+    iifname wan0 tcp dport 8080 dnat to 192.168.10.50:8080
+
+$ curl http://203.0.113.5:8080/health</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>delete rule ... handle 12</dt><dd>Remove a regra com o destino errado (:8081) antes de adicionar a corrigida — nft não permite duas regras conflitantes fazendo o mesmo "match" sem gerar ambiguidade.</dd>
+          <dt>dnat to 192.168.10.50:8080</dt><dd>Agora a porta interna volta a bater com a porta que o forward já liberava (8080) — as duas evidências finalmente concordam.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> acesso restaurado, confirmando a causa real (OK app-test healthy).</div>
+      <div class="lab-why"><b>Por quê:</b> corrigir só a regra realmente errada (o DNAT) confirma a causa raiz — se você tivesse mexido no forward, o teste continuaria falhando.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> corrigir os dois lugares (NAT e forward) "por garantia" — isso mascara qual era a causa real e pode deixar uma regra de forward genérica demais no ambiente.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente a causa exata (NAT com porta errada, não firewall) — reproduzindo o painel 6 da prancha de hoje.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> registro claro atribuindo a causa à camada certa.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar a causa exata (não "mexi em NAT e firewall até funcionar") é o que ensina o próximo colega a investigar pela ordem certa, em vez de culpar a camada aprendida por último.</div>
     </li>
   </ol>
 </section>

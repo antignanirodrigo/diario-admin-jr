@@ -370,24 +370,66 @@ src=192.168.10.31 sport=51603 reply_dst=203.0.113.5
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em VM de laboratório com duas interfaces (LAN e WAN), crie a table e chain de NAT.</div></div>
+      <div class="lab-cmd">$ sudo nft add table ip nat
+$ sudo nft add chain ip nat postrouting '{ type nat hook postrouting priority srcnat; policy accept; }'</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft add table ip nat</dt><dd>Cria uma tabela chamada "nat" na família ip — o contêiner onde vão ficar as chains e regras de NAT.</dd>
+          <dt>nft add chain ... postrouting</dt><dd>Cria a chain "postrouting" dentro dessa tabela, com hook postrouting — o ponto do pipeline do kernel onde o pacote já foi roteado e está prestes a sair, ideal para trocar o IP de origem (SNAT).</dd>
+          <dt>priority srcnat; policy accept</dt><dd>srcnat é a prioridade padrão pra chains de NAT de origem; policy accept deixa passar por padrão o que não casar com nenhuma regra desta chain.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> table e chain criadas sem erro.</div>
+      <div class="lab-why"><b>Por quê:</b> masquerade só pode ser adicionado dentro de uma chain do tipo nat com hook postrouting — sem isso, a regra seguinte falha.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tentar adicionar a regra de masquerade direto, sem criar antes a table e a chain — o nft recusa com erro de "no such file or directory".</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Adicione a regra masquerade cobrindo a sub-rede da LAN, saindo pela interface WAN.</div></div>
+      <div class="lab-cmd">$ sudo nft add rule ip nat postrouting \
+    oifname wan0 ip saddr 192.168.10.0/24 masquerade</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>oifname wan0</dt><dd>Casa o pacote pela interface de SAÍDA (output interface) — aqui, a interface WAN, que é por onde o tráfego sai pra internet.</dd>
+          <dt>ip saddr 192.168.10.0/24</dt><dd>Casa pelo IP de origem — toda a sub-rede da LAN, não uma máquina específica.</dd>
+          <dt>masquerade</dt><dd>Ação que traduz a origem para o IP atual da interface de saída (wan0) — se esse IP mudar, a próxima tradução já usa o novo automaticamente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> regra adicionada, visível em nft list ruleset.</div>
+      <div class="lab-why"><b>Por quê:</b> uma única regra cobrindo a sub-rede inteira evita as 50 chances de erro de uma regra por host, e cobre hosts novos automaticamente.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar iifname (interface de entrada) em vez de oifname — masquerade precisa casar pela interface de SAÍDA, que é onde a tradução realmente acontece.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">De uma máquina cliente na LAN, acesse a internet (ou um destino simulado) e confirme com conntrack -L.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> tradução visível, IP de origem trocado pelo IP da interface WAN.</div>
+      <div class="lab-cmd">$ sudo conntrack -L | grep 203.0.113.5</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>conntrack -L</dt><dd>Lista todas as conexões rastreadas na tabela de tradução do kernel.</dd>
+          <dt>| grep 203.0.113.5</dt><dd>Filtra só as linhas que envolvem o IP público (reply_dst) — confirma que a tradução está usando o IP da interface WAN.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> tradução visível, IP de origem trocado pelo IP da interface WAN (ex: src=192.168.10.15 sport=51601 reply_dst=203.0.113.5).</div>
+      <div class="lab-why"><b>Por quê:</b> é a prova de que a regra realmente está sendo aplicada ao tráfego real, não só aceita sem erro pelo nft.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> nada aparecer no conntrack porque o encaminhamento de pacotes (ip_forward) está desabilitado — a regra de NAT existe, mas o pacote nunca chega a ser roteado entre as interfaces.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a tradução não aparecer, este é o ponto onde o chat com o Sênior-IA vai ajudar a verificar se o roteamento e o encaminhamento de pacotes (ip forward) estão habilitados.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Teste com duas máquinas clientes simultaneamente e confirme portas diferentes na tabela de tradução.</div></div>
+      <div class="lab-cmd">$ sudo conntrack -L | grep 203.0.113.5
+src=192.168.10.15 sport=51601 reply_dst=203.0.113.5
+src=192.168.10.22 sport=51602 reply_dst=203.0.113.5</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>mesmo comando do passo anterior, chamado de novo</dt><dd>Com dois clientes ativos ao mesmo tempo, a consulta agora traz duas linhas — mesmo reply_dst (IP público), sport (porta de origem) diferente em cada uma.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ambas usando o mesmo IP de saída, portas diferentes.</div>
+      <div class="lab-why"><b>Por quê:</b> confirma na prática que uma única regra masquerade atende múltiplos clientes simultâneos, cada um rastreado pela sua própria porta.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> confundir sport (porta de origem do cliente) com a porta traduzida — as duas aparecem na mesma linha do conntrack, mas o que importa comparar aqui é reply_dst (mesmo IP) com portas de saída diferentes por conexão.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente a regra única no runbook de rede — reproduzindo o painel 6 da prancha de hoje.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> registro claro: SNAT/masquerade ativo, sem regra por host.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar a decisão de "uma regra por padrão, não por host" facilita auditoria e evita que alguém recrie regras redundantes no futuro.</div>
     </li>
   </ol>
 </section>

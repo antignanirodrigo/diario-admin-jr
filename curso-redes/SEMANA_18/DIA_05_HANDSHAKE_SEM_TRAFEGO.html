@@ -386,24 +386,61 @@ $ ping -c 3 10.10.10.50
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">No túnel montado nos dias anteriores, confirme wg show com latest handshake recente nos dois lados.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> handshake de poucos segundos ou minutos atrás.</div>
+      <div class="lab-cmd">$ wg show</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>wg show</dt><dd>Reporta exclusivamente o plano de controle — se os dois peers se autenticaram e trocaram handshake recentemente. Não testa entrega de dados nenhuma.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> handshake de poucos segundos ou minutos atrás (latest handshake: 4 seconds ago).</div>
+      <div class="lab-why"><b>Por quê:</b> é o primeiro círculo a confirmar — plano de controle OK — antes de investigar qualquer coisa do plano de dados.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver o wg show todo "verde" e já descartar qualquer problema de configuração de rede — handshake recente não tem nenhuma relação com se o tráfego de dados realmente chega ao destino final.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Simule uma terceira VM representando uma rede interna atrás do servidor, e tente pingá-la a partir do lado cliente.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> ping falha inicialmente, mesmo com o túnel funcionando.</div>
+      <div class="lab-cmd">$ ping -c 3 10.99.0.2
+$ ping -c 3 10.10.10.50</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ping 10.99.0.2 (IP do túnel)</dt><dd>Testa só o túnel em si, IP a IP — isola o plano de controle do resto. Se funciona, o WireGuard está saudável.</dd>
+          <dt>ping 10.10.10.50 (rede interna, atrás do servidor)</dt><dd>Testa o caminho completo até uma máquina que não é o próprio peer — passa pelo túnel E depois precisa ser roteada/encaminhada dentro da rede do servidor.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> ping pro IP do túnel funciona (0% packet loss), mas ping pra rede interna falha inicialmente (100% packet loss), mesmo com o túnel funcionando.</div>
+      <div class="lab-why"><b>Por quê:</b> separa claramente os dois círculos do sênior — plano de controle (handshake) e plano de dados (chegar até o destino final) são coisas diferentes, cada uma com seu próprio teste.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver o ping pro túnel funcionando e já concluir "a VPN está boa, o problema é outra coisa qualquer" sem investigar sistematicamente ip_forward, AllowedIPs e rota de volta.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não souber por onde começar a investigar, este é o ponto onde o chat com o Sênior-IA vai te guiar pela separação plano de controle / plano de dados.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Verifique sysctl net.ipv4.ip_forward no servidor que faz a ponte.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> valor 0 antes da correção.</div>
+      <div class="lab-cmd"># no servidor do Site A
+$ sysctl net.ipv4.ip_forward</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sysctl net.ipv4.ip_forward</dt><dd>Lê o parâmetro do kernel que autoriza (1) ou bloqueia (0) o encaminhamento de pacotes entre interfaces diferentes — aqui, entre wg0 e a interface da rede interna.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> valor 0 antes da correção (net.ipv4.ip_forward = 0).</div>
+      <div class="lab-why"><b>Por quê:</b> é exatamente esse valor 0 que explica o timeout do passo anterior — o servidor recebe o pacote pelo túnel, mas o kernel está proibido de encaminhá-lo adiante pra rede interna.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> checar ip_forward só no cliente, em vez de no servidor que faz a ponte — esse parâmetro importa especificamente na máquina que fica NO MEIO do caminho entre duas redes.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Habilite com sysctl -w net.ipv4.ip_forward=1 e teste o ping de novo.</div></div>
+      <div class="lab-cmd">$ sudo sysctl -w net.ipv4.ip_forward=1
+$ ping -c 3 10.10.10.50</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sysctl -w net.ipv4.ip_forward=1</dt><dd>-w (write) altera o parâmetro em tempo real — o servidor passa a autorizar o encaminhamento de pacotes entre interfaces imediatamente, sem precisar reiniciar nada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ping pra rede interna funciona agora, 0% de perda.</div>
+      <div class="lab-why"><b>Por quê:</b> confirma a causa raiz exata — habilitar ip_forward foi necessário, mas ainda assim é bom lembrar que ele sozinho não é suficiente em todo cenário (também dependem de AllowedIPs cobrindo o destino e a rede interna sabendo rotear a resposta de volta).</div>
+      <div class="lab-warn"><b>Cilada comum:</b> essa mudança feita com -w não é persistente — some num reboot. Pra produção, o valor precisa ser gravado em /etc/sysctl.conf (ou arquivo em /etc/sysctl.d/), não só aplicado em tempo real.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente a diferença entre os três testes: ping do túnel, ping da rede interna antes e depois do forwarding.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório mostrando claramente onde o plano de controle terminava e o plano de dados começava a falhar.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar cada camada com seu próprio teste evita que o próximo colega assuma que "wg show verde" ou "ping do túnel OK" já provam o caminho completo até uma rede interna.</div>
     </li>
   </ol>
 </section>

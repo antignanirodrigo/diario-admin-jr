@@ -371,24 +371,47 @@ UDP 51820 encrypted payload
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em VM de laboratório, capture tráfego HTTP simples sem VPN e observe o conteúdo em texto claro.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> requisição legível, incluindo host e headers.</div>
+      <div class="lab-cmd"># SEM VPN
+$ sudo tcpdump -i eth0 port 80 -A</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>tcpdump -i eth0</dt><dd>Captura pacotes na interface eth0 — a interface de rede da VM de laboratório.</dd>
+          <dt>port 80</dt><dd>Filtra só o tráfego HTTP, na porta 80 — evita ruído de outros protocolos na captura.</dd>
+          <dt>-A</dt><dd>Imprime o conteúdo de cada pacote em ASCII — é essa flag que deixa visível o texto claro do GET, Host e headers.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> requisição legível, incluindo host e headers (ex: GET /login HTTP/1.1, Host: app.intra.example).</div>
+      <div class="lab-why"><b>Por quê:</b> é a prova visual de que, sem VPN, qualquer um observando a rede lê o conteúdo da requisição inteiro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> capturar numa interface sem tráfego real passando (ex: uma interface loopback) e concluir erroneamente que "não há nada pra ver" — confirme que a requisição de teste realmente sai pela interface capturada.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ative uma VPN (se disponível em laboratório) e repita a captura do mesmo tráfego.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> tráfego aparece como payload criptografado, ilegível.</div>
+      <div class="lab-cmd"># COM VPN
+$ sudo tcpdump -i eth0 udp port 51820 -A</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>udp port 51820</dt><dd>Filtra pela porta UDP padrão do WireGuard — com a VPN ativa, é nela que o tráfego tunelado (já criptografado) passa a trafegar, não mais na porta 80 original.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> tráfego aparece como payload criptografado, ilegível (UDP 51820 encrypted payload).</div>
+      <div class="lab-why"><b>Por quê:</b> confirma na prática que quem observa a rede vê só o túnel, não o conteúdo — a mesma requisição HTTP de antes agora está ilegível de fora.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> continuar filtrando por "port 80" depois de ativar a VPN e concluir que "não há mais tráfego" — o tráfego real agora sai encapsulado na porta UDP do túnel, não mais na porta 80 original.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Liste, junto com um colega ou sozinho, três riscos que a VPN NÃO cobre, com um exemplo concreto de cada.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> lista clara: malware local, phishing, site final sem HTTPS.</div>
+      <div class="lab-why"><b>Por quê:</b> nomear os riscos que a VPN não cobre é o que evita a falsa sensação de "estou na VPN, então estou seguro" na equipe.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se tiver dúvida sobre onde termina a proteção da VPN num caso específico, este é o ponto onde o chat com o Sênior-IA vai ajudar a mapear o caminho exato do tráfego.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Monte uma tabela: "Protege" vs "Não protege", baseada no que você observou na captura.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> tabela clara, reproduzindo o painel 5 da prancha de hoje.</div>
+      <div class="lab-why"><b>Por quê:</b> ter o escopo exato por escrito orienta quais outras camadas de proteção (MFA, antivírus, treinamento) ainda são necessárias.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Liste as medidas complementares necessárias (MFA, antivírus, treinamento) — reproduzindo o painel 6.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> checklist de uso profissional completo.</div>
+      <div class="lab-why"><b>Por quê:</b> VPN é uma camada entre várias — documentar as complementares evita tratá-la como solução única e suficiente.</div>
     </li>
   </ol>
 </section>

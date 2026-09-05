@@ -380,20 +380,69 @@ $ ip route | grep wg0
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">No túnel montado no Dia 3, configure AllowedIPs = 0.0.0.0/0 no lado cliente e suba de novo.</div></div>
+      <div class="lab-cmd"># em wg0.conf, no bloco [Peer] do lado cliente:
+AllowedIPs = 0.0.0.0/0
+
+$ sudo wg-quick down wg0 && sudo wg-quick up wg0
+$ ip route | grep wg0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>wg-quick down wg0 && wg-quick up wg0</dt><dd>Derruba e sobe a interface de novo — necessário porque wg-quick aplica as rotas do AllowedIPs só na hora de subir; editar o arquivo sozinho não atualiza uma interface já ativa.</dd>
+          <dt>ip route | grep wg0</dt><dd>Mostra as rotas ativas que passam pela interface do túnel — confirma exatamente o que o AllowedIPs configurado realmente aplicou no sistema.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ip route mostra 0.0.0.0/0 dev wg0 — todo tráfego agora sai pelo túnel.</div>
+      <div class="lab-why"><b>Por quê:</b> reproduz exatamente o chamado de hoje — AllowedIPs = 0.0.0.0/0 no lado que inicia vira rota padrão, levando toda a navegação (inclusive internet normal) pra dentro do túnel.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> editar o arquivo wg0.conf e esquecer de subir a interface de novo — a mudança no arquivo não tem efeito nenhum numa interface que já está ativa.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
-      <div class="lab-text">Reverta pra AllowedIPs = 10.99.0.1/32 (só o IP do peer servidor) e suba de novo.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> ip route mostra só a rota específica, tráfego normal volta a sair fora do túnel.</div>
+      <div class="lab-text">Reverta pra AllowedIPs = 10.10.10.0/24 (só a rede interna) e suba de novo.</div></div>
+      <div class="lab-cmd"># em wg0.conf, no bloco [Peer] do lado cliente:
+AllowedIPs = 10.10.10.0/24
+
+$ sudo wg-quick down wg0 && sudo wg-quick up wg0
+$ ip route | grep wg0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>AllowedIPs = 10.10.10.0/24 (revertido)</dt><dd>Volta a listar só a sub-rede interna específica — a rota 0.0.0.0/0 desaparece assim que a interface sobe de novo com esse valor.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> ip route mostra só 10.10.10.0/24 dev wg0 — tráfego normal volta a sair fora do túnel.</div>
+      <div class="lab-why"><b>Por quê:</b> confirma que o mesmo campo, com um valor mais específico, restringe o túnel só ao tráfego que realmente precisa passar por ele — é a diferença prática entre split e full tunnel.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de derrubar e subir a interface de novo depois de reverter o arquivo — sem isso, a rota 0.0.0.0/0 antiga continua ativa mesmo com o arquivo já corrigido.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não perceber a diferença de comportamento entre os dois testes, este é o ponto onde o chat com o Sênior-IA vai te mostrar o ip route lado a lado.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">No lado servidor, mude o AllowedIPs do peer cliente pra um IP diferente do que ele realmente usa, e tente pingar.</div></div>
+      <div class="lab-cmd"># em wg0.conf do servidor, no bloco [Peer] do cliente:
+AllowedIPs = 10.99.0.9/32   # IP errado — o cliente real usa 10.99.0.2
+
+$ sudo wg-quick down wg0 && sudo wg-quick up wg0
+$ ping -c 3 10.99.0.2</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>AllowedIPs = 10.99.0.9/32 (errado de propósito)</dt><dd>O servidor passa a aceitar pacotes desse peer só se vierem de 10.99.0.9 — como o cliente real usa 10.99.0.2, todo pacote dele passa a ser rejeitado, mesmo autenticado pela chave certa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ping falha mesmo com handshake ok — o pacote é rejeitado pelo filtro de aceitação.</div>
+      <div class="lab-why"><b>Por quê:</b> mostra na prática que AllowedIPs no lado que recebe funciona como filtro — mesmo com a chave certa identificando o peer, um pacote com IP de origem fora da faixa configurada é descartado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> ver o ping falhar, checar wg show, ver o handshake OK, e concluir que "a VPN está funcionando mas o ping não" sem suspeitar do AllowedIPs — chave certa autentica o peer, AllowedIPs decide o que é aceito vindo dele.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Corrija o AllowedIPs do servidor de volta ao IP correto do peer, e confirme que o ping volta a funcionar.</div></div>
+      <div class="lab-cmd"># em wg0.conf do servidor, no bloco [Peer] do cliente:
+AllowedIPs = 10.99.0.2/32
+
+$ sudo wg-quick down wg0 && sudo wg-quick up wg0
+$ ping -c 3 10.99.0.2</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>AllowedIPs = 10.99.0.2/32 (corrigido)</dt><dd>Volta a bater exatamente com o IP real do peer cliente dentro do túnel — o servidor passa a aceitar os pacotes dele de novo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ping funcionando de novo, 0% de perda.</div>
+      <div class="lab-why"><b>Por quê:</b> confirma que a causa raiz era exatamente o AllowedIPs no lado servidor, não algo na chave ou no handshake.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> corrigir o AllowedIPs mas esquecer de recarregar a interface — sem o down/up (ou um wg syncconf), o servidor continua rejeitando pelo valor antigo em memória.</div>
     </li>
   </ol>
 </section>

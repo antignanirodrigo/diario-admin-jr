@@ -379,24 +379,71 @@ AllowedIPs = 10.10.10.0/24
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em duas VMs de laboratório (simulando dois sites), gere um par de chaves em cada uma.</div></div>
+      <div class="lab-cmd">$ wg genkey | tee privatekey | wg pubkey > publickey</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>wg genkey</dt><dd>Gera uma chave privada WireGuard aleatória e imprime no stdout.</dd>
+          <dt>tee privatekey</dt><dd>Grava a saída no arquivo privatekey E, ao mesmo tempo, repassa adiante no pipe — assim você guarda a privada e ainda consegue derivar a pública numa única linha.</dd>
+          <dt>wg pubkey > publickey</dt><dd>Deriva a chave pública correspondente a partir da privada recebida pelo pipe, salvando em publickey.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivos privatekey e publickey criados em ambas.</div>
+      <div class="lab-why"><b>Por quê:</b> cada peer precisa gerar seu próprio par independentemente — é isso que garante que a chave privada nunca precisa sair da máquina que a criou.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> gerar as chaves numa VM e copiar o mesmo par pra outra "pra ganhar tempo" — cada peer precisa ter seu próprio par único, nunca compartilhado entre máquinas.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Confirme as permissões da chave privada com ls -l em ambas as VMs.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> -rw------- (600) na privada de cada VM.</div>
+      <div class="lab-cmd">$ chmod 600 privatekey
+$ ls -l privatekey publickey</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>chmod 600 privatekey</dt><dd>Restringe a leitura e escrita da chave privada só ao dono do arquivo — ninguém mais no sistema consegue lê-la.</dd>
+          <dt>ls -l</dt><dd>Lista os dois arquivos com permissões detalhadas, pra confirmar visualmente a diferença entre privada (600) e pública (644).</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> -rw------- (600) na privada, -rw-r--r-- na pública, em cada VM.</div>
+      <div class="lab-why"><b>Por quê:</b> a chave privada é o que prova a identidade do peer — se qualquer outro usuário do sistema puder lê-la, a segurança do túnel inteiro fica comprometida.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> achar que a permissão da chave pública também precisa ser restrita — ela é feita pra ser compartilhada livremente, só a privada exige 600.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Troque apenas o conteúdo das chaves públicas entre as duas VMs (copie e cole, ou transfira o arquivo .pub).</div></div>
+      <div class="lab-cmd">$ cat publickey
+8G7nExamplePublicKeyBase64=</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cat publickey</dt><dd>Imprime o conteúdo do arquivo publickey no terminal — só pra copiar o texto e enviar ao outro administrador, nunca use cat em privatekey pra esse fim.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> cada VM tem a chave pública da outra, sem nunca ter tocado na privada alheia.</div>
+      <div class="lab-why"><b>Por quê:</b> é como SSH — a chave privada prova quem você é, a pública é o crachá que o outro lado cadastra; só o crachá circula entre os dois administradores.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> transferir o arquivo errado (privatekey em vez de publickey) — releia o nome do arquivo antes de colar ou transferir qualquer conteúdo de chave.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você acidentalmente copiar a chave privada em vez da pública, este é o ponto onde o chat com o Sênior-IA vai ajudar no protocolo de rotação de chave.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Cadastre a chave pública recebida no bloco [Peer] de cada configuração local.</div></div>
+      <div class="lab-cmd"># site-a peer
+[Peer]
+PublicKey = site_b_public_key
+AllowedIPs = 10.20.0.0/24
+
+# site-b peer
+[Peer]
+PublicKey = site_a_public_key
+AllowedIPs = 10.10.10.0/24</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>[Peer] PublicKey</dt><dd>A chave pública recebida do OUTRO lado — é ela que identifica criptograficamente quem tem permissão de estabelecer o túnel com esta máquina.</dd>
+          <dt>AllowedIPs</dt><dd>Faixa de IPs associada a esse peer — usada tanto como rota (o que enviar pra ele) quanto como filtro (o que aceitar vindo dele).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo de configuração com PublicKey do outro lado presente.</div>
+      <div class="lab-why"><b>Por quê:</b> a confiança precisa ser mútua — cada lado precisa ter cadastrado a chave pública do outro como peer autorizado; só ter a chave pública sem estar cadastrado do lado dele não basta.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> cadastrar a própria chave pública no bloco [Peer] por engano, em vez da chave pública recebida do OUTRO lado — o [Peer] sempre descreve quem é o outro extremo do túnel.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente a tabela de peers padronizados — reproduzindo o painel 6 da prancha de hoje.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório com confirmação de que nenhuma chave privada foi compartilhada.</div>
+      <div class="lab-why"><b>Por quê:</b> documentar reforça o protocolo — nunca enviar a chave privada por nenhum canal, mesmo interno ou "confiável".</div>
     </li>
   </ol>
 </section>

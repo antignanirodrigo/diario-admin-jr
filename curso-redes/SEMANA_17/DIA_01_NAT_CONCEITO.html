@@ -368,24 +368,63 @@ src=192.168.10.31 sport=51546 → src=203.0.113.5 sport=40003
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Em VM de laboratório atrás de NAT, confirme o IP privado com ip -4 addr show.</div></div>
+      <div class="lab-cmd">$ ip -4 addr show eth0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip addr show</dt><dd>Mostra os endereços IP configurados nas interfaces de rede da máquina.</dd>
+          <dt>-4</dt><dd>Filtra a saída para mostrar só endereços IPv4, ignorando IPv6 — deixa o resultado mais limpo pra este laboratório.</dd>
+          <dt>eth0</dt><dd>Nome da interface a inspecionar — a que liga esta VM à LAN atrás do roteador NAT.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> endereço na faixa privada (ex: 192.168.x.x).</div>
+      <div class="lab-why"><b>Por quê:</b> antes de comparar com o que o mundo externo vê, você precisa confirmar exatamente qual IP privado esta máquina usa por dentro.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar o comando na interface errada (ex: lo ou uma interface sem IP) e concluir que a máquina "não tem IP" — confira o nome real da interface primeiro com ip -4 addr show (sem especificar interface).</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Acesse um serviço de checagem de IP externo e compare com o IP privado.</div></div>
+      <div class="lab-cmd">$ curl -s https://checkip.example</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>curl</dt><dd>Faz uma requisição HTTP e imprime a resposta — aqui, um serviço que devolve o IP de origem que ele enxergou na requisição.</dd>
+          <dt>-s</dt><dd>Modo silencioso — esconde barra de progresso e estatísticas, mostrando só a resposta (o IP) na saída.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> IP público diferente do IP privado interno.</div>
+      <div class="lab-why"><b>Por quê:</b> é a prova concreta de que o mundo externo enxerga o IP do roteador, não o IP privado da sua VM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> achar que o IP retornado é "da sua máquina" — na verdade é o IP público do roteador NAT, a máquina interna nunca aparece diretamente na internet.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">No roteador/gateway (se tiver acesso), rode conntrack -L e observe as traduções ativas.</div></div>
-      <div class="lab-expect"><b>Resultado esperado:</b> lista de conexões com src interno e IP público de saída.</div>
+      <div class="lab-cmd">$ conntrack -L | grep 203.0.113.5</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>conntrack -L</dt><dd>Lista (List) todas as conexões atualmente rastreadas na tabela de tradução do kernel.</dd>
+          <dt>| grep 203.0.113.5</dt><dd>Filtra a lista completa só para as linhas que envolvem o IP público do roteador — evita rolar por conexões de outras origens.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect"><b>Resultado esperado:</b> lista de conexões com src interno e IP público de saída (ex: src=192.168.10.15 sport=51544 → src=203.0.113.5 sport=40001).</div>
+      <div class="lab-why"><b>Por quê:</b> é a evidência direta de que a tradução acontece — sem essa tabela, o roteador não saberia devolver a resposta pro cliente certo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar conntrack -L na VM cliente em vez de no roteador — a tabela de tradução vive no dispositivo que faz o NAT, não em cada máquina interna.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se conntrack não mostrar nada, este é o ponto onde o chat com o Sênior-IA vai ajudar a confirmar se o módulo de rastreamento está carregado.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Abra duas conexões simultâneas de máquinas internas diferentes e compare as portas de origem na tabela.</div></div>
+      <div class="lab-cmd">$ conntrack -L | grep 203.0.113.5
+src=192.168.10.15 sport=51544 → src=203.0.113.5 sport=40001
+src=192.168.10.22 sport=51545 → src=203.0.113.5 sport=40002</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>mesmo comando do passo anterior, chamado de novo</dt><dd>Com duas conexões ativas ao mesmo tempo, a mesma consulta agora mostra duas linhas — cada uma com uma porta externa (sport) diferente, mesmo IP público.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> portas de origem externas diferentes para cada conexão.</div>
+      <div class="lab-why"><b>Por quê:</b> é exatamente essa diferença de porta que permite ao roteador diferenciar respostas simultâneas usando um único IP público.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> abrir as duas conexões em momentos muito distantes um do outro e a primeira já ter expirado da tabela antes de você comparar — mantenha as duas ativas ao mesmo tempo.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente o modelo completo: LAN privada → roteador NAT → internet — reproduzindo o painel 6 da prancha de hoje.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> diagrama e explicação clara do fluxo de tradução.</div>
+      <div class="lab-why"><b>Por quê:</b> registrar o modelo mental completo agora evita confusão mais adiante, quando você configurar SNAT e DNAT manualmente com nftables.</div>
     </li>
   </ol>
 </section>
