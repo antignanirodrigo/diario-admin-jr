@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual foi o comando que reordenou a lista do htop pra mostrar o processo mais pesado no topo?<br>
+    <b>2.</b> Ontem você olhou QUEM consumia CPU antes de reiniciar. Hoje o alvo mudou de processo pra serviço — o que muda na sua régua de "observar antes de agir"?
+  </div>
+  <div class="ans">
+    <b>1.</b> Dentro do htop, <code>F6</code> e escolher <code>PERCENT_CPU</code>.<br>
+    <b>2.</b> Ontem a pergunta era "quem está consumindo"; hoje é "por que esse serviço falhou". Reiniciar sem ler o <code>journalctl</code> primeiro apaga a melhor pista que você tinha — é o mesmo erro de pressa, só que agora o preço é perder a evidência, não só adiar o problema.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> top e htop mostram o AGORA. Hoje o problema é diferente: um
 serviço falhou e já não está mais rodando pra você observar em tempo real — a única pista que sobrou é o que
@@ -188,9 +228,19 @@ apaga a melhor pista que você tinha.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>O dashboard mostra <code>app.service — failed</code>. O primeiro pensamento é "se eu
-  reiniciar, resolve?" — mas reiniciar sem ler o log apaga a melhor pista que você tinha sobre o motivo real
-  da falha.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#3391</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:05</span>
+      <span>aberto por: monitoramento (Zabbix)</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-04</b> · serviço: app.service</div>
+      <div class="msg">"app.service — failed. Reinicialização automática falhou 3 vezes seguidas."</div>
+    </div>
+    <div class="ticket-foot">Reiniciar de novo pode apagar a pista do motivo real. O que você digita primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -264,6 +314,12 @@ sudo systemctl restart ssh</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> -f é a ferramenta certa pra validar em tempo real que uma correção funcionou — você vê o evento acontecer, não precisa adivinhar rodando o comando de novo depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> deixar o journalctl -f rodando numa sessão e esquecer de encerrar com Ctrl+C — não quebra nada, mas ocupa a sessão à toa.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a mensagem de erro no journal não fizer sentido pra você, este é o ponto onde o chat com o Sênior-IA vai ajudar a traduzir o que ela significa.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>a tela fica parada, nenhuma linha nova aparece</b> → isso é esperado se ninguém tentar conectar via SSH nesse meio-tempo — na janela 2, gere um evento de verdade com <code>logger "teste ssh"</code> ou tente uma conexão SSH de propósito para ver o -f funcionando ao vivo.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Provoque um conflito de porta conhecido e encontre a causa só pelo journal.</div></div>
@@ -273,6 +329,12 @@ python3 -m http.server 8080 &
       <div class="lab-expect"><b>Resultado esperado:</b> mensagem de erro específica localizada, explicando exatamente por que o serviço falhou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir o erro de propósito, num ambiente controlado, é a forma mais segura de reconhecer essa mensagem específica quando ela aparecer de verdade num chamado real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir "porta ocupada" com "serviço com bug" — a mensagem address already in use aponta pra um conflito de recurso, não pra um defeito no código do serviço.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"OSError: [Errno 98] Address already in use"</b> → a porta 8080 já está ocupada por outro processo (talvez sobra de um teste anterior). Use outra porta, ex: <code>python3 -m http.server 8081</code>, e ajuste o restante do exercício.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Documente unidade, filtro usado, mensagem de erro, causa raiz e ação tomada.</div></div>
@@ -282,7 +344,20 @@ python3 -m http.server 8080 &
       <div class="lab-why"><b>Por que fizemos isso:</b> registrar a causa raiz (não só "reiniciei e funcionou") é o que impede o mesmo problema de reaparecer sem ninguém entender por quê.</div>
       <div class="lab-warn"><b>Cilada comum:</b> documentar só "restart resolveu" sem registrar a causa raiz — some a informação mais valiosa da investigação inteira.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Encerre o servidor de teste que ocupou a porta 8080 e confirme que a porta voltou a ficar livre.</div></div>
+      <div class="lab-cmd">kill %1
+ss -ltnp | grep 8080 || echo "porta livre"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nenhuma linha de retorno do ss para a porta 8080 — mensagem "porta livre" confirma.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> você ocupou a porta 8080 só para reproduzir o sintoma do ticket na sua própria VM — sem liberar, o próximo teste de porta desta aula (ou de outra) encontra um conflito fantasma que não existe de verdade.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o <code>python3 -m http.server</code> rodando em background. Na próxima vez que você testar uma porta, vai achar um "conflito" que na real é sobra do seu próprio laboratório.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"bash: kill: %1: no such job"</b> → rode <code>jobs</code> para achar o número certo do job, ou <code>pkill -f http.server</code> para matar por nome do processo.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

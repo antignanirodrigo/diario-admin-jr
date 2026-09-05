@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual foi o comando que mostrou os grupos reais de um usuário depois de qualquer mudança com usermod?<br>
+    <b>2.</b> Esta semana inteira cada dia deu uma ferramenta pra um tipo de sintoma diferente — carga, log de serviço, disco, kernel, histórico, acesso, pacotes, usuários. Hoje dois sintomas aparecem juntos no mesmo chamado. O que isso muda na sua abordagem?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>id teste_user</code>.<br>
+    <b>2.</b> Muda que você não escolhe UMA ferramenta e para — você combina as da semana (top/htop pra carga, journalctl pra serviço, sar pra histórico, last/auditd pra acesso) porque duas coisas estranhas ao mesmo tempo raramente são coincidência. Hoje é o dia de montar isso junto, não aprender algo novo.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com as últimas duas semanas inteiras:</b> top/htop, journalctl, syslog,
 dmesg, last/lastlog/auditd, sar, correlação entre servidores, pacotes e usuários — hoje você usa TUDO isso
@@ -188,9 +228,19 @@ cruzá-las quando os sintomas parecem não ter relação nenhuma.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #4587, prioridade alta, com DOIS sintomas no mesmo chamado: "servidor lento" e
-  "login desconhecido detectado". Sua primeira dúvida é qual investigar primeiro — mas duas coisas estranhas
-  ao mesmo tempo raramente são coincidência.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4587</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>17:15</span>
+      <span>aberto por: monitoramento (Zabbix) + gestor de segurança</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: aplicação + acesso</div>
+      <div class="msg">"Dois alertas ao mesmo tempo: "servidor lento" e "login desconhecido detectado"."</div>
+    </div>
+    <div class="ticket-foot">Duas coisas estranhas ao mesmo tempo raramente são coincidência. Qual você investiga primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -283,7 +333,20 @@ last -a</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> reconhecer o que ainda não está sólido é tão importante quanto celebrar o que já domina — é isso que direciona o que revisar antes da próxima semana.</div>
       <div class="lab-warn"><b>Cilada comum:</b> escrever uma autoavaliação genérica ("aprendi bastante") sem nomear ferramentas específicas — sem especificidade, a autoavaliação não ajuda a decidir o que revisar.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Encerre o processo de carga sintética que você criou para o exercício, deixando o servidor limpo.</div></div>
+      <div class="lab-cmd">kill %1
+top -bn1 | head -5</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o processo <code>yes</code> não aparece mais na lista de carga do top.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse processo foi criado só pra você ter algo pra cruzar com o <code>last -a</code> no exercício — sem encerrar, ele fica consumindo CPU de verdade muito depois da aula ter acabado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> no dia da revisão geral é fácil esquecer esse detalhe, já que a atenção está nos exercícios mentais de correlação, não nos comandos de shell.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"bash: kill: %1: no such job"</b> → use <code>pkill yes</code> para matar por nome, já que o número do job pode ter mudado se você rodou outros comandos em background durante a semana.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

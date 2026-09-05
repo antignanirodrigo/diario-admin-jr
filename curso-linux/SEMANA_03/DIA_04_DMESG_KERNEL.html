@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual comando revelou que um arquivo "apagado" ainda estava preso, segurando o espaço em disco?<br>
+    <b>2.</b> Ontem a causa real estava escondida numa camada que <code>rm</code> sozinho não mostrava. Hoje a aplicação para sem erro nenhum no log dela — em que camada, ainda mais funda, você vai procurar agora?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>lsof | grep deleted</code>.<br>
+    <b>2.</b> No kernel, com <code>dmesg</code>. Ontem a pista estava numa camada abaixo do <code>rm</code> (o processo que segurava o arquivo); hoje ela está numa camada abaixo da própria aplicação — o kernel pode ter matado o processo (ex: OOM killer) sem deixar rastro nenhum no log do app.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com os últimos dois dias:</b> journalctl e syslog registram o que a
 APLICAÇÃO e o systemd têm a dizer. Mas hoje o silêncio é total — nem o app registrou erro, porque o problema
@@ -187,9 +227,19 @@ ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Durante a madrugada o servidor reiniciou sozinho. De manhã, o log da aplicação
-  simplesmente PARA às 10:42 — nenhum erro registrado, nenhuma explicação. O app não tem culpa nenhuma nisso:
-  o motivo está numa camada abaixo dele.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#3415</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>10:50</span>
+      <span>aberto por: monitoramento (Zabbix)</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: app-worker</div>
+      <div class="msg">"app-worker parou de responder às 10:42. Nenhum erro no log da aplicação."</div>
+    </div>
+    <div class="ticket-foot">O app não registrou nada. Onde mais você procura antes de dizer que "não tem explicação"?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -242,6 +292,13 @@ ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para
       <div class="lab-expect"><b>Resultado esperado:</b> lista de eventos de kernel com timestamp legível.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> conhecer o "normal" do dmesg antes de um incidente é o que te permite reconhecer rápido quando algo foge do padrão numa investigação real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar dmesg sem o -T e tentar interpretar timestamps em "segundos desde o boot" — sem conversão pra data/hora legível, correlacionar com outros logs vira matemática desnecessária.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"dmesg: read kernel buffer failed: Operation not permitted"</b> → em algumas distros o buffer do kernel é restrito a root. Use <code>sudo dmesg -T | tail -30</code>.<br>
+          <b>a lista está vazia ou só tem mensagens de boot antigas</b> → normal numa VM de laboratório sem incidente real acontecendo. Isso não é falha sua — é a ausência de evento que você vai aprender a reconhecer como resultado válido.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Filtre só eventos de erro e aviso, cortando ruído informativo.</div></div>

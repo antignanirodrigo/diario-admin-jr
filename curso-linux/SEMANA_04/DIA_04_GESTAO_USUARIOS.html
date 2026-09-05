@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual comando mostra a lista de pacotes que SERIAM afetados por um upgrade, sem executar nada de verdade?<br>
+    <b>2.</b> Ontem o perigo era confundir <code>install</code> (pontual) com <code>upgrade</code> (sistema inteiro). Hoje existe um perigo com a mesma forma, escondido numa única letra — qual é?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>apt list --upgradable</code>.<br>
+    <b>2.</b> <code>usermod -aG</code> (adiciona um grupo) contra <code>usermod -G</code> sem o <code>-a</code> (substitui TODOS os grupos extras do usuário). É o mesmo formato de risco de ontem: uma opção pontual e uma que afeta muito mais do que parece à primeira vista.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> instalar pacote com escopo mínimo. Hoje o mesmo cuidado de
 escopo se aplica a pessoas: criar conta e adicionar a UM grupo específico — sem acidentalmente apagar todos
@@ -188,9 +228,19 @@ grupo.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #9842: criar conta pra um novo colega e adicionar a um grupo extra. Seu dedo está
-  perto de digitar <code>usermod -G suporte novo_user</code> — mas sem o <code>-a</code>, esse comando não
-  adiciona um grupo, ele SUBSTITUI a lista inteira.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#9842</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>10:10</span>
+      <span>aberto por: gestor da equipe</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-01</b> · serviço: contas de usuário</div>
+      <div class="msg">"Criar conta pro novo colega e adicionar ele ao grupo de suporte, sem mexer no resto."</div>
+    </div>
+    <div class="ticket-foot">Seu dedo está perto de digitar <code>usermod -G suporte novo_user</code>. O que esse comando faz de diferente do que parece?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -240,6 +290,22 @@ uid=1002(novo_user) gid=1002(novo_user) grupos=1002(novo_user),1001(desenvolvime
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie os três grupos de teste que o laboratório vai usar, antes de tentar adicionar o usuário a eles.</div></div>
+      <div class="lab-cmd">sudo groupadd grupo1
+sudo groupadd grupo2
+sudo groupadd grupo3
+getent group grupo1 grupo2 grupo3</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> os três grupos listados pelo getent, confirmando que existem antes do próximo passo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> <code>usermod -aG</code> não cria grupos, só adiciona um usuário a grupos que já existem — sem esse passo, o próximo comando falha por um motivo que não tem nada a ver com a lição de hoje.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — criar grupos de teste com nomes genéricos pode colidir com grupos reais em servidores de produção.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"groupadd: group 'grupo1' already exists"</b> → sobra de uma execução anterior do laboratório — pode seguir em frente normalmente, o grupo já está pronto.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Crie um usuário de teste com home e shell corretos, e defina uma senha.</div></div>
       <div class="lab-cmd">sudo useradd -m -s /bin/bash teste_user
 sudo passwd teste_user</div>
@@ -255,6 +321,12 @@ id teste_user</div>
       <div class="lab-expect"><b>Resultado esperado:</b> id teste_user mostra os dois grupos acumulados, nenhum perdido.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver os grupos se ACUMULANDO, um por um, é o comportamento correto e esperado que você vai usar sempre em produção.</div>
       <div class="lab-warn"><b>Cilada comum:</b> tentar adicionar os dois grupos numa linha só sem revisar a sintaxe — `usermod -aG grupo1,grupo2` funciona, mas `-aG grupo1 -aG grupo2` não é válido.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"usermod: group 'grupo1' does not exist"</b> → os grupos de teste ainda não foram criados. Volte ao passo de setup e rode <code>sudo groupadd grupo1 grupo2 grupo3</code> antes de continuar.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Reproduza deliberadamente o erro: rode -G sem -a e veja os outros grupos sumirem.</div></div>
@@ -282,7 +354,23 @@ id teste_user</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> registrar até o erro cometido (e corrigido) no laboratório é mais valioso que só documentar o resultado final — mostra o raciocínio completo de diagnóstico.</div>
       <div class="lab-warn"><b>Cilada comum:</b> documentar só o estado final "correto", sem mencionar o erro reproduzido — perder essa parte perde o valor pedagógico do exercício.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o usuário de teste e os três grupos, deixando o servidor como estava antes da aula.</div></div>
+      <div class="lab-cmd">sudo userdel -r teste_user
+sudo groupdel grupo1
+sudo groupdel grupo2
+sudo groupdel grupo3
+id teste_user 2>&1 || echo "usuário removido"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> mensagem de erro do sistema confirmando que teste_user não existe mais.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> contas e grupos de teste esquecidos numa VM são exatamente o tipo de achado confuso numa auditoria de segurança meses depois — ninguém lembra por que "grupo1" existe.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar <code>groupdel</code> antes do <code>userdel</code> pode falhar se o grupo ainda for o grupo primário de algum usuário — sempre remova o usuário primeiro.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"userdel: user teste_user is currently used by process"</b> → encerre a sessão dele ou use <code>sudo userdel -rf teste_user</code> (força a remoção — só em VM de teste).
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

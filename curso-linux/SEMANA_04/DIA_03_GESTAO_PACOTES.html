@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual foi o primeiro comando obrigatório antes de comparar timestamps entre dois servidores diferentes?<br>
+    <b>2.</b> Ontem a diferença que importava era o RAIO de uma investigação: um servidor ou dois. Hoje a diferença que importa é o raio de uma AÇÃO: instalar um pacote ou atualizar todos. O que isso tem em comum com ontem?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>timedatectl</code>, para confirmar que os fusos horários das duas máquinas estavam alinhados.<br>
+    <b>2.</b> As duas lições são sobre medir o raio de impacto antes de agir: ontem, saber se o problema estava numa máquina ou em duas; hoje, saber se o comando mexe só no pacote pedido (<code>install</code>) ou no sistema inteiro (<code>upgrade</code>). Confundir o raio de impacto é o erro central dos dois dias.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com as últimas duas semanas:</b> você já sabe investigar carga, log e
 correlação entre servidores. Hoje entra uma nova categoria de mudança real: instalar software em produção,
@@ -187,9 +227,19 @@ autorização pra usar apt/dnf install — nunca upgrade quando o pedido é inst
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #2587: instalar uma ferramenta de diagnóstico. Seu dedo já está digitando
-  <code>apt upgrad</code> — mas upgrade e install não são a mesma coisa, e num servidor de produção essa
-  diferença é o tamanho do raio de impacto.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2587</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>13:40</span>
+      <span>aberto por: colega de equipe</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: ferramentas de diagnóstico</div>
+      <div class="msg">"Preciso que instale uma ferramenta de diagnóstico neste servidor de produção, o htop."</div>
+    </div>
+    <div class="ticket-foot">Seu dedo já está digitando <code>apt upgrad</code>. Isso é a mesma coisa que instalar só o htop?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -258,6 +308,12 @@ apt policy htop</div>
       <div class="lab-expect"><b>Resultado esperado:</b> lista de pacotes e dependências revisada antes da confirmação.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ler a lista de "será instalado" antes de confirmar é o que te dá a chance de perceber se algo além do esperado está prestes a mudar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confirmar instalações com "yes" automático sem ler a lista — como quase aconteceu com o apt upgrad de hoje, digitar sem olhar é onde o erro entra.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"htop is already the newest version" logo no primeiro comando</b> → provavelmente sobrou de um laboratório anterior nesta VM. Rode <code>sudo apt remove --purge htop</code> primeiro para começar do zero e sentir a diferença de verdade.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Confirme a instalação e a versão exata.</div></div>
@@ -282,7 +338,20 @@ apt policy htop</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> documentar o escopo explicitamente ("resto do sistema intocado") é o que prova, não só afirma, que a instalação foi feita com o cuidado certo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> documentar só "instalei o htop" sem mencionar a verificação de escopo — sem isso, quem revisar depois não sabe se você confundiu install com upgrade ou não.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o pacote instalado no laboratório e confirme que o servidor voltou ao estado anterior à aula.</div></div>
+      <div class="lab-cmd">sudo apt remove --purge htop
+dpkg -l | grep htop || echo "pacote removido"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> mensagem "pacote removido" — dpkg -l não lista mais o htop.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> você instalou o htop só para observar a diferença entre install e upgrade na prática — deixá-lo instalado no laboratório sem necessidade é exatamente o tipo de "pacote sobrando sem dono claro" que uma auditoria de sistema pega depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover o pacote de teste. Meses depois, alguém revisando os pacotes instalados encontra o htop e não sabe se foi uma instalação real de produção ou sobra de laboratório.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"dpkg: warning: while removing htop, directory not empty"</b> → normal se algum arquivo de configuração ficou para trás — não é erro grave, mas se quiser limpeza total use <code>sudo apt autoremove</code> em seguida.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 5, Semana 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na sexta-feira passada você só LEU rede e agendamento (<code>ip a</code>, <code>crontab -l</code>), sem mexer em nada. Por que o material insistiu nisso, mesmo sendo chato?<br>
+    <b>2.</b> Hoje seu dedo vai querer digitar <code>systemctl restart</code> direto. O que a semana toda vem te ensinando sobre agir antes de observar?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque mexer em rede e agendamento sem entender o que já está configurado é o tipo de erro que derruba acesso remoto ou quebra um cron de produção — observar primeiro é o que evita isso.<br>
+    <b>2.</b> A mesma disciplina de "observar antes" que valeu para rede e agendamento vale para performance: hoje, antes de reiniciar qualquer coisa, você vai abrir <code>top</code>/<code>htop</code> e descobrir QUEM está consumindo o quê. Reiniciar sem saber é a mesma pressa que a Semana 2 pediu pra você resistir.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 2 inteira:</b> você já sabe agir com aprovação, ajustar
 permissão, buscar em escala e remover com segurança. Agora entra um novo hábito: antes de qualquer ação num
@@ -188,9 +228,19 @@ está consumindo o quê.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #2741, prioridade alta: "aplicação lenta". Seu dedo já está digitando
-  <code>sudo systemctl restart app-service</code> — mas reiniciar sem saber a causa só adia o problema,
-  não resolve. Antes de qualquer ação, é hora de olhar quem está consumindo o quê.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2741</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>14:20</span>
+      <span>aberto por: usuário final</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: aplicação — atendimento</div>
+      <div class="msg">"Está lentíssimo, quase travando. Preciso que resolvam AGORA."</div>
+    </div>
+    <div class="ticket-foot">Seu dedo já está digitando <code>sudo systemctl restart app-service</code>. O que você faz antes disso?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -255,6 +305,12 @@ htop</div>
       <div class="lab-expect"><b>Resultado esperado:</b> interface interativa do htop carregada, com barras coloridas de CPU/memória.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> htop dá visão por núcleo e ordenação interativa que o top não tem de forma tão prática — é a ferramenta certa quando você já sabe que precisa investigar mais fundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> instalar htop numa sessão de produção sem confirmar antes que instalar pacotes ali é permitido — em ambiente real, confirme a política do time primeiro.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"E: Unable to locate package htop" (não é Debian/Ubuntu)</b> → use o gerenciador da sua distro: <code>sudo dnf install htop</code> (RHEL/Fedora) ou <code>sudo yum install htop</code> (CentOS antigo).
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Ordene a lista por %CPU e identifique o processo no topo.</div></div>
@@ -270,6 +326,12 @@ htop</div>
       <div class="lab-expect"><b>Resultado esperado:</b> processo de teste visível consumindo %CPU alto, load average subindo em tempo real.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> gerar a própria carga é a forma mais segura de ver o comportamento real do top/htop antes de precisar diagnosticar isso em produção sob pressão.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o processo de teste rodando depois do laboratório — sempre encerre com kill no final, senão ele continua consumindo CPU sem necessidade.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>rodou o comando duas vezes sem perceber e agora tem dois processos <code>yes</code> disputando CPU</b> → confira com <code>jobs</code> antes de matar — pode precisar de <code>kill %1</code> e <code>kill %2</code>, não só um.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Encerre o processo de teste e documente PID, %CPU, %MEM e load average antes/depois.</div></div>
@@ -278,6 +340,12 @@ top</div>
       <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> comparar o "antes" e o "depois" com números concretos é a prova de que a ação realmente resolveu — sem essa comparação, "achei que melhorou" não é validação de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> encerrar o laboratório sem rodar o top de "depois" — sem essa segunda leitura, você não tem evidência formal de que a carga voltou ao normal.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"bash: kill: %1: no such job"</b> → o job pode ter outro número se você rodou outros comandos em background antes. Rode <code>jobs</code> primeiro pra confirmar o número certo, ou use <code>pkill yes</code> para matar por nome.
+        </div>
+      </details>
     </li>
   </ol>
 </section>

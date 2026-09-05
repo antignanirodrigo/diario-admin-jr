@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual combinação de duas flags do journalctl transformou um log de centenas de linhas numa lista curta só com o que importava?<br>
+    <b>2.</b> Ontem o journal te mostrou POR QUE um serviço falhou. Hoje o disco está cheio e o reflexo é apagar um log direto — o que pode dar errado nisso, do mesmo jeito que reiniciar sem investigar deu errado ontem?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>--since</code> combinado com <code>-p err</code>.<br>
+    <b>2.</b> Apagar um arquivo que um processo ainda está usando (via <code>tail -f</code>, por exemplo) não libera o espaço de verdade — só some o NOME do arquivo, o espaço continua ocupado até o processo soltar. É a mesma lição de ontem: agir sem checar o estado real esconde o problema em vez de resolver.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> journalctl é o log moderno do systemd. Mas nem todo sistema
 usa só ele — muitos ambientes ainda dependem do syslog clássico (rsyslog) e da rotação automática via
@@ -188,9 +228,19 @@ processos ainda podem estar escrevendo.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Um alerta de disco mostra <code>/var/log</code> em 98% de uso. O reflexo é digitar
-  <code>rm /var/log/app.log</code> — mas se um processo ainda estiver escrevendo nesse arquivo, apagar o nome
-  não libera o espaço de verdade, só esconde o problema.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#3402</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>11:47</span>
+      <span>aberto por: monitoramento (Zabbix)</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-01</b> · serviço: disco — partição /var</div>
+      <div class="msg">"/var/log em 98% de uso. Gravação pode falhar a qualquer momento."</div>
+    </div>
+    <div class="ticket-foot">O reflexo é apagar app.log direto. Isso realmente libera o espaço? O que você confere antes?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -261,6 +311,13 @@ lsof | grep deleted</div>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo listado como (deleted) no lsof, ainda ocupando espaço.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver com os próprios olhos o "(deleted)" no lsof é o que fixa o conceito de inode preso — muito mais concreto que só ouvir a explicação.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar rm de novo no mesmo caminho achando que vai "apagar de vez" — o nome já sumiu, rm de novo não faz nada.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b><code>lsof | grep deleted</code> não mostra nada, mesmo com o <code>tail -f</code> ainda rodando</b> → confira se o <code>tail -f</code> da janela 1 realmente ainda está ativo — se ele foi encerrado sem você perceber, o arquivo já não está mais "segurado" por ninguém, e o comportamento muda.<br>
+          <b>"lsof: command not found"</b> → instale com <code>sudo apt install lsof</code> — em algumas distros mínimas ele não vem por padrão.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Encerre o processo que prende o arquivo e confirme que o espaço foi liberado.</div></div>
@@ -277,6 +334,12 @@ lsof | grep deleted</div>
       <div class="lab-expect"><b>Resultado esperado:</b> saída detalhada mostrando quais arquivos seriam rotacionados e como.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> -d é a etapa de segurança que confirma o que vai acontecer antes de aplicar de verdade — pular direto pra -f é como pular o pwd antes de um rm.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir a saída do -d com a rotação já aplicada — como o colega da história de hoje, é só simulação, nada mudou no disco ainda.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"error: skipping "/var/log/algumacoisa.log" because parent directory has insecure permissions"</b> → isso é o logrotate recusando operar em diretório com permissão insegura — leia qual diretório é e ajuste, não ignore o aviso mesmo em modo -d (debug).
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Documente partição afetada, causa do espaço preso, ação tomada, espaço liberado antes/depois.</div></div>
