@@ -181,6 +181,20 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+
+/* PROTOTIPO — detalhamento de comando por flag */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -304,6 +318,12 @@ passwd: password updated successfully</pre>
       <div class="lab-cmd">(no menu do GRUB, tecla 'e', adicionar ao final da linha linux:)
 systemd.unit=rescue.target
 (Ctrl+X para inicializar)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse parâmetro</summary>
+        <dl class="flag-list">
+          <dt>systemd.unit=</dt><dd>Parâmetro de kernel lido pelo systemd assim que ele assume o controle do boot — sobrescreve, só para esse boot específico, qual target (estado) o sistema deve alcançar.</dd>
+          <dt>rescue.target</dt><dd>O estado mínimo do systemd: monta os sistemas de arquivos locais e abre uma shell de root, sem subir rede nem a maioria dos serviços — é o "modo oficina" da recuperação.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> shell de root disponível, sem pedir senha.</div>
       <div class="lab-why"><b>Por quê:</b> modo de usuário único pula a autenticação normal — é exatamente o mecanismo de recuperação para quando a senha foi perdida.</div>
     </li>
@@ -329,6 +349,15 @@ passwd: password unchanged</div>
       <div class="lab-cmd"># mount -o remount,rw /
 # mount | grep ' / '
 /dev/mapper/vg_root-lv_root on / type ext4 (rw,relatime)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>mount</dt><dd>Sem argumentos, listaria todos os pontos montados. Aqui é usado para RECONFIGURAR uma montagem que já existe, não para criar uma nova.</dd>
+          <dt>-o</dt><dd>Introduz uma lista de opções de montagem, separadas por vírgula.</dd>
+          <dt>remount</dt><dd>Diz ao kernel para reconfigurar um sistema de arquivos já montado, sem desmontá-lo primeiro — essencial pra raiz, que nunca pode ser desmontada com o sistema rodando nela.</dd>
+          <dt>rw</dt><dd>A opção nova sendo aplicada: leitura-e-escrita, substituindo o <code>ro</code> (somente-leitura) que o modo rescue tinha imposto.</dd>
+          <dt>/</dt><dd>O ponto de montagem alvo — a raiz do sistema de arquivos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> saída mostrando (rw,relatime).</div>
     
       <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
