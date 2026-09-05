@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, quais três diretórios precisam ser montados com --bind antes de entrar no chroot pra reparar o GRUB?<br>
+    <b>2.</b> Ontem o problema era o próprio GRUB sumido — nenhum menu aparecia. Hoje o GRUB funciona perfeitamente e mostra o menu. O problema está uma camada depois de onde estava ontem — em quê?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>/dev</code>, <code>/proc</code> e <code>/sys</code>.<br>
+    <b>2.</b> No kernel que o GRUB carrega, não no GRUB em si. Um <code>kernel panic</code> logo após uma atualização significa que o carregador de boot está funcionando certo — ele até achou e carregou o kernel novo — mas esse kernel específico não consegue montar o sistema de arquivos raiz.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 do GRUB (Semana 11):</b> Você já sabe que o menu do GRUB guarda
 entradas antigas em "Advanced options". Hoje isso vira solução real: uma atualização de kernel causou pane, e
@@ -188,9 +228,19 @@ preservar os logs do panic em vez de apagá-los na pressa de "deixar tudo limpo"
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Atualizei e agora não sobe." A tela mostra "Kernel panic - not syncing: VFS: Unable to
-  mount root fs" logo após uma atualização de kernel. O reflexo de reiniciar de novo sem mudar nada só repete
-  o mesmo panic — a saída está no menu do GRUB, em "Advanced options".</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#7534</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:30</span>
+      <span>aberto por: você mesmo — pós-atualização</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM de laboratório</b> · serviço: boot — kernel panic</div>
+      <div class="msg">"Atualizei o kernel e agora não sobe. Kernel panic - not syncing: VFS: Unable to mount root fs."</div>
+    </div>
+    <div class="ticket-foot">Reiniciar de novo sem mudar nada só repete o mesmo panic. Onde no menu do GRUB está a saída pra esse caso?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -255,6 +305,12 @@ $ systemctl --failed
 > Linux 6.1.0-9-amd64 (recovery mode)</div>
       <div class="lab-expect"><b>Resultado esperado:</b> pelo menos duas versões de kernel listadas, se houver mais de uma instalada.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar visualmente que a "rota de fuga" existe antes de precisar dela é parte de conhecer o ambiente.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>o menu "Advanced options" só mostra UMA versão de kernel</b> → normal numa VM nova sem atualizações ainda — rode <code>sudo apt upgrade</code>, reinicie uma vez pra instalar o kernel novo (sem remover o antigo), e só então repita o exercício com as duas versões disponíveis.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> selecione uma versão específica e, após o boot, confirme com uname -r.</div></div>

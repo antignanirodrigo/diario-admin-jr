@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, o modo rescue significa que o systemd já tinha assumido o controle do boot, ou ainda não?<br>
+    <b>2.</b> Ontem o sistema já tinha chegado ao rescue.target, dentro do systemd. Hoje o boot para ANTES disso, tentando montar a própria raiz do disco. Por que esse problema é uma etapa mais cedo do que o rescue de ontem?
+  </div>
+  <div class="ans">
+    <b>1.</b> Já tinha — rescue.target é um estado gerenciado pelo próprio systemd.<br>
+    <b>2.</b> Porque o initramfs roda ANTES do systemd assumir qualquer coisa — é o ambiente mínimo carregado na RAM cuja única missão é encontrar e montar a raiz real. Se ele não consegue, o systemd nunca chega a existir nesse boot; você fica preso numa etapa anterior ao rescue de ontem.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem o boot chegou até o rescue.target — uma etapa avançada
 o suficiente pra ter shell de root. Hoje o cenário é mais cedo na cadeia: o boot nem chega no rescue, trava
@@ -188,9 +228,19 @@ um volume LVM inativo) usando as ferramentas certas antes de qualquer reboot.</d
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>O boot para com: "Gave up waiting for root device. ALERT! /dev/mapper/vg_root-lv_root does
-  not exist. Dropping to a shell!" O reflexo de reiniciar de novo não resolve nada — se o sistema parou aqui,
-  ele ainda nem chegou no sistema real. O shell (initramfs) serve pra investigar a etapa quebrada.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#7451</b></span>
+      <span><b>PRIORIDADE CRÍTICA</b></span>
+      <span>02:14</span>
+      <span>aberto por: monitoramento</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-07</b> · serviço: boot — raiz não encontrada</div>
+      <div class="msg">"Gave up waiting for root device. ALERT! /dev/mapper/vg_root-lv_root does not exist. Dropping to a shell!"</div>
+    </div>
+    <div class="ticket-foot">Reiniciar de novo não resolveu da última vez. O sistema nem chegou a carregar o real. O que você investiga nessa shell?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -270,6 +320,12 @@ control</div>
       <div class="lab-expect"><b>Resultado esperado:</b> volume group encontrado, volume lógico listado como inactive.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "does not exist" na mensagem de erro e concluir que o dado foi perdido — inactive não é o mesmo que ausente ou corrompido, é só destravar que falta.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se lvscan não mostrar nada, este é o ponto onde o chat com o Sênior-IA vai ajudar a diferenciar "volume inativo" de "volume realmente ausente".</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"No volume groups found"</b> → diferente de "inactive", isso indica que o próprio módulo/driver de LVM pode não ter carregado no initramfs — rode também <code>(initramfs) lvm pvscan</code> pra confirmar se os discos físicos ao menos são enxergados antes de concluir que o volume sumiu.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> documente: etapa (initramfs), subsistema (LVM), causa (volume group inativo), ação recomendada (não reiniciar às cegas).</div></div>

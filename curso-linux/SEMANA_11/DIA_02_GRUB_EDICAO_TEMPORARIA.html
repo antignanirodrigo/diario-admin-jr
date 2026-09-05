@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual comando separa quanto tempo do boot foi gasto no kernel e quanto foi gasto no userspace?<br>
+    <b>2.</b> Ontem você só observou as etapas do boot, sem tocar em nada. Hoje você vai editar um parâmetro bem no início dessa cadeia, na tela do GRUB — por que fazer esse teste na tela de boot é mais seguro do que editar o arquivo grub.cfg direto?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>systemd-analyze</code>.<br>
+    <b>2.</b> Porque a edição na tela do GRUB (tecla 'e') só existe na memória para AQUELE boot — se der errado, um reboot normal desfaz tudo sozinho. Editar o grub.cfg direto é mudança permanente arriscada, e pior: esse arquivo é gerado automaticamente, então a edição manual pode sumir ou ficar inconsistente na próxima atualização.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você mapeou as seis etapas do boot sem mudar nada. Hoje
 você aprende a ferramenta que ATUA numa dessas etapas — o GRUB — e a distinção mais importante que existe
@@ -188,9 +228,19 @@ simples reboot normal desfaz tudo, sem nenhum rastro.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você abre /boot/grub/grub.cfg pra "mexer direto" — mas esse arquivo tem um aviso claro:
-  "Gerado automaticamente". Editar o arquivo gerado é a armadilha clássica: sua mudança pode sumir na próxima
-  atualização, ou pior, ficar inconsistente com a fonte real que o gera.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#7430</b></span>
+      <span><b>PRIORIDADE BAIXA</b></span>
+      <span>10:15</span>
+      <span>aberto por: você mesmo — estudo</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM de laboratório</b> · serviço: GRUB — configuração de boot</div>
+      <div class="msg">"Preciso testar um parâmetro novo de boot sem arriscar quebrar a inicialização permanentemente."</div>
+    </div>
+    <div class="ticket-foot">Editar /boot/grub/grub.cfg direto parece o caminho mais rápido. Por que esse arquivo específico é uma armadilha?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -253,6 +303,12 @@ linux /boot/vmlinuz-6.1.0-21-amd64 root=/dev/mapper/vg_root-lv_root ro quiet
 initrd /boot/initrd.img-6.1.0-21-amd64</div>
       <div class="lab-expect"><b>Resultado esperado:</b> tela de edição mostrando a linha linux e initrd da entrada.</div>
       <div class="lab-why"><b>Por quê:</b> essa tela edita só a cópia carregada em memória pra esse boot — nada em disco é tocado ainda.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>a tela de edição não abre, ou o menu do GRUB nem aparece</b> → pressione uma tecla qualquer bem no início do boot pra pausar o timeout automático do menu — em muitas VMs o menu passa rápido demais e vai direto pro boot padrão.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> adicione systemd.unit=rescue.target ao final da linha linux e inicialize com Ctrl+X.</div></div>

@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, o que "inactive" significava quando o <code>lvscan</code> mostrou o volume group — o dado estava perdido?<br>
+    <b>2.</b> Ontem o problema era o sistema não CONSEGUIR chegar ao systemd. Hoje o systemd já está de pé e funcionando — mas você mesmo pode derrubar o próprio acesso trocando o estado dele com <code>isolate</code>. Por que isso é arriscado especificamente via SSH?
+  </div>
+  <div class="ans">
+    <b>1.</b> Não — "inactive" significa só destravado, não perdido ou corrompido.<br>
+    <b>2.</b> Porque <code>systemctl isolate</code> muda o estado real do sistema, parando serviços que não pertencem ao alvo novo — incluindo, às vezes, a própria rede ou o sshd que sustentam sua sessão SSH. Você corta o galho em que está sentado, sem conseguir digitar o comando de volta pela mesma conexão que acabou de cair.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> Você já viu rescue.target (Dia 3) e initramfs
 (Dia 4) na prática. Hoje fecha o quadro: todos os estados do systemd são chamados de "targets", e trocar de
@@ -188,9 +228,19 @@ verdade apenas com console local numa VM de laboratório.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Ajuste rápido... só um isolate e já volto!" — e a conexão SSH cai imediatamente: "Connection
-  to server closed by remote host." systemctl isolate rescue.target mudou o estado real do sistema, parando
-  serviços e derrubando a rede — inclusive a própria sessão SSH usada pra rodar o comando.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#7460</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>15:50</span>
+      <span>aberto por: você mesmo — manutenção</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-08 (acesso via SSH)</b> · serviço: systemd — troca de target</div>
+      <div class="msg">"Preciso isolar o sistema em rescue.target rapidinho pra um teste e já volto ao normal."</div>
+    </div>
+    <div class="ticket-foot">"Ajuste rápido, só um isolate e já volto" — o que pode dar errado nessa frase, especificamente por estar conectado via SSH?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -272,6 +322,12 @@ multi-user.target  loaded active active Multi-User System</div>
       <div class="lab-expect"><b>Resultado esperado:</b> ssh.service aparece inactive (dead) — comportamento esperado do rescue.target.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar esse mesmo comando via SSH "só pra ver" — nesse exato momento a sessão SSH cai, e você perde o acesso que estava usando pra testar.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você acidentalmente rodar isolate via SSH e perder a sessão, este é o ponto onde o chat com o Sênior-IA vai ajudar a planejar a recuperação via console.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>rodou <code>systemctl isolate rescue.target</code> via SSH por engano, mesmo avisado</b> → a sessão cai imediatamente e não tem como digitar o comando de volta pela mesma conexão — só resolve com acesso ao console local (ou console web do provedor de VM), exatamente por isso o exercício insiste em console local, não SSH.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> volte ao estado normal com systemctl isolate multi-user.target e confirme que ssh.service reativa.</div></div>

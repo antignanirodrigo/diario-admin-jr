@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual comando revelou o UUID real do disco, pra comparar com o que o fstab esperava?<br>
+    <b>2.</b> Ontem você corrigiu um erro DENTRO de um sistema que ainda conseguia iniciar (mesmo que em manutenção). Hoje a tela mostra só <code>grub rescue&gt;</code>, sem menu nenhum. Por que esse caso exige uma mídia externa (live media), e não dá pra corrigir de dentro do próprio sistema?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>blkid</code>.<br>
+    <b>2.</b> Porque o próprio GRUB — o programa que carrega o sistema operacional — está corrompido ou ausente. Sem ele, não existe "dentro do sistema" pra acessar: é preciso inicializar por outro meio (um USB ou ISO live) só pra ter uma shell de onde reinstalar o GRUB no disco certo.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 11 inteira:</b> Até agora, o GRUB sempre funcionava — só o
 sistema por trás dele falhava. Hoje o cenário é diferente: o próprio GRUB está corrompido, e o prompt que
@@ -188,9 +228,19 @@ pra uma partição (/dev/sda1) — confundir os dois é o erro mais comum nesse 
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Vou instalar no primeiro disco que aparecer?" — pergunta arriscada. A tela mostra apenas
-  grub rescue&gt;, sem menu nenhum. O GRUB em si está corrompido ou ausente. "Calma. Pense. Confirme." — antes
-  de qualquer grub-install, é preciso montar a cadeia de recuperação inteira, começando pela mídia externa.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#7523</b></span>
+      <span><b>PRIORIDADE CRÍTICA</b></span>
+      <span>13:10</span>
+      <span>aberto por: monitoramento</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-10</b> · serviço: boot — GRUB ausente</div>
+      <div class="msg">"Tela mostra apenas grub rescue>, sem menu. Servidor não inicializa de jeito nenhum."</div>
+    </div>
+    <div class="ticket-foot">"Vou instalar no primeiro disco que aparecer?" — antes de qualquer grub-install, o que precisa ser montado primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -276,6 +326,12 @@ $ chroot /mnt</div>
       <div class="lab-expect"><b>Resultado esperado:</b> prompt muda, indicando que você está operando dentro do sistema instalado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular direto pro chroot sem as montagens bind — comandos como grub-install podem falhar de forma confusa sem /dev, /proc e /sys disponíveis.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se algum comando dentro do chroot reclamar de dispositivo ou arquivo ausente, este é o ponto onde o chat com o Sênior-IA vai ajudar a checar as montagens bind.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>esqueceu de montar um dos três (<code>/dev</code>, <code>/proc</code> ou <code>/sys</code>) antes do chroot</b> → o chroot entra normalmente, mas comandos como <code>grub-install</code> falham com erros estranhos de I/O ou "cannot find a device" — sempre monte os três antes de entrar no <code>chroot /mnt</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> rode grub-install /dev/sda (disco inteiro) e depois update-grub, ainda dentro do chroot.</div></div>
@@ -285,6 +341,12 @@ Installation finished. No error reported.
 # update-grub
 Found linux image: /boot/vmlinuz-6.1.0-21-amd64</div>
       <div class="lab-expect"><b>Resultado esperado:</b> "Installation finished. No error reported" e o menu reconstruído.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>instalar sem querer em <code>/dev/sda1</code> (uma partição) em vez de <code>/dev/sda</code> (o disco inteiro)</b> → <code>grub-install</code> sempre aponta pro DISCO inteiro, nunca para uma partição específica — mesmo em sistemas com partição EFI separada. Confirme com <code>lsblk</code> antes de rodar, sempre no nome do disco, sem número no final.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> saia do chroot, desmonte tudo na ordem inversa, remova a mídia e reinicie para validar o boot real.</div></div>
