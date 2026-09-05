@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -289,6 +302,13 @@ ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Leia os eventos mais recentes do kernel, mesmo sem incidente nenhum.</div></div>
       <div class="lab-cmd">dmesg -T | tail -30</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dmesg</dt><dd>Mostra as mensagens do buffer de log do kernel.</dd>
+          <dt>-T</dt><dd>Converte os timestamps internos do kernel (segundos desde o boot) para data/hora legível — sem isso, os horários são números difíceis de interpretar.</dd>
+          <dt>| tail -30</dt><dd>Pipe para tail, mostrando só as 30 últimas mensagens em vez do buffer inteiro.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista de eventos de kernel com timestamp legível.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> conhecer o "normal" do dmesg antes de um incidente é o que te permite reconhecer rápido quando algo foge do padrão numa investigação real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar dmesg sem o -T e tentar interpretar timestamps em "segundos desde o boot" — sem conversão pra data/hora legível, correlacionar com outros logs vira matemática desnecessária.</div>
@@ -303,6 +323,12 @@ ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Filtre só eventos de erro e aviso, cortando ruído informativo.</div></div>
       <div class="lab-cmd">dmesg -l err,warn</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dmesg</dt><dd>Mostra as mensagens do kernel.</dd>
+          <dt>-l err,warn</dt><dd>Filtra por nível de prioridade, mostrando só mensagens de erro ou aviso — corta o volume grande de mensagens puramente informativas do kernel.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista bem menor, só com eventos relevantes, sem o ruído informativo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> o kernel gera MUITAS mensagens informativas de rotina — filtrar por prioridade é o que separa sinal real de ruído de fundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> filtrar tão agressivamente que perde contexto — às vezes um evento "info" logo antes de um "err" é parte da mesma história.</div>

@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -296,6 +309,14 @@ $ ls -lh /tmp/contratos_recuperados/Contratos/2026/
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Monte o catálogo de arquivos do backup do PBS via FUSE com proxmox-file-restore.</div></div>
       <div class="lab-cmd">proxmox-file-restore list pbs-backup vm/100/2026-09-01T10:00:00Z drive-scsi0.img.fidx /etc/</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-file-restore list</dt><dd>Lista o conteúdo de um caminho dentro de um backup, sem precisar restaurar ou ligar a VM inteira.</dd>
+          <dt>pbs-backup vm/100/...</dt><dd>O storage e o snapshot de origem a explorar.</dd>
+          <dt>drive-scsi0.img.fidx</dt><dd>O disco virtual específico dentro do backup a montar — uma VM pode ter vários discos, cada um com seu próprio índice (.fidx).</dd>
+          <dt>/etc/</dt><dd>O caminho dentro desse disco a listar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Lista de backups de VMs e containers exibida.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-file-restore monta a árvore de diretórios do backup via FUSE na memória RAM, permitindo navegar pelos arquivos sem ligar a VM.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Restaurar uma VM inteira de 500GB apenas para recuperar um arquivo de texto de configuração de 4KB, desperdiçando tempo e espaço de storage.</div>
@@ -310,6 +331,14 @@ $ ls -lh /tmp/contratos_recuperados/Contratos/2026/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Extraia um único arquivo de configuração corrompido para o diretório local.</div></div>
       <div class="lab-cmd">proxmox-file-restore extract pbs-backup vm/100/2026-09-01T10:00:00Z drive-scsi0.img.fidx /etc/nginx/nginx.conf ./nginx_recuperado.conf</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-file-restore extract</dt><dd>Extrai um arquivo específico de dentro de um backup, sem restaurar a VM inteira.</dd>
+          <dt>drive-scsi0.img.fidx</dt><dd>O disco de origem dentro do backup.</dd>
+          <dt>/etc/nginx/nginx.conf</dt><dd>O caminho do arquivo dentro do backup a ser extraído.</dd>
+          <dt>./nginx_recuperado.conf</dt><dd>O caminho de destino, na máquina atual, onde o arquivo extraído é salvo — sem sobrescrever o arquivo original, permitindo comparar antes de aplicar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Visualização completa dos arquivos com tamanhos e permissões.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-file-restore extract extrai o arquivo específico diretamente para a pasta atual do terminal em menos de 1 segundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Sobrescrever o arquivo de produção atual diretamente sem fazer uma cópia de segurança prévia (backup do arquivo modificado).</div>

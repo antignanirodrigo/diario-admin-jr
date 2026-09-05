@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -300,6 +313,16 @@ TASK OK
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Isole uma VLAN de contingência (Sandbox) sem rota para a rede de produção.</div></div>
       <div class="lab-cmd">pct set 200 -net0 name=eth0,bridge=vmbr0,tag=999,ip=192.168.99.10/24</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>pct set 200</dt><dd>Altera a configuração de um container LXC existente, de ID 200.</dd>
+          <dt>-net0</dt><dd>Define a primeira interface de rede do container — a numeração (net0, net1...) permite múltiplas interfaces.</dd>
+          <dt>name=eth0</dt><dd>O nome que a interface terá dentro do container.</dd>
+          <dt>bridge=vmbr0</dt><dd>A bridge de rede do host à qual essa interface se conecta.</dd>
+          <dt>tag=999</dt><dd>Marca essa interface com a VLAN 999 — usada aqui para isolar o teste de disaster recovery numa rede separada da produção, evitando conflito de IP.</dd>
+          <dt>ip=192.168.99.10/24</dt><dd>O endereço IP fixo atribuído ao container, já dentro da faixa isolada da VLAN de teste.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Restauração disparada com streaming sob demanda.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Isolar uma VLAN de contingência (Sandbox) permite restaurar máquinas virtuais em simulação de desastre sem gerar conflitos de IP com a produção.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Restaurar VMs de backup na mesma rede de produção com a máquina original ligada, gerando conflito severo de IP e corrupção de banco.</div>
@@ -307,6 +330,14 @@ TASK OK
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute a restauração paralela de múltiplos serviços críticos cronometrando o tempo.</div></div>
       <div class="lab-cmd">time qmrestore pbs-backup:backup/vm/100/latest 900 --live-restore 1</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>time</dt><dd>Comando do shell que mede quanto tempo o comando seguinte leva para executar — usado aqui para cronometrar o RTO (tempo de recuperação) na prática.</dd>
+          <dt>qmrestore ... /latest</dt><dd>Restaura o backup mais recente disponível da VM 100, sem precisar digitar o timestamp exato.</dd>
+          <dt>900</dt><dd>O ID da VM temporária criada para o simulado de disaster recovery.</dd>
+          <dt>--live-restore 1</dt><dd>Liga a VM quase imediatamente enquanto o restante do disco ainda é transferido em segundo plano, reduzindo drasticamente o tempo até o serviço voltar a responder.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Cronômetro marcando menos de 60 segundos de indisponibilidade.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Cronometrar cada etapa da restauração (download de chunks, boot da VM, validação de banco) comprova se o RTO contratado foi atingido.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Considerar o simulado bem-sucedido apenas porque o comando rodou, sem validar se a aplicação realmente subiu e processou transações.</div>

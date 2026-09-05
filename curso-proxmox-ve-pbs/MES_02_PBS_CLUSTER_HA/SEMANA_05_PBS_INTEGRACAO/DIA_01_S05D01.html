@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -293,6 +306,14 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Dispare o primeiro backup deduplicado no Proxmox Backup Server via CLI.</div></div>
       <div class="lab-cmd">proxmox-backup-client backup root.pxar:/ --repository admin@pbs:tank-backup</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-client</dt><dd>Cliente de linha de comando do Proxmox Backup Server, usado para enviar backups ao datastore.</dd>
+          <dt>backup</dt><dd>Subcomando que inicia um novo backup.</dd>
+          <dt>root.pxar:/</dt><dd>Formato origem:destino do PBS — 'root.pxar' é o nome do arquivo de arquivo (archive) a criar, ':/'  indica que a pasta de origem é a raiz do sistema de arquivos.</dd>
+          <dt>--repository admin@pbs:tank-backup</dt><dd>Define onde enviar o backup: usuário 'admin' no servidor apelidado 'pbs', gravando no datastore chamado 'tank-backup'.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Datastore principal listado com status ativo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-client testa o fatiamento de dados em chunks dinâmicos de 4MB identificados por hash SHA-256.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Achar que o PBS gera arquivos .tar ou .vmdk tradicionais; o PBS armazena apenas blocos deduplicados na pasta .chunks/.</div>

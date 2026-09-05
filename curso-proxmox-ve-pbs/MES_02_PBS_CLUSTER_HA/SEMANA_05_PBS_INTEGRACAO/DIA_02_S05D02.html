@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -295,6 +308,13 @@ verify group vm/101 (2 snapshots)
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Inicie a Fase 1 e Fase 2 do Garbage Collection no datastore do PBS.</div></div>
       <div class="lab-cmd">proxmox-backup-manager garbage-collection start tank-backup</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager</dt><dd>Ferramenta administrativa do PBS, para tarefas de manutenção do servidor (diferente do proxmox-backup-client, usado para enviar backups).</dd>
+          <dt>garbage-collection start</dt><dd>Inicia manualmente a rotina de limpeza (garbage collection): remove chunks de dados que não são mais referenciados por nenhum backup válido.</dd>
+          <dt>tank-backup</dt><dd>O datastore alvo da limpeza.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Exibição do total de chunks, tamanho em disco e taxa de deduplicação.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O Garbage Collection Fase 1 varre os arquivos de manifesto (.fidx/.didx) e marca todos os chunks que ainda estão em uso ativo por backups válidos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Interromper o processo de Garbage Collection no meio, deixando o datastore em estado intermediário de verificação.</div>
@@ -328,6 +348,12 @@ verify group vm/101 (2 snapshots)
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide que o relatório final acusa 100% de chunks íntegros com zero corrupção.</div></div>
       <div class="lab-cmd">proxmox-backup-manager datastore verify tank-backup</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager datastore verify</dt><dd>Recalcula os hashes SHA-256 de cada chunk armazenado fisicamente no datastore, comparando com o valor esperado — detecta corrupção silenciosa em disco.</dd>
+          <dt>tank-backup</dt><dd>O datastore verificado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Validação de 100% dos hashes com status OK.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Agendar GC semanalmente e Verify mensalmente estabelece a rotina oficial de manutenção preventiva do Proxmox Backup Server.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Agendar Verify Jobs diários em datastores de dezenas de terabytes, mantendo os discos em 100% de leitura ininterrupta.</div>

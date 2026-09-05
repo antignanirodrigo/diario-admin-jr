@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -296,6 +309,12 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Gere uma chave mestra de criptografia client-side AES-256-GCM no Proxmox VE.</div></div>
       <div class="lab-cmd">proxmox-backup-client key create /etc/pve/priv/storage/pbs-key.json</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-client key create</dt><dd>Gera uma nova chave de criptografia simétrica (AES-256) para cifrar os backups do lado do cliente, antes de saírem do hypervisor.</dd>
+          <dt>/etc/pve/priv/storage/pbs-key.json</dt><dd>O caminho onde a chave gerada é salva — uma pasta privada do cluster Proxmox, com acesso restrito.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Chave simétrica AES-256 gerada no arquivo local.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Gerar uma chave de criptografia client-side com proxmox-backup-client key create cifra os dados com AES-256-GCM antes de saírem do hypervisor.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Perder o arquivo de chave de criptografia; no modelo Zero-Knowledge do PBS, os dados no servidor são ruído puro e NINGUÉM consegue recuperá-los sem a chave.</div>
@@ -303,6 +322,13 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Exporte a Paperkey estruturada para impressão em formato de texto seguro.</div></div>
       <div class="lab-cmd">proxmox-backup-client key paperkey /etc/pve/priv/storage/pbs-key.json --output-format text</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>key paperkey</dt><dd>Exporta uma chave de criptografia existente num formato pensado para impressão em papel, como backup físico da chave.</dd>
+          <dt>/etc/pve/priv/storage/pbs-key.json</dt><dd>A chave a ser exportada — a mesma criada no passo anterior.</dd>
+          <dt>--output-format text</dt><dd>Define que a saída deve ser texto estruturado e legível, pronto para copiar ou imprimir, em vez de dados binários.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Bloco de texto blindado <code>--- BEGIN PROXMOX BACKUP KEY ---</code> exibido.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando paperkey exporta a chave em formato de texto estruturado para ser impressa e guardada em cofre físico à prova de fogo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Guardar a paperkey em um arquivo de texto no próprio desktop ou na mesma VM que está sendo feito o backup.</div>

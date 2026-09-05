@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -322,6 +335,14 @@ systemctl status nginx</div>
       <div class="lab-text"><b>Ação:</b> Execute o restart e confira o status imediatamente depois.</div></div>
       <div class="lab-cmd">sudo systemctl restart nginx
 systemctl status nginx</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo</dt><dd>Controlar serviços do sistema exige privilégio elevado.</dd>
+          <dt>systemctl</dt><dd>Ferramenta de controle do systemd — inicia, para, reinicia e consulta o estado de serviços.</dd>
+          <dt>restart</dt><dd>Subcomando que para e inicia o serviço de novo, em sequência — diferente de 'reload', que recarrega configuração sem interromper o processo.</dd>
+          <dt>nginx</dt><dd>O serviço alvo da ação.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> active (running) com um novo horário de início, confirmando que o restart funcionou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> restart exige sudo de propósito — essa exigência de privilégio é o que garante que a ação fica registrada em nome de quem executou, não é anônima.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "active (running)" e já considerar resolvido — como o caso do técnico da história de hoje, isso é só o primeiro sinal, não a confirmação de estabilidade.</div>

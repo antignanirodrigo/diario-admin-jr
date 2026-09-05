@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -324,6 +337,12 @@ logger "evento de teste VM2"</div>
       <div class="lab-text"><b>Ação:</b> Construa manualmente a linha do tempo cruzada dos dois eventos.</div></div>
       <div class="lab-cmd">journalctl --since "5 min ago" | grep "evento de teste"
 # repita na outra VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>journalctl --since "5 min ago"</dt><dd>Mostra só as mensagens do journal dos últimos 5 minutos, em vez do log inteiro — essencial para comparar horários entre duas máquinas sem se perder em ruído antigo.</dd>
+          <dt>| grep "evento de teste"</dt><dd>Filtra essa janela recente para mostrar só as linhas que contêm o texto de teste gerado no passo anterior.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> sequência clara mostrando qual evento aconteceu primeiro e qual foi consequência.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa é a habilidade central da aula — pegar timestamps de fontes diferentes e alinhar numa única narrativa coerente.</div>
       <div class="lab-warn"><b>Cilada comum:</b> montar a linha do tempo mas esquecer de anotar de qual máquina veio cada evento — sem essa origem clara, a linha do tempo perde credibilidade.</div>

@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -326,6 +339,12 @@ apt policy htop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Compare o que um upgrade completo afetaria, sem rodar de verdade.</div></div>
       <div class="lab-cmd">apt list --upgradable</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>apt list</dt><dd>Lista pacotes conforme um critério.</dd>
+          <dt>--upgradable</dt><dd>Filtra para mostrar só os pacotes que têm uma versão mais nova disponível — mostra o TAMANHO do impacto que um 'apt upgrade' teria, sem executar nada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista de pacotes que teriam sido afetados por upgrade, comparada com a instalação pontual já feita.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver essa lista, sem executar, deixa concreto o tamanho do raio de impacto que um upgrade teria — muito maior que o install pontual que você acabou de fazer.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar apt upgrade "só pra ver o que aconteceria" em VM que não é totalmente descartável — mesmo curiosidade merece ambiente isolado.</div>
@@ -342,6 +361,13 @@ apt policy htop</div>
       <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o pacote instalado no laboratório e confirme que o servidor voltou ao estado anterior à aula.</div></div>
       <div class="lab-cmd">sudo apt remove --purge htop
 dpkg -l | grep htop || echo "pacote removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo apt remove</dt><dd>Desinstala um pacote, mas por padrão mantém arquivos de configuração no disco.</dd>
+          <dt>--purge</dt><dd>Remove também os arquivos de configuração do pacote — desinstalação completa, sem deixar resíduo.</dd>
+          <dt>htop</dt><dd>O pacote instalado nesta mesma aula, agora removido para deixar o sistema como estava antes.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> mensagem "pacote removido" — dpkg -l não lista mais o htop.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você instalou o htop só para observar a diferença entre install e upgrade na prática — deixá-lo instalado no laboratório sem necessidade é exatamente o tipo de "pacote sobrando sem dono claro" que uma auditoria de sistema pega depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover o pacote de teste. Meses depois, alguém revisando os pacotes instalados encontra o htop e não sabe se foi uma instalação real de produção ou sobra de laboratório.</div>

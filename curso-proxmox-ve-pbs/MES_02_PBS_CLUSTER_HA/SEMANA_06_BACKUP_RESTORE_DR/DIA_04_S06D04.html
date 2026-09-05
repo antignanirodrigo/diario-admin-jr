@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -298,6 +311,14 @@ Sync job finished successfully!</pre>
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Configure um Remote PBS em outra localidade geográfica para replicação offsite.</div></div>
       <div class="lab-cmd">proxmox-backup-manager remote create pbs-offsite --server pbs.datacenter2.com --auth-id sync-bot@pbs!token --fingerprint &lt;fingerprint&gt;</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>remote create pbs-offsite</dt><dd>Registra uma conexão com outro servidor PBS remoto, identificada pelo apelido 'pbs-offsite'.</dd>
+          <dt>--server pbs.datacenter2.com</dt><dd>O endereço do servidor PBS remoto, tipicamente em outro datacenter — a base da estratégia de backup 3-2-1 (uma cópia fora do local principal).</dd>
+          <dt>--auth-id sync-bot@pbs!token</dt><dd>A identidade (usuário + token) usada para autenticar nesse servidor remoto.</dd>
+          <dt>--fingerprint <fingerprint></dt><dd>A impressão digital do certificado TLS do servidor remoto, necessária para confiar na conexão.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Endpoint remoto salvo com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Configurar um Remote PBS em outro datacenter e criar uma tarefa de Sync Job garante que os backups sejam replicados para fora do prédio (offsite).</div>
       <div class="lab-warn"><b>Cilada comum:</b> Manter todos os backups no mesmo local físico da produção, violando a Regra 3-2-1 e arriscando perda total em caso de incêndio ou enchente.</div>
@@ -305,6 +326,15 @@ Sync job finished successfully!</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Crie uma tarefa de Sync Job vinculada ao remote configurando limite de banda.</div></div>
       <div class="lab-cmd">proxmox-backup-manager sync-job create sync-remote-tank --remote pbs-offsite --remote-store tank-backup --store tank-offsite --rate-in 50M</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sync-job create sync-remote-tank</dt><dd>Cria uma tarefa agendada de sincronização entre datastores, com o nome 'sync-remote-tank'.</dd>
+          <dt>--remote pbs-offsite</dt><dd>O servidor remoto de origem (ou destino) configurado no passo anterior.</dd>
+          <dt>--remote-store tank-backup</dt><dd>O datastore no lado remoto envolvido na sincronização.</dd>
+          <dt>--store tank-offsite</dt><dd>O datastore local (ou de destino) envolvido na sincronização.</dd>
+          <dt>--rate-in 50M</dt><dd>Limita a velocidade de transferência a 50 megabytes por segundo, evitando que o sync sature o link de internet da empresa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Sync Job programado no agendador.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O Sync Job transfere exclusivamente os chunks novos que o servidor de destino ainda não possui, minimizando o uso do link de WAN.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Fazer cópias manuais de arquivos gigantes pela rede em vez de usar os Sync Jobs otimizados do PBS.</div>

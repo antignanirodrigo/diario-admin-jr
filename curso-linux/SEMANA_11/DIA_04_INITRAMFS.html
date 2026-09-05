@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -317,6 +330,13 @@ control</div>
   Found volume group "vg_root" using metadata type lvm2
 (initramfs) lvm lvscan
   inactive          '/dev/vg_root/lv_root' [40.00 GiB] inherit</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos LVM</summary>
+        <dl class="flag-list">
+          <dt>lvm</dt><dd>Ferramenta de gestão de volumes LVM (Logical Volume Manager) — disponível mesmo dentro do shell mínimo do initramfs.</dd>
+          <dt>vgscan</dt><dd>Varre os discos em busca de volume groups (VGs) existentes e os registra — necessário quando o sistema ainda não 'enxerga' o volume group esperado.</dd>
+          <dt>lvscan</dt><dd>Varre e lista os volumes lógicos (LVs) dentro dos volume groups encontrados, mostrando o estado de cada um — como 'inactive' (existe, mas não está ativado) ou 'ACTIVE'.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> volume group encontrado, volume lógico listado como inactive.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "does not exist" na mensagem de erro e concluir que o dado foi perdido — inactive não é o mesmo que ausente ou corrompido, é só destravar que falta.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se lvscan não mostrar nada, este é o ponto onde o chat com o Sênior-IA vai ajudar a diferenciar "volume inativo" de "volume realmente ausente".</div>

@@ -184,6 +184,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -286,6 +299,14 @@ TASK OK (VM 100% autônoma no storage local)</pre>
   <ol class='steps' id="labSteps"><li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Dispare a restauração de emergência de uma VM com a flag --live-restore 1.</div></div>
       <div class="lab-cmd">qmrestore pbs-backup:backup/vm/100/2026-09-01T10:00:00Z 110 --live-restore 1</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>qmrestore</dt><dd>Restaura uma VM a partir de um backup, criando (ou sobrescrevendo) uma máquina virtual.</dd>
+          <dt>pbs-backup:backup/vm/100/2026-09-01T10:00:00Z</dt><dd>O snapshot de origem: storage 'pbs-backup', backup da VM 100, no timestamp específico indicado.</dd>
+          <dt>110</dt><dd>O ID da NOVA VM a ser criada com os dados restaurados.</dd>
+          <dt>--live-restore 1</dt><dd>Liga a VM quase imediatamente, enquanto os dados do disco ainda estão sendo baixados em segundo plano sob demanda — reduz drasticamente o tempo de indisponibilidade (RTO) comparado a esperar a restauração completa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Snapshot do PBS identificado com data e tamanho.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> A flag --live-restore 1 instrui o QEMU a ligar a máquina virtual imediatamente (em ~2 segundos), iniciando o boot enquanto os dados são baixados.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Aguardar horas para baixar um arquivo de backup de 1 TB em um incidente crítico quando o Live-Restore poderia colocar o serviço no ar instantaneamente.</div>

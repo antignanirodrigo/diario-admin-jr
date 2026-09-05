@@ -181,6 +181,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
 .lab-setup{border-left-color:var(--purple)!important}
 .setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -303,6 +316,14 @@ ls -l teste.log</div>
       <div class="lab-cmd">sudo useradd testeapp
 sudo chown testeapp:testeapp teste.log
 ls -l teste.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo</dt><dd>Trocar o dono de um arquivo exige privilégio elevado, a menos que você já seja o dono atual.</dd>
+          <dt>chown</dt><dd>Muda o dono (usuário) e/ou grupo de um arquivo.</dd>
+          <dt>testeapp:testeapp</dt><dd>Formato usuário:grupo — define o novo dono (testeapp) e o novo grupo dono (também testeapp) numa única chamada.</dd>
+          <dt>teste.log</dt><dd>O arquivo alvo da mudança.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ls -l mostra testeapp como novo dono do arquivo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> chown resolve QUEM é dono — é sempre o primeiro passo antes de decidir quanto de permissão dar, porque a permissão errada no dono errado não resolve o problema real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> aplicar chmod antes de corrigir o dono com chown — você pode acabar dando permissão certa pro dono errado, sem perceber.</div>
@@ -317,6 +338,15 @@ ls -l teste.log</div>
       <div class="lab-text"><b>Ação:</b> Aplique a permissão mínima (640) e confirme.</div></div>
       <div class="lab-cmd">chmod 640 teste.log
 ls -l teste.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa permissão octal</summary>
+        <dl class="flag-list">
+          <dt>chmod</dt><dd>Muda as permissões (leitura/escrita/execução) de um arquivo.</dd>
+          <dt>6</dt><dd>Permissão do DONO: 4 (leitura) + 2 (escrita) = 6, ou seja, ler e escrever, sem executar.</dd>
+          <dt>4</dt><dd>Permissão do GRUPO: só 4, ou seja, só leitura.</dd>
+          <dt>0</dt><dd>Permissão de OUTROS (todo o resto do sistema): zero, nenhum acesso.</dd>
+          <dt>teste.log</dt><dd>O arquivo recebendo essas permissões — resultado final: -rw-r-----.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> -rw-r----- exatamente, sem permissão nenhuma para "outros".</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> 640 é o exemplo prático do menor privilégio — dono lê/escreve (o que ele precisa), grupo só lê (se fizer sentido), outros nada (porque não precisam).</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir 640 com 740 de cabeça — a diferença entre os dois é a permissão de EXECUÇÃO do dono, que um arquivo de log nunca deveria ter.</div>
