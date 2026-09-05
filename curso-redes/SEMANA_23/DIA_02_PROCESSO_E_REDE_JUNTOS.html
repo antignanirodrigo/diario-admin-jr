@@ -435,6 +435,15 @@ $ sudo systemctl disable app-teste.service
 $ sudo rm /etc/systemd/system/app-teste.service
 $ sudo systemctl daemon-reload
 $ systemctl status app-teste.service 2>&1 | head -3</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl stop app-teste.service</dt><dd>Para a execução do serviço de teste.</dd>
+          <dt>systemctl disable app-teste.service</dt><dd>Remove o serviço da inicialização automática do boot.</dd>
+          <dt>rm /etc/systemd/system/app-teste.service</dt><dd>Apaga o arquivo de unit criado pro teste.</dd>
+          <dt>systemctl daemon-reload</dt><dd>Recarrega a configuração do systemd pra que ele esqueça a unit removida — sem isso, ela pode continuar aparecendo em memória mesmo depois do arquivo apagado.</dd>
+          <dt>systemctl status ... 2>&1 | head -3</dt><dd>Confirma que o systemd já não reconhece mais a unit; 2>&1 junta a saída de erro com a normal, e head -3 mostra só as três primeiras linhas, onde já aparece a mensagem esperada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Unit app-teste.service could not be found" — o serviço de teste sumiu completamente do systemd.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> unit de teste esquecida continua aparecendo em systemctl list-units e pode confundir o próximo diagnóstico, fazendo alguém achar que existe um serviço real ali.</div>
       <div class="lab-warn"><b>Cilada comum:</b> apagar só o arquivo sem rodar <code>daemon-reload</code> depois — o systemd mantém a unit em memória e ela continua aparecendo, dando a falsa impressão de que a remoção não funcionou.</div>

@@ -398,6 +398,12 @@ $ sudo tcpdump -i eth0 -n 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'</div>
       <div class="lab-cmd">$ sudo tcpdump -i eth0 -n port 9999
 # em outro terminal:
 $ curl http://localhost:9999</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo tcpdump -i eth0 -n port 9999</dt><dd>Captura na interface eth0, filtrando só tráfego envolvendo a porta 9999 (origem ou destino), sem resolver nomes.</dd>
+          <dt>curl http://localhost:9999</dt><dd>Gera uma tentativa de conexão a essa porta, no próprio host, pra observar como o tcpdump captura (ou não) o handshake dessa tentativa contra uma porta fechada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ou nenhuma resposta (retransmissão de SYN), ou um pacote com flag RST recusando a conexão.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se aparecer RST em vez de silêncio, este é o ponto onde o chat com o Sênior-IA vai explicar a diferença entre os dois comportamentos.</div>
     

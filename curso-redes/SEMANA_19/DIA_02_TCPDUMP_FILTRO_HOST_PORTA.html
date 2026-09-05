@@ -368,11 +368,24 @@ $ sudo tcpdump -i eth0 dst host 10.10.10.50 and dst port 443
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, rode tcpdump -i eth0 sem filtro por alguns segundos e observe o volume de linhas.</div></div>
       <div class="lab-cmd">$ sudo tcpdump -i eth0 -n</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo</dt><dd>Necessário porque capturar pacotes brutos numa interface exige privilégio elevado.</dd>
+          <dt>tcpdump -i eth0</dt><dd>Captura o tráfego passando pela interface eth0.</dd>
+          <dt>-n</dt><dd>Não resolve nomes de host (DNS reverso) nem de porta (/etc/services) — mostra os números crus, mais rápido e sem gerar tráfego DNS extra.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> várias linhas de tráfego não relacionado ao que te interessa.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Rode de novo com host &lt;ip de outra VM&gt; e gere tráfego só com ela.</div></div>
       <div class="lab-cmd">$ sudo tcpdump -i eth0 -n host 10.10.10.50</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>-n</dt><dd>Mostra IPs e portas em formato numérico, sem resolver nomes.</dd>
+          <dt>host 10.10.10.50</dt><dd>Filtro que mostra só pacotes onde esse IP aparece como origem OU destino — reduz o volume de tráfego irrelevante mostrado na tela.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> só pacotes envolvendo esse IP específico aparecem.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o volume ainda parecer alto demais, este é o ponto onde o chat com o Sênior-IA vai te ajudar a combinar mais critérios.</div>
     

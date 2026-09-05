@@ -428,6 +428,15 @@ sudo sed -i '/uploads/d' /etc/exports
 sudo exportfs -ra
 sudo userdel -r joao
 sudo rm -rf /dados/uploads /mnt/uploads</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>umount /mnt/uploads</dt><dd>Desmonta o compartilhamento antes de qualquer outra limpeza.</dd>
+          <dt>sed -i '/uploads/d' /etc/exports</dt><dd>Remove a linha de export de teste do arquivo, editando-o diretamente (in-place).</dd>
+          <dt>exportfs -ra</dt><dd>Reaplica os exports, refletindo a remoção da linha.</dd>
+          <dt>userdel -r joao</dt><dd>Remove a conta de usuário de teste e, com -r, também seu diretório home.</dd>
+          <dt>rm -rf /dados/uploads /mnt/uploads</dt><dd>Remove os diretórios de teste usados durante a semana.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>id joao</code> retorna "no such user", e <code>exportfs -v</code> não lista mais /dados/uploads.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> fecha a semana com a mesma disciplina do Dia 1: todo usuário, export e diretório tocados nesses cinco dias foram criados por você, pro seu próprio aprendizado, e saem exatamente como entraram.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar userdel antes do umount pode deixar o ponto de montagem preso a um usuário que já não existe mais — sempre desmonte primeiro.</div>

@@ -423,6 +423,13 @@ $ rsync -avz --progress --partial --partial-dir=.rsync-partial ~/backup-teste.im
       <div class="lab-cmd">$ rm ~/backup-teste.img
 $ ssh usuario@srv-backup-03 'rm -rf /destino/backup-teste.img /destino/.rsync-partial'
 $ ssh usuario@srv-backup-03 'ls /destino/'</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>rm ~/backup-teste.img</dt><dd>Remove o arquivo de teste local usado pra simular o backup grande.</dd>
+          <dt>ssh usuario@srv-backup-03 'rm -rf ...'</dt><dd>Executa remotamente, via SSH, a remoção do arquivo copiado e da pasta de parciais no servidor de destino — os comandos entre aspas rodam na máquina remota, não na local.</dd>
+          <dt>ssh usuario@srv-backup-03 'ls /destino/'</dt><dd>Confirma remotamente que a pasta de destino voltou ao estado anterior à aula, sem os arquivos de teste.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nem backup-teste.img nem a pasta .rsync-partial aparecem mais listados no destino — a pasta voltou a ter só os arquivos que já existiam antes da aula.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo criar → derrubar rede → confirmar retomada → limpar. O mesmo disco que você aprendeu a diagnosticar em semanas anteriores não deveria acumular lixo de laboratório.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de limpar o lado REMOTO (servidor de destino) — é fácil lembrar de apagar só o arquivo local e deixar a cópia de 2GB esquecida no destino.</div>

@@ -383,6 +383,15 @@ sudo mkdir -p /dados/uploads /mnt/uploads
 echo '/dados/uploads 127.0.0.1(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports
 sudo exportfs -ra
 exportfs -v</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>apt install -y nfs-kernel-server nfs-common</dt><dd>Instala os pacotes do servidor NFS e das ferramentas de cliente, sem pedir confirmação (-y).</dd>
+          <dt>mkdir -p /dados/uploads /mnt/uploads</dt><dd>Cria os diretórios de origem (a exportar) e de destino (ponto de montagem), incluindo pastas pai que faltarem (-p).</dd>
+          <dt>echo '...' | sudo tee -a /etc/exports</dt><dd>Acrescenta (tee -a, append) essa linha ao final do arquivo — tee é necessário aqui porque um simples '>>' com sudo não funciona pra redirecionar pra um arquivo que o usuário comum não pode escrever diretamente.</dd>
+          <dt>exportfs -ra</dt><dd>Reaplica as configurações de export a partir do arquivo /etc/exports.</dd>
+          <dt>exportfs -v</dt><dd>Lista os exports ativos, pra confirmar que a linha foi aplicada corretamente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> exportfs -v mostra /dados/uploads liberado pra 127.0.0.1 — o export já existe, pronto pra você escrever a linha de fstab no próximo passo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> pra isolar o aprendizado de hoje (_netdev e nofail), o export do lado servidor já vem pronto, sem exigir que você repita o que já viu nos Dias 1 e 2.</div>
       <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — editar fstab errado pode travar boots futuros até você corrigir manualmente numa shell de emergência.</div>

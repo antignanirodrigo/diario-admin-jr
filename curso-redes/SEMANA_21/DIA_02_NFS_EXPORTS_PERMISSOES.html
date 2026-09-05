@@ -422,6 +422,15 @@ sudo sed -i '/uploads/d' /etc/exports
 sudo exportfs -ra
 exportfs -v
 sudo rm -rf /dados/uploads /mnt/uploads</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>umount /mnt/uploads</dt><dd>Desmonta o compartilhamento NFS antes de qualquer outra limpeza — evita erros de 'device busy' nos passos seguintes.</dd>
+          <dt>sed -i '/uploads/d' /etc/exports</dt><dd>Edita o arquivo de exports diretamente (in-place, -i), deletando (d) qualquer linha que contenha a palavra 'uploads'.</dd>
+          <dt>exportfs -ra</dt><dd>Reaplica (-r, reexport) todos (-a, all) os exports a partir do arquivo já editado, sem precisar reiniciar o serviço NFS.</dd>
+          <dt>exportfs -v</dt><dd>Lista (verbose) os exports atualmente ativos, pra confirmar visualmente que a linha de teste sumiu.</dd>
+          <dt>rm -rf /dados/uploads /mnt/uploads</dt><dd>Remove recursivamente e sem confirmação os diretórios de teste usados na aula.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> exportfs -v sem nenhuma linha de /dados/uploads, e os diretórios de teste removidos.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> um export de teste esquecido com rede/IP mal pensado é exatamente o tipo de configuração que gera um chamado como o #2102 de verdade — desfazer o laboratório evita deixar pra trás o próprio erro que você acabou de estudar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> o umount pode reclamar "not mounted" se algum dos seus testes não chegou a montar — normal, ignore e siga pra remoção do export.</div>

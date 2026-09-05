@@ -395,6 +395,12 @@ $ ping -c 5 8.8.8.8</div>
       <div class="lab-text">Interrompa a captura e reabra o arquivo com tcpdump -r teste.pcap.</div></div>
       <div class="lab-cmd">^C
 $ sudo tcpdump -r ~/teste.pcap</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>^C</dt><dd>Interrompe a captura ao vivo iniciada no passo anterior.</dd>
+          <dt>tcpdump -r ~/teste.pcap</dt><dd>Lê (replay) um arquivo .pcap já gravado, reproduzindo as linhas de tráfego como se fosse uma captura ao vivo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> as mesmas linhas de tráfego aparecendo, como se fosse ao vivo.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se quiser abrir esse mesmo arquivo visualmente no Wireshark depois, este é o ponto onde o chat com o Sênior-IA vai te mostrar o próximo passo.</div>
     </li>
@@ -412,6 +418,12 @@ $ sudo tcpdump -r ~/teste.pcap</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Tente abrir o mesmo arquivo com cat teste.pcap e observe o conteúdo ilegível.</div></div>
       <div class="lab-cmd">$ cat ~/teste.pcap</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cat</dt><dd>Concatena e imprime o conteúdo de um arquivo diretamente no terminal.</dd>
+          <dt>~/teste.pcap</dt><dd>Arquivo binário (não texto) gravado pelo tcpdump — cat não sabe interpretar esse formato, por isso mostra caracteres ilegíveis em vez do tráfego decodificado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> caracteres binários sem sentido no terminal, confirmando que não é texto simples.</div>
     
       <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
@@ -424,6 +436,13 @@ $ sudo tcpdump -r ~/teste.pcap</div>
       <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o arquivo de captura de teste e confirme que não sobrou nada na VM.</div></div>
       <div class="lab-cmd">$ rm ~/teste.pcap
 $ ls ~/teste.pcap 2>/dev/null || echo "arquivo removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>rm ~/teste.pcap</dt><dd>Remove o arquivo de captura de teste do disco.</dd>
+          <dt>ls ~/teste.pcap 2>/dev/null</dt><dd>Tenta listar o arquivo já removido, descartando a mensagem de erro (redirecionada para /dev/null).</dd>
+          <dt>|| echo "arquivo removido"</dt><dd>Executa esse echo só quando o ls anterior falha (arquivo não existe mais) — confirma visualmente a remoção.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "arquivo removido" — nenhum arquivo de captura esquecido na VM.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> um .pcap esquecido no disco não é tão sensível quanto uma senha, mas pode conter tráfego real capturado (inclusive de outros serviços rodando na mesma VM). Encerrar o laboratório sem deixar arquivo de captura pra trás é a mesma disciplina de "ZERO mudança no sistema" que vale pra qualquer teste — não é exclusiva de disco ou processo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer que pode haver um processo tcpdump ainda em segundo plano gravando nesse arquivo. Confirme com <code>pgrep tcpdump</code> antes de apagar, ou o arquivo volta a crescer sozinho depois de removido.</div>

@@ -423,6 +423,13 @@ ls -n /dados/uploads/arquivo.txt</div>
       <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Apague o arquivo e o diretório de teste, devolvendo a VM ao estado anterior.</div></div>
       <div class="lab-cmd">sudo rm -rf /dados/uploads
 ls /dados/uploads 2>/dev/null || echo "diretorio de teste removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>rm -rf /dados/uploads</dt><dd>Remove recursivamente o diretório e o arquivo de teste criados no primeiro passo do laboratório.</dd>
+          <dt>ls /dados/uploads 2>/dev/null</dt><dd>Tenta listar o diretório já removido, descartando a mensagem de erro esperada.</dd>
+          <dt>|| echo "diretorio de teste removido"</dt><dd>Mostra essa mensagem só quando o ls anterior falha, confirmando visualmente que a remoção funcionou.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "diretorio de teste removido" confirma que nada ficou pra trás.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> mesmo um teste simples de chown pode deixar um arquivo com dono "órfão" (UID sem nome) esquecido na VM — o tipo de coisa que confunde uma auditoria de disco meses depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> se você também criou usuários reais de teste numa segunda VM pra reproduzir o cenário completo, lembre de rodar <code>userdel -r</code> neles lá também — este teardown cobre só esta VM.</div>
