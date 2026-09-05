@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, antes de qualquer <code>rm</code>, qual era o primeiro passo do ritual, sempre?<br>
+    <b>2.</b> Por que fazer backup antes de apagar, mesmo quando a pasta "parece" só cache descartável?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>pwd</code> — confirmar onde você está, antes de qualquer comando destrutivo. Hoje esse mesmo reflexo de "confirmar antes" reaparece, só que aplicado à rede e ao agendamento: você vai <i>ler</i> o ambiente antes de qualquer ideia de mexer nele.<br>
+    <b>2.</b> Porque <code>rm</code> não tem lixeira e "parece descartável" é suposição, não confirmação — o custo do backup é sempre menor que o custo de um erro sem cópia nenhuma.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> systemctl supervisionado, permissões, busca em
 escala, remoção com ritual — cada dia te deu uma ferramenta de mudança real. Hoje não muda mais nada: é uma
@@ -188,9 +228,19 @@ quando você já souber exatamente o que está vendo.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #8742: "verificar rede e tarefas agendadas". O sênior deixa um bilhete colado na tela:
-  <em>"lembrete: somente leitura"</em>. Rede e agendamento podem derrubar tudo se mexidos sem entendimento —
-  hoje é só sobre enxergar o que já existe.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#8742</b></span>
+      <span><b>PRIORIDADE BAIXA</b></span>
+      <span>09:00</span>
+      <span>aberto por: sênior</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: auditoria de rotina — rede e agendamento</div>
+      <div class="msg">"Verificar rede e tarefas agendadas antes de qualquer mudança futura ser planejada."</div>
+    </div>
+    <div class="ticket-foot">O sênior deixa um bilhete colado na tela: "lembrete: somente leitura". Por onde você começa?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -264,6 +314,12 @@ $ diff config.old config.new
       <div class="lab-expect"><b>Resultado esperado:</b> gateway padrão identificado corretamente.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> saber a rota padrão é entender por onde o servidor "sai pro mundo" — essencial pra diagnósticos futuros de "não conecta com nada externo".</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir a rota da rede local (ex: 192.168.1.0/24) com a rota padrão (default via) — são linhas diferentes com propósitos diferentes.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Aparecem várias linhas e não sei qual é a padrão</b> → procure a linha que começa com <code>default via</code> — essa é a rota padrão, o "portão de saída" do servidor pra internet.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Liste as tarefas agendadas do seu usuário e entenda o resultado, mesmo que vazio.</div></div>
@@ -272,6 +328,12 @@ $ diff config.old config.new
       <div class="lab-why"><b>Por que fizemos isso:</b> ver "vazio" e saber INTERPRETAR o vazio corretamente (é só do meu usuário, não do servidor inteiro) é mais importante que o comando em si.</div>
       <div class="lab-warn"><b>Cilada comum:</b> concluir "não tem nada agendado no servidor" a partir de um crontab -l vazio — root e /etc/cron.d/ podem ter tarefas que esse comando não mostra.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você quiser entender uma rota ou tarefa agendada que não fez sentido, este é o ponto onde o chat com o Sênior-IA vai ajudar a interpretar.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"no crontab for [usuário]"</b> → resultado normal quando não há tarefa agendada pro SEU usuário — não significa que o servidor inteiro não tem nada agendado. Root e <code>/etc/cron.d/</code> podem ter tarefas próprias, invisíveis nesse comando.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Crie dois arquivos com uma linha diferente entre eles e compare.</div></div>

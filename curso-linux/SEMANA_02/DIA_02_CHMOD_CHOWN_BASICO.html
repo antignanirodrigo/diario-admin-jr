@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você só reiniciou um serviço depois de aprovação explícita. Sem olhar: por que pular a aprovação era arriscado, mesmo sabendo tecnicamente rodar o comando?<br>
+    <b>2.</b> Qual foi a sequência completa de 5 passos, do chamado até fechar o ticket?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque "saber rodar o comando" não é a mesma coisa que "ser a hora certa de rodar". Uma mudança real fica registrada em nome de quem executou — hoje isso reaparece: alterar dono e permissão de um arquivo também é uma mudança real, que precisa do mesmo cuidado.<br>
+    <b>2.</b> <code>status → aprovação → restart → status de novo → validação</code>. Hoje o "status" vira <code>ls -l</code> (ver o antes), a "ação" vira <code>chmod</code>/<code>chown</code>, e a validação continua sendo checar de novo depois.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> ontem você fez sua primeira mudança real — reiniciar um
 serviço, com aprovação. Hoje o alvo é diferente: não é o serviço que está errado, é quem pode ler ou escrever
@@ -188,9 +228,19 @@ o mínimo que resolve o problema real.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Uma aplicação não consegue gravar em <code>app.log</code>, e a tela mostra <code>Permission
-  denied</code>. Seu primeiro instinto é digitar <code>chmod 777</code> pra resolver rápido — mas o sênior já
-  avisou: 777 não é solução, é ausência de uma.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4650</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>11:30</span>
+      <span>aberto por: desenvolvedor da aplicação</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: aplicação — gravação de log</div>
+      <div class="msg">"Não consigo gravar em app.log. A tela mostra 'Permission denied'."</div>
+    </div>
+    <div class="ticket-foot">Seu primeiro instinto é digitar chmod 777 pra resolver rápido. O sênior já avisou: 777 não é solução, é ausência de uma. O que você faz?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -256,6 +306,12 @@ ls -l teste.log</div>
       <div class="lab-expect"><b>Resultado esperado:</b> ls -l mostra testeapp como novo dono do arquivo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> chown resolve QUEM é dono — é sempre o primeiro passo antes de decidir quanto de permissão dar, porque a permissão errada no dono errado não resolve o problema real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> aplicar chmod antes de corrigir o dono com chown — você pode acabar dando permissão certa pro dono errado, sem perceber.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"chown: invalid user: 'testeapp:testeapp'"</b> → o usuário ainda não existe. Volte e rode <code>sudo useradd testeapp</code> antes deste comando.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Aplique a permissão mínima (640) e confirme.</div></div>
@@ -265,6 +321,12 @@ ls -l teste.log</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> 640 é o exemplo prático do menor privilégio — dono lê/escreve (o que ele precisa), grupo só lê (se fizer sentido), outros nada (porque não precisam).</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir 640 com 740 de cabeça — a diferença entre os dois é a permissão de EXECUÇÃO do dono, que um arquivo de log nunca deveria ter.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não tiver certeza de qual número usar pra um caso específico, este é o ponto onde o chat com o Sênior-IA vai ajudar a calcular o mínimo necessário.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Depois do chmod, testeapp continua sem conseguir ler o arquivo</b> → confira com <code>ls -l teste.log</code> se o grupo do arquivo é realmente <code>testeapp</code> — <code>640</code> dá leitura pro grupo, mas só funciona se o grupo certo estiver aplicado no arquivo.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Compare visualmente o risco: aplique 777 só pra ver, depois volte pra 640.</div></div>
@@ -284,7 +346,22 @@ ls -l teste.log</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> esse registro é o que permite qualquer pessoa (inclusive você, meses depois) entender por que a permissão está do jeito que está, sem precisar adivinhar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> documentar só o comando final (chmod 640), sem o "antes" e o motivo — sem contexto, a próxima pessoa não sabe se pode confiar nesse valor ou se precisa reinvestigar do zero.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o usuário e o arquivo de teste, deixando o servidor exatamente como estava antes da aula.</div></div>
+      <div class="lab-cmd">sudo userdel testeapp
+rm teste.log
+id testeapp 2>&1 || echo "usuário removido"
+ls -l teste.log 2>&1 || echo "arquivo removido"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> duas mensagens de erro do sistema confirmando que o usuário e o arquivo não existem mais — sinal de que a limpeza funcionou.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> você criou <code>testeapp</code> só pra ter um dono real pra ajustar — sem remover depois, o próximo técnico encontra uma conta órfã sem propósito nenhum. Numa auditoria de segurança, cada conta sem dono claro é uma pergunta que alguém vai ter que responder.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o <code>testeapp</code> na VM. Meses depois, alguém acha essa conta numa varredura de segurança e perde tempo investigando uma "ameaça" que era só sobra de laboratório.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"userdel: user testeapp is currently used by process"</b> → algum processo ou sessão ainda referencia esse usuário. Feche a sessão dele ou use <code>sudo userdel -f testeapp</code> (força a remoção mesmo com processo residual — use com cautela, só em VM de teste).
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

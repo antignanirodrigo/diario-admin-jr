@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você usou <code>find</code> para localizar arquivos por nome e data. Sem olhar: qual a diferença entre o que <code>grep</code> encontra e o que <code>find</code> encontra?<br>
+    <b>2.</b> Por que investigar "centenas de logs" ontem exigia ferramenta de busca, e não rolar tela com less?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>grep</code> acha <b>texto dentro</b> dos arquivos; <code>find</code> acha os <b>arquivos em si</b> (por nome, data, tamanho). Hoje isso volta de outro jeito: antes de apagar algo, você precisa ter certeza de que <i>achou o arquivo certo</i> (find) antes de decidir o que fazer com ele (rm).<br>
+    <b>2.</b> Porque em escala, ferramenta manual não escala — e o mesmo raciocínio vale para comando destrutivo: fazer no "olho" sem ritual escala mal e é onde o erro mora.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com Semana 1, Dia 4:</b> lá você aprendeu a identificar o que estava
 consumindo espaço, sem apagar nada. Hoje você finalmente ganha permissão pra apagar de verdade — e junto com
@@ -188,9 +228,19 @@ alvo e backup antes.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Uma pasta de cache antiga (<code>cache_old/</code>) precisa ser removida pra liberar espaço.
-  Seu dedo já está perto do Enter em cima de <code>rm -rf ../cache_old/</code> — mas você ainda não confirmou
-  se está na pasta certa, nem fez backup de nada.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4890</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>15:00</span>
+      <span>aberto por: coordenação de infra</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: espaço em disco — pasta de cache</div>
+      <div class="msg">"Uma pasta de cache antiga (cache_old/) precisa ser removida pra liberar espaço."</div>
+    </div>
+    <div class="ticket-foot">Seu dedo já está perto do Enter em cima de rm -rf ../cache_old/ — mas você ainda não confirmou se está na pasta certa, nem fez backup de nada. O que falta?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -267,6 +317,12 @@ ls -lh backup_teste.tgz</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> rm não tem lixeira — o backup É o rollback. Sem esse passo, não existe "desfazer" possível depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fazer o backup mas não confirmar que ele realmente foi criado com conteúdo (ls -lh mostrando tamanho > 0) — um backup vazio ou corrompido dá falsa sensação de segurança.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você tiver dúvida sobre se algo é seguro de apagar, este é o ponto onde o chat com o Sênior-IA vai ajudar a pensar no risco antes de agir.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"tar: teste_cache/: Cannot stat: No such file or directory"</b> → você não está na pasta onde criou <code>teste_cache</code>. Confira com <code>pwd</code> e <code>ls</code> antes de repetir o comando.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Remova a pasta de teste usando o caminho absoluto completo, confirmado pelo pwd do passo 2.</div></div>
@@ -274,6 +330,13 @@ ls -lh backup_teste.tgz</div>
       <div class="lab-expect"><b>Resultado esperado:</b> pasta removida, backup ainda existe intacto.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> caminho absoluto (começando com /) sempre aponta pro mesmo lugar, não importa de onde você rodou o comando — elimina o risco de ../ apontar pro lugar errado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> copiar e colar um caminho relativo (../teste_cache/) de um comando anterior sem adaptar pro absoluto — é exatamente esse tipo de descuido que causa remoção no lugar errado.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Não sei qual é o "caminho absoluto confirmado"</b> → é a saída exata do <code>pwd</code> do passo 2, com <code>/teste_cache</code> no final. Exemplo: se o <code>pwd</code> mostrou <code>/home/adminjr</code>, o comando é <code>rm -rf /home/adminjr/teste_cache/</code>.<br>
+          <b>"rm: cannot remove ... No such file or directory"</b> → o caminho digitado não bate com o do <code>pwd</code>. Copie o caminho absoluto exato, não digite de memória.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide o resultado final e documente o ritual completo.</div></div>

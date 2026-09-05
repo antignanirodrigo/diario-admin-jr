@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (fechamento da Semana 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No último dia da Semana 1 você já rodou <code>systemctl status</code>. Sem olhar: o que esse comando mostra, e ele altera alguma coisa no sistema?<br>
+    <b>2.</b> A Semana 1 inteira foi só observação, sem tocar em nada. Por que essa disciplina importava?
+  </div>
+  <div class="ans">
+    <b>1.</b> Mostra o estado atual do serviço — ativo, falho, motivo da falha — <b>sem executar nenhuma ação</b>. Hoje esse mesmo comando volta, só que agora seguido de uma ação real: o restart.<br>
+    <b>2.</b> Porque mudar antes de entender é operar sem diagnóstico. Hoje você ganha a primeira mudança real da carreira — mas só porque passou 5 dias aprendendo a olhar direito antes de agir.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 1 inteira:</b> cinco dias de observação pura, sem tocar em
 nada, construíram a base. Hoje isso muda: um serviço real caiu, e pela primeira vez você vai executar uma
@@ -188,9 +228,19 @@ realmente falhou, e alguém aprovou a ação antes de você executar.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>O monitoramento mostra <code>app.service failed</code>. Seu dedo já está perto do Enter
-  pra rodar o restart, mas você para: reiniciar sem aprovação, nem uma vez, é o hábito que separa quem segue
-  procedimento de quem aprende do jeito difícil.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4581</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>10:21</span>
+      <span>aberto por: monitoramento</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-03</b> · serviço: app.service — aplicação de negócio</div>
+      <div class="msg">"app.service em estado failed (exit-code) desde 10:21:18."</div>
+    </div>
+    <div class="ticket-foot">Seu dedo já está quase no Enter pra rodar o restart. O que vem antes disso?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -253,6 +303,12 @@ systemctl status nginx</div>
       <div class="lab-expect"><b>Resultado esperado:</b> systemctl status mostra inactive (dead), simulando a falha do chamado.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de uma falha real (mesmo que provocada por você) pra praticar a sequência completa — não dá pra treinar "confirmar antes de agir" sem ter algo pra confirmar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> parar um serviço de produção de verdade "só pra testar" — sempre use um serviço descartável numa VM de teste, nunca simule falha em ambiente real.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Unit nginx.service could not be found"</b> → o nginx não está instalado na sua VM. Instale com <code>sudo apt install nginx -y</code> antes do laboratório, ou troque por outro serviço já presente (ex: <code>cron</code>, <code>ssh</code>).
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Escreva uma "mensagem de aprovação" fictícia antes de reiniciar.</div></div>
@@ -269,6 +325,12 @@ systemctl status nginx</div>
       <div class="lab-expect"><b>Resultado esperado:</b> active (running) com um novo horário de início, confirmando que o restart funcionou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> restart exige sudo de propósito — essa exigência de privilégio é o que garante que a ação fica registrada em nome de quem executou, não é anônima.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "active (running)" e já considerar resolvido — como o caso do técnico da história de hoje, isso é só o primeiro sinal, não a confirmação de estabilidade.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O restart não muda o horário de início no status</b> → confira se o comando anterior (<code>stop</code>) realmente rodou sem erro — sem o serviço estar parado antes, o "restart" pode não gerar um novo horário de start visível.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Espere alguns segundos e cheque o status de novo, pra confirmar estabilidade.</div></div>
