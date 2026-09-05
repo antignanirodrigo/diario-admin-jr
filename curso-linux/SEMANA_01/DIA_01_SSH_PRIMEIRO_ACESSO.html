@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -187,12 +215,19 @@ ganha, não se assume.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu acesso ao servidor <b>srv01</b>, IP <b>10.10.10.25</b>, para apoiar o time de
-  infraestrutura. O ambiente atende usuários reais, mas o chamado não pede nenhuma mudança: primeiro você
-  deve confirmar que chegou ao host correto, identificar seu
-  <span class="hint" data-tip="UID, GID e grupos definem o que a conta pode fazer no sistema." onclick="openGlossary(10)">nível de privilégio</span>
-  e produzir um <span class="hint" data-tip="Registro do que você observou, com comando, hora e resultado — vira prova depois." onclick="openGlossary(9)">inventário</span>
-  inicial sem alterar o sistema.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#3902</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>08:40</span>
+      <span>aberto por: coordenação de infra</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: servidor recém-transferido de outro time</div>
+      <div class="msg">"Recebemos este servidor hoje. Ninguém sabe o que roda nele. Antes de qualquer mudança, precisamos de um levantamento."</div>
+    </div>
+    <div class="ticket-foot">O acesso SSH é seu. O que você faz antes de tocar em qualquer coisa?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -253,6 +288,21 @@ srv01
   <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Grave a sessão inteira antes de começar — todo levantamento profissional deixa rastro.</div></div>
+      <div class="lab-cmd">script ~/levantamento-$(date +%F).log     # tudo a partir daqui fica gravado
+# (para encerrar a gravação no fim: digite  exit  )</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "Script started, output log file is ..." — a partir daí, tudo que você digitar e receber fica salvo no arquivo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> levantamento sem evidência é conversa. Com o log gravado, você entrega um relatório com o que foi realmente executado — e se algo quebrar depois, você prova que não foi você.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer que a gravação está ativa e digitar senha na sessão. <b>Nada de senha enquanto o script roda</b> — ela ficaria em texto puro no arquivo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"script: command not found"</b> → instale com <code>sudo apt install bsdutils</code> (Debian/Ubuntu) ou use <code>tee</code>: <code>comando | tee -a levantamento.log</code>.<br>
+          <b>Quero saber se ainda estou gravando</b> → rode <code>echo $SCRIPT</code> ou observe: ao sair com <code>exit</code>, aparece "Script done".
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Crie uma VM Linux descartável (Ubuntu Server, por exemplo) e, na tela do instalador, marque explicitamente a opção de instalar o OpenSSH Server.</div></div>
       <div class="lab-cmd"># depois que a VM subir, confirme pelo console local:
 systemctl status ssh</div>
@@ -305,7 +355,21 @@ systemctl --failed</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> esse é o teste que prova, e não só afirma, que sua sessão foi realmente somente-leitura — sem essa reexecução, "não mudei nada" é uma alegação, não uma evidência.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular esse passo por parecer redundante — é justamente a redundância que vira prova em caso de auditoria ou incidente futuro.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Encerre a gravação e confira o que ficou registrado — esse arquivo é a sua entrega de hoje.</div></div>
+      <div class="lab-cmd">exit
+ls -lh ~/levantamento-*.log
+head -30 ~/levantamento-*.log</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Script done" na tela, o arquivo listado com tamanho maior que zero e as primeiras linhas mostrando os comandos que você rodou.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo do dia: você observou, registrou e agora tem evidência entregável. Nenhuma configuração do servidor foi alterada — exatamente o que o chamado pedia.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> deixar a sessão gravando aberta por horas. O arquivo cresce sem parar e vira lixo em vez de evidência — encerre assim que terminar o levantamento.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O arquivo tem caracteres estranhos (<code>^[[0m</code>)</b> → são códigos de cor do terminal, é normal. Para ler limpo: <code>cat -v arquivo.log</code> ou <code>sed 's/\x1b\[[0-9;]*m//g' arquivo.log</code>.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

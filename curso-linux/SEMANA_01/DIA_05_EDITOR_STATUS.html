@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dias 3 e 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 3 você acompanhou um log crescendo em tempo real. Qual comando fazia isso — e como você saía dele?<br>
+    <b>2.</b> No Dia 4, o que <code>df</code> respondia que o <code>du</code> não respondia?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>tail -f arquivo.log</code> mostra as linhas novas conforme chegam; sai com <kbd>Ctrl+C</kbd>. Hoje o <code>journalctl -f</code> faz exatamente a mesma coisa, só que para os logs do systemd.<br>
+    <b>2.</b> <code>df</code> respondia <i>quanto espaço existe e quanto foi usado por partição</i>; <code>du</code> respondia <i>qual pasta está ocupando</i>. Um mede o tanque, o outro procura o vazamento.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 4:</b> ontem você aprendeu a diferenciar disco de memória e a
 montar um relatório com evidência. Hoje fecha a primeira semana: um colega pede pra você "dar uma olhada" na
@@ -189,9 +229,19 @@ e serviços — sem nunca ter alterado nada. Amanhã começa a Semana 2, e a pri
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #4587: "Dê uma olhada no serviço web." Uma colega te entrega o ticket e pergunta:
-  "como abro a configuração sem quebrar?" — a pergunta certa a se fazer antes de qualquer edição, mesmo que
-  hoje você só vá abrir e sair, sem salvar nada.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4520</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>16:47</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: serviço de emissão de notas</div>
+      <div class="msg">"O serviço aparece como 'não está rodando' no painel. Ninguém sabe desde quando nem por quê. Não reiniciem antes de entender."</div>
+    </div>
+    <div class="ticket-foot">Não reiniciar é justamente a parte difícil. Como você descobre o que aconteceu?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -246,6 +296,30 @@ May 17 10:15:55 jr-server nginx[1236]: worker process started</pre>
   <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie um serviço de teste que falha de propósito — sem um serviço quebrado de verdade, <code>systemctl status</code> e <code>journalctl</code> não têm o que te mostrar.</div></div>
+      <div class="lab-cmd">sudo tee /etc/systemd/system/teste-jr.service >/dev/null <<'EOF'
+[Unit]
+Description=Servico de teste do Admin Jr
+
+[Service]
+Type=oneshot
+ExecStart=/bin/false
+EOF
+sudo systemctl daemon-reload
+sudo systemctl start teste-jr.service     # vai falhar — é esse o objetivo</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o <code>start</code> retorna erro dizendo que o serviço falhou. Perfeito: agora existe um serviço em estado <code>failed</code> para você investigar como investigaria em produção.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ler o status de um serviço saudável ensina pouco. É no estado <code>failed</code> que aparecem as linhas que realmente importam — <code>Active: failed</code>, o código de saída e as últimas linhas do log.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar isso em servidor de produção. <b>Só em VM descartável.</b> O arquivo fica em <code>/etc/systemd/system/</code> — anote, você vai removê-lo no último passo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"tee: /etc/systemd/system/...: Permission denied"</b> → o <code>sudo</code> precisa estar no <code>tee</code>, não no <code>echo</code> — é por isso que o comando está escrito nessa ordem. Copie-o inteiro.<br>
+          <b>"Failed to start teste-jr.service: Unit not found"</b> → faltou o <code>sudo systemctl daemon-reload</code> depois de criar o arquivo. O systemd só enxerga units novas após recarregar.<br>
+          <b>O serviço iniciou com sucesso (não falhou)</b> → confira se o <code>ExecStart</code> aponta para <code>/bin/false</code>. Se o seu sistema não tiver esse caminho, use <code>/usr/bin/false</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Abra qualquer arquivo de configuração com nano, navegue até o final, e saia sem salvar.</div></div>
       <div class="lab-cmd">nano arquivo.conf
 # Ctrl+X pra sair, "N" quando perguntar se quer salvar</div>
@@ -286,7 +360,22 @@ systemctl status &lt;outro serviço instalado&gt;</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> fechar a semana com um resumo escrito é o que consolida os 5 dias como um método único (observar antes de agir), não 5 aulas soltas sobre comandos diferentes.</div>
       <div class="lab-warn"><b>Cilada comum:</b> listar só os comandos decorados, sem escrever o PADRÃO que se repetiu (confirmar antes de agir, ler antes de editar) — é o padrão que vai valer pra toda ferramenta nova daqui pra frente, não só as desta semana.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o serviço de teste e confirme que o systemd não o conhece mais.</div></div>
+      <div class="lab-cmd">sudo systemctl reset-failed teste-jr.service
+sudo rm /etc/systemd/system/teste-jr.service
+sudo systemctl daemon-reload
+systemctl status teste-jr.service 2>&1 | head -3   # deve dizer que não existe</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Unit teste-jr.service could not be found" — o serviço sumiu e a lista de falhas do sistema está limpa de novo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> unit de teste esquecida aparece para sempre em <code>systemctl --failed</code> e polui o diagnóstico do próximo incidente real. O <code>reset-failed</code> é o passo que quase todo mundo esquece — e é ele que limpa o histórico de falha.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> apagar o arquivo sem rodar <code>daemon-reload</code> depois. O systemd mantém a unit em memória e ela continua aparecendo, dando a impressão de que a remoção não funcionou.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Ainda aparece em <code>systemctl --failed</code></b> → rode <code>sudo systemctl reset-failed</code> sem argumento para limpar todas as falhas registradas.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

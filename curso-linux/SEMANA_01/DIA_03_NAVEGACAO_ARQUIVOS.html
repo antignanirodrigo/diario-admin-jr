@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dias 1 e 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2 você comparou <code>id</code> entre dois usuários. Sem olhar: o que explicava a diferença de poder entre eles?<br>
+    <b>2.</b> Por que ler um arquivo de log pode falhar mesmo com o arquivo existindo?
+  </div>
+  <div class="ans">
+    <b>1.</b> A <b>lista de grupos</b>, não o número do UID. Estar em <code>sudo</code> ou <code>adm</code> é o que dá acesso — e hoje isso reaparece: vários logs em <code>/var/log</code> só são legíveis por quem está no grupo <code>adm</code>.<br>
+    <b>2.</b> Permissão. O arquivo existe, mas a sua identidade não tem direito de leitura sobre ele. É por isso que <code>cat</code> às vezes responde "Permission denied" em vez de "No such file" — são erros diferentes contando histórias diferentes.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2:</b> ontem você aprendeu a confirmar sua identidade e o host antes
 de qualquer coisa. Hoje, com isso resolvido, o primeiro chamado de verdade chega: acham um erro específico
@@ -189,9 +229,19 @@ problema, mesmo em diretórios que você nunca visitou antes.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #3487: "Encontrar erro no log da aplicação." Só isso. Você recebe o ticket sem
-  saber em qual pasta o log está, nem o que exatamente procurar dentro dele. Antes de sair digitando comandos
-  ao acaso, é preciso navegar com método.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#4013</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>14:02</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: aplicação de pedidos</div>
+      <div class="msg">"Cliente relata erro intermitente ao finalizar pedido. Precisamos ver o log no momento exato em que o erro acontece."</div>
+    </div>
+    <div class="ticket-foot">O log tem 400 mil linhas e o erro acontece de novo em minutos. Como você olha?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -250,6 +300,26 @@ $ tail -f app.log
   <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie um log grande e um que cresce em tempo real — sem os dois, metade dos comandos de hoje não tem o que mostrar.</div></div>
+      <div class="lab-cmd">mkdir -p ~/lab-logs
+seq 1 200000 | sed 's/^/2026-09-05 INFO linha /' > ~/lab-logs/grande.log
+ls -lh ~/lab-logs/grande.log
+# agora um log que cresce sozinho, em segundo plano:
+(while true; do echo "$(date +%T) INFO pedido processado"; sleep 2; done) >> ~/lab-logs/vivo.log &
+echo "gerador em segundo plano: PID $!"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o <code>grande.log</code> com alguns MB e a mensagem com o PID do gerador. O <code>vivo.log</code> ganha uma linha nova a cada 2 segundos.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> <code>head</code>, <code>tail -f</code> e <code>less</code> resolvem problemas diferentes — mas isso só fica óbvio quando existe um arquivo grande demais para <code>cat</code> e outro que muda enquanto você olha. Agora você tem os dois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar isso na raiz ou em <code>/var/log</code>. Use <code>~/lab-logs</code> como aqui — e <b>anote o PID</b>, você vai encerrar esse processo no último passo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"seq: command not found"</b> → alternativa: <code>for i in $(seq 1 200000)</code> não vai funcionar sem seq — use <code>awk 'BEGIN{for(i=1;i&lt;=200000;i++) print "2026-09-05 INFO linha " i}' &gt; ~/lab-logs/grande.log</code>.<br>
+          <b>O gerador não mostrou PID</b> → rode <code>jobs -l</code> para ver os processos em segundo plano desta sessão.<br>
+          <b>O arquivo ficou pequeno demais</b> → confira se o <code>sed</code> rodou; sem ele o arquivo ainda funciona para o exercício, só fica menor.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Confirme onde você está, veja o que existe na pasta, depois navegue até /var/log.</div></div>
       <div class="lab-cmd">pwd
 ls -la
@@ -294,7 +364,22 @@ echo "teste" >> app.log</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> o registro é o produto real do seu trabalho hoje — sem ele, ninguém além de você sabe o que foi encontrado, mesmo que você tenha investigado certo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> registrar só "encontrei o erro" sem horário nem mensagem exata — isso obriga quem ler depois a refazer toda a investigação do zero.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Encerre o gerador em segundo plano e apague os logs de laboratório.</div></div>
+      <div class="lab-cmd">kill %1                        # encerra o gerador (ou: kill <PID anotado>)
+jobs                           # deve voltar vazio
+rm -rf ~/lab-logs
+ls ~/lab-logs 2>/dev/null || echo "laboratório limpo"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>jobs</code> sem nada listado e a mensagem "laboratório limpo".</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> processo em segundo plano esquecido continua escrevendo arquivo para sempre — é exatamente assim que aparece um "disco enchendo do nada" semanas depois. Encerrar o que você iniciou faz parte do trabalho.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fechar o terminal achando que isso mata o gerador. Dependendo de como a sessão termina, o processo pode continuar rodando órfão. <b>Encerre explicitamente e confirme com <code>jobs</code>.</b></div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"kill: %1: no such job"</b> → a sessão pode ter perdido o controle do job. Ache pelo comando: <code>pgrep -af "pedido processado"</code> e encerre pelo PID.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

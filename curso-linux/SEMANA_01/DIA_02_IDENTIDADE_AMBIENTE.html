@@ -153,6 +153,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +191,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você entrou num servidor desconhecido. Sem olhar: por que a regra era <i>observar antes de tocar</i>?<br>
+    <b>2.</b> Qual foi a primeira coisa que você fez antes de rodar qualquer comando de levantamento?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque mudar antes de entender é como operar sem diagnóstico: você pode "consertar" algo que não era o problema e quebrar o que funcionava. Hoje isso continua valendo — descobrir <i>quem você é</i> na máquina vem antes de usar qualquer poder que você tenha.<br>
+    <b>2.</b> Gravou a sessão (<code>script</code>). Evidência primeiro. Hoje o mesmo princípio aparece de outro jeito: antes de rodar algo como root, saber exatamente com qual identidade você está operando.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 1:</b> ontem você aprendeu a entrar no servidor sem mudar nada e a
 não confundir "estar no grupo sudo" com "ser root" — foi a resposta certa da última pergunta. Hoje você vai a
@@ -189,9 +229,19 @@ erro mais clássico de todo iniciante.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Um colega te vê logado no servidor de produção e pergunta, meio de brincadeira: "você tá
-  como root aí?". Antes de responder qualquer coisa, você para — porque nem sempre a resposta é óbvia, e
-  responder errado (mesmo por engano) pode virar um mal-entendido sério num ambiente de produção.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#3947</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>10:15</span>
+      <span>aberto por: desenvolvedor da equipe de faturamento</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: script de importação noturna</div>
+      <div class="msg">"Meu script funciona quando eu rodo, mas falha com 'Permission denied' quando o agendador executa. Não mudei nada."</div>
+    </div>
+    <div class="ticket-foot">Mesma máquina, mesmo script, resultado diferente. O que muda entre um caso e outro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -244,6 +294,24 @@ $ uname -r
   <div class='box warning'><strong>Segurança:</strong> execute as mudanças apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie um usuário de teste para comparar identidades lado a lado — é vendo a diferença que o conceito de UID/GID gruda.</div></div>
+      <div class="lab-cmd">sudo useradd -m teste-jr
+id                       # a SUA identidade
+id teste-jr              # a identidade dele
+groups teste-jr          # em que grupos ele entrou</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> dois blocos com <code>uid=</code>, <code>gid=</code> e <code>groups=</code> claramente diferentes. Você provavelmente está em grupos como <code>sudo</code> ou <code>adm</code>; o teste-jr não está em nenhum deles.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> "Permission denied" quase nunca é sobre o comando — é sobre <b>quem</b> executou. Comparar duas identidades na mesma máquina mostra, em uma tela, por que o mesmo script tem dois destinos diferentes.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar usuário em servidor de produção "só pra testar". <b>Só em VM descartável</b> — e anote o nome, você vai removê-lo no último passo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"useradd: command not found"</b> → use <code>sudo adduser --disabled-password --gecos '' teste-jr</code> (mais comum em Debian/Ubuntu).<br>
+          <b>"id: teste-jr: no such user"</b> → o useradd falhou silenciosamente. Rode de novo observando a saída, ou confirme com <code>grep teste-jr /etc/passwd</code>.<br>
+          <b>Os UIDs são muito parecidos (ex: 1000 e 1001)</b> → normal — o que importa não é o número, é a <b>lista de grupos</b>. É ali que mora a diferença de poder entre as duas contas.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Rode, em sequência, os quatro comandos de identidade desta aula.</div></div>
       <div class="lab-cmd">whoami
 id
@@ -286,7 +354,21 @@ uname -a</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa reexecução prova que investigar identidade não exige privilégio nenhum — é o tipo de checagem que você pode (e deve) fazer antes de qualquer decisão maior.</div>
       <div class="lab-warn"><b>Cilada comum:</b> digitar <code>sudo</code> na frente "por hábito" de outros comandos. Nenhum dos quatro aqui precisa — se pediu senha, revise o que foi digitado.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o usuário de teste e prove que a máquina voltou ao estado anterior.</div></div>
+      <div class="lab-cmd">sudo userdel -r teste-jr
+id teste-jr              # deve falhar agora — e falhar aqui é o resultado certo
+grep teste-jr /etc/passwd || echo "removido com sucesso"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "no such user" no <code>id</code> e a mensagem "removido com sucesso". A máquina está exatamente como estava antes da aula.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> criar → observar → remover é o ciclo que permite estudar identidade sem deixar conta órfã em servidor. Conta esquecida é porta aberta: em auditoria, é um dos achados mais comuns.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o <code>-r</code>. Sem ele o usuário some, mas a pasta <code>/home/teste-jr</code> fica para trás ocupando espaço e confundindo o próximo técnico.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"userdel: user teste-jr is currently used by process"</b> → algum shell ainda está aberto com esse usuário. Feche a sessão dele ou use <code>sudo pkill -u teste-jr</code> antes de repetir.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>
