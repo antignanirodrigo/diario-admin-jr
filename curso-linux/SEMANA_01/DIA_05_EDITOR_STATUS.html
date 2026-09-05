@@ -344,6 +344,14 @@ sudo systemctl start teste-jr.service     # vai falhar — é esse o objetivo</d
       <div class="lab-text"><b>Ação:</b> Abra qualquer arquivo de configuração com nano, navegue até o final, e saia sem salvar.</div></div>
       <div class="lab-cmd">nano arquivo.conf
 # Ctrl+X pra sair, "N" quando perguntar se quer salvar</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa sintaxe</summary>
+        <dl class="flag-list">
+          <dt>nano</dt><dd>Editor de texto simples de terminal, com atalhos mostrados na parte de baixo da tela.</dd>
+          <dt>arquivo.conf</dt><dd>O arquivo aberto para leitura/edição.</dd>
+          <dt>Ctrl+X</dt><dd>Atalho do nano para sair do editor.</dd>
+          <dt>N</dt><dd>Resposta que recusa salvar as alterações quando o nano pergunta antes de sair.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> o arquivo continua exatamente igual depois — confirme comparando o tamanho ou o conteúdo antes e depois.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa é a saída de emergência do nano — dominar ela é o que te dá liberdade de abrir qualquer arquivo pra ler, sem medo de estragar algo sem querer.</div>
       <div class="lab-warn"><b>Cilada comum:</b> apertar <code>Ctrl+O</code> (salvar) por reflexo em vez de <code>Ctrl+X</code> (sair) — são teclas próximas, e confundir as duas grava uma alteração que você nem queria fazer.</div>
@@ -352,6 +360,15 @@ sudo systemctl start teste-jr.service     # vai falhar — é esse o objetivo</d
       <div class="lab-text"><b>Ação:</b> Repita o mesmo processo com vim.</div></div>
       <div class="lab-cmd">vim arquivo.conf
 # "i" pra entrar em modo de inserção, Esc pra sair dele, ":q" pra sair sem salvar</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa sintaxe</summary>
+        <dl class="flag-list">
+          <dt>vim</dt><dd>Editor de texto modal — alterna entre modo de comando e modo de inserção de texto.</dd>
+          <dt>arquivo.conf</dt><dd>O arquivo aberto para leitura/edição.</dd>
+          <dt>i</dt><dd>Entra em modo de INSERÇÃO, permitindo digitar texto no arquivo.</dd>
+          <dt>Esc</dt><dd>Sai do modo de inserção e volta ao modo de comando.</dd>
+          <dt>:q</dt><dd>Comando de modo normal que sai do vim sem salvar nada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> mesmo resultado do nano — arquivo intacto, você saiu sem alterar nada.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> vim aparece em praticamente todo servidor Linux por padrão — não saber pelo menos sair dele sem salvar é um problema clássico de quem só conhece nano.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ficar "preso" no vim sem saber sair, e digitar letras aleatórias tentando escapar — cada letra digitada em modo de inserção pode alterar o arquivo. Se travar, <code>Esc</code> primeiro, sempre.</div>
@@ -361,6 +378,14 @@ sudo systemctl start teste-jr.service     # vai falhar — é esse o objetivo</d
       <div class="lab-cmd">systemctl status ssh
 systemctl status cron
 systemctl status &lt;outro serviço instalado&gt;</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl status</dt><dd>Mostra o estado atual de um serviço: active/inactive/failed, PID, tempo rodando e últimas linhas de log.</dd>
+          <dt>ssh</dt><dd>Nome da unidade do servidor SSH.</dd>
+          <dt>cron</dt><dd>Nome da unidade do agendador de tarefas cron.</dd>
+          <dt>&lt;outro serviço instalado&gt;</dt><dd>Placeholder — substitua pelo nome de qualquer outro serviço presente na sua VM.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> três saídas diferentes, cada uma mostrando active/inactive/failed e o tempo de execução.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> saber ler rapidamente se um serviço está saudável é o primeiro passo de qualquer chamado — antes de journalctl, antes de qualquer diagnóstico mais fundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "active" e parar por aí, sem checar há QUANTO TEMPO está ativo — um serviço que reiniciou sozinho há 30 segundos está "active", mas isso já é uma pista de problema.</div>
@@ -394,6 +419,14 @@ systemctl status &lt;outro serviço instalado&gt;</div>
 sudo rm /etc/systemd/system/teste-jr.service
 sudo systemctl daemon-reload
 systemctl status teste-jr.service 2>&1 | head -3   # deve dizer que não existe</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>reset-failed</dt><dd>Limpa o histórico de falha de uma unidade no systemd — sem isso, ela continua aparecendo em 'systemctl --failed' mesmo depois de removida.</dd>
+          <dt>rm /etc/systemd/system/teste-jr.service</dt><dd>Apaga o arquivo da unit criada no início da aula.</dd>
+          <dt>daemon-reload</dt><dd>Recarrega a configuração do systemd, fazendo-o esquecer units removidas do disco.</dd>
+          <dt>systemctl status ... 2>&1 | head -3</dt><dd>Mostra o status da unit e junta stderr com stdout (2>&1), exibindo só as 3 primeiras linhas — o suficiente para confirmar 'could not be found'.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Unit teste-jr.service could not be found" — o serviço sumiu e a lista de falhas do sistema está limpa de novo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> unit de teste esquecida aparece para sempre em <code>systemctl --failed</code> e polui o diagnóstico do próximo incidente real. O <code>reset-failed</code> é o passo que quase todo mundo esquece — e é ele que limpa o histórico de falha.</div>
       <div class="lab-warn"><b>Cilada comum:</b> apagar o arquivo sem rodar <code>daemon-reload</code> depois. O systemd mantém a unit em memória e ela continua aparecendo, dando a impressão de que a remoção não funcionou.</div>

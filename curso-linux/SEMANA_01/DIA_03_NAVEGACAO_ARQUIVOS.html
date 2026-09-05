@@ -346,6 +346,15 @@ echo "gerador em segundo plano: PID $!"</div>
 ls -la
 cd /var/log
 pwd</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>pwd</dt><dd>Mostra o caminho absoluto completo do diretório atual.</dd>
+          <dt>ls -l</dt><dd>Lista o conteúdo do diretório em formato detalhado: permissões, dono, grupo, tamanho e data.</dd>
+          <dt>-a</dt><dd>Inclui também arquivos e pastas ocultos (os que começam com ponto).</dd>
+          <dt>cd /var/log</dt><dd>Muda o diretório de trabalho da shell para /var/log, o caminho padrão dos logs do sistema.</dd>
+          <dt>pwd (segunda vez)</dt><dd>Confirma que a navegação funcionou, mostrando o novo diretório atual.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> o segundo <code>pwd</code> mostra <code>/var/log</code>, confirmando que a navegação funcionou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> confirmar a posição antes e depois de navegar é o mesmo hábito do Dia 1 e do Dia 2 — sem isso, você não tem certeza de que o próximo comando vai atuar onde você pensa que está.</div>
       <div class="lab-warn"><b>Cilada comum:</b> encadear vários <code>cd</code> seguidos sem checar <code>pwd</code> entre eles — depois de 3-4 comandos, é fácil perder a noção de onde você realmente está.</div>
@@ -354,6 +363,14 @@ pwd</div>
       <div class="lab-text"><b>Ação:</b> Abra um arquivo de log com less e navegue com as setas, depois saia sem alterar nada.</div></div>
       <div class="lab-cmd">less app.log
 # setas pra navegar, "q" pra sair</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa ferramenta</summary>
+        <dl class="flag-list">
+          <dt>less</dt><dd>Paginador interativo: carrega o arquivo sob demanda (não lê tudo de uma vez), permitindo rolar página por página.</dd>
+          <dt>app.log</dt><dd>O arquivo aberto para leitura.</dd>
+          <dt>setas</dt><dd>Navegam para cima/baixo dentro do arquivo, uma linha ou página por vez.</dd>
+          <dt>q</dt><dd>Tecla que sai do less sem alterar o arquivo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> você consegue rolar pra cima e pra baixo sem o terminal ficar poluído, e sair sem alterar nada.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> less carrega o arquivo sob demanda, página por página — é a ferramenta certa pra qualquer arquivo que você não sabe o tamanho antes de abrir.</div>
       <div class="lab-warn"><b>Cilada comum:</b> abrir com <code>cat</code> por hábito, mesmo depois de aprender a diferença — num log de produção de milhares de linhas isso afoga o terminal na hora.</div>
@@ -362,6 +379,14 @@ pwd</div>
       <div class="lab-text"><b>Ação:</b> Compare o início e o final do mesmo arquivo.</div></div>
       <div class="lab-cmd">head -20 app.log
 tail -20 app.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>head</dt><dd>Mostra o INÍCIO de um arquivo — por padrão, as 10 primeiras linhas.</dd>
+          <dt>-20</dt><dd>Quantidade de linhas a mostrar — aqui, as primeiras 20.</dd>
+          <dt>tail</dt><dd>Mostra o FINAL de um arquivo — por padrão, as 10 últimas linhas.</dd>
+          <dt>-20 (no tail)</dt><dd>Quantidade de linhas a mostrar — aqui, as últimas 20.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> head mostra o início do arquivo, tail mostra o final — conteúdos diferentes do mesmo arquivo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> saber que existem essas duas pontas evita abrir o arquivo inteiro só pra ver o começo ou o fim — economiza tempo numa investigação real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> achar que <code>head</code> e <code>tail</code> mostram a mesma coisa só que "diferente" — são pontas opostas do arquivo, não a mesma informação reorganizada.</div>
@@ -398,6 +423,17 @@ echo "teste" >> app.log</div>
 jobs                           # deve voltar vazio
 rm -rf ~/lab-logs
 ls ~/lab-logs 2>/dev/null || echo "laboratório limpo"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>kill</dt><dd>Envia um sinal para terminar um processo.</dd>
+          <dt>%1</dt><dd>Referência ao job número 1 em segundo plano DESTA sessão de shell — não é o PID do processo.</dd>
+          <dt>jobs</dt><dd>Lista os processos em segundo plano controlados pela sessão atual.</dd>
+          <dt>rm -rf</dt><dd>Remove recursivamente (-r, entra em subpastas) e força sem pedir confirmação (-f).</dd>
+          <dt>~/lab-logs</dt><dd>A pasta de teste criada no início do laboratório, alvo da remoção.</dd>
+          <dt>ls ... 2>/dev/null</dt><dd>Lista a pasta descartando qualquer mensagem de erro (redireciona stderr para o 'buraco negro').</dd>
+          <dt>|| echo ...</dt><dd>Só executa o echo se o comando anterior (ls) falhar — aqui, espera-se que falhe porque a pasta não existe mais.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>jobs</code> sem nada listado e a mensagem "laboratório limpo".</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> processo em segundo plano esquecido continua escrevendo arquivo para sempre — é exatamente assim que aparece um "disco enchendo do nada" semanas depois. Encerrar o que você iniciou faz parte do trabalho.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fechar o terminal achando que isso mata o gerador. Dependendo de como a sessão termina, o processo pode continuar rodando órfão. <b>Encerre explicitamente e confirme com <code>jobs</code>.</b></div>

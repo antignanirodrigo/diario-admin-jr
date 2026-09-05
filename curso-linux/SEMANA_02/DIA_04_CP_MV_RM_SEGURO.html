@@ -310,6 +310,13 @@ backup-cache_old.tgz  cache_new</pre>
       <div class="lab-text"><b>Ação:</b> Crie uma pasta de teste com alguns arquivos dentro.</div></div>
       <div class="lab-cmd">mkdir teste_cache
 touch teste_cache/a.txt teste_cache/b.txt</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>mkdir</dt><dd>Cria um novo diretório (pasta).</dd>
+          <dt>teste_cache</dt><dd>A pasta de teste, isolada, usada só para este laboratório.</dd>
+          <dt>touch teste_cache/a.txt teste_cache/b.txt</dt><dd>Cria dois arquivos vazios dentro da pasta de teste, de uma vez.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pasta criada com 2 arquivos, confirmada com ls.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de um alvo descartável de verdade pra praticar o ritual completo sem risco — nunca pratique comando destrutivo em algo que importa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> praticar num diretório que também tem arquivos reais misturados — isole sempre o teste numa pasta própria, vazia antes de começar.</div>
@@ -318,6 +325,12 @@ touch teste_cache/a.txt teste_cache/b.txt</div>
       <div class="lab-text"><b>Ação:</b> Confirme onde está e o que existe ali, como ritual, antes de qualquer ação.</div></div>
       <div class="lab-cmd">pwd
 ls -la</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>pwd</dt><dd>Mostra o caminho absoluto completo do diretório atual — o ritual de confirmar ANTES de qualquer ação destrutiva.</dd>
+          <dt>ls -la</dt><dd>Lista todo o conteúdo da pasta, incluindo ocultos, em formato detalhado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> caminho absoluto confirmado, conteúdo da pasta visível.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> esse é o passo que a história de hoje mostrou que quase falhou — confirmar ANTES é o que evita usar caminho relativo apontando pro lugar errado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar pwd uma vez no início da sessão e confiar nesse resultado horas depois — confirme de novo, sempre, logo antes do comando destrutivo, não só no começo do dia.</div>
@@ -372,6 +385,11 @@ ls -lh backup_teste.tgz</div>
       <div class="lab-text"><b>Ação:</b> Valide o resultado final e documente o ritual completo.</div></div>
       <div class="lab-cmd">ls
 # registro: alvo confirmado (pwd/ls), backup criado (tar), alvo removido (rm), sistema íntegro (ls final)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ls</dt><dd>Lista o conteúdo da pasta atual, confirmando visualmente que a pasta de teste já não está mais ali e que o backup .tgz continua existindo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> um registro de 4 linhas reproduzindo exatamente o painel 6 da prancha de hoje.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> validar depois é o que fecha o ciclo — sem essa checagem final, você não tem prova de que o ritual funcionou como esperado, só a expectativa de que funcionou.</div>
       <div class="lab-warn"><b>Cilada comum:</b> considerar a tarefa terminada assim que o rm roda sem erro — "não deu erro" não é o mesmo que "validei que o resultado é o esperado".</div>

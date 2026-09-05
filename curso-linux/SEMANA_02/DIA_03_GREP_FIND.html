@@ -309,6 +309,13 @@ $ find /var/log/app -name "*.log" -mtime -1 -exec grep -n "timeout" {} \;
       <div class="lab-cmd">echo "linha normal" > a.log
 echo "linha com ERROR aqui" > b.log
 echo "outra linha normal" > c.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>echo "texto"</dt><dd>Imprime o texto entre aspas.</dd>
+          <dt>> arquivo</dt><dd>Redireciona a saída do echo para dentro do arquivo indicado, criando-o (ou sobrescrevendo, se já existir).</dd>
+          <dt>a.log, b.log, c.log</dt><dd>Três arquivos de teste, só um deles (b.log) contendo a palavra ERROR — o alvo conhecido da busca.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> 3 arquivos criados, prontos pra busca.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> testar numa pasta pequena e controlada, onde você já sabe a resposta certa, é como confirmar que o comando funciona antes de confiar nele numa investigação real de centenas de arquivos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular esse passo e ir direto testar em logs de produção reais — sem saber a resposta esperada de antemão, fica difícil confirmar se o comando funcionou certo.</div>
@@ -339,6 +346,13 @@ echo "outra linha normal" > c.log</div>
       <div class="lab-text"><b>Ação:</b> Filtre arquivos por nome e depois por data de modificação.</div></div>
       <div class="lab-cmd">find . -name "*.log"
 find . -name "*.log" -mtime -1</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>find .</dt><dd>Busca arquivos a partir da pasta atual, percorrendo subpastas.</dd>
+          <dt>-name "*.log"</dt><dd>Filtra só arquivos cujo nome termina em .log — o asterisco é curinga para qualquer nome antes da extensão.</dd>
+          <dt>-mtime -1</dt><dd>Filtra por data de modificação: o sinal de menos significa 'modificado há menos de 1 dia'.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista dos arquivos .log criados recentemente.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> find responde uma pergunta diferente de grep — não "o que tem escrito", mas "quais arquivos existem e quando mudaram". Confundir os dois é o erro mais comum de quem está aprendendo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar find -name esperando que ele encontre texto DENTRO do arquivo — find nunca olha conteúdo, só metadados (nome, data, tamanho).</div>
@@ -378,6 +392,12 @@ find . -name "*.log" -mtime -1</div>
       <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Apague os logs de teste que você criou — eles não podem ficar confundindo buscas futuras nesta pasta.</div></div>
       <div class="lab-cmd">rm a.log b.log c.log
 ls *.log 2>&1 || echo "logs de teste removidos"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>rm a.log b.log c.log</dt><dd>Remove os três arquivos de teste criados no início da aula.</dd>
+          <dt>ls *.log 2>&1 || echo ...</dt><dd>Tenta listar qualquer .log restante; como isso falha (não sobrou nenhum), o '||' confirma a limpeza.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> mensagem de erro do <code>ls</code> confirmando que não sobrou nenhum <code>.log</code> na pasta — sinal de limpeza completa.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> um log de teste esquecido na pasta de trabalho confunde o próximo <code>grep</code> ou <code>find</code> que alguém rodar ali: "esse ERROR aqui é real ou é sobra de aula antiga?" é exatamente a dúvida que se evita limpando.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer que o <code>find . -name "*.log" -mtime -1</code> do passo anterior vai continuar encontrando esses arquivos até você de fato removê-los.</div>

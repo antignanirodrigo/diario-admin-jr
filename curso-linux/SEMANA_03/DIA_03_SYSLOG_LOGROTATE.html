@@ -312,6 +312,12 @@ $ df -h
       <div class="lab-cmd"># janela 1:
 touch teste.log
 tail -f teste.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>touch teste.log</dt><dd>Cria o arquivo de teste vazio.</dd>
+          <dt>tail -f teste.log</dt><dd>Abre o arquivo em modo 'follow', mantendo-o aberto e acompanhando novas linhas ao vivo — é esse processo que vai 'prender' o arquivo depois.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> processo tail rodando, arquivo sendo acompanhado ao vivo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de um arquivo "vivo" de verdade pra reproduzir o cenário real — um processo com o arquivo aberto é exatamente o que faz um rm parecer não liberar espaço.</div>
       <div class="lab-warn"><b>Cilada comum:</b> testar isso num arquivo real de produção — sempre use um arquivo de teste isolado pra esse tipo de experimento.</div>
@@ -321,6 +327,13 @@ tail -f teste.log</div>
       <div class="lab-cmd"># janela 2, com tail ainda rodando na janela 1:
 rm teste.log
 lsof | grep deleted</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>rm teste.log</dt><dd>Remove o NOME do arquivo do diretório — mas o conteúdo continua existindo enquanto o tail -f mantém ele aberto.</dd>
+          <dt>lsof</dt><dd>Lista arquivos abertos por processos no sistema (list open files).</dd>
+          <dt>| grep deleted</dt><dd>Filtra a saída do lsof para mostrar só arquivos marcados como '(deleted)' — removidos do nome, mas ainda presos por um processo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo listado como (deleted) no lsof, ainda ocupando espaço.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver com os próprios olhos o "(deleted)" no lsof é o que fixa o conceito de inode preso — muito mais concreto que só ouvir a explicação.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar rm de novo no mesmo caminho achando que vai "apagar de vez" — o nome já sumiu, rm de novo não faz nada.</div>
@@ -336,6 +349,12 @@ lsof | grep deleted</div>
       <div class="lab-text"><b>Ação:</b> Encerre o processo que prende o arquivo e confirme que o espaço foi liberado.</div></div>
       <div class="lab-cmd"># janela 1: Ctrl+C no tail
 lsof | grep deleted</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>Ctrl+C</dt><dd>Encerra o processo tail -f que estava rodando na janela 1, liberando o vínculo com o arquivo.</dd>
+          <dt>lsof | grep deleted</dt><dd>Reexecutado para confirmar que o arquivo já não aparece mais como '(deleted)' — o espaço foi liberado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lsof | grep deleted não mostra mais o arquivo, espaço confirmado livre.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa é a prova de que o espaço volta assim que o processo solta o arquivo — não com um rm mágico, mas com o processo liberando o vínculo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> matar o processo com kill -9 num caso real sem aprovação — em produção, reinicie o serviço com o mesmo cuidado da Semana 2, não mate processos às cegas.</div>

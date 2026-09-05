@@ -335,6 +335,12 @@ df -h /                                  # compare: subiu quanto?</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Meça o disco e identifique qual sistema de arquivos está mais cheio.</div></div>
       <div class="lab-cmd">df -h</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>df</dt><dd>Mostra o espaço usado e disponível em cada sistema de arquivos montado.</dd>
+          <dt>-h</dt><dd>Formato legível por humanos (K, M, G) em vez do número bruto de blocos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> uma tabela com percentual de uso por partição, com pelo menos uma linha destacada como mais crítica.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> df é o primeiro comando de qualquer alerta de disco — mede o TAMANHO do problema antes de você sair procurando causa em qualquer lugar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular direto pra du sem rodar df antes — sem saber qual partição está crítica, você pode gastar tempo medindo a pasta errada.</div>
@@ -352,6 +358,14 @@ df -h /                                  # compare: subiu quanto?</div>
       <div class="lab-cmd">du -sh /var/log
 du -sh /home
 du -sh /tmp</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>du</dt><dd>Mostra o espaço em disco ocupado por arquivos e pastas.</dd>
+          <dt>-s</dt><dd>Resume (summarize): mostra só o total da pasta, sem listar cada subpasta separadamente.</dd>
+          <dt>-h</dt><dd>Formato legível por humanos (K, M, G).</dd>
+          <dt>/var/log, /home, /tmp</dt><dd>As três pastas medidas para comparar qual consome mais espaço.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> três valores diferentes, permitindo identificar qual pasta consome mais espaço.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> df diz QUE partição está cheia, mas não diz QUAL pasta é a culpada — du é o passo que localiza a causa dentro do sintoma que df apontou.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar <code>du -sh /</code> direto na raiz do sistema — em disco grande isso demora muito e sobrecarrega I/O; é melhor ir testando pasta por pasta a partir das mais suspeitas.</div>
@@ -391,6 +405,14 @@ top</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Confirme que nenhum processo foi finalizado e nenhum arquivo foi apagado durante o laboratório.</div></div>
       <div class="lab-cmd">ps aux</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ps</dt><dd>Mostra um retrato (snapshot) dos processos em execução no momento em que o comando roda.</dd>
+          <dt>a</dt><dd>Mostra processos de todos os usuários, não só os seus.</dd>
+          <dt>u</dt><dd>Formato detalhado, com dono do processo e uso de %CPU/%MEM.</dd>
+          <dt>x</dt><dd>Inclui também processos sem terminal associado (daemons e serviços).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> rodando ps aux de novo, a lista de processos é a mesma de antes.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> diagnosticar não é a mesma coisa que agir — essa reexecução prova que hoje foi só observação, exatamente como o chamado pedia.</div>
       <div class="lab-warn"><b>Cilada comum:</b> num momento de urgência (alerta crítico), ceder à tentação de "só apagar um log grande rapidinho" antes de terminar o diagnóstico. Isso destrói evidência e pode apagar algo necessário.</div>
@@ -400,6 +422,14 @@ top</div>
       <div class="lab-cmd">df -h /                                  # o % ANTES de limpar
 sudo rm /var/log/teste-disco-cheio.log
 df -h /                                  # voltou ao valor do começo da aula?</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>df -h /</dt><dd>Mede o percentual de uso da partição raiz, antes e depois da limpeza, para comparar.</dd>
+          <dt>sudo</dt><dd>Necessário porque o arquivo de teste está em /var/log, que pertence a root.</dd>
+          <dt>rm</dt><dd>Remove o arquivo de teste criado no início da aula — ação definitiva, sem lixeira.</dd>
+          <dt>/var/log/teste-disco-cheio.log</dt><dd>O arquivo de teste criado só para simular o sintoma de disco cheio.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o percentual volta ao mesmo valor que você anotou no primeiro passo. O sistema está exatamente como estava antes de você começar.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> aqui o "ZERO mudança no sistema" do topo da aula se cumpre de verdade: o único arquivo alterado hoje foi um que <i>você mesmo</i> criou para estudar — e você o removeu. Esse ciclo (criar cenário → diagnosticar → desfazer) é como se treina infra sem quebrar nada de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o arquivo de teste na VM. Daqui a duas semanas você acha um <code>teste-disco-cheio.log</code> de 3G, não lembra da onde veio, e desconfia de um incidente que nunca existiu. <b>Sempre desfaça o que você montou.</b></div>

@@ -305,6 +305,11 @@ $ journalctl --since "15:03" --until "15:12"
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Confirme o fuso horário de cada VM antes de qualquer comparação.</div></div>
       <div class="lab-cmd">timedatectl</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>timedatectl</dt><dd>Mostra a data, hora e fuso horário configurados no sistema — o primeiro passo obrigatório antes de comparar horários entre servidores diferentes.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> mesmo fuso confirmado (ou diferença identificada) entre as duas máquinas.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa confirmação é o passo que a história de hoje mostrou ser obrigatório — sem ele, qualquer linha do tempo cruzada pode estar simplesmente errada.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que "todo servidor usa UTC" sem checar — configurações regionais variam, e presumir é o mesmo erro do colega que comparou horários "parecidos" sem confirmar.</div>
@@ -312,6 +317,13 @@ $ journalctl --since "15:03" --until "15:12"
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Pratique um SSH entre as duas VMs, com um usuário de privilégio mínimo.</div></div>
       <div class="lab-cmd">ssh usuario@IP_DA_SEGUNDA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa sintaxe</summary>
+        <dl class="flag-list">
+          <dt>ssh</dt><dd>Cliente SSH — inicia conexão remota criptografada.</dd>
+          <dt>usuario</dt><dd>Conta de privilégio mínimo usada para acessar a segunda VM.</dd>
+          <dt>IP_DA_SEGUNDA_VM</dt><dd>Placeholder para o endereço IP real da segunda máquina.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> conexão SSH estabelecida com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> acessar a segunda máquina com o menor privilégio necessário é o mesmo princípio da Semana 2 aplicado agora a investigações entre servidores.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar uma conta com privilégio total "pra garantir acesso" — mesmo numa investigação, o menor privilégio necessário continua valendo.</div>
@@ -328,6 +340,12 @@ $ journalctl --since "15:03" --until "15:12"
 logger "evento de teste VM1"
 # VM 2, logo em seguida:
 logger "evento de teste VM2"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>logger</dt><dd>Envia uma mensagem de texto para o journal/syslog do sistema — usado aqui só para gerar um evento de teste com horário conhecido.</dd>
+          <dt>"evento de teste VM1/VM2"</dt><dd>O texto registrado em cada máquina, com poucos segundos de diferença entre os dois.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dois eventos registrados, um em cada VM, com timestamps próximos.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> gerar os dois eventos de propósito, sabendo a ordem real em que aconteceram, é o que permite validar se a linha do tempo cruzada bate com a realidade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> gerar os dois eventos simultaneamente demais — deixe alguns segundos de diferença clara pra facilitar confirmar a ordem depois.</div>

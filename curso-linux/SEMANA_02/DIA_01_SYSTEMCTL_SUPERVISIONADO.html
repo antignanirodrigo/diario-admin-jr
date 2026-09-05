@@ -313,6 +313,14 @@ $ systemctl status app
       <div class="lab-text"><b>Ação:</b> Pare um serviço de teste na sua VM, simulando a falha do chamado, e confirme.</div></div>
       <div class="lab-cmd">sudo systemctl stop nginx
 systemctl status nginx</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo</dt><dd>Controlar (parar) um serviço do sistema exige privilégio elevado.</dd>
+          <dt>systemctl stop</dt><dd>Para um serviço em execução, sem desabilitar o início automático dele no boot.</dd>
+          <dt>nginx</dt><dd>O serviço alvo, parado de propósito para simular a falha do chamado.</dd>
+          <dt>systemctl status nginx</dt><dd>Confirma o novo estado: inactive (dead).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> systemctl status mostra inactive (dead), simulando a falha do chamado.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de uma falha real (mesmo que provocada por você) pra praticar a sequência completa — não dá pra treinar "confirmar antes de agir" sem ter algo pra confirmar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> parar um serviço de produção de verdade "só pra testar" — sempre use um serviço descartável numa VM de teste, nunca simule falha em ambiente real.</div>
@@ -357,6 +365,11 @@ systemctl status nginx</div>
       <div class="lab-text"><b>Ação:</b> Espere alguns segundos e cheque o status de novo, pra confirmar estabilidade.</div></div>
       <div class="lab-cmd"># espere ~30s
 systemctl status nginx</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl status nginx</dt><dd>Consulta o estado do serviço de novo, após um intervalo — confirma ESTABILIDADE, não só que ele subiu.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> o serviço continua active (running), sem voltar pra failed.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa segunda checagem, depois de um tempo, é o que diferencia "subiu" de "ficou de pé" — exatamente o detalhe que faltou no caso real que contei na história de hoje.</div>
       <div class="lab-warn"><b>Cilada comum:</b> checar status só uma vez, logo após o restart, e já fechar o chamado — sem essa segunda olhada com intervalo, você não tem evidência de estabilidade real.</div>

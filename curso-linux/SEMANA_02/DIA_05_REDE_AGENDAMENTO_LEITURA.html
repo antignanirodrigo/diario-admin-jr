@@ -330,6 +330,12 @@ $ diff config.old config.new
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Identifique a rota padrão (default via).</div></div>
       <div class="lab-cmd">ip route</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip</dt><dd>Ferramenta moderna de configuração e consulta de rede no Linux.</dd>
+          <dt>route</dt><dd>Subcomando que mostra a tabela de rotas — para onde o tráfego é enviado conforme o destino, incluindo a rota padrão (default via).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> gateway padrão identificado corretamente.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> saber a rota padrão é entender por onde o servidor "sai pro mundo" — essencial pra diagnósticos futuros de "não conecta com nada externo".</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir a rota da rede local (ex: 192.168.1.0/24) com a rota padrão (default via) — são linhas diferentes com propósitos diferentes.</div>
@@ -365,6 +371,13 @@ $ diff config.old config.new
       <div class="lab-cmd">echo "timeout=30" > config.old
 echo "timeout=60" > config.new
 diff config.old config.new</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>echo "texto" > arquivo</dt><dd>Cria cada arquivo de teste já com uma linha de conteúdo diferente.</dd>
+          <dt>diff</dt><dd>Compara dois arquivos linha a linha e mostra exatamente o que difere entre eles.</dd>
+          <dt>config.old config.new</dt><dd>Os dois arquivos comparados: o '-' marca a linha removida, o '+' marca a linha adicionada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> diff mostra exatamente a linha que difere, com - e + indicando o antes e depois.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> diff é a ferramenta certa pra responder "o que mudou exatamente" sem precisar ler o arquivo inteiro linha por linha procurando a diferença.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver uma diferença no diff e já querer corrigir/reverter na hora — hoje o objetivo é só identificar e documentar, não decidir se a mudança foi certa.</div>

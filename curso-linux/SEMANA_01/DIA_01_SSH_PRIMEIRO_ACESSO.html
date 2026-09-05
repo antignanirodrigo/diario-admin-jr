@@ -327,6 +327,13 @@ srv01
       <div class="lab-text"><b>Ação:</b> Crie uma VM Linux descartável (Ubuntu Server, por exemplo) e, na tela do instalador, marque explicitamente a opção de instalar o OpenSSH Server.</div></div>
       <div class="lab-cmd"># depois que a VM subir, confirme pelo console local:
 systemctl status ssh</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl</dt><dd>Ferramenta de controle do systemd — aqui usada só para CONSULTAR o estado de um serviço, sem alterar nada.</dd>
+          <dt>status</dt><dd>Subcomando que mostra o estado atual do serviço: ativo/inativo/falho, PID, e as últimas linhas de log.</dd>
+          <dt>ssh</dt><dd>Nome da unidade systemd do servidor OpenSSH (sshd) — em Debian/Ubuntu o nome mais comum da unidade é 'ssh'.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> a VM reinicia e mostra um prompt de login local. O <code>systemctl status ssh</code> retorna <code>active (running)</code>.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você precisa de um alvo real pra praticar sem risco de derrubar produção — "descartável" quer dizer que pode quebrar à vontade, você reinstala.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de marcar a instalação do OpenSSH Server na tela do instalador. A VM sobe normalmente, mas sem <code>sshd</code> — no Passo 2 você vai achar que o problema é de rede, quando na real o serviço nunca existiu.</div>
@@ -349,6 +356,14 @@ systemctl status ssh</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Do seu PC, conecte via SSH e compare a fingerprint mostrada com a que você anotou no passo anterior.</div></div>
       <div class="lab-cmd">ssh usuario@IP_DA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa sintaxe</summary>
+        <dl class="flag-list">
+          <dt>ssh</dt><dd>Cliente SSH — inicia uma conexão remota criptografada com outro host.</dd>
+          <dt>usuario</dt><dd>Nome da conta no servidor remoto com a qual você quer autenticar.</dd>
+          <dt>@</dt><dd>Separador entre usuário e destino — tudo antes é a conta, tudo depois é o host.</dd>
+          <dt>IP_DA_VM</dt><dd>Endereço IP (ou hostname) do servidor de destino — aqui é um placeholder a substituir pelo IP real da sua VM.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> se a fingerprint bater, digite <code>yes</code>. Se não bater, <b>pare</b> — não seria seguro em ambiente real.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> a pergunta "Are you sure you want to continue connecting?" não é burocracia — é o único momento em que você ainda pode recusar um servidor errado antes dele virar "confiável para sempre" no seu <code>known_hosts</code>.</div>
       <div class="lab-warn"><b>Cilada comum:</b> digitar <code>yes</code> de reflexo, só porque o prompt parece familiar, sem de fato comparar o valor com o que você anotou. Isso anula toda a proteção do Passo 2.</div>
@@ -395,6 +410,21 @@ hostnamectl
 pwd &amp;&amp; ls -lah
 df -hT
 systemctl --failed</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco (reexecução)</summary>
+        <dl class="flag-list">
+          <dt>whoami</dt><dd>Mostra só o nome do usuário logado na sessão atual.</dd>
+          <dt>&amp;&amp;</dt><dd>Só roda o comando seguinte se o anterior terminar sem erro — encadeia os dois numa linha só.</dd>
+          <dt>id</dt><dd>Mostra UID, GID e todos os grupos do usuário.</dd>
+          <dt>hostnamectl</dt><dd>Identifica hostname, sistema operacional, versão do kernel e arquitetura da máquina.</dd>
+          <dt>pwd</dt><dd>Mostra o caminho completo do diretório em que você está agora.</dd>
+          <dt>ls -l</dt><dd>Lista o conteúdo do diretório em formato detalhado: permissões, dono, grupo, tamanho e data.</dd>
+          <dt>-a</dt><dd>Inclui também arquivos e pastas ocultos (os que começam com ponto).</dd>
+          <dt>-h</dt><dd>Mostra tamanhos em formato legível (K, M, G) em vez do número bruto de bytes.</dd>
+          <dt>df -h</dt><dd>Mostra o espaço usado/livre de cada sistema de arquivos montado, em formato legível.</dd>
+          <dt>-T</dt><dd>Acrescenta uma coluna extra mostrando o TIPO de cada filesystem (ext4, xfs, tmpfs etc.).</dd>
+          <dt>systemctl --failed</dt><dd>Lista só os serviços do systemd que estão em estado de falha.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> rodando os mesmos comandos de novo, a saída é idêntica à primeira vez.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> esse é o teste que prova, e não só afirma, que sua sessão foi realmente somente-leitura — sem essa reexecução, "não mudei nada" é uma alegação, não uma evidência.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular esse passo por parecer redundante — é justamente a redundância que vira prova em caso de auditoria ou incidente futuro.</div>
@@ -404,6 +434,16 @@ systemctl --failed</div>
       <div class="lab-cmd">exit
 ls -lh ~/levantamento-*.log
 head -30 ~/levantamento-*.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>exit</dt><dd>Sai da shell atual — como você está dentro de uma sessão gravada por `script`, isso também encerra a gravação e finaliza o arquivo de log.</dd>
+          <dt>ls -l</dt><dd>Lista o arquivo em formato detalhado: permissões, dono, tamanho, data.</dd>
+          <dt>-h</dt><dd>Mostra o tamanho em formato legível (K, M, G) em vez do número bruto de bytes.</dd>
+          <dt>~/levantamento-*.log</dt><dd>Caminho com curinga (*) — casa com o nome exato do arquivo, já que ele tem a data de hoje embutida no nome.</dd>
+          <dt>head -n</dt><dd>Mostra só as primeiras linhas de um arquivo, em vez do conteúdo inteiro.</dd>
+          <dt>-30</dt><dd>Quantidade de linhas a mostrar — aqui, as primeiras 30, suficiente pra confirmar que a gravação capturou os comandos certos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Script done" na tela, o arquivo listado com tamanho maior que zero e as primeiras linhas mostrando os comandos que você rodou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo do dia: você observou, registrou e agora tem evidência entregável. Nenhuma configuração do servidor foi alterada — exatamente o que o chamado pedia.</div>
       <div class="lab-warn"><b>Cilada comum:</b> deixar a sessão gravando aberta por horas. O arquivo cresce sem parar e vira lixo em vez de evidência — encerre assim que terminar o levantamento.</div>

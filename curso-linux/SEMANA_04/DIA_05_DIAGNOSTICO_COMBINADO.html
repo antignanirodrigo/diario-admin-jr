@@ -309,6 +309,12 @@ admin    10.0.0.15      07:45</pre>
       <div class="lab-text"><b>Ação:</b> Simule um incidente combinado: gere carga de CPU e confira acessos ao mesmo tempo.</div></div>
       <div class="lab-cmd">yes > /dev/null &
 last -a</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>yes > /dev/null &</dt><dd>Gera uma carga sintética de CPU em segundo plano, descartando a saída — simula o sintoma de 'lentidão' do incidente combinado.</dd>
+          <dt>last -a</dt><dd>Lista o histórico de sessões de login recentes, com a origem (host/IP) de cada uma — coletado na mesma janela da carga de CPU.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dois conjuntos de dados coletados na mesma janela de investigação.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> praticar coletar duas fontes ao mesmo tempo, mesmo sintéticas, é o treino necessário pra fazer isso rápido quando um chamado real com dois sintomas chegar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> investigar as duas fontes em momentos separados, sem anotar horários — sem essa sincronização, fica impossível cruzar depois.</div>

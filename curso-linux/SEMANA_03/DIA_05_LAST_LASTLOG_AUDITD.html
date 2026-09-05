@@ -328,6 +328,11 @@ tempo               usuário  exe    comando   arquivo
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Compare com o último login por usuário.</div></div>
       <div class="lab-cmd">lastlog</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>lastlog</dt><dd>Mostra o ÚLTIMO login de cada usuário do sistema, um por linha — diferente do 'last', que lista TODAS as sessões recentes de todos os usuários.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> último login por usuário, formato diferente do last, mesma informação de base.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> lastlog responde uma pergunta diferente de last — "quando foi a ÚLTIMA vez" por usuário, útil pra achar contas paradas ou nunca usadas.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver "Never logged in" e já concluir "sem risco" — como a história de hoje mostrou, isso pede investigação, não descarte automático.</div>

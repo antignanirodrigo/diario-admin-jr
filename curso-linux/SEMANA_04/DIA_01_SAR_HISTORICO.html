@@ -308,6 +308,12 @@ May 27 15:11:02 servidor01 CRON[24566]: (root) job completed</pre>
       <div class="lab-text"><b>Ação:</b> Instale o sysstat e confirme que a coleta está ativa.</div></div>
       <div class="lab-cmd">sudo apt install sysstat
 systemctl status sysstat</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo apt install sysstat</dt><dd>Instala o pacote sysstat, que contém o sar e o coletor de dados sadc.</dd>
+          <dt>systemctl status sysstat</dt><dd>Confirma que o serviço/timer de coleta está ativo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pacote instalado, serviço sysstat/sadc rodando.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> sem essa instalação, não existe "gravação" nenhuma acontecendo — é literalmente o pré-requisito de tudo que vem depois na aula de hoje.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que sysstat já vem pronto por padrão, como o colega da história de hoje — na maioria das distros, precisa ser instalado e ativado manualmente.</div>
@@ -317,6 +323,12 @@ systemctl status sysstat</div>
       <div class="lab-cmd"># espere alguns minutos, ou force com:
 sudo sadc
 sar -u</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo sadc</dt><dd>Força uma coleta imediata de métricas do sistema, sem esperar o próximo ciclo automático.</dd>
+          <dt>sar -u</dt><dd>Consulta o histórico de uso de CPU já coletado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pelo menos algumas linhas de dados históricos de CPU aparecendo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> confirmar que existem dados é o passo antes de filtrar por período — sem isso, um sar -u vazio pode significar "sem carga" ou "sem coleta", e você precisa distinguir os dois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar sar logo após instalar e concluir "não funciona" porque ainda não passou tempo suficiente pra acumular dados.</div>
@@ -349,6 +361,13 @@ sar -b</div>
 # espere 1 minuto, depois:
 kill %1
 sar -u</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>yes > /dev/null &</dt><dd>Gera carga de CPU de propósito (yes imprime 'y' infinitamente) e descarta a saída, rodando em segundo plano.</dd>
+          <dt>kill %1</dt><dd>Encerra o processo de carga pelo número do job em segundo plano.</dd>
+          <dt>sar -u</dt><dd>Consulta o histórico de CPU de novo, para confirmar que o pico de carga ficou registrado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pico de CPU visível no sar, correspondente ao horário exato do teste.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver o próprio pico de teste aparecer no histórico é a prova concreta de que a coleta está funcionando — não é fé, é verificação.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de encerrar o processo yes com kill — ele fica consumindo CPU indefinidamente se você não parar.</div>

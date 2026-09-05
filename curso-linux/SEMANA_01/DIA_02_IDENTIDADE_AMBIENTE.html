@@ -338,6 +338,14 @@ groups teste-jr          # em que grupos ele entrou</div>
 id
 hostnamectl
 uname -a</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>whoami</dt><dd>Mostra só o nome (login) do usuário da sessão atual.</dd>
+          <dt>id</dt><dd>Mostra UID, GID e a lista completa de grupos do usuário.</dd>
+          <dt>hostnamectl</dt><dd>Identifica hostname, sistema operacional, versão do kernel e arquitetura.</dd>
+          <dt>uname -a</dt><dd>Mostra informações do kernel (nome, hostname, versão, build, arquitetura) — não mostra a distribuição.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> quatro saídas diferentes, cada uma respondendo uma pergunta específica (quem, privilégio, onde, o quê).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> cada comando responde só UMA das quatro perguntas — misturar a leitura de um com a conclusão de outro é exatamente o erro que gera mal-entendido, como o "você tá como root?" do início da aula.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar só <code>whoami</code> e achar que já é suficiente. Ele mostra o nome da conta, não o privilégio — é a camada mais superficial das quatro.</div>
@@ -345,6 +353,11 @@ uname -a</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Na saída de <code>id</code>, identifique qual grupo daria a você poder de virar root com <code>sudo</code>.</div></div>
       <div class="lab-cmd">id</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>id</dt><dd>Mostra UID (identificador numérico do usuário), GID (grupo primário) e a lista de todos os grupos secundários aos quais a conta pertence.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> o grupo <code>sudo</code> (ou <code>wheel</code>, em algumas distros) aparece listado, mas você continua logado como seu usuário normal.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> estar listado num grupo é autorização, não identidade ativa — sua sessão não muda de dono só por você pertencer ao grupo certo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver <code>sudo</code> na lista de grupos e responder "sim, sou root" pro colega. Pertencer ao grupo não é a mesma coisa que estar rodando como root agora.</div>
@@ -352,6 +365,12 @@ uname -a</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Rode <code>cat /etc/os-release</code> e compare com o que <code>uname -a</code> mostrou.</div></div>
       <div class="lab-cmd">cat /etc/os-release</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cat</dt><dd>Mostra o conteúdo de um arquivo de texto direto na tela, do início ao fim.</dd>
+          <dt>/etc/os-release</dt><dd>Arquivo padrão (systemd) com metadados da distribuição: nome, versão, ID e URL de suporte — é a fonte confiável para saber a distro, diferente do kernel.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> <code>os-release</code> mostra o nome da distribuição (ex: Ubuntu 22.04); <code>uname -a</code> não mostra isso, só o kernel.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> distribuições diferentes podem rodar exatamente a mesma versão de kernel — se você precisa saber a distro de verdade (pra escolher o comando certo de pacote, por exemplo), o kernel sozinho não serve.</div>
       <div class="lab-warn"><b>Cilada comum:</b> concluir a distribuição só pelo número do kernel em <code>uname -a</code> — foi exatamente esse o erro do caso real que contei na história de hoje.</div>
@@ -371,6 +390,14 @@ uname -a</div>
 id
 hostnamectl
 uname -a</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco (reexecução)</summary>
+        <dl class="flag-list">
+          <dt>whoami</dt><dd>Mostra só o nome (login) do usuário da sessão atual.</dd>
+          <dt>id</dt><dd>Mostra UID, GID e a lista completa de grupos do usuário.</dd>
+          <dt>hostnamectl</dt><dd>Identifica hostname, sistema operacional, versão do kernel e arquitetura.</dd>
+          <dt>uname -a</dt><dd>Mostra informações do kernel (nome, hostname, versão, build, arquitetura) — não mostra a distribuição.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> todos são comandos de leitura pura — se algum pediu senha de root, algo foi digitado errado.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa reexecução prova que investigar identidade não exige privilégio nenhum — é o tipo de checagem que você pode (e deve) fazer antes de qualquer decisão maior.</div>
       <div class="lab-warn"><b>Cilada comum:</b> digitar <code>sudo</code> na frente "por hábito" de outros comandos. Nenhum dos quatro aqui precisa — se pediu senha, revise o que foi digitado.</div>

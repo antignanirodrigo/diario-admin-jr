@@ -307,6 +307,13 @@ $ ls -l app.log
       <div class="lab-text"><b>Ação:</b> Crie um arquivo de teste e observe suas permissões padrão.</div></div>
       <div class="lab-cmd">touch teste.log
 ls -l teste.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>touch</dt><dd>Cria um arquivo vazio (ou atualiza a data de modificação, se já existir).</dd>
+          <dt>teste.log</dt><dd>O arquivo de teste criado para o laboratório.</dd>
+          <dt>ls -l</dt><dd>Lista o arquivo em formato detalhado, mostrando as permissões padrão logo após a criação.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> permissão padrão criada pelo seu usuário (geralmente -rw-r--r--).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver o estado ANTES de qualquer mudança é o passo 1 do procedimento — sem isso você não tem como provar depois o que era diferente antes/depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular direto pro chmod sem rodar ls -l antes — sem o "antes" registrado, um rollback vira chute, não reversão de verdade.</div>
@@ -364,6 +371,13 @@ ls -l teste.log</div>
 ls -l teste.log
 chmod 640 teste.log
 ls -l teste.log</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa permissão octal</summary>
+        <dl class="flag-list">
+          <dt>chmod 777</dt><dd>Dá leitura+escrita+execução (7) para dono, grupo E outros — o máximo de permissão possível, aberto para todo o sistema.</dd>
+          <dt>chmod 640</dt><dd>Dono: leitura+escrita (6). Grupo: só leitura (4). Outros: nada (0) — o exemplo de menor privilégio da aula.</dd>
+          <dt>ls -l (as duas vezes)</dt><dd>Confirma visualmente a mudança: -rwxrwxrwx (777) depois -rw-r----- (640).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ls -l mostra -rwxrwxrwx (777) e depois volta pra -rw-r----- (640) — comparação visual do risco.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver os dois lado a lado deixa concreto o que "abrir demais" significa — não é abstrato, é literalmente todo mundo do sistema com escrita e execução no arquivo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fazer esse teste num arquivo de produção real "só um segundo" — mesmo por poucos segundos, 777 já é uma janela de risco real, faça isso só em ambiente de teste.</div>
@@ -382,6 +396,14 @@ ls -l teste.log</div>
 rm teste.log
 id testeapp 2>&1 || echo "usuário removido"
 ls -l teste.log 2>&1 || echo "arquivo removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>sudo userdel testeapp</dt><dd>Remove a conta de usuário de teste criada no início da aula.</dd>
+          <dt>rm teste.log</dt><dd>Remove o arquivo de teste.</dd>
+          <dt>id testeapp 2>&1 || echo ...</dt><dd>Tenta consultar o usuário removido; como isso falha, o '||' executa o echo confirmando a remoção.</dd>
+          <dt>ls -l teste.log 2>&1 || echo ...</dt><dd>Mesma lógica: tenta listar o arquivo removido; a falha confirma que ele já não existe.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> duas mensagens de erro do sistema confirmando que o usuário e o arquivo não existem mais — sinal de que a limpeza funcionou.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> você criou <code>testeapp</code> só pra ter um dono real pra ajustar — sem remover depois, o próximo técnico encontra uma conta órfã sem propósito nenhum. Numa auditoria de segurança, cada conta sem dono claro é uma pergunta que alguém vai ter que responder.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o <code>testeapp</code> na VM. Meses depois, alguém acha essa conta numa varredura de segurança e perde tempo investigando uma "ameaça" que era só sobra de laboratório.</div>

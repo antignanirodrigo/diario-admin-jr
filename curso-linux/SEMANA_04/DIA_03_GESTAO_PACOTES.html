@@ -311,6 +311,12 @@ ii  htop  3.2.2-2ubuntu2  amd64</pre>
       <div class="lab-text"><b>Ação:</b> Atualize a lista de pacotes e verifique a versão candidata de uma ferramenta ainda não instalada.</div></div>
       <div class="lab-cmd">sudo apt update
 apt policy htop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo apt update</dt><dd>Atualiza a lista local de pacotes disponíveis a partir dos repositórios configurados — não instala nem atualiza nada ainda.</dd>
+          <dt>apt policy htop</dt><dd>Mostra a versão instalada (se houver) e a versão candidata disponível para instalação do pacote htop.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> versão candidata mostrada, nada ainda instalado.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ver a versão ANTES de instalar é o que permite confirmar que você vai receber o que espera, sem surpresas depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular o apt update achando que a lista de pacotes já está atualizada — sem isso, apt policy pode mostrar informação desatualizada.</div>
@@ -318,6 +324,11 @@ apt policy htop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Instale a ferramenta, lendo com atenção a lista antes de confirmar.</div></div>
       <div class="lab-cmd">sudo apt install htop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo apt install htop</dt><dd>Instala o pacote htop e suas dependências diretas, depois de listar o que será instalado para confirmação.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista de pacotes e dependências revisada antes da confirmação.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ler a lista de "será instalado" antes de confirmar é o que te dá a chance de perceber se algo além do esperado está prestes a mudar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confirmar instalações com "yes" automático sem ler a lista — como quase aconteceu com o apt upgrad de hoje, digitar sem olhar é onde o erro entra.</div>
@@ -331,6 +342,12 @@ apt policy htop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Confirme a instalação e a versão exata.</div></div>
       <div class="lab-cmd">dpkg -l | grep htop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dpkg -l</dt><dd>Lista todos os pacotes conhecidos pelo dpkg (gerenciador de pacotes de baixo nível) e seu estado de instalação.</dd>
+          <dt>| grep htop</dt><dd>Filtra a lista para mostrar só a linha do pacote htop, com a versão exata instalada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pacote listado com versão exata instalada.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> validar depois é o que fecha o ciclo — confirma que a versão candidata prometida é realmente a que foi instalada.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que "instalou sem erro" já é suficiente, sem confirmar a versão exata que ficou registrada no sistema.</div>

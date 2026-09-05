@@ -307,6 +307,11 @@ PID   USER    PRI NI  VIRT   RES  %CPU  %MEM  TIME+    Command
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Leia o load average dos três períodos antes de fazer qualquer coisa.</div></div>
       <div class="lab-cmd">top</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>top</dt><dd>Mostra em tempo real os processos em execução, uso de CPU/memória e o load average (carga média), atualizando a cada poucos segundos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> três números identificados e anotados, mesmo que baixos.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> top é a foto rápida da carga geral — o primeiro comando de qualquer ticket de "lento", antes de qualquer suposição sobre a causa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> olhar só o número de 1 minuto e ignorar os outros dois — sem os três, você não sabe se a carga está subindo, estável ou já caindo.</div>
@@ -315,6 +320,12 @@ PID   USER    PRI NI  VIRT   RES  %CPU  %MEM  TIME+    Command
       <div class="lab-text"><b>Ação:</b> Instale e abra o htop, se ainda não tiver.</div></div>
       <div class="lab-cmd">sudo apt install htop
 htop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo apt install htop</dt><dd>Instala o pacote htop usando o gerenciador de pacotes do sistema.</dd>
+          <dt>htop</dt><dd>Abre a interface interativa do htop, com barras coloridas de uso por núcleo de CPU e memória.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> interface interativa do htop carregada, com barras coloridas de CPU/memória.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> htop dá visão por núcleo e ordenação interativa que o top não tem de forma tão prática — é a ferramenta certa quando você já sabe que precisa investigar mais fundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> instalar htop numa sessão de produção sem confirmar antes que instalar pacotes ali é permitido — em ambiente real, confirme a política do time primeiro.</div>
@@ -328,6 +339,12 @@ htop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Ordene a lista por %CPU e identifique o processo no topo.</div></div>
       <div class="lab-cmd"># dentro do htop, pressione F6 e selecione PERCENT_CPU</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse atalho</summary>
+        <dl class="flag-list">
+          <dt>F6</dt><dd>Atalho de teclado dentro do htop que abre o menu de ordenação (Sort by).</dd>
+          <dt>PERCENT_CPU</dt><dd>Opção do menu que reordena a lista de processos pelo percentual de uso de CPU, do maior para o menor.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista reordenada, processo de maior consumo no topo, PID visível.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> ordenar por %CPU é o que transforma uma lista de dezenas de processos numa resposta direta: "quem é o culpado" aparece no topo, sem precisar ler linha por linha.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver %MEM baixo no processo do topo e descartar ele como "não é o problema" — como a história de hoje mostrou, CPU e memória são métricas independentes.</div>
@@ -357,6 +374,13 @@ htop</div>
       <div class="lab-text"><b>Ação:</b> Encerre o processo de teste e documente PID, %CPU, %MEM e load average antes/depois.</div></div>
       <div class="lab-cmd">kill %1
 top</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>kill</dt><dd>Envia um sinal para terminar um processo.</dd>
+          <dt>%1</dt><dd>Referência ao job 1 em segundo plano desta sessão de shell (o 'yes' iniciado antes) — não é o PID.</dd>
+          <dt>top</dt><dd>Reexecutado para confirmar que a carga de CPU e o load average voltaram ao normal depois do kill.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> registro completo reproduzindo o painel 6 da prancha de hoje.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> comparar o "antes" e o "depois" com números concretos é a prova de que a ação realmente resolveu — sem essa comparação, "achei que melhorou" não é validação de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> encerrar o laboratório sem rodar o top de "depois" — sem essa segunda leitura, você não tem evidência formal de que a carga voltou ao normal.</div>

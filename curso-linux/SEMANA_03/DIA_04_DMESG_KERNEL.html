@@ -345,6 +345,13 @@ ganha o hábito de olhar uma camada abaixo da aplicação quando o log dela para
       <div class="lab-text"><b>Ação:</b> Pratique correlacionar horários entre dmesg e o log de uma aplicação de teste.</div></div>
       <div class="lab-cmd">dmesg -T | tail -5
 tail -5 /var/log/syslog</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dmesg -T</dt><dd>Mostra as mensagens do kernel com timestamp convertido para data/hora legível.</dd>
+          <dt>| tail -5</dt><dd>Mostra só as 5 últimas mensagens do kernel.</dd>
+          <dt>tail -5 /var/log/syslog</dt><dd>Mostra as 5 últimas linhas do log geral do sistema, para comparar o horário com o evento de kernel.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dois eventos alinhados no tempo, mesmo que de fontes diferentes.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> foi essa correlação exata (poucos segundos de diferença) que confirmou a causa real hoje — treinar esse olhar é o que faz a diferença numa investigação de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir causa só por proximidade de horário sem checar o conteúdo das mensagens — coincidência de tempo é uma pista forte, não uma prova sozinha.</div>

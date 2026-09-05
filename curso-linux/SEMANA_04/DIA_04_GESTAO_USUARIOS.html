@@ -308,6 +308,13 @@ uid=1002(novo_user) gid=1002(novo_user) grupos=1002(novo_user),1001(desenvolvime
 sudo groupadd grupo2
 sudo groupadd grupo3
 getent group grupo1 grupo2 grupo3</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>groupadd</dt><dd>Cria um novo grupo no sistema.</dd>
+          <dt>grupo1, grupo2, grupo3</dt><dd>Os três grupos de teste do laboratório, criados antes de qualquer usuário ser associado a eles.</dd>
+          <dt>getent group</dt><dd>Consulta a base de grupos do sistema (arquivo /etc/group ou outra fonte configurada) e confirma que os três grupos existem.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> os três grupos listados pelo getent, confirmando que existem antes do próximo passo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> <code>usermod -aG</code> não cria grupos, só adiciona um usuário a grupos que já existem — sem esse passo, o próximo comando falha por um motivo que não tem nada a ver com a lição de hoje.</div>
       <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — criar grupos de teste com nomes genéricos pode colidir com grupos reais em servidores de produção.</div>
@@ -322,6 +329,14 @@ getent group grupo1 grupo2 grupo3</div>
       <div class="lab-text"><b>Ação:</b> Crie um usuário de teste com home e shell corretos, e defina uma senha.</div></div>
       <div class="lab-cmd">sudo useradd -m -s /bin/bash teste_user
 sudo passwd teste_user</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>useradd</dt><dd>Cria uma nova conta de usuário.</dd>
+          <dt>-m</dt><dd>Cria também o diretório home do usuário (ex: /home/teste_user) — sem essa flag, a home não é criada.</dd>
+          <dt>-s /bin/bash</dt><dd>Define o shell de login do usuário como bash.</dd>
+          <dt>passwd teste_user</dt><dd>Define (ou altera) a senha da conta indicada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> conta criada com home próprio, senha definida com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> -m garante o diretório home, -s define o shell certo — sem esses dois, o usuário pode não conseguir logar direito ou cair num shell errado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o passwd depois do useradd — a conta existe mas fica sem senha, incapaz de autenticar.</div>
@@ -369,6 +384,14 @@ id teste_user</div>
       <div class="lab-cmd">sudo usermod -aG grupo1 teste_user
 sudo usermod -aG grupo2 teste_user
 id teste_user</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando (restaurando com -aG)</summary>
+        <dl class="flag-list">
+          <dt>usermod</dt><dd>Modifica atributos de uma conta de usuário já existente.</dd>
+          <dt>-a</dt><dd>Append: ADICIONA o grupo indicado à lista de grupos do usuário, sem remover os que ele já tinha.</dd>
+          <dt>-G grupo</dt><dd>Grupo secundário a adicionar — só funciona corretamente combinado com -a.</dd>
+          <dt>id teste_user</dt><dd>Confirma que os grupos perdidos no passo anterior foram restaurados.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> todos os grupos originais restaurados, confirmados com id.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> essa correção só é possível porque você anotou os grupos ANTES do erro — sem esse registro prévio, restaurar seria adivinhação.</div>
       <div class="lab-warn"><b>Cilada comum:</b> tentar corrigir de memória, sem ter anotado os grupos originais — é exatamente por isso que id antes é indispensável, não opcional.</div>
@@ -388,6 +411,13 @@ sudo groupdel grupo1
 sudo groupdel grupo2
 sudo groupdel grupo3
 id teste_user 2>&1 || echo "usuário removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar cada comando desse bloco</summary>
+        <dl class="flag-list">
+          <dt>userdel -r</dt><dd>Remove a conta de usuário e também sua pasta home/mail spool (-r), sem deixar arquivos órfãos.</dd>
+          <dt>groupdel</dt><dd>Remove um grupo do sistema — deve ser feito DEPOIS de remover o usuário, nunca antes.</dd>
+          <dt>id teste_user 2>&1 || echo ...</dt><dd>Tenta consultar o usuário removido; a falha esperada confirma a remoção completa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> mensagem de erro do sistema confirmando que teste_user não existe mais.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> contas e grupos de teste esquecidos numa VM são exatamente o tipo de achado confuso numa auditoria de segurança meses depois — ninguém lembra por que "grupo1" existe.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar <code>groupdel</code> antes do <code>userdel</code> pode falhar se o grupo ainda for o grupo primário de algum usuário — sempre remova o usuário primeiro.</div>
