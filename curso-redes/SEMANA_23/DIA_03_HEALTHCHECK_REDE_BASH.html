@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2, qual comando confirmava que o processo estava rodando, e qual confirmava que ele estava de fato escutando na porta esperada?<br>
+    <b>2.</b> Você fez esses testes manualmente, um de cada vez, nos últimos dois dias. Hoje eles viram um script — qual é o erro clássico de encadear testes assim com &&?
+  </div>
+  <div class="ans">
+    <b>1.</b> systemctl status confirma que o processo está rodando; ss -tlnp confirma se ele está de fato escutando na porta esperada — são duas perguntas diferentes, que exigem dois comandos diferentes.<br>
+    <b>2.</b> Encadear com && faz o script parar no primeiro teste que falhar, nunca chegando a rodar os testes seguintes — escondendo outros problemas que poderiam existir ao mesmo tempo. Hoje o script precisa rodar TODOS os testes, independente do resultado de cada um.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Consolidação — junta bash (Fase 1, Semana 9-10) e diagnóstico de rede (Fase 2):</b>
 Você já sabe escrever scripts bash com funções e tratamento de erro. Hoje você aplica isso especificamente a
@@ -180,11 +233,19 @@ teste que falhou impedir os outros de rodarem também.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2303: "Preciso de um script que eu possa rodar (ou colocar no cron) que checa DNS,
-  conectividade de porta, espaço em disco e se o processo está de pé — tudo de uma vez, com um relatório
-  claro no final." O erro mais comum ao escrever esse tipo de script é encadear os testes com
-  <span class="hint" data-tip="Operador bash que só executa o comando seguinte se o anterior teve sucesso — encadear testes com ele faz o script parar no primeiro teste que falhar." onclick="openGlossary(0)">&amp;&amp;</span>,
-  fazendo o script parar no primeiro teste que falhar, sem nunca chegar a rodar os outros.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2303</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>14:00</span>
+      <span>aberto por: coordenação de infra</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>servidores de aplicação (ambiente de produção)</b> · serviço: monitoramento preventivo</div>
+      <div class="msg">"Preciso de um script que eu possa rodar (ou colocar no cron) que checa DNS, conectividade de porta, espaço em disco e se o processo está de pé — tudo de uma vez, com um relatório claro no final."</div>
+    </div>
+    <div class="ticket-foot">Um script assim já existe pronto? Não. Por onde você começa a escrever?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -326,6 +387,34 @@ echo "=== Healthcheck $(date) ==="
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie o arquivo healthcheck.sh de verdade na sua VM — sem o arquivo existir com permissão de execução, nem o script mais simples roda.</div></div>
+      <div class="lab-cmd">$ cat > ~/healthcheck.sh <<'EOF'
+#!/bin/bash
+echo "=== Healthcheck $(date) ==="
+EOF
+$ ./healthcheck.sh
+bash: ./healthcheck.sh: Permission denied
+$ chmod +x ~/healthcheck.sh
+$ ./healthcheck.sh
+=== Healthcheck Tue Sep  1 16:00:00 2026 ===</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>chmod +x</dt><dd>Adiciona (+) permissão de execução (x) ao arquivo — sem essa permissão, o sistema recusa rodar o script mesmo que o dono tenha permissão de leitura e escrita sobre ele.</dd>
+          <dt>~/healthcheck.sh</dt><dd>O arquivo alvo — o til (~) expande automaticamente pro diretório home do usuário atual.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Permission denied" na primeira tentativa; depois do chmod +x, o script roda normalmente e imprime a linha de cabeçalho.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> esse é o pega-ratão mais comum de quem escreve o primeiro script bash: criar o arquivo não é suficiente, o sistema operacional exige a permissão de execução de forma explícita, separada da permissão de leitura/escrita.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM de laboratório — e anote o caminho do arquivo (<code>~/healthcheck.sh</code>), você vai apagá-lo no teardown.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Permission denied" mesmo depois do chmod +x</b> → confirme que você está rodando com <code>./healthcheck.sh</code> (caminho explícito) e não só <code>healthcheck.sh</code> — sem estar no PATH, o shell não encontra o script sem o <code>./</code> na frente.<br>
+          <b>"bad interpreter: /bin/bash^M: no such file or directory"</b> → o arquivo foi salvo com quebra de linha do Windows (CRLF). Rode <code>sed -i 's/\r$//' ~/healthcheck.sh</code> pra corrigir, ou instale e use <code>dos2unix</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, escreva o script healthcheck.sh com as quatro funções, testando um alvo que funciona.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório mostrando OK nas quatro linhas.</div>
     </li>
@@ -342,7 +431,29 @@ echo "=== Healthcheck $(date) ==="
       <div class="lab-text">Adicione o script a uma entrada de cron de teste, e confirme execução automática registrada em log.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> execução automática confirmada, sem intervenção manual.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o script de teste e a entrada de cron que você criou, deixando a VM como estava antes da aula.</div></div>
+      <div class="lab-cmd">$ crontab -l | grep -v healthcheck.sh | crontab -
+$ rm ~/healthcheck.sh
+$ crontab -l | grep healthcheck || echo "cron limpo"
+$ ls ~/healthcheck.sh 2>/dev/null || echo "script removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>crontab -l</dt><dd>Lista as tarefas agendadas do usuário atual, uma por linha.</dd>
+          <dt>grep -v healthcheck.sh</dt><dd>Filtra removendo (-v inverte o filtro) qualquer linha que contenha o texto healthcheck.sh — sobra tudo, MENOS a linha de teste.</dd>
+          <dt>| crontab -</dt><dd>Envia o resultado já filtrado de volta como a nova lista de cron do usuário — o hífen final diz ao crontab pra ler da entrada padrão (o pipe) em vez de um arquivo.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "cron limpo" e "script removido" — nenhum rastro do teste de hoje ficou na VM.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> cron esquecido é o tipo de coisa que reaparece meses depois como um mistério — um healthcheck de teste rodando de hora em hora sem ninguém lembrar por quê.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar <code>crontab -r</code> (remove TODO o crontab do usuário) em vez de filtrar só a linha do teste — isso apagaria qualquer outra tarefa agendada que já existisse antes da aula.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"no crontab for usuario"</b> → normal se você nunca teve nenhuma entrada de cron antes desta aula — nesse caso não há nada pra limpar, o comando <code>crontab -l</code> só confirma que já está vazio.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

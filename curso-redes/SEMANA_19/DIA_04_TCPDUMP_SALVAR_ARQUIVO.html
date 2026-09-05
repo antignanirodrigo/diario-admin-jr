@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 3, quais são as três flags do handshake TCP completo, na ordem certa?<br>
+    <b>2.</b> Hoje você vai salvar a captura num arquivo em vez de ler ao vivo. Essas mesmas flags mudam de alguma forma quando lidas de um arquivo .pcap depois, em vez de na tela em tempo real?
+  </div>
+  <div class="ans">
+    <b>1.</b> SYN <code>[S]</code>, SYN-ACK <code>[S.]</code>, ACK <code>[.]</code> — nessa ordem, cliente → servidor → cliente.<br>
+    <b>2.</b> Não. <code>tcpdump -r</code> reproduz os mesmos pacotes gravados, byte a byte — as flags, IPs e portas aparecem exatamente como apareceriam ao vivo. A única diferença é que agora você pode reabrir e reler quantas vezes precisar, sem correr contra o tempo real do evento.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 3 (handshake TCP):</b> Você já sabe ler o handshake direto no
 terminal. Hoje você aprende a guardar essa captura num arquivo — pra reabrir depois, comparar com outra
@@ -180,11 +233,19 @@ salva, reproduzível e compartilhável.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #1904: "O bug só acontece de madrugada, quando ninguém está de plantão pra ficar
-  olhando o terminal ao vivo." A resposta certa não é ficar acordado esperando — é deixar uma captura rodando,
-  salvando pra
-  <span class="hint" data-tip="Formato de arquivo padrão pra armazenar capturas de pacotes de rede, legível por tcpdump, Wireshark e outras ferramentas." onclick="openGlossary(0)">arquivo .pcap</span>,
-  e analisar tudo com calma na manhã seguinte.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#1904</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>23:50</span>
+      <span>aberto por: plantão noturno, registrado por e-mail</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: job noturno de sincronização</div>
+      <div class="msg">"O bug só acontece de madrugada, quando ninguém está de plantão pra ficar olhando o terminal ao vivo."</div>
+    </div>
+    <div class="ticket-foot">Você não pode ficar acordado a noite toda. Qual é o plano?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -313,22 +374,66 @@ $ tcpdump -r /var/log/captura_1904.pcap host 10.10.10.50
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Rode tcpdump -i eth0 -w teste.pcap enquanto gera algum tráfego (curl, ping).</div></div>
+      <div class="lab-cmd">$ sudo tcpdump -i eth0 -w ~/teste.pcap
+# em outro terminal:
+$ ping -c 5 8.8.8.8</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo tcpdump -i eth0</dt><dd>Captura na interface eth0, como nos dias anteriores.</dd>
+          <dt>-w ~/teste.pcap</dt><dd>Em vez de traduzir cada pacote pra uma linha de texto e imprimir na tela, grava os pacotes BRUTOS (binário) direto nesse arquivo — nada aparece no terminal enquanto -w está ativo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo teste.pcap criado, com tamanho maior que zero.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O arquivo foi criado mas com 0 bytes</b> → confirme que o tráfego gerado (o ping) realmente passou pela interface <code>eth0</code> e não por outra — testar contra <code>localhost</code>, por exemplo, gera tráfego na interface <code>lo</code>, não em <code>eth0</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Interrompa a captura e reabra o arquivo com tcpdump -r teste.pcap.</div></div>
+      <div class="lab-cmd">^C
+$ sudo tcpdump -r ~/teste.pcap</div>
       <div class="lab-expect"><b>Resultado esperado:</b> as mesmas linhas de tráfego aparecendo, como se fosse ao vivo.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se quiser abrir esse mesmo arquivo visualmente no Wireshark depois, este é o ponto onde o chat com o Sênior-IA vai te mostrar o próximo passo.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Reaplique um filtro host ou port sobre o arquivo já salvo, com tcpdump -r teste.pcap host &lt;ip&gt;.</div></div>
+      <div class="lab-cmd">$ sudo tcpdump -r ~/teste.pcap host 8.8.8.8</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>-r ~/teste.pcap</dt><dd>Lê um arquivo .pcap já existente e reproduz os pacotes gravados nele, em vez de capturar ao vivo de uma interface.</dd>
+          <dt>host 8.8.8.8</dt><dd>Filtros normais (host, port, and/or) funcionam exatamente igual sobre um arquivo já salvo — você pode reaplicar quantos filtros diferentes quiser sobre a MESMA captura, sem precisar capturar de novo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> só as linhas relevantes ao filtro aparecem, mesmo lendo de um arquivo já pronto.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Tente abrir o mesmo arquivo com cat teste.pcap e observe o conteúdo ilegível.</div></div>
+      <div class="lab-cmd">$ cat ~/teste.pcap</div>
       <div class="lab-expect"><b>Resultado esperado:</b> caracteres binários sem sentido no terminal, confirmando que não é texto simples.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O terminal trava, mostra caracteres estranhos ou emite bips</b> → normal — são bytes binários sendo interpretados como caracteres de controle pelo terminal. Pressione Ctrl+C pra recuperar o terminal e use <code>tcpdump -r</code> ou <code>file ~/teste.pcap</code> em vez de <code>cat</code> pra inspecionar o arquivo com segurança.
+        </div>
+      </details>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova o arquivo de captura de teste e confirme que não sobrou nada na VM.</div></div>
+      <div class="lab-cmd">$ rm ~/teste.pcap
+$ ls ~/teste.pcap 2>/dev/null || echo "arquivo removido"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "arquivo removido" — nenhum arquivo de captura esquecido na VM.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> um .pcap esquecido no disco não é tão sensível quanto uma senha, mas pode conter tráfego real capturado (inclusive de outros serviços rodando na mesma VM). Encerrar o laboratório sem deixar arquivo de captura pra trás é a mesma disciplina de "ZERO mudança no sistema" que vale pra qualquer teste — não é exclusiva de disco ou processo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer que pode haver um processo tcpdump ainda em segundo plano gravando nesse arquivo. Confirme com <code>pgrep tcpdump</code> antes de apagar, ou o arquivo volta a crescer sozinho depois de removido.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"rm: cannot remove '~/teste.pcap': Permission denied"</b> → o arquivo foi criado com <code>sudo tcpdump -w</code>, então pertence a root. Use <code>sudo rm ~/teste.pcap</code>.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

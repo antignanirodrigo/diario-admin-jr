@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você viu por que a chave privada nunca se compartilha. Sem olhar: o que a chave PÚBLICA pode fazer com segurança, que a privada nunca deveria fazer?<br>
+    <b>2.</b> Hoje você vai acessar um servidor interno através de um bastion. Isso muda o cuidado que você teve ontem com a IdentityFile, ou o princípio continua o mesmo?
+  </div>
+  <div class="ans">
+    <b>1.</b> A pública pode (e deve) ser distribuída livremente — ela só serve pra verificar quem tem a privada correspondente, nunca pra autenticar sozinha.<br>
+    <b>2.</b> O princípio continua o mesmo — hoje a mesma chave privada do Dia 1 é referenciada no bloco <code>Host bastion</code>, e ela precisa estar corretamente configurada ali pra que o ProxyJump funcione em cadeia.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você organizou chaves SSH. Hoje o problema é escala:
 digitar sequências manuais de saltos (laptop → bastion → servidor interno) toda vez é lento e propenso a
@@ -188,9 +241,19 @@ Você ganha a diferença entre atalho que burla processo (perigoso) e atalho que
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Sempre erro a sequência: primeiro bastion, depois servidor interno." Topologia real:
-  laptop (fora da rede) → bastion host (192.168.10.10, único ponto exposto) → rede interna (10.20.0.0/16,
-  servidores sem acesso direto de fora). Digitar essa cadeia manualmente, toda vez, convida a erro.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6490</b></span>
+      <span><b>PRIORIDADE BAIXA</b></span>
+      <span>10:50</span>
+      <span>aberto por: você mesmo, incomodado com a repetição</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>laptop → bastion (192.168.10.10) → rede interna (10.20.0.0/16)</b> · serviço: acesso a servidores internos</div>
+      <div class="msg">"Sempre erro a sequência: primeiro bastion, depois servidor interno."</div>
+    </div>
+    <div class="ticket-foot">Digitar essa cadeia manualmente, toda vez, convida a erro. Existe um jeito de fazer isso com um único comando, sem burlar o processo de dois saltos?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -259,6 +322,12 @@ $ hostname -I
       <div class="lab-expect"><b>Resultado esperado:</b> ssh bastion funciona sem digitar o IP.</div>
       <div class="lab-why"><b>Por quê:</b> esse primeiro bloco é a base — todo o resto depende de referenciar corretamente esse alias.</div>
       <div class="lab-warn"><b>Cilada comum:</b> errar a indentação do arquivo — ~/.ssh/config é sensível a isso, cada diretiva precisa estar indentada sob seu Host.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>SSH ignora o arquivo de config ("Bad configuration option")</b> → confira a indentação — cada diretiva (HostName, User, IdentityFile) precisa estar indentada com espaço ou tab sob a linha <code>Host</code> correspondente; sem indentação, o SSH pode não associar a diretiva ao bloco certo.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: adicione o bloco Host para o servidor interno com ProxyJump.</div></div>
@@ -266,6 +335,13 @@ $ hostname -I
     HostName IP_INTERNO
     User adminjr
     ProxyJump bastion</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse bloco de configuração</summary>
+        <dl class="flag-list">
+          <dt>Host srv-interno</dt><dd>Define um alias — a partir de agora, <code>ssh srv-interno</code> usa toda a configuração abaixo, sem precisar digitar IP ou usuário.</dd>
+          <dt>HostName IP_INTERNO</dt><dd>O endereço real do servidor interno, que só é alcançável de dentro da rede — não diretamente do laptop.</dd>
+          <dt>ProxyJump bastion</dt><dd>Instrui o SSH a abrir primeiro uma conexão com o alias <code>bastion</code> (definido no bloco anterior), e usar ELA como túnel pra alcançar o <code>srv-interno</code> — os dois saltos acontecem automaticamente, num único comando.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> configuração salva sem erro de sintaxe.</div>
       <div class="lab-why"><b>Por quê:</b> ProxyJump referencia o alias "bastion" do bloco anterior — é essa ligação entre os dois blocos que cria a cadeia automática.</div>
       <div class="lab-warn"><b>Cilada comum:</b> apontar ProxyJump para um alias que não existe (erro de digitação) — o SSH vai reclamar de host desconhecido só na hora de conectar.</div>

@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 1, qual comando testava SÓ resolução de nome, e qual testava SÓ conectividade de porta, sem depender do DNS?<br>
+    <b>2.</b> Ontem você separou DNS de firewall com dois testes isolados. Hoje a mesma lógica de separação se aplica a outra dupla de camadas — qual?
+  </div>
+  <div class="ans">
+    <b>1.</b> dig (ou nslookup) testa só resolução de nome; nc -zv direto no IP testa só conectividade de porta, bypassando o DNS completamente.<br>
+    <b>2.</b> Hoje você separa processo (o binário está rodando?) de rede (ele está de fato escutando na porta certa?). São duas confirmações diferentes, exatamente como DNS e firewall eram ontem — parecem o mesmo sintoma de fora, mas exigem testes diferentes pra isolar a causa.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Consolidação — junta diagnóstico de processo (Fase 1) e diagnóstico de rede
 (Fase 2):</b> Você já sabe confirmar se um processo está rodando e se uma porta está acessível, cada um na
@@ -181,12 +234,19 @@ por impulso, sem antes saber se o problema é o processo, o bind da porta, ou o 
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2302: "A aplicação na porta 8080 não responde. Já reiniciei o serviço duas vezes
-  e continua igual." Reiniciar sem diagnosticar é o erro clássico — existem pelo menos três causas
-  completamente diferentes pra "porta não responde", e reiniciar só resolve UMA delas. É preciso confirmar,
-  em ordem: o processo está rodando? Ele está de fato
-  <span class="hint" data-tip="Ação de um processo associar-se a uma porta específica, passando a escutar conexões nela." onclick="openGlossary(0)">escutando</span>
-  naquela porta? E a rede permite alcançar essa porta de fora?</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2302</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>11:20</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-14</b> · serviço: aplicação na porta 8080</div>
+      <div class="msg">"A aplicação na porta 8080 não responde. Já reiniciei o serviço duas vezes e continua igual."</div>
+    </div>
+    <div class="ticket-foot">Reiniciar não resolveu nada. O que você confirma antes de tentar de novo?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -318,6 +378,40 @@ nc: connect to 10.10.10.50 port 8080 (tcp) failed: Connection refused
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie um cenário real de "processo rodando, porta errada" — sem isso os comandos de hoje não têm nada de anormal pra mostrar.</div></div>
+      <div class="lab-cmd">$ sudo tee /etc/systemd/system/app-teste.service >/dev/null <<'EOF'
+[Unit]
+Description=App de teste (porta errada de proposito)
+[Service]
+ExecStart=/usr/bin/ncat -l 8081
+[Install]
+WantedBy=multi-user.target
+EOF
+$ sudo systemctl daemon-reload
+$ sudo systemctl start app-teste.service
+$ systemctl status app-teste.service | grep Active
+$ ss -tulpn | grep 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ss</dt><dd>Substituto moderno do netstat — lista sockets de rede (conexões ativas e portas em escuta).</dd>
+          <dt>-t</dt><dd>Mostra sockets TCP.</dd>
+          <dt>-u</dt><dd>Mostra também sockets UDP.</dd>
+          <dt>-l</dt><dd>Mostra só sockets em modo listen (escutando por conexões), não conexões já estabelecidas.</dd>
+          <dt>-p</dt><dd>Mostra o processo (PID e nome) responsável por cada socket — normalmente exige sudo pra ver processos de outros usuários.</dd>
+          <dt>-n</dt><dd>Mostra portas e endereços em formato numérico, sem tentar resolver nomes — mais rápido e evita depender do DNS só pra ler o resultado.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> Active: active (running) no systemctl, mas ss -tulpn | grep 8080 não retorna nenhuma linha — o processo está de pé, só que escutando na porta ERRADA (8081, não 8080).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> só criando esse descompasso de propósito você reproduz o sintoma exato do chamado #2302 na sua própria VM, em vez de ler sobre ele.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — e anote o nome do arquivo de unit (<code>app-teste.service</code>), você vai removê-lo no teardown.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"ncat: command not found"</b> → instale com <code>sudo apt install ncat</code> (do pacote nmap-ncat) ou troque por <code>ExecStart=/usr/bin/nc -l -p 8081</code> se o seu netcat aceitar a flag -p.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, configure um serviço simples pra escutar numa porta errada de propósito, e confirme com systemctl status que ele aparece como rodando.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> active (running), mesmo com a porta errada.</div>
     </li>
@@ -334,7 +428,23 @@ nc: connect to 10.10.10.50 port 8080 (tcp) failed: Connection refused
       <div class="lab-text">Teste conectividade de outra VM com nc -zv, confirmando o fluxo completo funcionando.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida do ponto de vista externo também.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Pare e remova o serviço de teste — nada de unit de teste esquecida no systemd, chamada por engano às 3 da manhã meses depois.</div></div>
+      <div class="lab-cmd">$ sudo systemctl stop app-teste.service
+$ sudo systemctl disable app-teste.service
+$ sudo rm /etc/systemd/system/app-teste.service
+$ sudo systemctl daemon-reload
+$ systemctl status app-teste.service 2>&1 | head -3</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> "Unit app-teste.service could not be found" — o serviço de teste sumiu completamente do systemd.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> unit de teste esquecida continua aparecendo em systemctl list-units e pode confundir o próximo diagnóstico, fazendo alguém achar que existe um serviço real ali.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> apagar só o arquivo sem rodar <code>daemon-reload</code> depois — o systemd mantém a unit em memória e ela continua aparecendo, dando a falsa impressão de que a remoção não funcionou.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Ainda aparece em systemctl list-units --all</b> → rode <code>sudo systemctl daemon-reload</code> de novo e confirme com <code>systemctl list-units --all | grep app-teste</code>.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

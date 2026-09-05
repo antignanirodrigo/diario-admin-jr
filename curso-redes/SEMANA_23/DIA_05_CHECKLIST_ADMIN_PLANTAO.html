@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 4, o que a flag --partial evita que aconteça quando a rede cai no meio de uma transferência rsync?<br>
+    <b>2.</b> --partial sozinho não bastava — qual opção resolvia o problema de organização, mantendo o destino final sempre limpo? E por que isso liga com o hábito de hoje?
+  </div>
+  <div class="ans">
+    <b>1.</b> --partial evita que o rsync APAGUE o arquivo parcialmente transferido quando a conexão cai — sem ela, não sobra nada pra retomar depois.<br>
+    <b>2.</b> --partial-dir guarda os arquivos incompletos numa pasta separada, em vez de misturá-los com os arquivos completos no destino. A ligação com hoje: manter separado o que está incompleto/em andamento do que já está resolvido é a mesma disciplina por trás de documentar um chamado EM TEMPO REAL, e não só no relatório final.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> DNS+firewall (Dia 1), processo+rede (Dia 2),
 healthcheck bash (Dia 3), backup resiliente (Dia 4). Hoje tudo vira um checklist único — a referência que
@@ -182,10 +235,19 @@ a ordem certa de investigação pra qualquer incidente de rede — e o entendime
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2305: "Sou novo no plantão — o alarme disparou às 3h, e não sei nem por onde
-  começar." A resposta não é decorar todo comando do curso — é ter um
-  <span class="hint" data-tip="Sequência estruturada de verificações usada como ponto de partida padrão diante de qualquer incidente, reduzindo a chance de pular uma etapa importante sob pressão." onclick="openGlossary(0)">checklist de triagem</span>
-  confiável, que você segue mesmo sob pressão e sono, sem depender de lembrar tudo de cabeça.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2305</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>03:00</span>
+      <span>aberto por: alarme automático (monitoramento)</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>servidor de aplicação (a confirmar via triagem)</b> · serviço: aplicação X</div>
+      <div class="msg">"Sou novo no plantão — o alarme disparou às 3h, e não sei nem por onde começar."</div>
+    </div>
+    <div class="ticket-foot">O relógio marca 3h da manhã. Por onde você começa, sem decorar nada de cabeça?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -312,6 +374,23 @@ a ordem certa de investigação pra qualquer incidente de rede — e o entendime
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Reproduza o incidente exato do exemplo de hoje — processo zumbi preso numa porta — pra treinar o checklist completo do zero, não só ler sobre ele.</div></div>
+      <div class="lab-cmd">$ sudo nc -l -p 8080 &
+$ echo "processo zumbi simulado: PID $!"
+$ sudo systemctl restart app-x.service
+$ sudo systemctl status app-x.service | grep Active
+$ ss -tulpn | grep 8080</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> app-x.service aparece como active (running), mas ss -tulpn mostra a porta 8080 ocupada pelo PID do nc (o zumbi), não pelo processo novo — exatamente o sintoma do chamado #2305.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> seguir o checklist inteiro (processo → escuta → log → causa raiz) só faz sentido de verdade quando existe um sintoma real pra investigar, com uma causa raiz genuína escondida nele.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — anote o PID do processo zumbi simulado, você vai encerrá-lo explicitamente no teardown, já que o systemctl restart sozinho não resolve isso.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>ss -tulpn não mostra nada na porta 8080</b> → confirme que o <code>nc -l -p 8080 &amp;</code> realmente ficou rodando em segundo plano com <code>jobs -l</code>; alguns shells encerram processos em background ao fechar a sessão.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Simule um cenário de incidente numa VM de laboratório (ex.: processo antigo preso numa porta, como no exemplo da aula).</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> sintoma reproduzido — aplicação não responde na porta esperada.</div>
     </li>
@@ -328,7 +407,28 @@ a ordem certa de investigação pra qualquer incidente de rede — e o entendime
       <div class="lab-text">Escreva o relatório final seguindo o formato: causa raiz, ação tomada, validação.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório completo e claro, pronto pra ser lido por outra pessoa da equipe.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Encerre o processo zumbi e confirme que o app-x real assume a porta corretamente — a validação final do seu relatório de fechamento.</div></div>
+      <div class="lab-cmd">$ sudo kill -9 SEU_PID_ANOTADO
+$ sudo systemctl restart app-x.service
+$ ss -tulpn | grep 8080
+$ jobs</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>kill</dt><dd>Envia um sinal a um processo pelo PID — apesar do nome, nem todo sinal mata o processo; sem opção nenhuma, o padrão é SIGTERM, um pedido educado de encerramento.</dd>
+          <dt>-9</dt><dd>Sinal SIGKILL — força o encerramento imediato do processo, sem chance dele fazer limpeza própria. Use como último recurso, quando um kill comum (SIGTERM) não for suficiente.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> ss -tulpn agora mostra o PID do app-x.service (não mais o nc) escutando em 8080, e jobs vem vazio.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o chamado #2305 com evidência: causa raiz confirmada (processo zumbi), ação tomada (kill + restart), validação (porta assumida pelo processo certo) — o mesmo formato de relatório da seção 6 de hoje.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de matar o processo zumbi antes de reiniciar o serviço real — o systemctl restart sozinho não libera uma porta ocupada por outro processo que não seja o dele.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"kill: (PID): No such process"</b> → o processo já não existe mais (pode ter caído sozinho). Rode <code>ss -tulpn | grep 8080</code> de novo pra confirmar quem está segurando a porta agora, antes de tentar matar de novo.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

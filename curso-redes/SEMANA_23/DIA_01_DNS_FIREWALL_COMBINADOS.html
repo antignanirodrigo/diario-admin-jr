@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Semana 22 e mais atrás)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 22, Dia 5, você corrigiu permissão de arquivos em massa com find + chmod. Sem olhar: por que rodar um comando genérico (chmod -R) em tudo de uma vez era perigoso ali?<br>
+    <b>2.</b> Da Semana 14 (DNS) e da Semana 15 (firewall), cada uma tinha um jeito de testar SÓ a própria camada, isolada das outras. Hoje as duas se juntam num único chamado — o que muda?
+  </div>
+  <div class="ans">
+    <b>1.</b> Pastas precisam do bit de execução pra serem navegáveis; arquivos comuns não. Aplicar a mesma permissão (664) em tudo de uma vez removeria a execução das pastas, quebrando a navegação de toda a árvore — separar por tipo era obrigatório.<br>
+    <b>2.</b> Antes, DNS e firewall eram estudados isolados, cada semana testando só a própria camada. Hoje o chamado não diz qual dos dois é a causa — seu trabalho é aplicar os dois testes isolados, um de cada vez, pra descobrir qual camada realmente falhou, sem misturar os sintomas.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Consolidação — junta Semana 14 (DNS) e Semana 15 (firewall):</b> Você já sabe
 diagnosticar DNS isolado e firewall isolado, cada um na sua semana. Hoje o chamado não diz qual dos dois é —
@@ -180,11 +233,19 @@ abre) exigem dois testes completamente diferentes pra diagnosticar.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2301: "A aplicação não consegue conectar em db-externo.empresa.com. Preciso
-  saber AGORA se é problema de DNS ou de firewall, porque são times diferentes que vão resolver." Os dois
-  sintomas — "não resolve o nome" e "resolve mas não conecta" — parecem idênticos pra quem só vê "erro de
-  conexão" na aplicação. A diferença só aparece testando as duas camadas
-  <span class="hint" data-tip="Técnica de testar cada camada separadamente antes de concluir onde está o problema, evitando confundir sintomas de causas diferentes." onclick="openGlossary(0)">isoladamente</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2301</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:15</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-11</b> · serviço: conexão com banco externo (db-externo.empresa.com)</div>
+      <div class="msg">"A aplicação não consegue conectar em db-externo.empresa.com. Preciso saber AGORA se é problema de DNS ou de firewall, porque são times diferentes que vão resolver."</div>
+    </div>
+    <div class="ticket-foot">Dois times esperam a resposta. Qual dos dois você aciona — com evidência, não achismo?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -314,6 +375,30 @@ Encaminhar pro time de rede/firewall, não pro time de DNS.</pre>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Confirme o estado saudável de DNS e conectividade ANTES de simular qualquer bloqueio — essa é a sua baseline pra provar depois exatamente o que mudou.</div></div>
+      <div class="lab-cmd">$ dig +short db-externo.empresa.com
+10.50.0.20
+$ nc -zv 10.50.0.20 5432
+Connection to 10.50.0.20 5432 port [tcp/*] succeeded!</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dig</dt><dd>Ferramenta de consulta DNS — pergunta a um servidor de nomes qual IP corresponde a um nome, sem tentar se conectar em porta nenhuma depois.</dd>
+          <dt>+short</dt><dd>Formato de saída resumido: retorna só o IP encontrado, sem o restante do cabeçalho técnico da resposta DNS — ótimo pra usar dentro de scripts.</dd>
+          <dt>db-externo.empresa.com</dt><dd>O nome que está sendo resolvido — o alvo da pergunta feita ao servidor DNS.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o IP retornado pelo dig e "succeeded" no nc — os dois testes passam antes de você simular qualquer bloqueio de firewall.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> sem essa baseline, você não teria como provar depois que o bloqueio (e não outra coisa) foi a causa real da falha simulada no próximo passo.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM/ambiente de laboratório — nunca rode nft em produção sem confirmar a regra exata antes. Anote o IP e a porta usados aqui, você vai reutilizá-los nos próximos passos.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"nc: command not found"</b> → instale com <code>sudo apt install netcat-openbsd</code> (Debian/Ubuntu) ou use <code>telnet 10.50.0.20 5432</code> como alternativa pro mesmo teste.<br>
+          <b>dig retorna vazio, sem IP nenhum</b> → confirme que o nome existe no seu ambiente de teste — mapeie um nome fictício a um IP de teste em <code>/etc/hosts</code> se você não tiver um servidor DNS real configurado na VM.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, rode dig contra um nome que resolve corretamente, e confirme o IP retornado.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> IP válido retornado sem erro.</div>
     </li>
@@ -330,7 +415,29 @@ Encaminhar pro time de rede/firewall, não pro time de DNS.</pre>
       <div class="lab-text">Documente os dois testes separadamente (DNS e conectividade), como se fosse fechar o chamado #2301.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório claro apontando qual camada era a causa real.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova a regra de bloqueio que você criou e prove que os dois testes voltam a passar exatamente como na baseline do início.</div></div>
+      <div class="lab-cmd">$ sudo nft -a list ruleset | grep 5432
+$ sudo nft delete rule inet filter output handle SEU_HANDLE_ANOTADO
+$ nc -zv 10.50.0.20 5432
+Connection to 10.50.0.20 5432 port [tcp/*] succeeded!</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft delete rule</dt><dd>Remove uma regra específica do firewall nftables, identificada pelo seu handle (número único de identificação).</dd>
+          <dt>inet filter output</dt><dd>Localiza a regra: família de endereço inet (IPv4+IPv6), na tabela filter, chain output (tráfego saindo desta máquina).</dd>
+          <dt>handle</dt><dd>Número de identificação único de cada regra — nft não permite remover uma regra só pelo texto dela, é preciso o handle exato, visto com <code>nft -a list ruleset</code>.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nc volta a confirmar sucesso na mesma porta que você bloqueou — igual à baseline medida no primeiro passo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo criar cenário → diagnosticar → desfazer: a regra de firewall de teste não fica esquecida na sua VM confundindo o próximo laboratório.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o handle da regra ou a chain certa. Rode <code>sudo nft -a list ruleset</code> antes de tentar apagar — o <code>-a</code> mostra os handles, que é o que o delete exige.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Error: Could not process rule: No such file or directory"</b> → o handle informado não existe mais ou está errado. Rode <code>sudo nft -a list ruleset</code> de novo e copie o número exato do handle atual antes de tentar apagar.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

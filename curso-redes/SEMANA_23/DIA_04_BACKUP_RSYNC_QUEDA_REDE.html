@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 3, por que encadear os quatro testes do healthcheck com && era considerado um erro de estrutura do script?<br>
+    <b>2.</b> O princípio de "não perder o que já foi feito quando algo falha no meio" apareceu ontem no script. Hoje ele reaparece num contexto diferente — qual?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque o script pararia no primeiro teste que falhasse, nunca rodando os outros três — escondendo problemas que poderiam existir simultaneamente. Cada teste precisa rodar e reportar, independente dos demais.<br>
+    <b>2.</b> No rsync: sem --partial, uma queda de rede no meio de uma transferência grande apaga o progresso já feito, obrigando a recomeçar do zero — o mesmo problema de "perder trabalho parcial", agora numa transferência de arquivo em vez de num script de checagens.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Consolidação — junta rsync (Fase 1) e a realidade de rede instável (Fase 2):</b>
 Você já sabe usar rsync pra backup. Hoje você aprende o que acontece quando a rede cai NO MEIO da
@@ -181,11 +234,19 @@ retomar de onde parou.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2304: "O backup noturno de um arquivo de 40GB caiu no meio, a rede oscilou. Rodei
-  rsync de novo hoje de manhã e ele começou a transferir os 40GB inteiros outra vez, do zero." Isso aconteceu
-  porque, por padrão, o rsync APAGA o arquivo parcialmente transferido quando a conexão cai — sem
-  <span class="hint" data-tip="Opção do rsync que mantém o arquivo parcialmente transferido em vez de apagá-lo, permitindo retomar de onde parou na próxima execução." onclick="openGlossary(0)">--partial</span>,
-  não sobra nada pra continuar de onde parou.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2304</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>07:40</span>
+      <span>aberto por: equipe de backup</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-backup-03</b> · serviço: backup rsync de imagem de disco (40GB)</div>
+      <div class="msg">"O backup noturno de um arquivo de 40GB caiu no meio, a rede oscilou. Rodei rsync de novo hoje de manhã e ele começou a transferir os 40GB inteiros outra vez, do zero."</div>
+    </div>
+    <div class="ticket-foot">Perder a transferência inteira de novo não é opção. O que muda no comando?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -317,6 +378,30 @@ backup_40gb.img
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie o arquivo grande de teste e inicie a transferência com as flags corretas — sem um arquivo de verdade em trânsito, não dá pra derrubar rede no meio de nada.</div></div>
+      <div class="lab-cmd">$ dd if=/dev/zero of=~/backup-teste.img bs=1M count=2000
+$ rsync -avz --progress --partial --partial-dir=.rsync-partial ~/backup-teste.img usuario@srv-backup-03:/destino/</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>-a</dt><dd>Modo arquivo (archive) — preserva permissões, donos e timestamps, e já implica recursividade dentro de diretórios.</dd>
+          <dt>-v</dt><dd>Verbose — mostra detalhes do que está sendo transferido.</dd>
+          <dt>-z</dt><dd>Compacta os dados durante a transferência, reduzindo o tráfego de rede — útil em links mais lentos.</dd>
+          <dt>--progress</dt><dd>Mostra o progresso em tempo real de cada arquivo (percentual, velocidade, tempo estimado).</dd>
+          <dt>--partial</dt><dd>Mantém o arquivo parcialmente transferido em vez de apagá-lo se a conexão cair no meio do caminho.</dd>
+          <dt>--partial-dir=.rsync-partial</dt><dd>Guarda os arquivos parciais numa pasta separada e oculta, em vez de misturá-los com os arquivos já completos no destino final.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> arquivo de ~2GB criado, e a transferência começando a mostrar progresso em tempo real (percentual, velocidade, tempo estimado).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> 2GB já é grande o suficiente pra você ter alguns segundos de janela pra derrubar a rede no meio, sem precisar esperar os 40GB reais do chamado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM/ambiente de laboratório — e confira com <code>df -h</code> antes que sua VM realmente tem espaço livre suficiente pra criar o arquivo de teste.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"dd: error writing ... No space left on device"</b> → reduza pra <code>count=500</code> (500MB) — o objetivo é ter um arquivo grande o suficiente pra demorar alguns segundos, não replicar os 40GB reais do chamado.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, crie um arquivo grande de teste (ex.: dd de alguns GB) e inicie uma transferência rsync com --partial --partial-dir pra outra VM.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> transferência iniciando normalmente.</div>
     </li>
@@ -333,7 +418,21 @@ backup_40gb.img
       <div class="lab-text">Restaure a rede e rode o mesmo comando de novo, confirmando que a transferência retoma em vez de recomeçar do zero.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> tempo de conclusão bem menor que uma transferência completa do zero.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Apague o arquivo de teste e a pasta de parciais dos dois lados — 2GB de arquivo de teste esquecido é exatamente o tipo de sobra silenciosa que confunde o próximo diagnóstico de disco cheio.</div></div>
+      <div class="lab-cmd">$ rm ~/backup-teste.img
+$ ssh usuario@srv-backup-03 'rm -rf /destino/backup-teste.img /destino/.rsync-partial'
+$ ssh usuario@srv-backup-03 'ls /destino/'</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nem backup-teste.img nem a pasta .rsync-partial aparecem mais listados no destino — a pasta voltou a ter só os arquivos que já existiam antes da aula.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo criar → derrubar rede → confirmar retomada → limpar. O mesmo disco que você aprendeu a diagnosticar em semanas anteriores não deveria acumular lixo de laboratório.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de limpar o lado REMOTO (servidor de destino) — é fácil lembrar de apagar só o arquivo local e deixar a cópia de 2GB esquecida no destino.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"rm: cannot remove '.rsync-partial': No such file or directory"</b> → normal se a transferência já tinha completado antes de você conseguir derrubar a rede — nesse caso não sobrou parcial nenhum pra limpar, só o arquivo final mesmo.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

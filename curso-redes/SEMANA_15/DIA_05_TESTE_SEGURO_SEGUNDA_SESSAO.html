@@ -155,6 +155,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -165,6 +206,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem a ordem errada entre duas regras mascarava uma restrição de SSH. Sem olhar: por que testar só da origem autorizada não seria suficiente pra confirmar a correção?<br>
+    <b>2.</b> Hoje o risco volta a ser o do Dia 1: se trancar fora durante uma mudança de firewall. O que muda na proteção de hoje comparado com o Dia 1?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque provaria só metade da história — o objetivo da regra restritiva é BLOQUEAR quem não deveria entrar; sem testar uma origem não autorizada, você não confirma que o bloqueio realmente funciona.<br>
+    <b>2.</b> Hoje a proteção fica explícita como protocolo formal: uma SEGUNDA sessão SSH, aberta ANTES da mudança, funcionando como rede de segurança — não só uma regra bem ordenada, mas um plano B ativo se algo sair errado.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> Você já sabe ordenar regras, diagnosticar
 serviço vs firewall, e fazer backup/rollback. Hoje fecha com o protocolo mais importante de todos: nunca
@@ -191,9 +244,19 @@ regra, testar autorizado, testar não autorizado, e só então fechar a sessão 
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Vou limitar SSH ao IP de gestão. Se eu errar, posso perder o acesso." Reconhecimento
-  honesto do risco — a "change window" de 15 minutos está no relógio. A resposta certa não é evitar a mudança,
-  é ter uma segunda sessão SSH ativa (standby) como rede de segurança antes do primeiro comando.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6420</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>13:45</span>
+      <span>aberto por: você mesmo, antes da change window</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-09</b> · serviço: SSH restrito a IP de gestão</div>
+      <div class="msg">"Vou limitar SSH ao IP de gestão. Se eu errar, posso perder o acesso."</div>
+    </div>
+    <div class="ticket-foot">Reconhecimento honesto do risco. A change window de 15 minutos está no relógio. Qual é a rede de segurança antes do primeiro comando?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -264,6 +327,12 @@ Connection timed out</pre>
       <div class="lab-text">Ação: abra duas sessões SSH separadas para o mesmo servidor.</div></div>
       <div class="lab-cmd">$ ssh admin@IP_DA_VM   # sessão A (janela 1)
 $ ssh admin@IP_DA_VM   # sessão B (janela 2)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse passo</summary>
+        <dl class="flag-list">
+          <dt>sessão A</dt><dd>Onde a mudança de firewall será aplicada — é ela que corre o risco.</dd>
+          <dt>sessão B</dt><dd>A rede de segurança: aberta ANTES da mudança, fica de reserva. Como já está com uma conexão ESTABLISHED, ela sobrevive mesmo que a regra nova bloqueie NOVAS tentativas de conexão.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> duas sessões ativas simultaneamente, confirmadas com whoami em cada uma.</div>
       <div class="lab-why"><b>Por quê:</b> a sessão B só funciona como rede de segurança se estiver aberta ANTES da mudança arriscada, nunca depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> abrir só uma sessão "pra economizar tempo" — é exatamente essa pressa que causa o lockout que o protocolo evita.</div>
@@ -274,6 +343,12 @@ $ ssh admin@IP_DA_VM   # sessão B (janela 2)</div>
       <div class="lab-expect"><b>Resultado esperado:</b> IP de origem correto identificado e anotado.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar o IP na hora evita restringir SSH pro IP errado — um erro de digitação aqui é o mesmo lockout, só com outra causa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar um IP "de memória" em vez de confirmar com o comando — VPNs e redes com NAT podem mudar o IP de origem visto pelo servidor.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>A variável vem vazia</b> → <code>$SSH_CONNECTION</code> só existe em sessões abertas via SSH — se você estiver testando local (console/VM), ela realmente não existirá; use <code>who -m</code> ou verifique os logs de conexão do <code>sshd</code> em outra sessão SSH ativa.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: aplique a regra na sessão A, mantendo a B intocada.</div></div>

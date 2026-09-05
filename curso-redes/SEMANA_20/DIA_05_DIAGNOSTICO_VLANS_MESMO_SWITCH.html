@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você validou isolamento com dois testes. Sem olhar: qual era o teste de CONTROLE, e por que ele vinha antes do teste de isolamento?<br>
+    <b>2.</b> Ontem a validação deu certo — o isolamento estava funcionando. Hoje o mesmo tipo de teste acusa uma falha real: uma VLAN alcançando outra que não deveria. Quais são os dois pontos de configuração mais prováveis de causar exatamente esse tipo de vazamento?
+  </div>
+  <div class="ans">
+    <b>1.</b> O teste de controle era pingar DENTRO da mesma VLAN, confirmando que a rede funcionava normalmente antes de interpretar o resultado do teste entre VLANs. Ele vinha antes pra eliminar a ambiguidade: sem ele, um ping falhando entre VLANs podia ser tanto isolamento certo quanto rede simplesmente quebrada.<br>
+    <b>2.</b> Uma porta access configurada na VLAN errada, ou um trunk permitindo mais VLANs do que deveria — revelados por <code>show vlan brief</code> e <code>show interfaces trunk</code>, respectivamente. É exatamente por aí que a investigação de hoje começa.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 4 (validação de isolamento):</b> Você já sabe validar isolamento
 com teste de controle. Hoje o cenário inverte: a validação FALHOU — a VLAN de visitantes consegue alcançar o
@@ -183,11 +236,19 @@ bloqueado.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2005: "A validação do Dia 4 deu certo mês passado. Hoje, do nada, alguém da rede
-  de visitantes conseguiu acessar o servidor financeiro." Nada muda sozinho numa rede — alguma configuração foi
-  alterada nesse meio tempo. A investigação começa revisando exatamente as duas coisas que aprendemos essa
-  semana: a VLAN de cada porta access, e as VLANs permitidas em cada
-  <span class="hint" data-tip="Link entre switches configurado pra carregar múltiplas VLANs simultaneamente, usando tagging 802.1Q." onclick="openGlossary(1)">trunk</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2005</b></span>
+      <span><b>PRIORIDADE CRÍTICA</b></span>
+      <span>10:12</span>
+      <span>aberto por: segurança da informação</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VLAN 50 (visitantes) → VLAN 10 (financeiro)</b> · serviço: isolamento entre VLANs (vazamento confirmado)</div>
+      <div class="msg">"A validação do Dia 4 deu certo mês passado. Hoje, do nada, alguém da rede de visitantes conseguiu acessar o servidor financeiro."</div>
+    </div>
+    <div class="ticket-foot">Nada muda sozinho numa rede. Por onde você começa a investigar?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 

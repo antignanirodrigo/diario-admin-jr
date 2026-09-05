@@ -155,6 +155,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -172,6 +213,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
   sistema Linux sozinho. Agora o mesmo método (evidência antes de correção) se aplica a um domínio novo: a
   rede que conecta esse sistema a tudo mais.</p>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Missão Final da Fase 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Missão Final do Linux, o chamado te lembrava: 12 semanas te ensinaram a resistir ao reflexo de reiniciar de novo. Sem olhar: qual era o hábito que substituía esse reflexo?<br>
+    <b>2.</b> Esse hábito de observar antes de agir vale só pra Linux, ou serve pra qualquer camada de um sistema — inclusive rede?
+  </div>
+  <div class="ans">
+    <b>1.</b> Diagnosticar com evidência antes de agir — ler logs, confirmar estado real, só então corrigir. O Linux inteiro foi construído nesse hábito, do Dia 1 (gravar a sessão antes de mexer) até o incidente final.<br>
+    <b>2.</b> Serve pra qualquer camada. Hoje esse mesmo hábito ganha um novo mapa: em vez de perguntar "o que está errado no servidor", você vai perguntar "em qual das cinco camadas de rede o problema está" — e confirmar cada uma com evidência, camada por camada, antes de reiniciar qualquer coisa.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Fase 1 inteira:</b> "Antes de alterar, observe" foi o lema dos
 últimos três meses. Hoje você aprende ONDE observar numa rede — o modelo TCP/IP não é teoria decorada, é o
@@ -198,9 +251,19 @@ já aprendeu a evitar.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket #5842: "Site indisponível. O site não está carregando para os usuários. Impacto:
-  Alto." O reflexo de "reiniciar tudo" ignora uma pergunta essencial: em qual das cinco camadas da rede o
-  problema realmente está? Sem esse mapa, você reinicia o serviço no escuro.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5842</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:12</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: site institucional</div>
+      <div class="msg">"Site indisponível. O site não está carregando para os usuários. Impacto: Alto."</div>
+    </div>
+    <div class="ticket-foot">O reflexo de "reiniciar tudo" ignora uma pergunta essencial. Em qual das cinco camadas da rede o problema realmente está?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -253,22 +316,66 @@ LISTEN   0        128        0.0.0.0:22</pre>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Derrube de propósito o serviço web da VM antes de começar o diagnóstico — sem um sintoma real, andar pelas quatro camadas vira leitura, não investigação.</div></div>
+      <div class="lab-cmd">$ sudo python3 -m http.server 80 &amp;
+$ echo "PID do servidor de teste: $!"
+$ sudo kill $!          # derruba de propósito — reproduz o "site indisponível" do chamado</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o servidor de teste sobe, você anota o PID, e o <code>kill</code> derruba ele de propósito. A partir daqui, a porta 80 não responde mais — exatamente o sintoma do chamado #5842.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir o "site fora do ar" na sua própria VM é o que transforma o passeio pelas quatro camadas em diagnóstico de verdade: você vai encontrar a camada de aplicação quebrada com as próprias mãos, não só ler sobre isso.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> fazer isso numa VM de produção ou numa máquina compartilhada. <b>Só em VM descartável</b> — e anote o PID, ele não serve mais depois que você mata o processo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"python3: command not found"</b> → use <code>python -m SimpleHTTPServer 80</code> (Python 2) ou instale com <code>sudo apt install python3</code>.<br>
+          <b>"Permission denied" ao subir na porta 80</b> → portas abaixo de 1024 exigem root — confirme que rodou com <code>sudo</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme a camada de enlace na VM de laboratório.</div></div>
       <div class="lab-cmd">$ ip -br link</div>
       <div class="lab-expect"><b>Resultado esperado:</b> interface listada como UP, com endereço MAC visível.</div>
       <div class="lab-why"><b>Por quê:</b> se a interface não estiver UP, nenhuma camada acima dela pode funcionar — é sempre o primeiro ponto a confirmar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir interface "UP" (administrativamente ligada) com "conectada" — cabo desconectado ainda pode mostrar UP dependendo do driver.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>A interface aparece como <code>DOWN</code></b> → em VM, isso costuma ser a interface errada. Rode <code>ip -br link</code> sem filtro e confirme qual delas tem endereço MAC — normalmente <code>ens160</code>, <code>eth0</code> ou <code>enp0s3</code>, dependendo do hypervisor.<br>
+          <b>Nenhuma interface aparece além de <code>lo</code></b> → a VM pode não ter uma NIC configurada no hypervisor — confirme nas configurações da VM antes de suspeitar do Linux.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme a camada de rede na mesma interface.</div></div>
       <div class="lab-cmd">$ ip -br addr show ens160</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip addr show</dt><dd>Mostra os endereços IP configurados nas interfaces de rede — a camada de rede (camada 3) do modelo TCP/IP.</dd>
+          <dt>-br</dt><dd>Modo <i>brief</i>: uma linha por interface, resumida, em vez da saída longa padrão — mais fácil de ler rapidamente num diagnóstico.</dd>
+          <dt>ens160</dt><dd>Nome da interface a consultar. Sem esse argumento, o comando lista todas as interfaces da máquina.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> endereço IP e prefixo (ex: 192.168.10.25/24) visíveis.</div>
       <div class="lab-why"><b>Por quê:</b> sem IP configurado, roteamento e portas não têm como funcionar, mesmo com enlace saudável.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que um IP presente está necessariamente correto — confira também a máscara/prefixo, não só a existência do endereço.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Device \"ens160\" does not exist"</b> → o nome da interface varia por distro e hypervisor. Rode <code>ip -br link</code> primeiro pra descobrir o nome real (comum: <code>eth0</code>, <code>enp0s3</code>, <code>ens18</code>) e substitua no comando.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme a camada de transporte listando portas escutando.</div></div>
       <div class="lab-cmd">$ ss -tln</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ss</dt><dd>Substituto moderno do antigo <code>netstat</code> — lista sockets (conexões e portas) diretamente do kernel.</dd>
+          <dt>-t</dt><dd>Mostra apenas sockets TCP — filtra fora UDP e outros tipos, focando na camada de transporte.</dd>
+          <dt>-l</dt><dd>Mostra apenas sockets em estado <i>listening</i> (escutando) — serviços prontos pra aceitar conexão, não conexões já estabelecidas.</dd>
+          <dt>-n</dt><dd>Mostra endereços e portas como números, sem tentar resolver nomes — evita atraso de DNS e mostra o dado bruto.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista de portas, incluindo ao menos a 22 (SSH), se estiver ativa.</div>
       <div class="lab-why"><b>Por quê:</b> uma porta ausente na lista, com as camadas de baixo saudáveis, aponta direto pra causa na aplicação — sem precisar adivinhar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> testar só com <code>ping</code>, que só valida a camada de rede — nunca confirma se a porta da aplicação está escutando.</div>
@@ -291,7 +398,20 @@ LISTEN   0        128        0.0.0.0:22</pre>
       <div class="lab-why"><b>Por quê:</b> documentar por camada é o que transforma "reiniciei e funcionou" em "sei exatamente o que estava errado e por quê".</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular a documentação achando que "já resolveu, não precisa mais" — é exatamente esse hábito que faz o mesmo problema voltar sem ninguém reconhecer o padrão.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Suba o serviço de novo e confirme que as quatro camadas voltaram a responder — sem isso, a VM fica com a porta 80 morta pra sempre.</div></div>
+      <div class="lab-cmd">$ sudo python3 -m http.server 80 &amp;
+$ ss -tln | grep :80</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a porta 80 volta a aparecer em LISTEN — o mesmo diagnóstico de hoje, agora confirmando a recuperação em vez do incidente.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fechar o ciclo criar-sintoma → diagnosticar → restaurar é o que garante que a VM sai da aula exatamente como entrou, sem processo órfão escutando ou porta presa.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer o servidor de teste rodando em segundo plano depois da aula — ele fica ocupando a porta 80 e confunde o próximo laboratório que você fizer nessa mesma VM.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>A porta 80 continua sem resposta mesmo depois do restart</b> → confirme que não sobrou outro processo preso nela com <code>sudo ss -tlnp | grep :80</code>; mate qualquer PID residual antes de subir de novo.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem um AllowedIPs largo demais (0.0.0.0/0) roteava todo o tráfego pelo túnel sem querer. Sem olhar: qual seria o AllowedIPs correto pra rotear só o tráfego destinado ao peer servidor?<br>
+    <b>2.</b> Hoje o handshake do WireGuard está OK, mas o tráfego pra uma rede interna não passa. Isso te lembra a separação que você já viu na Semana 16, entre "autenticação" e "acesso de fato"?
+  </div>
+  <div class="ans">
+    <b>1.</b> Algo restrito, como <code>10.99.0.1/32</code> — só o IP específico do peer do outro lado, não a internet inteira.<br>
+    <b>2.</b> Sim — é a mesma separação do diagnóstico em camadas: o handshake prova que os dois peers se AUTENTICAM (plano de controle), mas isso não garante que o tráfego tem uma ROTA completa até o destino final (plano de dados) — duas checagens independentes, igual NAT e firewall na Semana 17.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 4 (AllowedIPs é rota e filtro):</b> Você já viu um pacote ser
 rejeitado por IP de origem fora do AllowedIPs, mesmo com chave certa. Hoje o cenário evolui: o handshake está
@@ -182,12 +235,19 @@ dois lados se autenticaram — não prova que existe uma rota completa levando o
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #1805: "wg show mostra latest handshake de 4 segundos atrás nos dois lados. Ping
-  pro IP do túnel funciona (10.99.0.1 até 10.99.0.2). Mas ping pra 10.10.10.50, um servidor dentro da rede
-  interna do Site A, simplesmente não responde." O
-  <span class="hint" data-tip="Camada responsável pelo handshake e pela troca de chaves — decide SE dois peers se reconhecem." onclick="openGlossary(0)">plano de controle</span>
-  está perfeito. O problema está em outro lugar: no
-  <span class="hint" data-tip="Camada responsável pelo tráfego real depois do handshake — decide O QUE circula e POR ONDE, depois da porta de entrada." onclick="openGlossary(1)">plano de dados</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#1805</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>16:00</span>
+      <span>aberto por: técnico de campo</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>túnel WireGuard Site A ↔ Site B, rede interna 10.10.10.0/24</b> · serviço: acesso à rede interna via VPN</div>
+      <div class="msg">"wg show mostra latest handshake de 4 segundos atrás nos dois lados. Ping pro IP do túnel funciona. Mas ping pra um servidor dentro da rede interna do Site A simplesmente não responde."</div>
+    </div>
+    <div class="ticket-foot">O plano de controle está perfeito. O problema está em outro lugar — no plano de dados. O que ainda falta configurar pro tráfego realmente atravessar?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 

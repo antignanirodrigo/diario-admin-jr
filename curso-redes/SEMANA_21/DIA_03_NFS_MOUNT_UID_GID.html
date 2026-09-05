@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dias 1 e 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2, numa linha como <code>/dados/uploads 10.10.10.21(rw,sync)</code>, quais são as duas decisões de segurança separadas sendo tomadas ali?<br>
+    <b>2.</b> No Dia 1, por que ter root no cliente NÃO significa automaticamente ter privilégios de root sobre os arquivos do export NFS?
+  </div>
+  <div class="ans">
+    <b>1.</b> Quem pode montar — a rede/IP entre parênteses — e o que pode fazer depois de montado — rw ou ro. Decisões independentes, escritas na mesma linha.<br>
+    <b>2.</b> Por causa do <b>root squash</b>: por padrão, o NFS trata o root de um cliente como um usuário sem privilégio (geralmente <code>nobody</code>) no servidor. Hoje você vê outro motivo pelo qual identidade entre cliente e servidor exige cuidado: os UIDs numéricos precisam bater, senão o dono do arquivo aparece errado.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 (exports e permissões):</b> Você já sabe controlar quem monta e
 com que permissão. Hoje você descobre que "permissão" no NFS ainda depende de um detalhe invisível: o NFS não
@@ -181,11 +234,19 @@ Você ganha o motivo real por trás de um sintoma clássico — "criei o arquivo
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2103: "Criei um arquivo como o usuário 'joao' no cliente, mas quando olho o
-  mesmo arquivo no servidor, o dono aparece como 'maria' — que nem existe no meu cliente!" Isso não é bug, é
-  consequência direta de como o NFS trata identidade: ele nunca envia o NOME "joao" pela rede, só o
-  <span class="hint" data-tip="Número inteiro que identifica um usuário no sistema Linux, usado internamente pelo kernel em vez do nome de login." onclick="openGlossary(0)">UID</span>
-  numérico associado a ele — e se esse número for diferente entre as duas máquinas, o nome mostrado muda.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2103</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>10:05</span>
+      <span>aberto por: joao (time de aplicação)</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-files-04 / cliente-dev-07</b> · serviço: diretório compartilhado via NFS</div>
+      <div class="msg">"Criei um arquivo como o usuário joao no cliente, mas quando olho o mesmo arquivo no servidor, o dono aparece como maria — que nem existe no meu cliente!"</div>
+    </div>
+    <div class="ticket-foot">Isso não é bug. O que você confirma primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -317,6 +378,31 @@ $ usermod -u 2001 joao   # ajustando pra não colidir com maria (1001) no servid
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de usuários, discos e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Sem duas VMs disponíveis, reproduza o EFEITO do descompasso de UID diretamente: atribua a um arquivo um UID que não existe como usuário local — é exatamente o que um servidor real veria vindo de um cliente com identidade diferente.</div></div>
+      <div class="lab-cmd">sudo mkdir -p /dados/uploads
+sudo touch /dados/uploads/arquivo.txt
+sudo chown 9999:9999 /dados/uploads/arquivo.txt
+ls -l /dados/uploads/arquivo.txt
+ls -n /dados/uploads/arquivo.txt</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>chown</dt><dd>Altera o dono e grupo de um arquivo ou diretório.</dd>
+          <dt>9999:9999</dt><dd>Aqui usado como NÚMERO puro (UID:GID), não nome de usuário — de propósito, pra simular um UID que não existe localmente, do jeito que o NFS realmente transmite identidade pela rede.</dd>
+          <dt>/dados/uploads/arquivo.txt</dt><dd>O arquivo de teste usado para observar como esse UID aparece do lado do cliente NFS.</dd>
+          <dt>ls -n</dt><dd>No mesmo passo, mostra o UID/GID em número puro (sem resolver pra nome) — é assim que você confirma exatamente o que o NFS está transmitindo de verdade.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>ls -l</code> mostra o dono como um número puro (9999), sem nome — porque não existe usuário local com esse UID. <code>ls -n</code> mostra o mesmo número, e é o comando certo pra esse tipo de investigação, porque nunca tenta traduzir.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir com duas VMs de verdade é o ideal se você tiver — mas o efeito central (UID sem nome correspondente) é o mesmo que aconteceria com um cliente NFS real usando uma identidade que o servidor não conhece. Isso te dá o sintoma sem exigir infraestrutura extra.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> 9999 aqui é só um número de exemplo sem usuário correspondente, de propósito — se sua VM por acaso já tiver um UID 9999 cadastrado, troque por um número mais alto e incomum, tipo 59999.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>ls -n mostra outro número que não 9999</b> → confira se o chown realmente aplicou: rode <code>stat -c '%u:%g' /dados/uploads/arquivo.txt</code> pra confirmar o UID/GID gravado no arquivo.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Confirme o UID de um usuário de teste em duas VMs de laboratório com id.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> UIDs diferentes entre as duas VMs (cenário proposital de descompasso).</div>
     </li>
@@ -333,7 +419,15 @@ $ usermod -u 2001 joao   # ajustando pra não colidir com maria (1001) no servid
       <div class="lab-text">Crie um novo arquivo e confirme que o dono agora aparece correto nas duas máquinas.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> mesmo nome de usuário exibido corretamente nos dois lados.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Apague o arquivo e o diretório de teste, devolvendo a VM ao estado anterior.</div></div>
+      <div class="lab-cmd">sudo rm -rf /dados/uploads
+ls /dados/uploads 2>/dev/null || echo "diretorio de teste removido"</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "diretorio de teste removido" confirma que nada ficou pra trás.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> mesmo um teste simples de chown pode deixar um arquivo com dono "órfão" (UID sem nome) esquecido na VM — o tipo de coisa que confunde uma auditoria de disco meses depois.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> se você também criou usuários reais de teste numa segunda VM pra reproduzir o cenário completo, lembre de rodar <code>userdel -r</code> neles lá também — este teardown cobre só esta VM.</div>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

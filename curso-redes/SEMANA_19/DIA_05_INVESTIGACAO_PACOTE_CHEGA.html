@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 4, qual flag grava a captura num arquivo, e qual flag reabre esse arquivo depois?<br>
+    <b>2.</b> Hoje você vai capturar em DOIS pontos ao mesmo tempo e comparar depois. Por que salvar cada captura em arquivo (Dia 4), em vez de só olhar ao vivo nos dois terminais, ajuda especificamente nessa comparação?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>-w</code> grava; <code>-r</code> reabre.<br>
+    <b>2.</b> Porque comparar dois terminais ao vivo, lado a lado, é visualmente difícil — você pode perder o momento exato do pacote num deles enquanto olha o outro. Salvando os dois com <code>-w</code>, você reabre cada um com <code>-r</code>, com calma, e compara timestamp a timestamp exatamente o que cada ponto viu (ou não viu).
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> primeira captura (Dia 1), filtro por host/porta
 (Dia 2), leitura do handshake (Dia 3), captura salva em arquivo (Dia 4). Hoje tudo se junta num único cenário
@@ -182,12 +235,19 @@ concluir com prova, não com achismo, se um pacote específico chegou ou não ao
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #1905: "O cliente jura que manda a requisição. O servidor jura que nunca recebe
-  nada. Um dos dois está errado — ou tem alguma coisa no meio bloqueando." A única forma de resolver essa
-  discussão sem opinião é capturar em DOIS pontos: na saída do cliente e na entrada do servidor, comparando o
-  que cada
-  <span class="hint" data-tip="Ponto específico da rede (interface, host, ou lado de um firewall) onde uma captura tcpdump é realizada." onclick="openGlossary(0)">ponto de captura</span>
-  realmente vê.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#1905</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>15:30</span>
+      <span>aberto por: desenvolvedor e time de infraestrutura, em desacordo</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05 (cliente) e srv-db-02 (servidor)</b> · serviço: conexão entre aplicação e banco de dados</div>
+      <div class="msg">"O cliente jura que manda a requisição. O servidor jura que nunca recebe nada. Um dos dois está errado — ou tem alguma coisa no meio bloqueando."</div>
+    </div>
+    <div class="ticket-foot">Sem opinião, só evidência. Como você resolve essa disputa?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -317,26 +377,78 @@ Próximo passo: capturar num ponto intermediário (ex.: no gateway) pra isolar a
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Prepare duas VMs de laboratório (cliente e servidor) com um serviço simples ativo numa porta conhecida.</div></div>
+      <div class="lab-cmd"># no servidor:
+$ python3 -m http.server 8080</div>
       <div class="lab-expect"><b>Resultado esperado:</b> as duas VMs conseguindo se comunicar normalmente antes do teste.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"bash: python3: command not found"</b> → use <code>python -m http.server 8080</code> (algumas distros ainda mapeiam <code>python</code> pra Python 3), ou instale com <code>sudo apt install python3</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Inicie captura simultânea nas duas VMs, filtrando por host e porta relevantes, salvando em arquivo.</div></div>
+      <div class="lab-cmd"># no cliente:
+$ sudo tcpdump -i eth0 -n host 10.10.10.20 and port 8080 -w cliente.pcap
+# no servidor, ao mesmo tempo:
+$ sudo tcpdump -i eth0 -n host 10.10.10.50 and port 8080 -w servidor.pcap</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>host 10.10.10.20 and port 8080</dt><dd>Isola só a conversa entre esse host específico e essa porta específica — a mesma lógica de interseção do Dia 2, agora aplicada nos dois pontos de captura ao mesmo tempo.</dd>
+          <dt>-w cliente.pcap</dt><dd>Grava a captura desse lado (o cliente) num arquivo próprio, pra comparar depois com calma com o arquivo do outro lado — a mesma técnica do Dia 4, aplicada aqui pra viabilizar a comparação entre dois pontos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dois arquivos .pcap sendo gravados ao mesmo tempo.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você não souber como sincronizar os dois terminais ao mesmo tempo, este é o ponto onde o chat com o Sênior-IA vai te ajudar com tmux ou duas sessões SSH.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Os dois arquivos .pcap não têm nenhum pacote em comum, mesmo com o teste funcionando</b> → confirme que os IPs <code>10.10.10.20</code> e <code>10.10.10.50</code> nos dois comandos batem com os IPs reais das duas VMs (rode <code>ip a</code> nas duas). IP trocado entre cliente e servidor é o erro mais comum nesse tipo de captura em dois pontos.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Gere tráfego de teste do cliente pro servidor (curl ou similar) enquanto as duas capturas rodam.</div></div>
+      <div class="lab-cmd"># no cliente:
+$ curl http://10.10.10.20:8080</div>
       <div class="lab-expect"><b>Resultado esperado:</b> pacotes aparecendo nas duas capturas, confirmando entrega completa.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Bloqueie temporariamente a porta no servidor (com um firewall simples de teste) e repita a captura dupla.</div></div>
+      <div class="lab-cmd"># no servidor:
+$ sudo iptables -A INPUT -p tcp --dport 8080 -j DROP
+# repita a captura dupla do passo anterior e o curl do cliente</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo iptables -A INPUT</dt><dd>Acrescenta (Append) uma nova regra à cadeia INPUT — as regras que decidem o que fazer com pacotes chegando NESSA máquina.</dd>
+          <dt>-p tcp --dport 8080</dt><dd>Restringe a regra a pacotes TCP com porta de destino 8080 — só esse tráfego específico é afetado.</dd>
+          <dt>-j DROP</dt><dd>Define a ação (jump/target): descartar o pacote silenciosamente, sem avisar quem enviou. É por isso que o cliente vê o SYN saindo mas nunca recebe resposta nenhuma — nem um RST, só silêncio.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> SYN aparecendo na captura do cliente, mas ausente na captura do servidor.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Documente a conclusão de cada cenário testado, citando exatamente qual evidência sustenta cada conclusão.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> relatório com evidência específica, não opinião, pra cada cenário.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova a regra de firewall de teste no servidor e confirme que a porta voltou a responder normalmente.</div></div>
+      <div class="lab-cmd"># no servidor:
+$ sudo iptables -D INPUT -p tcp --dport 8080 -j DROP
+$ sudo iptables -L INPUT -n | grep 8080 || echo "regra removida"
+# no cliente, confirme que voltou:
+$ curl http://10.10.10.20:8080</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "regra removida" e o curl do cliente respondendo normalmente de novo, como antes do bloqueio.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> uma regra de DROP esquecida no iptables é exatamente o tipo de mudança que gera um chamado idêntico ao de hoje, semanas depois, pra outra pessoa investigar do zero. Fechar o laboratório sem residual é a mesma disciplina de "ZERO mudança no sistema" que vale pra qualquer teste de rede.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar <code>iptables -F</code> (flush) pra "limpar tudo de uma vez" em vez de remover só a regra específica — isso apaga QUALQUER outra regra de firewall que já existisse na VM antes do laboratório, inclusive regras que não foram criadas por você hoje.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"iptables: Bad rule (does it exist?)"</b> → a sintaxe de remoção (<code>-D</code>) precisa bater exatamente com a de adição (<code>-A</code>). Confira as regras existentes com <code>sudo iptables -L INPUT -n --line-numbers</code> e remova pelo número da linha com <code>sudo iptables -D INPUT &lt;numero&gt;</code> se a remoção por sintaxe falhar.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

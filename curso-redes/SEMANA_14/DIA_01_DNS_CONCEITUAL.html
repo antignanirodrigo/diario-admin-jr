@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Semana 13)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 13 você aprendeu a subir pelas camadas: enlace, rede, transporte, aplicação. Sem olhar: em qual dessas camadas um nome como <code>app.empresa.local</code> é traduzido pra um IP?<br>
+    <b>2.</b> Você já usou <code>dig</code> ou algo parecido antes de hoje?
+  </div>
+  <div class="ans">
+    <b>1.</b> É um serviço de camada de aplicação — o DNS roda sobre UDP/TCP na porta 53, então depende de toda a pilha abaixo dele estar saudável (a mesma pilha que você diagnosticou a semana toda).<br>
+    <b>2.</b> Talvez não formalmente — hoje o <code>dig</code> vira sua ferramenta principal pra enxergar essa tradução acontecendo, camada por camada, exatamente como você fez com <code>ss</code> e <code>nc</code> na semana passada.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 13:</b> Você já sabe testar host, porta e aplicação por IP
 direto. Mas ninguém digita IP no navegador — digita um nome. Hoje você aprende o que acontece entre digitar
@@ -188,9 +241,19 @@ A (nome→IP) e um CNAME (apelido→outro nome) — a base pra qualquer diagnós
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você digita app.empresa.local no navegador e nada abre. "Será que o DNS é só um arquivo
-  grande em algum servidor?" "Onde está esse arquivo?" "Quem responde minha pergunta?" — três perguntas
-  legítimas de quem nunca viu o fluxo real. DNS não é um arquivo, é uma cadeia de perguntas em hierarquia.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6110</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>13:00</span>
+      <span>aberto por: novo colega de equipe</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>app.empresa.local</b> · serviço: resolução de nomes</div>
+      <div class="msg">"Você digita app.empresa.local no navegador e nada abre. Será que o DNS é só um arquivo grande em algum servidor? Onde está esse arquivo? Quem responde minha pergunta?"</div>
+    </div>
+    <div class="ticket-foot">Três perguntas legítimas de quem nunca viu o fluxo real. DNS é mesmo um arquivo único?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -243,9 +306,22 @@ www.empresa.local.   300  IN  CNAME  app.empresa.local.
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: consulte um domínio conhecido e leia a ANSWER SECTION completa.</div></div>
       <div class="lab-cmd">$ dig example.com A</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dig</dt><dd>Domain Information Groper — ferramenta de diagnóstico DNS, mostra a resposta completa de uma consulta, não só o IP final.</dd>
+          <dt>example.com</dt><dd>O nome de domínio sendo consultado.</dd>
+          <dt>A</dt><dd>O tipo de registro pedido — <code>A</code> mapeia um nome para um endereço IPv4. Outros tipos comuns: <code>AAAA</code> (IPv6), <code>CNAME</code> (apelido), <code>MX</code> (e-mail).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> registro A com IP, TTL e servidor que respondeu.</div>
       <div class="lab-why"><b>Por quê:</b> ler os três campos (IP, TTL, servidor) juntos é o que ensina a diferenciar resposta de cache de resposta fresca.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ler só o IP e ignorar a linha SERVER — sem ela você não sabe se a resposta veio do resolvedor local ou de um servidor autoritativo.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"connection timed out; no servers could be reached"</b> → a VM não tem um resolvedor DNS acessível. Confira <code>/etc/resolv.conf</code> ou tente <code>dig @8.8.8.8 example.com A</code> pra isolar se o problema é no resolvedor local ou na rede.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: configure um servidor DNS local simples com uma zona de teste, se disponível.</div></div>
@@ -268,6 +344,12 @@ $ dig www.empresa.local A</div>
       <div class="lab-text">Ação: compare o campo SERVER entre uma consulta ao resolvedor local e uma direta ao autoritativo.</div></div>
       <div class="lab-cmd">$ dig app.empresa.local A
 $ dig @192.168.10.20 app.empresa.local A</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dig app.empresa.local A</dt><dd>Consulta normal — usa o resolvedor configurado no sistema (geralmente em <code>/etc/resolv.conf</code>), que pode responder direto do cache.</dd>
+          <dt>@192.168.10.20</dt><dd>Força a consulta a ir direto a ESSE servidor específico, ignorando o resolvedor padrão — aqui, apontando pro servidor autoritativo da zona, pra comparar a resposta "de fonte" com a resposta "em cache".</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ambos retornam a mesma resposta, mas de fontes diferentes.</div>
       <div class="lab-why"><b>Por quê:</b> essa comparação lado a lado é o que prova, na prática, a diferença entre cache e fonte da verdade — não é só teoria.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que a resposta do resolvedor local está sempre atualizada só porque bate com o autoritativo agora — o cache pode ficar desatualizado depois de uma mudança recente.</div>
@@ -282,7 +364,21 @@ $ dig @192.168.10.20 app.empresa.local A</div>
       <div class="lab-why"><b>Por quê:</b> esse resumo é o que você vai usar amanhã, quando o tema for TTL e cache — a base de hoje sustenta o diagnóstico de amanhã.</div>
       <div class="lab-warn"><b>Cilada comum:</b> anotar só o IP final sem registrar de onde veio a resposta — sem isso, "o DNS está certo mas não funciona" vai parecer contraditório amanhã.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova a zona de teste do dnsmasq criada no laboratório de hoje, pra não deixar um servidor DNS de brinquedo respondendo indefinidamente na VM.</div></div>
+      <div class="lab-cmd">$ sudo sed -i '/app.empresa.local/d' /etc/dnsmasq.conf
+$ sudo systemctl restart dnsmasq
+$ dig @127.0.0.1 app.empresa.local A +short</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a última consulta não retorna mais nenhum IP pra esse nome — a zona de teste foi removida e o dnsmasq voltou ao estado anterior à aula.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> uma zona de teste esquecida é exatamente o tipo de "atalho local esquecido" que a Semana 14 vai explorar em detalhe no Dia 3 — fechar o ciclo hoje evita criar esse problema sem querer.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de reiniciar o dnsmasq depois do <code>sed</code> — a edição no arquivo não entra em vigor sozinha, o serviço precisa recarregar a configuração.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>dnsmasq não reinicia ("Failed to restart dnsmasq.service")</b> → confira a sintaxe do arquivo com <code>sudo dnsmasq --test</code> antes de reiniciar — um <code>sed</code> mal ajustado pode ter deixado uma linha quebrada.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

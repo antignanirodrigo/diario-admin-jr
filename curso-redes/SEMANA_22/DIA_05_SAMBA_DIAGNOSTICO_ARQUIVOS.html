@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 4, o que create mask controla exatamente, e o que ele NÃO controla?<br>
+    <b>2.</b> Por que directory mask precisa ser diferente de create mask (0775 em vez de 0664, por exemplo)?
+  </div>
+  <div class="ans">
+    <b>1.</b> create mask controla o teto de permissão aplicado a ARQUIVOS NOVOS criados via Samba (ex: 0664). Ele não controla se a escrita é permitida no compartilhamento — isso é <code>read only</code> — e principalmente: ele não é retroativo, não muda a permissão de arquivos que já existiam antes da mudança.<br>
+    <b>2.</b> Porque pastas precisam do bit de execução pra serem "atravessáveis" — sem ele, ninguém consegue nem listar o conteúdo, mesmo com permissão de leitura. Arquivos comuns não precisam de execução. Hoje isso é decisivo: aplicar a mesma permissão em arquivos e pastas de uma vez (chmod -R sem separar tipo) quebra a navegação.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> conceito Samba (Dia 1), smb.conf (Dia 2),
 smbpasswd (Dia 3), create mask (Dia 4). Hoje tudo se junta na correção que ficou faltando: dezenas de
@@ -182,11 +235,19 @@ usar o comando errado pode quebrar a navegação de pastas inteiras.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2205: "Corrigi o create mask ontem (Dia 4), e arquivos novos já funcionam certo.
-  Mas o time reclama que ainda existem dezenas de arquivos antigos que ninguém além do criador consegue
-  abrir." Como visto no Dia 4, create mask não é retroativo — é preciso uma correção manual em massa, usando
-  <span class="hint" data-tip="Comando Linux que busca arquivos e diretórios recursivamente, permitindo aplicar uma ação (como chmod) em cada resultado encontrado." onclick="openGlossary(0)">find</span>
-  combinado com chmod, tratando arquivos e pastas de forma DIFERENTE.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2205</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>16:00</span>
+      <span>aberto por: time de uploads</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: Samba — correção retroativa</div>
+      <div class="msg">"Corrigi o create mask ontem, e arquivos novos já funcionam certo. Mas o time reclama que ainda existem dezenas de arquivos antigos que ninguém além do criador consegue abrir."</div>
+    </div>
+    <div class="ticket-foot">create mask não é retroativo. Como você corrige o que já existe, sem quebrar a navegação das pastas?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -317,6 +378,23 @@ $ ls /dados/uploads/subpasta/
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie uma árvore de teste com arquivos e pastas em permissões restritivas — o mesmo cenário do time reclamando de arquivos antigos inacessíveis.</div></div>
+      <div class="lab-cmd">mkdir -p /dados/uploads-teste/subpasta
+touch /dados/uploads-teste/arquivo1.jpg /dados/uploads-teste/subpasta/arquivo2.jpg
+chmod 600 /dados/uploads-teste/arquivo1.jpg /dados/uploads-teste/subpasta/arquivo2.jpg
+chmod 700 /dados/uploads-teste/subpasta
+ls -lR /dados/uploads-teste</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> os dois arquivos aparecem como -rw-------, e a subpasta como drwx------ — exatamente o tipo de "arquivo antigo" que ninguém além do dono consegue abrir.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> sem essa árvore de teste reproduzindo o sintoma, o find + chmod da próxima etapa não teria nada de errado pra corrigir — você precisa do problema criado de propósito na sua VM antes de praticar a correção.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar isso fora de uma pasta de teste isolada. Use um diretório dedicado como /dados/uploads-teste — você vai apagá-lo inteiro no último passo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"touch: cannot touch ...: Permission denied"</b> → falta <code>sudo</code> se /dados não pertencer ao seu usuário; ou crie a árvore de teste dentro do seu $HOME pra simplificar (ex: ~/uploads-teste).
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, crie uma árvore de teste com arquivos e subpastas com permissões variadas (misturando 600, 700, etc.).</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> estrutura de teste criada com permissões inconsistentes.</div>
     </li>
@@ -333,7 +411,31 @@ $ ls /dados/uploads/subpasta/
       <div class="lab-text">Rode find com -not -perm pra confirmar que zero arquivos/pastas ficaram fora do padrão esperado.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> contagem zero de arquivos ou pastas fora do padrão.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Aplique a correção com find + chmod separando arquivos e pastas, confirme o resultado e apague a árvore de teste inteira.</div></div>
+      <div class="lab-cmd">find /dados/uploads-teste -type f -exec chmod 664 {} \;
+find /dados/uploads-teste -type d -exec chmod 775 {} \;
+find /dados/uploads-teste -not -perm 664 -type f
+ls -lR /dados/uploads-teste
+rm -rf /dados/uploads-teste
+ls /dados/uploads-teste 2>/dev/null || echo "laboratório limpo"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>find /dados/uploads-teste</dt><dd>Busca recursivamente a partir desse diretório, percorrendo todas as subpastas.</dd>
+          <dt>-type f</dt><dd>Filtra o resultado só pra ARQUIVOS comuns, ignorando diretórios — essencial pra não aplicar a mesma permissão em pastas, que precisam de bit de execução.</dd>
+          <dt>-exec chmod 664 {} \;</dt><dd>Pra cada resultado encontrado, executa chmod 664 nele. {} é substituído pelo caminho do arquivo encontrado, e \; marca o fim do comando executado (a barra escapa o ; pra o shell não interpretar como fim do find).</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o find de checagem não retorna nenhum arquivo fora do padrão, o ls mostra tudo em 664/775, e por fim a mensagem "laboratório limpo" confirma que a árvore de teste inteira foi removida.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo criar → diagnosticar → corrigir → desfazer: nada além dessa pasta de teste foi tocado no sistema — o "ZERO mudança" que fecha bem qualquer laboratório de permissão em massa, ainda mais importante aqui, onde o comando é recursivo e arriscado se apontado pro lugar errado.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer a árvore de teste na VM, ou pior, digitar o caminho errado no rm -rf. Sempre confira o caminho com <code>pwd</code> antes de confirmar um rm -rf recursivo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>find ainda retorna arquivos fora do padrão</b> → confira se algum arquivo tinha um bit especial (setuid/setgid/sticky) que o chmod numérico simples não tocou como esperado — liste com <code>ls -l</code> e ajuste manualmente esse caso específico.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 1 você aprendeu que autenticar num compartilhamento Samba não usa a senha Linux comum. Sem olhar: onde fica essa credencial?<br>
+    <b>2.</b> Por que um servidor Linux consegue rodar NFS e Samba ao mesmo tempo, atendendo dois tipos de cliente diferentes?
+  </div>
+  <div class="ans">
+    <b>1.</b> Numa base de credenciais própria do Samba, separada da base de senhas do sistema Linux — mesmo que o usuário exista no Linux, ele precisa ser cadastrado explicitamente também no Samba (<code>smbpasswd</code>, tema do Dia 3).<br>
+    <b>2.</b> Porque são dois protocolos e dois daemons independentes (NFS na porta 2049, Samba/SMB na porta 445) — um não substitui o outro, cada um atende o mundo nativo de um tipo de cliente. Hoje isso volta: o <code>smb.conf</code> configura especificamente o lado Samba, sem interferir no NFS.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 1 (conceito):</b> Você já sabe por que Samba existe. Hoje você
 escreve seu primeiro smb.conf de verdade — o arquivo único que define tanto o comportamento geral do servidor
@@ -180,11 +233,19 @@ procedimento certo pra aplicar mudanças sem reiniciar o servidor inteiro.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2202: "Editei o smb.conf, adicionei um compartilhamento novo, mas ele
-  simplesmente não aparece quando eu acesso \\10.10.10.50 do Windows." Antes de suspeitar de rede ou firewall,
-  a primeira pergunta é sempre: o
-  <span class="hint" data-tip="Arquivo de configuração central do Samba, dividido em seções — uma para comportamento geral e uma para cada compartilhamento." onclick="openGlossary(0)">smb.conf</span>
-  está com sintaxe válida, e o serviço foi recarregado depois da edição?</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2202</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>11:10</span>
+      <span>aberto por: usuário interno</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: Samba — compartilhamento novo</div>
+      <div class="msg">"Editei o smb.conf, adicionei um compartilhamento novo, mas ele simplesmente não aparece quando eu acesso \\10.10.10.50 do Windows."</div>
+    </div>
+    <div class="ticket-foot">Antes de suspeitar de rede ou firewall: o arquivo está com sintaxe válida, e o serviço foi recarregado depois da edição?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -322,6 +383,39 @@ Password for [WORKGROUP\joao]:
   <h2>7. Laboratório guiado — marca conforme for testando</h2>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Acrescente um compartilhamento de teste ao smb.conf, valide a sintaxe, recarregue o serviço e confirme que ele aparece listado.</div></div>
+      <div class="lab-cmd">sudo mkdir -p /dados/uploads
+sudo tee -a /etc/samba/smb.conf > /dev/null <<'EOF'
+
+[uploads]
+   path = /dados/uploads
+   valid users = joao
+   read only = no
+   browsable = yes
+EOF
+sudo testparm -s
+sudo systemctl reload smbd
+smbclient -L localhost -U joao</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>smbclient</dt><dd>Cliente de linha de comando do Samba — navega, lista e transfere arquivos de um compartilhamento SMB sem precisar de uma máquina Windows.</dd>
+          <dt>-L localhost</dt><dd>Modo de listagem ("List"): mostra os compartilhamentos disponíveis no host indicado, sem entrar em nenhum deles. Rodar contra localhost testa o próprio servidor.</dd>
+          <dt>-U joao</dt><dd>Define o usuário usado na tentativa de autenticação — o comando pede a senha SAMBA (não a Linux) desse usuário.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> testparm confirma "Loaded services file OK", o reload não retorna erro, e o smbclient -L lista "uploads" entre os compartilhamentos disponíveis (depois de pedir a senha do joao).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> um compartilhamento só existe de fato pro Windows depois dessas três confirmações em sequência — sintaxe válida, serviço recarregado, e listagem confirmando que o Samba realmente reconhece o novo bloco. Pular qualquer uma dessas etapas é a causa mais comum do chamado "editei mas não aparece".</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer que <code>valid users = joao</code> exige que joao já tenha uma credencial Samba cadastrada (Dia 3) — sem isso, o <code>smbclient -L</code> vai pedir senha e recusar. Use <code>smbclient -L localhost -N</code> pra listar sem autenticar, só confirmando que o compartilhamento aparece.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"testparm: command not found"</b> → o pacote <code>samba-common-bin</code> (Debian/Ubuntu) traz o testparm; instale com <code>sudo apt install samba-common-bin</code>.<br>
+          <b>avisos tipo "rlimit_max: increasing rlimit_max" no testparm</b> → são avisos informativos, não erros — o que importa é a linha "Loaded services file OK". Ignore linhas sem a palavra ERROR.<br>
+          <b>smbclient -L pede senha e nenhuma funciona ainda</b> → normal neste ponto — joao ainda não tem credencial Samba (isso é o Dia 3). Use <code>smbclient -L localhost -N</code> pra listar sem autenticar.
+        </div>
+      </details>
+    </li>
+
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, edite smb.conf adicionando um compartilhamento de teste com path, valid users e read only.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo salvo com a nova seção.</div>

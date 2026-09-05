@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você comparou uma consulta normal com uma consulta direta ao autoritativo, usando <code>dig @IP</code>. Sem olhar: por que essa comparação lado a lado é a forma correta de investigar um DNS que parece "errado"?<br>
+    <b>2.</b> Ontem o <code>dig</code> também mostrava um número junto com o IP, do lado de "TTL". Você reparou nele?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque ela isola exatamente onde está a divergência: se a resposta direta ao autoritativo diverge da resposta normal, o problema não é o registro (que está correto na fonte) — é uma cópia desatualizada em algum lugar entre você e ele.<br>
+    <b>2.</b> Esse TTL é o assunto de hoje inteiro: ele é o prazo, em segundos, que uma resposta de DNS fica guardada em cache antes de ser buscada de novo. Ignorá-lo é a causa nº1 de gente achar que uma mudança de DNS "não funcionou".
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você viu que o resolvedor guarda respostas em cache.
 Hoje o problema aparece na prática: "no DNS já está certo, mas meu notebook ainda vai pro IP antigo" — não é
@@ -188,9 +241,19 @@ novo numa zona DNS — velha resposta em cache não é falha de mudança.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"No DNS já está 192.168.10.80, mas meu notebook ainda vai para 192.168.10.50!" O
-  autoritativo já tem a resposta nova, mas o cache do cliente ainda guarda a antiga com um TTL diferente. Não
-  é a mudança que falhou — é a cópia em cache que ainda não expirou.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6142</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>09:40</span>
+      <span>aberto por: administrador de sistemas</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>app.intra.example</b> · serviço: aplicação interna</div>
+      <div class="msg">"No DNS já está 192.168.10.80, mas meu notebook ainda vai para 192.168.10.50!"</div>
+    </div>
+    <div class="ticket-foot">A mudança que você fez no autoritativo falhou, ou existe outra explicação?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -268,9 +331,23 @@ $ dig app.intra.example A +short</div>
       <div class="lab-text">Ação: rode um flush de cache controlado e consulte de novo.</div></div>
       <div class="lab-cmd">$ resolvectl flush-caches
 $ dig app.intra.example A +short</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>resolvectl</dt><dd>Ferramenta de controle do resolvedor DNS do systemd (systemd-resolved), presente por padrão em distros modernas baseadas em systemd.</dd>
+          <dt>flush-caches</dt><dd>Descarta todas as respostas guardadas em cache pelo resolvedor local, forçando a próxima consulta a buscar a resposta de novo — sem alterar nenhum registro DNS.</dd>
+          <dt>+short</dt><dd>Opção do <code>dig</code> que mostra só o resultado essencial (o IP), sem o cabeçalho completo da resposta — útil pra ler rápido depois de já saber interpretar a saída completa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> resposta agora reflete o valor atualizado do autoritativo.</div>
       <div class="lab-why"><b>Por quê:</b> o flush controlado é a alternativa correta a esperar o TTL — resolve o mesmo problema sem alterar nenhum registro.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fazer flush de cache em produção sem avisar, achando que é uma operação "inofensiva" — em servidores com muito tráfego, isso gera um pico temporário de consultas ao autoritativo.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"resolvectl: command not found"</b> → seu sistema não usa systemd-resolved. Alternativas: <code>sudo systemd-resolve --flush-caches</code> (versões antigas) ou reinicie o serviço de cache DNS que sua distro usa (ex: <code>sudo systemctl restart nscd</code>).<br>
+          <b>A resposta continua desatualizada mesmo depois do flush</b> → o cache pode estar em outra camada — o navegador tem cache DNS próprio, separado do sistema operacional. Teste com <code>dig</code> (que ignora cache de navegador) pra confirmar se o sistema operacional já está certo.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: documente o incidente completo.</div></div>

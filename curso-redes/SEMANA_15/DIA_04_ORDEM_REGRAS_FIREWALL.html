@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você confirmou serviço escutando E firewall bloqueando, sem nunca desligar a proteção. Sem olhar: qual comando prova a ausência de uma regra de accept, sem precisar desativar nada?<br>
+    <b>2.</b> Hoje as duas regras (genérica e específica) EXISTEM, mas o comportamento é o errado. Isso é ausência de regra, ou outra coisa?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>sudo nft list ruleset</code> — mostra a policy e todas as regras, deixando claro se falta um <code>accept</code> pra porta específica.<br>
+    <b>2.</b> Outra coisa: hoje as regras certas existem, mas a ORDEM entre elas está errada — o firewall lê de cima pra baixo, e a primeira regra que casar decide, mesmo que uma regra mais específica venha depois.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 (nftables básico):</b> Você já sabe que rules são avaliadas
 de cima pra baixo. Hoje aparece o efeito colateral disso: uma regra genérica ANTES de uma específica mascara
@@ -188,9 +241,19 @@ outra, e o procedimento de reordenar com evidência, testando dos dois lados dep
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Eu limitei SSH para 192.168.10.20, mas todo mundo ainda entra!" A regra específica
-  existe no firewall — mas está na posição 2, DEPOIS de uma regra genérica (ALLOW TCP 22 ANY → ANY) na
-  posição 1. Como a genérica casa primeiro, a específica nunca chega a ser avaliada.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6390</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:05</span>
+      <span>aberto por: administrador de segurança</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-09</b> · serviço: SSH</div>
+      <div class="msg">"Eu limitei SSH para 192.168.10.20, mas todo mundo ainda entra!"</div>
+    </div>
+    <div class="ticket-foot">A regra específica existe no firewall. Por que ela não está funcionando?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -258,6 +321,13 @@ Connection timed out</pre>
       <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 22 accept
 $ sudo nft add rule inet filter input ip saddr 192.168.10.20 tcp dport 22 accept
 $ sudo nft -a list chain inet filter input</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>primeira regra (genérica)</dt><dd><code>tcp dport 22 accept</code> sem restrição de origem — aceita QUALQUER IP na porta 22. Adicionada de propósito ANTES da específica, reproduzindo a armadilha do chamado.</dd>
+          <dt>segunda regra (específica)</dt><dd>Restringe a origem a <code>192.168.10.20</code> — mas como o nftables avalia de cima pra baixo, a primeira regra já aceitou o pacote antes desta ser sequer consultada.</dd>
+          <dt>nft -a</dt><dd>A flag <code>-a</code> (<i>anchors</i>/handles) mostra o número de identificação único (<code>handle</code>) de cada regra — necessário pra referenciar uma regra específica em comandos de <code>delete</code> ou <code>insert</code>.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> nft -a list mostra as duas regras, na ordem errada.</div>
       <div class="lab-why"><b>Por quê:</b> reproduzir a armadilha de propósito é o que ensina a reconhecer o padrão "regra restritiva existe mas não funciona" num caso real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> não anotar os handles logo de cara — sem eles, fica mais difícil referenciar a regra certa depois.</div>
@@ -273,6 +343,12 @@ $ sudo nft -a list chain inet filter input</div>
       <div class="lab-text">Ação: anote os handles e delete a regra genérica.</div></div>
       <div class="lab-cmd">$ sudo nft -a list chain inet filter input
 $ sudo nft delete rule inet filter input handle N</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft -a list ... </dt><dd>Lista as regras com seus handles (números de identificação únicos) — passo obrigatório antes de deletar, pra saber o N exato.</dd>
+          <dt>nft delete rule ... handle N</dt><dd>Remove a regra identificada pelo handle <code>N</code> especificamente — mais seguro que remover "pela posição", que pode mudar entre listagens.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> regra genérica removida, chain com uma regra a menos.</div>
       <div class="lab-why"><b>Por quê:</b> usar o handle exato (não a posição visual) é o que garante deletar a regra certa, sem ambiguidade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> deletar pela posição numérica "na cabeça" sem confirmar o handle real via -a — os números podem mudar entre listagens.</div>
@@ -285,6 +361,12 @@ $ sudo nft add rule inet filter input tcp dport 22 drop</div>
       <div class="lab-expect"><b>Resultado esperado:</b> chain reordenada, específica agora avaliada primeiro.</div>
       <div class="lab-why"><b>Por quê:</b> o drop explícito depois da específica fecha o comportamento pretendido — qualquer outra origem em SSH é rejeitada, não só "não aceita por acaso".</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o drop explícito e confiar só na policy padrão da chain — funciona, mas fica menos legível pra quem revisar depois.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Error: Could not process rule: Invalid argument" no insert</b> → confirme o número de handle usado em <code>position</code> — o <code>nft insert ... position 0</code> insere no TOPO da chain; se sua sintaxe usar <code>position handle</code> de outra regra, o handle precisa existir e vir de um <code>nft -a list</code> atual.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: teste dos dois lados — autorizado e não autorizado.</div></div>

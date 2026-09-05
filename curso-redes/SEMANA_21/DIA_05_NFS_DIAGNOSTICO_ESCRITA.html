@@ -147,6 +147,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -157,6 +198,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dias 1 a 4)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2, qual comando reaplica /etc/exports sem derrubar conexões de clientes já montados?<br>
+    <b>2.</b> No Dia 4, por que o boot completar sem travar (graças ao nofail) NÃO é garantia de que a montagem NFS teve sucesso?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>exportfs -ra</code>.<br>
+    <b>2.</b> Porque nofail só evita que uma FALHA de montagem trave o boot — não garante que a montagem aconteceu. Hoje isso volta: uma escrita pode falhar mesmo com tudo aparentemente certo, e só testando cada camada (rede, export, permissão Unix, UID) você confirma onde exatamente a falha está, em vez de assumir que qualquer coisa funcionou.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a semana inteira:</b> conceito (Dia 1), exports e permissões (Dia 2),
 UID/GID (Dia 3), fstab persistente (Dia 4). Hoje tudo se junta num único diagnóstico: uma escrita falhando,
@@ -182,12 +235,19 @@ certa, até encontrar exatamente onde a escrita está sendo barrada.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2105: "Monto o NFS normalmente, consigo listar os arquivos, mas na hora de
-  escrever um arquivo novo, recebo Permission denied — e não sei se o problema é do export, da permissão Unix
-  do diretório, ou de outra coisa." A resposta certa não é adivinhar — é testar cada camada na ordem: rede →
-  export → permissão Unix do diretório → UID do usuário, a mesma disciplina de
-  <span class="hint" data-tip="Técnica de testar cada camada separadamente antes de concluir onde está o problema, evitando confundir sintomas de causas diferentes." onclick="openGlossary(0)">isolamento de camada</span>
-  já usada com VPN (Semana 18).</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2105</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>15:30</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-files-04</b> · serviço: escrita em diretório NFS montado</div>
+      <div class="msg">"Monto o NFS normalmente, consigo listar os arquivos, mas na hora de escrever um arquivo novo, recebo Permission denied — e não sei se o problema é do export, da permissão Unix do diretório, ou de outra coisa."</div>
+    </div>
+    <div class="ticket-foot">A resposta certa não é adivinhar. Qual camada você testa primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -326,6 +386,25 @@ drwxr-xr-x 2 joao joao 4096 Sep  1 14:20 /dados/uploads
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Prepare o pacote e o usuário de teste — o ponto da aula é a permissão Unix do DIRETÓRIO, que você mesmo vai criar e quebrar de propósito no passo 1.</div></div>
+      <div class="lab-cmd">sudo apt install -y nfs-kernel-server nfs-common
+sudo useradd -u 5001 -m joao 2>/dev/null || echo "usuario joao ja existe"
+sudo mkdir -p /mnt/uploads
+id joao</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>useradd</dt><dd>Cria uma nova conta de usuário no sistema.</dd>
+          <dt>-u 5001</dt><dd>Define explicitamente o UID — não deixa o sistema escolher automaticamente, pois o teste depende desse número específico bater (ou não) com o do lado do servidor NFS.</dd>
+          <dt>-m</dt><dd>Cria também o diretório home do usuário.</dd>
+          <dt>2>/dev/null || echo "..."</dt><dd>Se o comando falhar (usuário já existe de um teste anterior), descarta o erro técnico e mostra uma mensagem clara em vez de travar o laboratório.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>id joao</code> mostra <code>uid=5001(joao)</code> — o usuário de teste está pronto, mesmo que o diretório de export ainda não exista (você cria no passo 1).</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ter o usuário de teste já pronto deixa você focado exatamente no que hoje ensina: a diferença entre permissão de export (NFS) e permissão Unix do sistema de arquivos.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — e se você já rodou o laboratório do Dia 3 nesta mesma VM, o useradd vai avisar que joao já existe; tudo bem, é o mesmo usuário.</div>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM servidor de laboratório, crie um diretório de export com dono root e permissão 755 (sem escrita pra outros).</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> diretório criado, export configurado com rw.</div>
     </li>
@@ -342,7 +421,23 @@ drwxr-xr-x 2 joao joao 4096 Sep  1 14:20 /dados/uploads
       <div class="lab-text">Teste como root no cliente também, e compare o resultado com o teste do usuário comum.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> comportamento diferente entre root (afetado por root squash) e o usuário comum já corrigido.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Desmonte, remova export, usuário e diretórios de teste — fecha a Semana 21 sem deixar rastro na VM.</div></div>
+      <div class="lab-cmd">sudo umount /mnt/uploads
+sudo sed -i '/uploads/d' /etc/exports
+sudo exportfs -ra
+sudo userdel -r joao
+sudo rm -rf /dados/uploads /mnt/uploads</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> <code>id joao</code> retorna "no such user", e <code>exportfs -v</code> não lista mais /dados/uploads.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha a semana com a mesma disciplina do Dia 1: todo usuário, export e diretório tocados nesses cinco dias foram criados por você, pro seu próprio aprendizado, e saem exatamente como entraram.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar userdel antes do umount pode deixar o ponto de montagem preso a um usuário que já não existe mais — sempre desmonte primeiro.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"umount: /mnt/uploads: not mounted"</b> → normal se seu teste específico não chegou a montar — ignore e siga pra remoção do usuário e do export.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

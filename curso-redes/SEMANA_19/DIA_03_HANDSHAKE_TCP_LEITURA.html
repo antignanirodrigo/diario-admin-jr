@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2, qual filtro te dava a interseção exata entre um host e uma porta específicos?<br>
+    <b>2.</b> Hoje você vai usar exatamente isso pra isolar UMA conexão específica e ler o handshake dela. Por que tentar ler um handshake numa captura sem filtro nenhum seria muito mais difícil?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>host &lt;ip&gt; and port &lt;porta&gt;</code> — a combinação com <code>and</code>.<br>
+    <b>2.</b> Porque numa VM com qualquer tráfego, dezenas de conexões diferentes se misturam na tela ao mesmo tempo. Sem isolar host e porta, fica quase impossível separar visualmente as três linhas do handshake de uma conversa específica dentro de uma enxurrada de pacotes de outras conversas.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 (filtro host/porta):</b> Você já sabe isolar exatamente a
 conversa entre dois pontos. Hoje você aprende a ler os três primeiros pacotes dessa conversa — o handshake que
@@ -180,11 +233,19 @@ estão — e, mais importante, em qual etapa uma conexão travou.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #1903: "O cliente diz que a conexão trava antes de qualquer coisa acontecer — nem
-  chega a trocar dados." Isso cheira a problema no
-  <span class="hint" data-tip="Sequência de três pacotes (SYN, SYN-ACK, ACK) que estabelece uma conexão TCP antes de qualquer dado real ser trocado." onclick="openGlossary(0)">three-way handshake</span>,
-  não no conteúdo da conversa em si — e a única forma de confirmar isso com certeza é ler as flags dos
-  primeiros pacotes numa captura.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#1903</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>11:45</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: checkout do e-commerce</div>
+      <div class="msg">"O cliente diz que a conexão trava antes de qualquer coisa acontecer — nem chega a trocar dados."</div>
+    </div>
+    <div class="ticket-foot">Antes de suspeitar da aplicação, o que você confirma primeiro?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -312,12 +373,39 @@ estão — e, mais importante, em qual etapa uma conexão travou.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Capture tráfego enquanto conecta com sucesso a um serviço ativo (ex.: curl pra um servidor web na VM).</div></div>
+      <div class="lab-cmd">$ sudo tcpdump -i eth0 -n port 80
+# em outro terminal, ao mesmo tempo:
+$ curl http://localhost
+# opcional: ver só os pacotes do handshake, ignorando o resto da conversa
+$ sudo tcpdump -i eth0 -n 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>tcp[tcpflags]</dt><dd>Acessa diretamente o byte de flags dentro do cabeçalho TCP do pacote, permitindo montar um filtro por bit em vez de usar só as palavras prontas do tcpdump.</dd>
+          <dt>& (tcp-syn|tcp-ack)</dt><dd>Operação bit a bit (AND) que verifica se o bit de SYN OU o bit de ACK está ligado naquele pacote — <code>tcp-syn</code> e <code>tcp-ack</code> são apelidos que o tcpdump já conhece pros bits de flag correspondentes.</dd>
+          <dt>!= 0</dt><dd>Só deixa passar o pacote se essa operação der resultado diferente de zero, ou seja, se pelo menos um dos dois bits (SYN ou ACK) estiver realmente presente — filtrando exatamente os pacotes do handshake (SYN, SYN-ACK, ACK) e ignorando o resto da conversa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> as três linhas do handshake completo visíveis na captura.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O handshake não aparece, só a linha de erro do curl</b> → confirme que existe realmente um servidor web escutando na porta 80 da VM (ex.: <code>sudo python3 -m http.server 80</code> ou nginx). Sem serviço ativo, o curl falha antes até de completar o SYN, e não há handshake nenhum pra capturar.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Tente conectar numa porta fechada da mesma VM e capture o resultado.</div></div>
+      <div class="lab-cmd">$ sudo tcpdump -i eth0 -n port 9999
+# em outro terminal:
+$ curl http://localhost:9999</div>
       <div class="lab-expect"><b>Resultado esperado:</b> ou nenhuma resposta (retransmissão de SYN), ou um pacote com flag RST recusando a conexão.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se aparecer RST em vez de silêncio, este é o ponto onde o chat com o Sênior-IA vai explicar a diferença entre os dois comportamentos.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Aparece "Connection refused" no curl, mas nenhum pacote RST aparece na captura filtrando -i eth0</b> → clássico: tráfego pra <code>localhost</code> não passa pela interface <code>eth0</code>, passa pela interface de loopback <code>lo</code>. Refaça a captura com <code>-i lo</code> em vez de <code>-i eth0</code> pra testes que usam localhost — esse é um dos erros mais comuns de quem está começando com tcpdump.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Compare visualmente as duas capturas lado a lado: handshake completo vs. handshake travado.</div></div>

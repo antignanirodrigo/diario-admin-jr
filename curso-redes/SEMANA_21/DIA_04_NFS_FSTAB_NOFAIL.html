@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 3, o que exatamente o NFS transmite pela rede pra identificar o dono de um arquivo: o nome ou o número?<br>
+    <b>2.</b> O comando <code>ls -n</code> do Dia 3 mostrava o quê, que o <code>ls -l</code> não mostrava?
+  </div>
+  <div class="ans">
+    <b>1.</b> Só o número (UID/GID). O nome exibido é sempre uma tradução feita localmente pela máquina que está olhando o arquivo.<br>
+    <b>2.</b> O número puro do UID/GID, sem a tradução pro nome — útil quando o dono aparece "errado" ou como um número desconhecido. Hoje você lida com outro número crítico do NFS: as opções <code>_netdev</code> e <code>nofail</code> no /etc/fstab, que decidem o que acontece no boot se o servidor não responder.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 12 (fstab quebrado):</b> Você já viu uma entrada de fstab mal
 configurada travar o boot inteiro numa emergency shell. Hoje o mesmo risco reaparece com um sabor novo: um
@@ -181,12 +234,19 @@ nofail (não trava o boot mesmo se a montagem falhar) — e por que as duas junt
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2104: "Adicionei o NFS no fstab pra montar sempre no boot. Ontem o servidor NFS
-  ficou fora do ar por manutenção, e TODOS os clientes que dependiam dele travaram no boot, mesmo os que não
-  precisavam do NFS pra nada crítico." O fstab tentou montar um recurso de REDE antes mesmo da rede estar
-  pronta, e sem a opção
-  <span class="hint" data-tip="Opção de montagem que impede uma falha naquela entrada específica de travar o restante do processo de boot." onclick="openGlossary(1)">nofail</span>,
-  qualquer falha ali vira bloqueio total.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2104</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>07:50</span>
+      <span>aberto por: plantão de infraestrutura</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>múltiplos clientes NFS</b> · serviço: boot de servidores dependentes de /etc/fstab</div>
+      <div class="msg">"Adicionei o NFS no fstab pra montar sempre no boot. Ontem o servidor NFS ficou fora do ar por manutenção, e TODOS os clientes que dependiam dele travaram no boot, mesmo os que não precisavam do NFS pra nada crítico."</div>
+    </div>
+    <div class="ticket-foot">O fstab tentou montar rede antes da rede estar pronta. O que falta na linha?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -317,6 +377,23 @@ $ mount | grep uploads
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Prepare o export do lado servidor antes do laboratório — hoje o risco é especificamente sobre a linha do /etc/fstab, não sobre criar o export de novo.</div></div>
+      <div class="lab-cmd">sudo apt install -y nfs-kernel-server nfs-common
+sudo mkdir -p /dados/uploads /mnt/uploads
+echo '/dados/uploads 127.0.0.1(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports
+sudo exportfs -ra
+exportfs -v</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> exportfs -v mostra /dados/uploads liberado pra 127.0.0.1 — o export já existe, pronto pra você escrever a linha de fstab no próximo passo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> pra isolar o aprendizado de hoje (_netdev e nofail), o export do lado servidor já vem pronto, sem exigir que você repita o que já viu nos Dias 1 e 2.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> só em VM descartável — editar fstab errado pode travar boots futuros até você corrigir manualmente numa shell de emergência.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"exportfs: /dados/uploads does not support NFS export"</b> → confirme que o diretório existe: <code>sudo mkdir -p /dados/uploads</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Adicione uma linha NFS no fstab de uma VM cliente de laboratório, com _netdev,nofail.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> mount -a monta o diretório sem erro.</div>
     </li>
@@ -333,7 +410,26 @@ $ mount | grep uploads
       <div class="lab-text">Suba o serviço NFS de novo no servidor, e rode mount -a manualmente no cliente.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> montagem bem-sucedida agora, sem precisar reiniciar o cliente.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Restaure o /etc/fstab ao estado original e remova o export e os diretórios de teste.</div></div>
+      <div class="lab-cmd">sudo umount /mnt/uploads
+sudo sed -i '/uploads/d' /etc/fstab
+sudo sed -i '/uploads/d' /etc/exports
+sudo exportfs -ra
+sudo rm -rf /dados/uploads /mnt/uploads
+grep uploads /etc/fstab || echo "fstab limpo"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sed -i</dt><dd>Edita o arquivo diretamente (in-place), sem precisar abrir um editor.</dd>
+          <dt>'/uploads/d'</dt><dd>Padrão de endereço + comando: qualquer linha que contenha "uploads" (o padrão) é deletada (o 'd' no final).</dd>
+          <dt>/etc/fstab</dt><dd>O arquivo de montagens automáticas do boot — remover a linha aqui evita que o próximo boot tente montar um recurso que já foi desfeito.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a mensagem "fstab limpo" confirma que nenhuma linha de teste sobrou no arquivo que controla o boot da sua VM.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> um /etc/fstab com lixo de laboratório só dói no PRÓXIMO reboot, semanas depois — desfazer agora, com a shell ainda disponível, é bem mais barato que descobrir isso numa manutenção real.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar o sed no fstab sem antes desmontar pode deixar o systemd tentando gerenciar um mount cuja linha correspondente já sumiu — sempre desmonte primeiro.</div>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

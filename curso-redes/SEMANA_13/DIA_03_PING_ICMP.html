@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem dois servidores pareciam "parecidos" pelos primeiros números do IP. Sem olhar: o que realmente decide se dois IPs estão na mesma rede?<br>
+    <b>2.</b> Hoje o ping entra em cena. Ele testa a mesma coisa que o cálculo de rede de ontem, ou outra coisa?
+  </div>
+  <div class="ans">
+    <b>1.</b> A operação AND entre o IP e a máscara (CIDR) — o resultado, o endereço de rede, é o que precisa ser igual nos dois lados. Números parecidos no início não garantem nada.<br>
+    <b>2.</b> Outra coisa, mais restrita: o ping confirma só que o host RESPONDE a ICMP — ele nem confirma que a rede está certa (rotas e firewall também entram na jogada), nem diz nada sobre porta ou aplicação. Hoje a lição é não parar a investigação assim que o ping funcionar.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Você já sabe que ping testa a camada de rede (ICMP). Hoje
 o erro clássico aparece: "ping OK, então rede OK?" Não — ping prova só que o host responde, nada sobre porta
@@ -188,9 +241,19 @@ prova aplicação — e a disciplina de nunca fechar um chamado sem testar as tr
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Ticket: "Site não abre." Você roda ping, recebe resposta, e marca "Motivo anotado: ping OK"
-  como se o caso estivesse fechado. Mas ping só prova que o host responde a ICMP — nada sobre a porta 80
-  estar aberta, nem sobre o serviço web estar de pé.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5960</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>15:20</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: site institucional</div>
+      <div class="msg">"Site não abre."</div>
+    </div>
+    <div class="ticket-foot">Você roda ping, recebe resposta, e já quer marcar "motivo anotado: ping OK". Isso fecha o caso?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -257,9 +320,24 @@ $ systemctl status nginx --no-pager
       <div class="lab-text">Ação: pare um serviço web (se houver) e teste a porta específica.</div></div>
       <div class="lab-cmd">$ systemctl stop nginx
 $ nc -zv 127.0.0.1 80</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl stop nginx</dt><dd>Para o serviço nginx de propósito, reproduzindo o cenário em que a aplicação está fora do ar (mas a rede continua saudável).</dd>
+          <dt>nc</dt><dd>Netcat — ferramenta de rede genérica usada aqui só pra testar se uma porta TCP aceita conexão, sem precisar de um cliente HTTP completo.</dd>
+          <dt>-z</dt><dd>Modo <i>zero-I/O</i>: só testa se a conexão abre, sem enviar ou receber dados — ideal pra checagem rápida de porta.</dd>
+          <dt>-v</dt><dd>Modo verboso: mostra na tela se a conexão teve sucesso, foi recusada ou expirou, em vez de ficar silencioso.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> connection refused ou timed out, dependendo do estado do firewall.</div>
       <div class="lab-why"><b>Por quê:</b> nc testa especificamente a camada de transporte — a porta aceita conexão ou não, independente do host responder a ping.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir "connection refused" (host respondeu, ninguém escutando) com "timeout" (sem resposta nenhuma, possível firewall) — são causas diferentes.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"nc: command not found"</b> → instale com <code>sudo apt install netcat-openbsd</code> (Debian/Ubuntu) ou use <code>curl --connect-timeout 3 telnet://127.0.0.1:80</code> como alternativa.<br>
+          <b>"Unit nginx.service not loaded"</b> → o nginx não está instalado nessa VM. Instale com <code>sudo apt install nginx</code> ou adapte o exercício pro serviço web que você tiver disponível.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: investigue localmente no servidor e compare com o resultado do nc.</div></div>

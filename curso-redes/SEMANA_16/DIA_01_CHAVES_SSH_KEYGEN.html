@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Semana 15)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 15 você abriu uma SEGUNDA sessão SSH como rede de segurança antes de mudar firewall. Sem olhar: por que a sessão B só protege se for aberta ANTES da mudança arriscada?<br>
+    <b>2.</b> Hoje o acesso SSH em si é o assunto. O que garante hoje que só você consegue abrir uma sessão nova, sem senha nenhuma?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porque uma sessão já ESTABLISHED sobrevive a uma regra de drop que só afeta conexões NOVAS — aberta depois, ela já nasceria sob a regra restritiva e não serviria de nada.<br>
+    <b>2.</b> Um par de chaves assimétricas: a pública fica no servidor, a privada fica só com você. Hoje você aprende por que compartilhar a privada é o oposto de tudo que a Semana 15 ensinou sobre proteger acesso.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 15 inteira:</b> Você já sabe proteger o CAMINHO até o
 servidor (firewall). Hoje você protege a PRÓPRIA IDENTIDADE de quem entra — chaves SSH, e a regra mais
@@ -189,9 +242,19 @@ certo de instalação (ssh-copy-id) e o protocolo de revogação se uma chave pr
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Vou colocar minha chave na pasta da equipe para facilitar." Alerta vermelho: id_ed25519
-  (sem .pub) sendo arrastado pra uma pasta compartilhada. Chave privada NUNCA se compartilha — é o crachá com
-  biometria, não um passe genérico. Compartilhar a privada é compartilhar a própria identidade digital.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6460</b></span>
+      <span><b>PRIORIDADE CRÍTICA</b></span>
+      <span>16:30</span>
+      <span>aberto por: observação de um colega sênior</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>pasta compartilhada da equipe</b> · serviço: chaves SSH</div>
+      <div class="msg">"Vou colocar minha chave na pasta da equipe para facilitar."</div>
+    </div>
+    <div class="ticket-foot">Alerta vermelho: id_ed25519 (sem .pub) sendo arrastado pra uma pasta compartilhada. Por que isso é grave, mesmo que a intenção seja só "facilitar"?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -253,6 +316,13 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: gere um par de chaves.</div></div>
       <div class="lab-cmd">$ ssh-keygen -t ed25519 -C "lab@teste"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh-keygen</dt><dd>Gera um novo par de chaves SSH (pública e privada).</dd>
+          <dt>-t ed25519</dt><dd>Especifica o algoritmo — Ed25519 é moderno, rápido e recomendado hoje em dia sobre o antigo RSA para a maioria dos usos.</dd>
+          <dt>-C "lab@teste"</dt><dd>Adiciona um comentário à chave, geralmente e-mail ou identificação — não afeta a segurança, mas ajuda a identificar de onde veio cada chave quando você tem várias.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dois arquivos criados, id_ed25519 e id_ed25519.pub.</div>
       <div class="lab-why"><b>Por quê:</b> o comentário (-C) identifica de onde veio a chave — útil quando você tem várias e precisa saber qual remover depois.</div>
       <div class="lab-warn"><b>Cilada comum:</b> deixar a passphrase em branco em chaves usadas fora de laboratório — sem ela, quem tiver o arquivo da chave privada tem acesso direto.</div>
@@ -263,6 +333,12 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> -rw------- na privada (600), -rw-r--r-- na pública.</div>
       <div class="lab-why"><b>Por quê:</b> permissões erradas na privada (legível por outros usuários) fazem o próprio SSH recusar usá-la — é uma proteção embutida.</div>
       <div class="lab-warn"><b>Cilada comum:</b> copiar a chave privada entre máquinas com scp/rsync sem preservar permissões, e depois perder tempo descobrindo por que o SSH recusa a chave.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>A chave privada aparece com permissão <code>-rw-r--r--</code> (644) em vez de 600</b> → corrija com <code>chmod 600 ~/.ssh/id_ed25519</code> — o próprio SSH recusa usar uma chave privada legível por outros usuários do sistema.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: instale a chave pública num destino de teste.</div></div>
@@ -284,6 +360,12 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
       <div class="lab-cmd">$ ssh-keygen -t ed25519 -C "lab@teste-rotated"
 $ sed -i '/lab@teste$/d' ~/.ssh/authorized_keys
 $ ssh-copy-id -i ~/.ssh/id_ed25519_rotated.pub adminjr@IP_DA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sed -i '/lab@teste$/d' authorized_keys</dt><dd>Remove do arquivo <code>authorized_keys</code> a linha que termina com o comentário da chave antiga — usa o comentário (<code>-C</code>) que você deu antes, pra identificar exatamente qual linha apagar.</dd>
+          <dt>ssh-copy-id -i arquivo.pub</dt><dd>A flag <code>-i</code> especifica QUAL arquivo de chave pública instalar — sem ela, <code>ssh-copy-id</code> tentaria usar a chave padrão (<code>id_rsa.pub</code> ou <code>id_ed25519.pub</code>), não a nova chave rotacionada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> chave antiga sem mais acesso, nova chave funcionando — reproduzindo o painel 6 da prancha de hoje.</div>
       <div class="lab-why"><b>Por quê:</b> praticar a rotação num ambiente seguro é o que te deixa confiante pra fazer isso rápido quando for um caso real de vazamento.</div>
       <div class="lab-warn"><b>Cilada comum:</b> remover a chave antiga do authorized_keys ANTES de confirmar que a nova já está funcionando — isso pode te trancar fora sem querer.</div>

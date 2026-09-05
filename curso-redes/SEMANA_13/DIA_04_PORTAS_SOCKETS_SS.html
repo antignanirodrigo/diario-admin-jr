@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem o ping respondeu, mas o site continuava fora do ar. Sem olhar: o que o ping NUNCA confirma, mesmo quando dá certo?<br>
+    <b>2.</b> Hoje aparecem dois sinais diferentes de falha ao testar uma porta. Ontem você já viu um deles — qual?
+  </div>
+  <div class="ans">
+    <b>1.</b> Se a porta da aplicação está aberta e o serviço está de pé — ping só confirma a camada de rede (ICMP), nunca a camada de transporte ou aplicação.<br>
+    <b>2.</b> "Connection refused" — quando o host responde mas ninguém está escutando naquela porta (foi o caso de ontem, com o nginx parado). Hoje você compara isso com um segundo sinal, o timeout, que conta uma história diferente: alguém no caminho está bloqueando, sem nem responder.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você separou o teste de porta como uma camada própria.
 Hoje você aprofunda: o que exatamente é um socket, e por que "connection refused" e "timeout" — dois erros que
@@ -188,9 +241,19 @@ timeout significa "ninguém respondeu, o caminho pode estar bloqueado". São dia
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Vou desligar o firewall só pra testar..." — reflexo perigoso. A conexão falhou, e o
-  reflexo de desabilitar segurança pra "só testar" ignora que refused e timeout já contam histórias
-  diferentes, sem precisar tocar em nada. Ler o sinal antes de mudar a configuração é o método de hoje.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6003</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>10:05</span>
+      <span>aberto por: desenvolvedor</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-08</b> · serviço: API interna, porta 8080</div>
+      <div class="msg">"A conexão na porta 8080 falhou. Vou desligar o firewall só pra testar rapidinho, tudo bem?"</div>
+    </div>
+    <div class="ticket-foot">Reflexo perigoso. Antes de tocar em qualquer configuração de segurança: refused e timeout já contam histórias diferentes, sem precisar mudar nada. Você sabe ler qual é qual?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -254,6 +317,12 @@ $ ss -tlnp | grep ':8080'</div>
       <div class="lab-expect"><b>Resultado esperado:</b> porta 8080 aparecendo em LISTEN, com o processo associado.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar localmente primeiro dá a linha de base — sem isso, você não sabe se um teste remoto que falha é do serviço ou do caminho.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de derrubar o servidor de teste no final — ele fica rodando e ocupando a porta pra próxima vez.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b><code>ss -tlnp</code> não mostra o processo (coluna vazia)</b> → sem <code>sudo</code>, o <code>ss</code> não tem permissão de ver o dono de sockets de outros usuários. Rode <code>sudo ss -tlnp | grep ':8080'</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: de outra VM, teste a porta correta e uma porta sem serviço.</div></div>
@@ -267,10 +336,26 @@ $ nc -zv 192.168.10.X 9999</div>
       <div class="lab-text">Ação: adicione uma regra de firewall com policy drop, sem accept pra porta do serviço.</div></div>
       <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 drop
 $ nc -zv 192.168.10.X 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>nft add rule</dt><dd>Adiciona uma nova regra a uma chain existente do nftables — o firewall padrão em distros Linux modernas.</dd>
+          <dt>inet filter input</dt><dd>Localização da regra: table <code>inet</code> (cobre IPv4 e IPv6), chain <code>filter</code>, hook <code>input</code> (tráfego destinado à própria máquina).</dd>
+          <dt>tcp dport 8080</dt><dd>Condição da regra: só afeta pacotes TCP com porta de destino (<i>destination port</i>) 8080.</dd>
+          <dt>drop</dt><dd>Ação: descarta o pacote silenciosamente, sem responder nada ao remetente — é isso que produz o sintoma de timeout, diferente de um <code>reject</code> que responderia com recusa explícita.</dd>
+          <dt>nc -zv ... 8080</dt><dd>Testa a porta 8080 especificamente (revisado no Dia 3) — aqui usado pra confirmar, na prática, que o drop vira timeout.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> timeout, em vez de refused ou succeeded.</div>
       <div class="lab-why"><b>Por quê:</b> reproduzir o timeout de propósito é o que prova, na prática, que ele vem do firewall — não é só teoria.</div>
       <div class="lab-warn"><b>Cilada comum:</b> testar uma regra de drop na porta SSH por engano, numa VM sem console alternativo — isso te tranca fora da própria VM.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você acidentalmente bloquear sua própria porta SSH ao testar firewall, este é o ponto onde o chat com o Sênior-IA vai ajudar a recuperar o acesso via console.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>A regra de drop bloqueou a própria sessão SSH usada pra testar, e a sessão travou</b> → clássico de nftables: sempre confirme que a regra de drop está restrita à porta de teste (8080), nunca aplique uma <code>drop</code> genérica de <code>input</code> numa sessão SSH ativa sem antes garantir uma regra explícita liberando a porta 22.<br>
+          <b>"Error: Could not process rule: No such file or directory"</b> → a table/chain <code>inet filter</code> ainda não existe nessa VM. Crie primeiro com <code>sudo nft add table inet filter</code> e <code>sudo nft add chain inet filter input { type filter hook input priority 0 \; }</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: adicione a regra específica de accept e confirme que o teste remoto volta a funcionar.</div></div>

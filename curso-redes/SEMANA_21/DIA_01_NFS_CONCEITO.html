@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Semana 20, Dia 5)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 20 você diagnosticou um vazamento de isolamento entre VLANs. Sem olhar: quais eram os dois pontos de configuração mais prováveis de causar esse tipo de vazamento?<br>
+    <b>2.</b> Você viu que "permissivo por padrão" é um risco comum em configuração de rede. Hoje você vai decidir quem pode montar um diretório NFS e o que pode fazer com ele — por que essa mesma disciplina de "não liberar mais do que o necessário" se aplica aqui também?
+  </div>
+  <div class="ans">
+    <b>1.</b> Porta access na VLAN errada, ou um trunk permitindo VLANs demais ("allowed vlan: all"). Os dois comandos centrais eram <code>show vlan brief</code> e <code>show interfaces trunk</code>.<br>
+    <b>2.</b> Porque assim como um trunk "allowed vlan: all" de fábrica libera tráfego que não deveria, um export NFS mal restrito libera acesso e escrita a clientes que não deveriam ter nenhum dos dois — segmentar rede e restringir compartilhamento de arquivo são a mesma disciplina de segurança, aplicada em camadas diferentes.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 20 (VLAN):</b> Você já sabe que segmentação de rede não é
 sobre negar acesso por padrão, é sobre controlar exatamente quem alcança o quê. Hoje esse mesmo raciocínio se
@@ -181,14 +234,19 @@ local — mas por baixo, cada operação de arquivo ainda está trafegando pela 
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2101: "Preciso que três servidores de aplicação compartilhem os mesmos arquivos
-  de upload, sem copiar manualmente entre eles toda hora." A resposta clássica no mundo Linux é
-  <span class="hint" data-tip="Network File System — protocolo que permite montar um diretório de outro servidor Linux/Unix como se fosse local." onclick="openGlossary(0)">NFS</span>:
-  um servidor central
-  <span class="hint" data-tip="Ação do lado servidor de disponibilizar um diretório para ser acessado remotamente por clientes autorizados." onclick="openGlossary(1)">exporta</span>
-  um diretório, e cada cliente
-  <span class="hint" data-tip="Ação do lado cliente de anexar um sistema de arquivos remoto a um ponto específico da árvore de diretórios local." onclick="openGlossary(2)">monta</span>
-  esse mesmo diretório — mudanças feitas por um aparecem instantaneamente pros outros.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2101</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>09:20</span>
+      <span>aberto por: coordenação de aplicações</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-01, srv-app-02, srv-app-03</b> · serviço: upload de arquivos</div>
+      <div class="msg">"Preciso que três servidores de aplicação compartilhem os mesmos arquivos de upload, sem copiar manualmente entre eles toda hora."</div>
+    </div>
+    <div class="ticket-foot">A resposta clássica do mundo Linux é NFS. Por onde você começa?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -318,6 +376,34 @@ foto.jpg   ← apareceu imediatamente, mesmo sem ter sido criado ali</pre>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VMs descartáveis e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Antes do primeiro passo do laboratório, monte o par servidor+cliente na mesma VM: instale os pacotes, crie o diretório e exporte via loopback.</div></div>
+      <div class="lab-cmd">sudo apt install -y nfs-kernel-server nfs-common
+sudo mkdir -p /dados/uploads
+echo '/dados/uploads 127.0.0.1(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports
+sudo exportfs -ra
+exportfs -v</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>/dados/uploads</dt><dd>O diretório local que está sendo exportado (compartilhado) pela rede.</dd>
+          <dt>127.0.0.1</dt><dd>Quem tem permissão de montar esse export — aqui, restrito ao próprio host, só pra teste seguro em VM única.</dd>
+          <dt>rw</dt><dd>Permite leitura e escrita a quem montar — sem essa opção, o padrão é somente leitura.</dd>
+          <dt>sync</dt><dd>Confirma a escrita no disco antes de responder ao cliente — mais lento, mas evita perda de dado numa queda do servidor.</dd>
+          <dt>no_subtree_check</dt><dd>Desativa uma verificação extra de subdiretório que causa mais problemas de compatibilidade do que resolve, recomendação padrão para exports de diretório inteiro.</dd>
+          <dt>sudo tee -a /etc/exports</dt><dd>Grava a linha no arquivo de configuração dos exports, sem sobrescrever o que já existia (-a de append).</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> exportfs -v lista <code>/dados/uploads 127.0.0.1(rw,sync,no_subtree_check)</code> — o export existe e está ativo.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> sem essa infraestrutura mínima, os passos de showmount e mount do laboratório não têm servidor real pra conversar — você precisa do par servidor+cliente de pé antes de observar qualquer comportamento do NFS.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> usar 127.0.0.1 como servidor é só um truque de VM única pra estudar sem precisar de duas máquinas — numa rede real, servidor e cliente NFS são hosts diferentes. <b>Só em VM descartável.</b></div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"nfs-kernel-server: not found"</b> → seu gerenciador de pacotes pode ter outro nome — em Fedora/RHEL use <code>sudo dnf install nfs-utils</code> e <code>sudo systemctl enable --now nfs-server</code>.<br>
+          <b>"exportfs: /dados/uploads does not support NFS export"</b> → confirme que o diretório existe antes do export: <code>sudo mkdir -p /dados/uploads</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM servidor de laboratório, confirme um export existente (ou peça ajuda pra criar um básico) com exportfs -v.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> diretório exportado listado com suas opções.</div>
     </li>
@@ -334,7 +420,30 @@ foto.jpg   ← apareceu imediatamente, mesmo sem ter sido criado ali</pre>
       <div class="lab-text">Se tiver uma segunda VM cliente disponível, monte o mesmo export nela e confirme que o arquivo já aparece lá.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo visível na segunda VM, sem nenhuma ação adicional de sincronização.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Desmonte, remova o export e apague o diretório de teste — devolve a VM ao estado anterior à aula.</div></div>
+      <div class="lab-cmd">sudo umount /mnt/uploads
+sudo sed -i '/uploads/d' /etc/exports
+sudo exportfs -ra
+exportfs -v
+sudo rm -rf /dados/uploads /mnt/uploads</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>exportfs</dt><dd>Aplica (ou remove) exports NFS sem precisar reiniciar o serviço inteiro.</dd>
+          <dt>-r</dt><dd>Re-exporta tudo que está em /etc/exports, sincronizando com o estado atual do arquivo.</dd>
+          <dt>-a</dt><dd>Aplica a todos os exports do arquivo, não só um específico.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> exportfs -v não lista mais nada relacionado a /dados/uploads, e as duas pastas de teste não existem mais.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> fecha o ciclo criar → observar → desfazer: o único diretório e export tocados hoje foram os que você mesmo criou pra estudar — nenhuma configuração real do servidor sobrou pra trás.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover a linha do /etc/exports antes de rodar exportfs -ra de novo depois — export fantasma confunde investigação futura.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"umount: /mnt/uploads: not mounted"</b> → normal se você pulou o passo de montagem — ignore e siga pra remoção do export.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

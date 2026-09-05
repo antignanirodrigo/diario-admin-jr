@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 2, qual comando você rodou ANTES de aplicar qualquer mudança no smb.conf, pra validar a sintaxe?<br>
+    <b>2.</b> Salvar o smb.conf editado é suficiente pra uma mudança valer? O que mais é preciso?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>testparm</code>. Ele aponta erro de sintaxe antes de você arriscar recarregar uma configuração quebrada. Hoje ele reaparece indiretamente: depois de mexer na base de credenciais do Samba, testar com <code>smbclient</code> segue o mesmo princípio de validar antes de assumir que funcionou.<br>
+    <b>2.</b> Não — o serviço smbd continua com a configuração antiga em memória até você rodar <code>systemctl reload</code> (ou restart). Hoje um passo extra parecido aparece: criar o usuário Linux não é suficiente, é preciso também cadastrar a credencial dele na base do Samba com <code>smbpasswd -a</code>.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 (smb.conf):</b> Você já escreveu valid users = joao no
 compartilhamento. Hoje você resolve a peça que faltava: joao existe no Linux, mas ainda não tem senha nenhuma
@@ -181,12 +234,19 @@ novo, só adiciona credencial Samba pra um usuário Linux que já existe.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2203: "Segui exatamente o Dia 2, valid users = joao está certinho no smb.conf,
-  mas quando o Windows pede senha, nenhuma senha que eu tento funciona — nem a senha Linux do joao." Isso é
-  esperado: o usuário joao existe no Linux, mas nunca foi cadastrado na
-  <span class="hint" data-tip="Banco de dados próprio do Samba que armazena as credenciais usadas para autenticação em compartilhamentos, separado da base de senhas do sistema Linux." onclick="openGlossary(0)">base de credenciais do Samba</span>.
-  É exatamente pra isso que existe o comando
-  <span class="hint" data-tip="Comando usado para gerenciar senhas na base de credenciais do Samba, incluindo adicionar, remover e desativar contas." onclick="openGlossary(1)">smbpasswd</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2203</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>14:20</span>
+      <span>aberto por: usuário joao</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: Samba — autenticação</div>
+      <div class="msg">"Segui exatamente o Dia 2, valid users = joao está certinho no smb.conf, mas quando o Windows pede senha, nenhuma senha que eu tento funciona — nem a senha Linux do joao."</div>
+    </div>
+    <div class="ticket-foot">O usuário já existe no Linux. Onde mais ele precisa existir?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -320,6 +380,29 @@ smb: \> ls
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de usuários, discos e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Crie um usuário Linux de teste isolado e tente cadastrar a credencial Samba dele ANTES e DEPOIS de ele existir no sistema — é assim que o erro de ordem fica visível.</div></div>
+      <div class="lab-cmd">sudo smbpasswd -a teste-jr          # tentativa 1: ainda NÃO existe no Linux
+sudo useradd -m teste-jr
+sudo smbpasswd -a teste-jr          # tentativa 2: agora existe
+pdbedit -L | grep teste-jr</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>smbpasswd</dt><dd>Ferramenta de gerenciamento da base de credenciais do Samba — separada da base de senhas do Linux.</dd>
+          <dt>-a</dt><dd>Add: adiciona um usuário à base de credenciais Samba, pedindo uma senha específica pra ele. Exige que o usuário já exista como conta Linux — não cria conta nova.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a tentativa 1 falha com um erro indicando que o usuário não existe no sistema. A tentativa 2, depois do useradd, pede e cadastra a senha SMB com sucesso, e teste-jr aparece na saída do pdbedit -L.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver o comando falhar por causa da ordem errada, e depois funcionar corretamente, grava o motivo melhor do que só ler sobre ele — smbpasswd -a nunca cria conta Linux, só adiciona credencial pra uma que já existe.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> criar esse usuário em servidor de produção. <b>Só em VM descartável</b> — anote o nome teste-jr, você vai removê-lo no último passo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>a tentativa 1 não deu nenhum erro visível</b> → confira a versão com <code>smbpasswd -V</code>; em algumas versões o erro aparece só no log — rode <code>sudo journalctl -u smbd -n 10</code> depois da tentativa.<br>
+          <b>"useradd: user 'teste-jr' already exists"</b> → alguém (ou uma aula anterior) já criou esse usuário nesta VM. Use outro nome, ex: <code>teste-jr2</code>, ou remova o antigo primeiro com <code>sudo userdel -r teste-jr</code>.
+        </div>
+      </details>
+    </li>
+
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, tente smbpasswd -a pra um usuário que ainda não existe no Linux, e observe o erro.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> mensagem de erro indicando que o usuário não existe.</div>
     </li>
@@ -336,7 +419,27 @@ smb: \> ls
       <div class="lab-text">Defina uma senha Samba diferente da senha Linux do mesmo usuário, e confirme que os dois logins continuam funcionando separadamente.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> login Linux com uma senha, login Samba com outra, sem conflito.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova a credencial Samba e o usuário Linux de teste, e prove que os dois sumiram.</div></div>
+      <div class="lab-cmd">sudo smbpasswd -x teste-jr
+sudo userdel -r teste-jr
+pdbedit -L | grep teste-jr || echo "credencial Samba removida"
+id teste-jr 2>&1 | grep -i "no such user" && echo "usuário Linux removido"</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>smbpasswd -x</dt><dd>Delete: remove um usuário da base de credenciais do Samba, sem tocar na conta Linux dele. Sempre rode antes de remover o usuário Linux com userdel, nunca depois.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nenhuma linha do pdbedit menciona mais teste-jr, e o id confirma "no such user" — exatamente o esperado depois da limpeza.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> usuário de teste esquecido em qualquer sistema (Linux ou base Samba) é um achado clássico de auditoria — sobra credencial ativa sem dono claro. Encerrar o ciclo criar → testar → remover é como se pratica sem deixar rastro na VM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> rodar <code>smbpasswd -x</code> depois de já ter removido o usuário Linux com <code>userdel -r</code> — a ordem certa é remover a credencial Samba PRIMEIRO, depois o usuário Linux (ordem inversa da criação).</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"smbpasswd -x: cannot open passdb" ou erro parecido depois do userdel</b> → você inverteu a ordem — sempre remova a credencial Samba (<code>smbpasswd -x</code>) antes do usuário Linux (<code>userdel</code>), nunca depois.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

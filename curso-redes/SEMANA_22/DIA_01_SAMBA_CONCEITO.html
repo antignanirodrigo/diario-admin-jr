@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Semana 21)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 21 você fechou o curso de NFS diagnosticando uma escrita negada em camadas: rede, export, permissão Unix e UID. Sem olhar: qual dessas camadas era a causa raiz real do chamado #2105?<br>
+    <b>2.</b> Por que testar como root podia enganar um diagnóstico de permissão NFS, segundo a Semana 21?
+  </div>
+  <div class="ans">
+    <b>1.</b> A permissão Unix tradicional do diretório no servidor (<code>ls -ld</code> mostrava dono root sem escrita pro usuário) — mesmo com export <code>rw</code> e UID batendo, a permissão Unix do sistema de arquivos ainda bloqueava a escrita. Hoje essa mesma disciplina de separar camadas reaparece: Samba também empilha várias permissões diferentes sobre o mesmo compartilhamento.<br>
+    <b>2.</b> Por causa do <i>root squash</i>: o root do cliente é tratado como usuário sem privilégio no servidor, então ele SEMPRE tem dificuldade de escrita, mesmo quando o problema real afeta só um usuário comum. Hoje, com Samba, existe uma armadilha parecida: testar com uma conta que 'deveria' funcionar sem confirmar se ela está cadastrada na base certa de credenciais.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 21 (NFS):</b> Você já sabe compartilhar arquivos entre
 máquinas Linux com NFS. Hoje você aprende a resolver o mesmo problema pra um público diferente: máquinas
@@ -180,12 +233,19 @@ nativo de um mundo — e por que escolher o errado significa pedir pro cliente i
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2201: "Configurei um export NFS igual fiz semana passada, mas os notebooks
-  Windows do escritório não conseguem acessar de jeito nenhum — nem aparece nada no Explorador de Arquivos."
-  O problema não é configuração errada, é protocolo errado: o Windows fala nativamente
-  <span class="hint" data-tip="Protocolo de rede usado pelo Windows para compartilhamento de arquivos e impressoras, diferente do protocolo usado pelo NFS." onclick="openGlossary(1)">SMB</span>,
-  não NFS. Pra atender esses clientes, o servidor Linux precisa rodar
-  <span class="hint" data-tip="Conjunto de programas open source que implementa o protocolo SMB no Linux, permitindo que ele funcione como servidor de arquivos compatível com Windows." onclick="openGlossary(0)">Samba</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2201</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>09:30</span>
+      <span>aberto por: coordenação de TI do escritório</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: compartilhamento de arquivos (era NFS)</div>
+      <div class="msg">"Configurei um export NFS igual fiz semana passada, mas os notebooks Windows do escritório não conseguem acessar de jeito nenhum — nem aparece nada no Explorador de Arquivos."</div>
+    </div>
+    <div class="ticket-foot">O problema não é configuração errada. O que muda quando o cliente é Windows?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -314,6 +374,33 @@ LISTEN  0  128  0.0.0.0:445    ← SMB (Samba, porta padrão)</pre>
   <h2>7. Laboratório guiado — marca conforme for testando</h2>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Instale o Samba na VM de laboratório e confirme que os dois serviços essenciais (smbd e nmbd) subiram, além da porta SMB escutando.</div></div>
+      <div class="lab-cmd">sudo apt update && sudo apt install -y samba
+sudo systemctl status smbd nmbd --no-pager
+ss -tlnp | grep -E ':445|:139'</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ss</dt><dd>Substituto moderno do netstat — lista sockets de rede ativos no sistema.</dd>
+          <dt>-t</dt><dd>Mostra apenas conexões TCP (o protocolo usado por SMB).</dd>
+          <dt>-l</dt><dd>Mostra apenas sockets em modo LISTEN — portas esperando conexão, não conexões já estabelecidas.</dd>
+          <dt>-n</dt><dd>Mostra endereços e portas em formato numérico, sem tentar resolver nomes — mais rápido e sem depender de DNS.</dd>
+          <dt>-p</dt><dd>Mostra o processo (PID e nome) dono de cada socket — exige sudo pra aparecer completo.</dd>
+          <dt>grep -E ':445|:139'</dt><dd>Filtra a saída só pelas linhas que mencionam a porta 445 (SMB moderno) ou 139 (NetBIOS/SMB legado) — as duas portas que o Samba pode usar.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> smbd e nmbd aparecem como "active (running)", e a porta 445 (e geralmente a 139) aparecem em LISTEN na saída do ss.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> sem confirmar que os dois serviços realmente subiram e a porta está escutando, qualquer teste de acesso do Windows depois vira suposição — você precisa da evidência de que o servidor está pronto pra receber conexão SMB antes de ir pro cliente.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> instalar isso em servidor de produção só pra testar. <b>Só em VM descartável</b> — e confirme que não há firewall bloqueando a porta 445 na rede do laboratório.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Unable to locate package samba"</b> → atualize a lista de pacotes primeiro com <code>sudo apt update</code>, ou confirme que o repositório universe está habilitado (Ubuntu): <code>sudo add-apt-repository universe</code>.<br>
+          <b>nmbd aparece como "inactive" ou "failed"</b> → distros recentes às vezes desabilitam nmbd por padrão (NetBIOS é menos necessário com DNS moderno). Ative com <code>sudo systemctl enable --now nmbd</code>. Sem ele, a resolução de nome NetBIOS pode falhar, mas acesso via IP direto no Windows ainda funciona.<br>
+          <b>a porta 445 não aparece no ss</b> → confirme que smbd realmente está "active (running)" primeiro — se o serviço caiu, rode <code>sudo journalctl -u smbd -n 30</code> pra ver o motivo antes de tentar de novo.
+        </div>
+      </details>
+    </li>
+
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, instale o pacote samba e confirme os serviços smbd e nmbd ativos.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> systemctl status smbd e nmbd mostrando active (running).</div>

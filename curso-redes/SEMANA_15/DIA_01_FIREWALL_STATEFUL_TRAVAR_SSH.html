@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Semana 14)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Na Semana 14 você viu um escopo DHCP ficar sem endereços e travar vários clientes de uma vez. Sem olhar: o que os DIVERSOS chamados simultâneos indicavam sobre a causa provável?<br>
+    <b>2.</b> Hoje o risco muda de "vários clientes travados" pra "eu mesmo travado fora do servidor". Isso pede mais ou menos cuidado antes de agir?
+  </div>
+  <div class="ans">
+    <b>1.</b> Que a causa era compartilhada (o escopo cheio), não algo local a um único cliente — sintomas simultâneos apontam pra uma causa central.<br>
+    <b>2.</b> Muito mais cuidado — hoje um único comando de firewall mal ordenado pode cortar o SEU PRÓPRIO acesso remoto à VM, sem ninguém mais pra te ajudar a reverter de fora.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 13 (portas e sockets):</b> Você já sabe diagnosticar firewall
 sem desligá-lo. Hoje o risco muda de figura: aplicar uma regra de firewall remotamente, sem plano de volta,
@@ -189,9 +242,19 @@ RELATED — e a armadilha: aplicar um deny-all sem primeiro permitir SSH NEW te 
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Se eu aplicar deny-all agora, continuo conectado?" — pergunta certa, feita tarde demais.
-  O comando sudo nft add rule inet filter input drop já foi digitado. Sem uma regra explícita permitindo SSH
-  ANTES do drop padrão, a resposta é não: "Connection timed out" na próxima tentativa.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6301</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>10:00</span>
+      <span>aberto por: você mesmo, antes de aplicar a mudança</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02</b> · serviço: acesso SSH remoto</div>
+      <div class="msg">"Se eu aplicar deny-all agora, continuo conectado?"</div>
+    </div>
+    <div class="ticket-foot">Pergunta certa, feita tarde demais — o comando "drop" já está digitado na tela. Sem uma regra explícita permitindo SSH antes do drop padrão, o que acontece na próxima tentativa de conexão?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -260,6 +323,13 @@ admin@srv-app-01:~$ [OK, sem lockout]</pre>
       <div class="lab-cmd">$ sudo nft add rule inet filter input ip saddr SEU_IP tcp dport 22 accept
 $ sudo nft add rule inet filter input ct state established,related accept
 $ sudo nft add rule inet filter input drop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essas regras</summary>
+        <dl class="flag-list">
+          <dt>ip saddr SEU_IP tcp dport 22 accept</dt><dd>Permite conexões NOVAS de origem específica (<code>saddr</code>) na porta 22 — a regra que garante que você, especificamente, consegue entrar.</dd>
+          <dt>ct state established,related accept</dt><dd>Permite pacotes de conexões JÁ estabelecidas ou relacionadas a elas — é o que torna o firewall <i>stateful</i>: sem essa regra, até o tráfego de retorno da sua própria sessão seria bloqueado.</dd>
+          <dt>drop</dt><dd>Regra final: descarta tudo que não casou com nenhuma regra anterior — o "nega por padrão" que só é seguro por causa das duas regras acima virem ANTES dele.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> três regras adicionadas com sucesso, chain agora com policy drop efetiva.</div>
       <div class="lab-why"><b>Por quê:</b> essa ordem exata é o que garante que o drop nunca seja avaliado antes da regra que te permite entrar de novo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> inverter a ordem "só pra testar rápido" — mesmo em laboratório, isso reproduz o lockout real.</div>
@@ -271,6 +341,12 @@ $ sudo nft add rule inet filter input drop</div>
       <div class="lab-why"><b>Por quê:</b> testar com uma sessão NOVA (não a do console já aberto) é a única forma de validar que a regra funciona pra uma conexão NEW de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confiar só na sessão de console já aberta e assumir que SSH também funciona — sessões diferentes, estados diferentes.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você se trancar fora acidentalmente numa VM de laboratório, este é o ponto onde o chat com o Sênior-IA vai ajudar a recuperar via console.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Connection timed out" mesmo depois das três regras aplicadas na ordem certa</b> → confirme com <code>echo $SSH_CONNECTION</code> na sessão de console que o IP de origem usado na regra é EXATAMENTE o mesmo da nova tentativa — VPNs e NAT podem mudar o IP de origem visto pelo servidor.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confira os contadores de pacotes/bytes de cada regra.</div></div>

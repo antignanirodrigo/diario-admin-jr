@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> No Dia 3, joao já existia no Linux mas não conseguia autenticar no compartilhamento Samba. Sem olhar: qual era a causa, e qual comando resolveu?<br>
+    <b>2.</b> smbpasswd -a cria um usuário Linux novo?
+  </div>
+  <div class="ans">
+    <b>1.</b> joao nunca tinha sido cadastrado na base de credenciais própria do Samba. <code>sudo smbpasswd -a joao</code> resolveu, cadastrando uma senha específica pra autenticação SMB — independente da senha Linux dele.<br>
+    <b>2.</b> Não — ele exige que o usuário já exista no Linux (criado com useradd) e só adiciona a credencial dele na base do Samba. Hoje isso importa de novo: mesmo com joao já autenticando corretamente, o ARQUIVO que ele cria pode ainda não ser acessível por outra pessoa — autenticação e permissão de arquivo são camadas diferentes.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 21 (permissão NFS em camadas):</b> Você já sabe que export rw
 não substitui permissão Unix do diretório. Hoje o Samba traz uma terceira camada: mesmo com read only = no e
@@ -181,11 +234,19 @@ nova, independente do que o cliente Windows "pediu".</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #2204: "joao consegue criar arquivos no compartilhamento normalmente — read only
-  = no está certo. Mas maria, que também tem acesso ao mesmo compartilhamento, não consegue nem ABRIR o
-  arquivo que joao acabou de criar." O problema não é o export nem a autenticação — é a permissão que o
-  arquivo NASCE com. Isso é controlado por
-  <span class="hint" data-tip="Opção do Samba que define o teto máximo de permissão aplicado a arquivos novos criados através do compartilhamento." onclick="openGlossary(0)">create mask</span>.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#2204</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>10:05</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-05</b> · serviço: Samba — compartilhamento uploads</div>
+      <div class="msg">"joao consegue criar arquivos no compartilhamento normalmente. Mas maria, que também tem acesso ao mesmo compartilhamento, não consegue nem ABRIR o arquivo que joao acabou de criar."</div>
+    </div>
+    <div class="ticket-foot">read only já está certo. O que mais controla se um arquivo pode ser lido depois de criado?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -321,6 +382,37 @@ $ ls -l /dados/uploads/
   <h2>7. Laboratório guiado — marca conforme for testando</h2>
   <div class='box warning'><strong>Segurança:</strong> execute os testes apenas em VM descartável e confirme nomes de discos, hosts e arquivos antes de cada comando.</div>
   <ol class='steps' id="labSteps">
+    <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Sem create mask definido, crie um arquivo através do Samba e confirme a permissão restritiva. Depois adicione create mask e directory mask ao bloco do compartilhamento e repita o teste.</div></div>
+      <div class="lab-cmd">echo teste > /tmp/teste.jpg
+smbclient //localhost/uploads -U joao -c "put /tmp/teste.jpg antes.jpg"
+ls -l /dados/uploads/antes.jpg
+
+sudo tee -a /etc/samba/smb.conf > /dev/null <<'EOF'
+   create mask = 0664
+   directory mask = 0775
+EOF
+sudo testparm -s
+sudo systemctl reload smbd
+smbclient //localhost/uploads -U joao -c "put /tmp/teste.jpg depois.jpg"
+ls -l /dados/uploads/depois.jpg</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essas opções do smb.conf</summary>
+        <dl class="flag-list">
+          <dt>create mask = 0664</dt><dd>Define o teto máximo de permissão Unix aplicado a ARQUIVOS NOVOS criados através deste compartilhamento — 0664 = rw-rw-r-- (dono e grupo leem/escrevem, outros só leem). É um teto: bits além dele nunca são concedidos, mesmo que o cliente peça mais.</dd>
+          <dt>directory mask = 0775</dt><dd>Mesma ideia do create mask, mas aplicada a PASTAS novas — 0775 = rwxrwxr-x. Pastas precisam do bit de execução (x) pra serem navegáveis; por isso o valor é diferente do create mask.</dd>
+        </dl>
+      </details>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> antes.jpg aparece com permissão -rw------- (só joao acessa). depois.jpg, criado depois do create mask, aparece com -rw-rw-r-- — agora legível por outros.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> ver os dois arquivos lado a lado, criados no mesmo compartilhamento antes e depois da mudança, prova visualmente que create mask afeta só criação futura — exatamente o ponto que confunde todo iniciante nesse tema.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> as linhas create mask/directory mask precisam ficar DENTRO do bloco [uploads], não soltas no fim do arquivo — colar com tee -a sem confirmar a posição pode fazer elas caírem fora do bloco certo se houver outro compartilhamento depois. Confirme com <code>cat /etc/samba/smb.conf</code> antes de recarregar.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>depois.jpg saiu com a mesma permissão de antes.jpg</b> → as linhas provavelmente caíram fora do bloco [uploads]. Edite o arquivo diretamente e confirme com <code>testparm -s -v | grep -A5 uploads</code> que create mask aparece associado ao [uploads] certo.<br>
+          <b>"NT_STATUS_ACCESS_DENIED" ao rodar put</b> → confirme que valid users inclui joao e que a credencial Samba dele já foi cadastrada (Dia 3) com <code>pdbedit -L</code>.
+        </div>
+      </details>
+    </li>
+
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Numa VM de laboratório, crie um arquivo via smbclient sem create mask definido, e confirme a permissão restritiva com ls -l.</div></div>
       <div class="lab-expect"><b>Resultado esperado:</b> permissão tipo -rw------- no arquivo criado.</div>

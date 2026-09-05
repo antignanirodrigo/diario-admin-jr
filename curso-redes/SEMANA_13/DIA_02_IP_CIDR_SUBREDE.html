@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem você caminhou pelas quatro camadas até achar a causa de um site fora do ar. Sem olhar: qual comando confirma a camada de REDE (a camada 3) de uma interface?<br>
+    <b>2.</b> Ontem a camada de rede era só "tem IP ou não tem". Hoje ela ganha uma segunda pergunta: tendo IP, isso te diz alguma coisa sozinho?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>ip -br addr show &lt;interface&gt;</code> — mostra o endereço IP e o prefixo configurados.<br>
+    <b>2.</b> Não. Um IP sem máscara/CIDR é um endereço incompleto — ele não diz quem está na mesma rede e quem precisa de rota. Hoje você aprende a completar essa pergunta com o CIDR.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com ontem:</b> Ontem você aprendeu que a camada de rede usa endereçamento
 IP. Hoje você aprende o detalhe que confunde todo iniciante: dois IPs parecidos NÃO significa que estão na
@@ -188,9 +241,19 @@ números parecem iguais" é uma armadilha, não uma prova de que dois hosts se f
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"192.168.10.15 e 192.168.20.30... começam parecido. Devem se falar direto!" — essa suposição
-  é a armadilha central de hoje. Endereço IP sem máscara engana: só o CIDR (a máscara) mostra onde a rede
-  realmente termina, e os dois IPs acima estão em sub-redes diferentes.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5901</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>11:30</span>
+      <span>aberto por: estagiário de infra</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>srv-app-02 e srv-app-03</b> · serviço: comunicação entre servidores</div>
+      <div class="msg">"192.168.10.15 e 192.168.20.30... começam parecido. Devem se falar direto!"</div>
+    </div>
+    <div class="ticket-foot">Essa suposição é a armadilha central de hoje. Os dois IPs realmente estão na mesma rede?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -246,9 +309,23 @@ REDE     11000000.10101000.00001010.00000000  (192.168.10.0)</pre>
       <div class="lab-cmd">vm-a$ ip addr add 192.168.10.15/24 dev ens160
 vm-b$ ip addr add 192.168.10.40/24 dev ens160
 $ ip -br addr</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip addr add</dt><dd>Adiciona um endereço IP a uma interface de rede — comando de configuração, diferente do <code>ip addr show</code> (só leitura) usado ontem.</dd>
+          <dt>192.168.10.15/24</dt><dd>O endereço IP seguido da máscara em notação CIDR — o <code>/24</code> diz que os primeiros 24 bits identificam a rede, sobrando 8 bits para hosts (256 endereços possíveis, 254 utilizáveis).</dd>
+          <dt>dev ens160</dt><dd>Especifica em qual interface de rede o endereço deve ser adicionado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ambos os IPs visíveis, com o mesmo prefixo /24.</div>
       <div class="lab-why"><b>Por quê:</b> começar com um caso "mesma rede" confirmado dá uma base pra comparar com o caso "redes diferentes" mais adiante.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir IP configurado temporariamente (via <code>ip addr add</code>) com IP persistente — sem editar o arquivo de configuração, isso some no reboot.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"RTNETLINK answers: File exists"</b> → o IP já está atribuído (de uma tentativa anterior). Remova antes com <code>sudo ip addr del 192.168.10.15/24 dev ens160</code> e adicione de novo.<br>
+          <b>"Cannot find device \"ens160\""</b> → confirme o nome real da interface com <code>ip -br link</code> antes de rodar o comando — em VMs diferentes pode ser <code>eth0</code> ou <code>enp0s3</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: calcule manualmente o endereço de rede de cada IP usando a máscara /24.</div></div>
@@ -265,6 +342,12 @@ $ ip -br addr</div>
       <div class="lab-why"><b>Por quê:</b> o ping é a segunda evidência — cálculo teórico batendo com teste prático é o que fecha a confirmação, não um ou outro isolado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> um firewall bloqueando ICMP pode dar falso negativo — se o ping falhar mas o cálculo bateu, verifique regras de firewall antes de assumir que a rede está errada.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o cálculo manual e o teste de ping não baterem, este é o ponto onde o chat com o Sênior-IA vai ajudar a revisar a matemática binária.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>100% de perda de pacotes mesmo com o cálculo batendo em mesma rede</b> → confirme que o firewall de uma das VMs não está bloqueando ICMP com <code>sudo nft list ruleset | grep icmp</code> — ping falho não invalida o cálculo de sub-rede, só mascara o teste.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: reconfigure uma VM para uma sub-rede diferente e recalcule.</div></div>
@@ -282,7 +365,22 @@ $ ip -br addr</div>
       <div class="lab-why"><b>Por quê:</b> registrar os dois cenários lado a lado é o que você vai consultar da próxima vez que dois IPs "parecerem" da mesma rede.</div>
       <div class="lab-warn"><b>Cilada comum:</b> anotar só a conclusão ("são redes diferentes") sem o cálculo — sem o raciocínio registrado, você vai precisar refazer tudo da próxima vez.</div>
     </li>
-  </ol>
+      <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
+      <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Remova os IPs temporários adicionados nas duas VMs — <code>ip addr add</code> não é persistente, mas some só no reboot; sem remover, a VM fica com endereços de laboratório penduradas.</div></div>
+      <div class="lab-cmd">vm-a$ sudo ip addr del 192.168.10.15/24 dev ens160
+vm-b$ sudo ip addr del 192.168.10.40/24 dev ens160
+vm-b$ sudo ip addr del 192.168.20.30/24 dev ens160
+$ ip -br addr</div>
+      <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nenhum dos três IPs de teste aparece mais em <code>ip -br addr</code> — cada VM volta a mostrar só o IP original dela.</div>
+      <div class="lab-why"><b>Por que fizemos isso:</b> como esses endereços não foram gravados em nenhum arquivo de configuração, eles só sumiriam no próximo reboot — remover manualmente fecha o laboratório sem depender de reiniciar a VM.</div>
+      <div class="lab-warn"><b>Cilada comum:</b> tentar remover um endereço que nunca foi adicionado com sucesso (por causa de um erro anterior) — o <code>ip addr del</code> nesse caso retorna erro; confira com <code>ip -br addr</code> antes de assumir que sobrou algo.</div>
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"RTNETLINK answers: Cannot assign requested address"</b> → o endereço já não estava mais lá (talvez removido antes, ou nunca foi de fato adicionado) — confirme com <code>ip -br addr</code> que a limpeza já está completa.
+        </div>
+      </details>
+    </li>
+</ol>
 </section>
 
 <section class='section'>

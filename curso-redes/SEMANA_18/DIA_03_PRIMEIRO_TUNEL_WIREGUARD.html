@@ -145,6 +145,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -155,6 +196,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem cada peer gerou seu próprio par de chaves e trocou só a pública. Sem olhar: o que NUNCA deveria sair da máquina onde foi gerado?<br>
+    <b>2.</b> Hoje um dos dois sites tem IP público fixo, e o outro tem IP dinâmico (muda com o tempo). Isso te lembra de algum problema parecido lá da Semana 17, sobre endereço que muda?
+  </div>
+  <div class="ans">
+    <b>1.</b> A chave privada — só a pública é trocada entre os peers.<br>
+    <b>2.</b> Sim — o masquerade da Semana 17 (Dia 2) existia justamente porque o IP público de saída podia mudar, e a regra precisava se adaptar sozinha. Hoje o princípio é o oposto: o lado com IP DINÂMICO precisa ser quem INICIA a conexão (Endpoint configurado nele), porque o outro lado não tem como alcançar um endereço que muda.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2 (chaves e peers):</b> Você já gerou os pares de chave e trocou
 apenas as públicas entre os dois lados. Hoje essas chaves entram de fato num arquivo wg0.conf, e você sobe o
@@ -180,11 +233,19 @@ está de pé — não é só o comando não ter dado erro.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Chamado #1803: "Configurei o WireGuard nos dois sites, subi a interface nos dois, e não
-  conecta." Site A é o datacenter, com IP público fixo 203.0.113.10. Site B é uma filial pequena, atrás de um
-  roteador doméstico com IP dinâmico — hoje é um endereço, semana que vem pode ser outro. O técnico colocou um
-  <span class="hint" data-tip="Campo do bloco [Peer] com o IP:porta público do outro lado, usado para iniciar a conexão." onclick="openGlossary(4)">Endpoint</span>
-  no arquivo do Site A apontando pro último IP dinâmico observado do Site B. Isso é o erro raiz do dia.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#1803</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>11:00</span>
+      <span>aberto por: técnico de campo</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>Site A (datacenter, IP fixo 203.0.113.10) e Site B (filial, IP dinâmico)</b> · serviço: túnel WireGuard entre dois sites</div>
+      <div class="msg">"Configurei o WireGuard nos dois sites, subi a interface nos dois, e não conecta."</div>
+    </div>
+    <div class="ticket-foot">O Endpoint do Site A foi configurado apontando pro último IP dinâmico observado do Site B. Isso é o erro raiz do dia — por quê?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 

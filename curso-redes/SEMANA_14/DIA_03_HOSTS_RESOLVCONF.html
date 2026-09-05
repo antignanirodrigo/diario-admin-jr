@@ -153,6 +153,47 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
+/* CMD-EXPLAIN-L99 */
+.cmd-explain{margin-top:6px}
+.cmd-explain summary{cursor:pointer;color:var(--cyan);font-weight:700;font-size:12.5px;list-style:none;padding:4px 0}
+.cmd-explain summary::-webkit-details-marker{display:none}
+.cmd-explain summary::before{content:"\276F ";font-size:11px}
+.cmd-explain[open] summary::before{content:"\25BE ";}
+.cmd-explain .flag-list{margin-top:6px;padding:10px 12px;background:#0d1522;border-left:3px solid var(--purple);border-radius:0 4px 4px 0;font-size:13px}
+.cmd-explain .flag-list dt{font-family:Consolas,monospace;color:var(--gold);font-weight:700;margin-top:8px}
+.cmd-explain .flag-list dt:first-child{margin-top:0}
+.cmd-explain .flag-list dd{margin:2px 0 0 0;color:var(--muted)}
+[data-theme="light"] .cmd-explain .flag-list{background:#f1f5f9;border-left:3px solid var(--purple)}
+[data-theme="light"] .cmd-explain .flag-list dt{color:#7c3aed}
+[data-theme="light"] .cmd-explain .flag-list dd{color:var(--muted)}
 </style></head>
 <body>
 <header class='top'>
@@ -163,6 +204,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>🧠 Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem "a mudança não funcionou" na verdade era cache com TTL ainda ativo. Sem olhar: qual foi a ação correta pra confirmar isso, sem esperar o TTL expirar sozinho?<br>
+    <b>2.</b> Hoje o sintoma parece igual ("resposta errada"), mas só em UMA máquina específica. O cache de ontem explicaria isso, ou é outra coisa?
+  </div>
+  <div class="ans">
+    <b>1.</b> Comparar a consulta normal com uma consulta direta ao servidor autoritativo (<code>dig @IP</code>) — se divergem, é cache; e um <code>resolvectl flush-caches</code> resolve sem mexer em nenhum registro.<br>
+    <b>2.</b> O cache de DNS costuma expirar igual em todas as máquinas que consultam o mesmo TTL — se só UMA máquina insiste no valor errado, o suspeito muda: hoje o culpado é local a essa máquina, não o cache do resolvedor.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com os dois dias anteriores:</b> Você já sabe ler DNS e diferenciar
 cache de mudança real. Hoje aparece um jeito de o DNS estar 100% certo e ainda assim UMA máquina específica
@@ -188,9 +241,19 @@ quando só UMA máquina, de várias, se comporta diferente.</div>
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>"Se o DNS está certo, por que só este PC insiste no IP antigo?" PC-01 e PC-03 resolvem
-  app.intra.example pro IP certo (192.168.10.80). PC-02, sozinho, insiste em 192.168.10.99. O DNS não é o
-  culpado aqui — algo local nessa máquina específica está respondendo antes dele.</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6178</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>16:10</span>
+      <span>aberto por: suporte N1</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>PC-02 (dos três: PC-01, PC-02, PC-03)</b> · serviço: acesso à aplicação interna</div>
+      <div class="msg">"Se o DNS está certo, por que só este PC insiste no IP antigo?"</div>
+    </div>
+    <div class="ticket-foot">PC-01 e PC-03 resolvem certo. PC-02, sozinho, insiste em outro IP. O DNS é o culpado aqui?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -257,6 +320,12 @@ $ getent hosts app.intra.example
       <div class="lab-text">Ação: compare getent hosts com dig para o mesmo nome.</div></div>
       <div class="lab-cmd">$ getent hosts app.intra.example
 $ dig app.intra.example A +short</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>getent hosts</dt><dd>Consulta o mecanismo de resolução de nomes COMPLETO do sistema — segue a ordem configurada em <code>/etc/nsswitch.conf</code>, incluindo <code>/etc/hosts</code> antes do DNS.</dd>
+          <dt>dig ... +short</dt><dd>Consulta o DNS DIRETO, ignorando <code>/etc/hosts</code> por completo — é uma ferramenta de diagnóstico de DNS, não do sistema de resolução geral.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> getent mostra o IP de /etc/hosts; dig mostra o IP real do DNS — divergentes.</div>
       <div class="lab-why"><b>Por quê:</b> essa comparação prova, na prática, que dig e getent hosts não consultam a mesma coisa — dig ignora /etc/hosts, getent segue a cadeia completa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar só dig pra diagnosticar um problema de resolução — ele nunca vai revelar um override em /etc/hosts, porque não consulta esse arquivo.</div>
@@ -268,6 +337,12 @@ $ dig app.intra.example A +short</div>
       <div class="lab-why"><b>Por quê:</b> confirmar a ordem antes de agir evita assumir "files vem primeiro" quando, numa configuração não-padrão, pode ser o contrário.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que todo sistema Linux tem a mesma ordem em nsswitch.conf — sempre confira, não presuma.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a ordem estiver invertida (dns antes de files), este é o ponto onde o chat com o Sênior-IA vai ajudar a entender as implicações dessa configuração não-padrão.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>Nenhuma linha retorna (grep vazio)</b> → algumas distros usam uma sintaxe ligeiramente diferente; procure a seção inteira com <code>cat /etc/nsswitch.conf | grep -A0 hosts</code> ou abra o arquivo com um editor pra localizar a linha manualmente.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: faça backup, remova a entrada de teste e valide com getent hosts.</div></div>
@@ -277,6 +352,12 @@ $ getent hosts app.intra.example</div>
       <div class="lab-expect"><b>Resultado esperado:</b> getent hosts agora retorna o mesmo IP que o dig.</div>
       <div class="lab-why"><b>Por quê:</b> o backup antes de editar é o que te dá um caminho de volta imediato se a remoção afetar algo além da linha de teste.</div>
       <div class="lab-warn"><b>Cilada comum:</b> remover a linha errada com sed sem antes confirmar com grep quais linhas seriam afetadas.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>O <code>sed</code> removeu mais linhas do que deveria</b> → restaure do backup imediatamente com <code>sudo cp /etc/hosts.bak /etc/hosts</code> e refaça o <code>sed</code> com um padrão mais específico (ex: incluindo o IP exato, não só o nome).
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: documente a causa raiz correta.</div></div>
