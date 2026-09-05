@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual algoritmo de hash identifica cada chunk único no datastore do PBS?<br>
+    <b>2.</b> Ontem você viu blocos deduplicados sendo criados e economizando espaço. Hoje o problema é o oposto: você apagou 50 snapshots e o espaço em disco não diminuiu. Por que apagar o snapshot não libera o chunk na hora?
+  </div>
+  <div class="ans">
+    <b>1.</b> SHA-256.<br>
+    <b>2.</b> Porque apagar um snapshot só remove o arquivo de índice (.fidx) que APONTA pros chunks — os chunks em si só somem de verdade depois que o Garbage Collection roda e confirma que nenhum outro backup ainda referencia aquele bloco. É a mesma lógica da deduplicação de ontem, só que ao contrário: um chunk só é removido quando NINGUÉM mais precisa dele.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Ontem você entendeu como os chunks são criados. Hoje você aprende como o PBS limpa blocos não utilizados quando backups são apagados: conhecendo o ciclo em duas fases (Mark & Sweep) do Garbage Collection e a proteção contra deleção acidental de backups em andamento.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#5002</b>: 'O administrador apagou 50 snapshots antigos de máquinas virtuais na interface web do PBS, mas o espaço em disco do Datastore continuou 100% ocupado. Além disso, a auditoria externa exige garantir que nenhum backup armazenado há mais de 6 meses sofreu corrupção silenciosa de hardware. O chamado exige: (1) Entender por que apagar snapshots apenas remove arquivos de índice (.fidx) sem liberar os chunks de dados imediatamente; (2) Executar o <span class="hint" data-tip="Processo em 2 etapas: Fase 1 (Mark) marca chunks em uso; Fase 2 (Sweep) apaga chunks órfãos após o tempo de carência." onclick="openGlossary(0)">Garbage Collection (GC)</span>; (3) Entender a janela de carência de 24h e 5min (Grace Period); e (4) Configurar um <span class="hint" data-tip="Varredura que lê e recalcula os hashes de todos os chunks do datastore para detectar corrupção de disco." onclick="openGlossary(1)">Verify Job</span> semanal.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5002</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>10:15</span>
+      <span>aberto por: auditoria externa</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>tank-backup</b> · serviço: datastore PBS</div>
+      <div class="msg">"Apaguei 50 snapshots antigos mas o disco continua 100% cheio. Além disso, preciso garantir que nada armazenado há 6 meses sofreu corrupção silenciosa."</div>
+    </div>
+    <div class="ticket-foot">Apagar o snapshot não bastou. O que ainda falta rodar pra liberar o espaço de verdade — e pra confirmar que os dados antigos ainda estão íntegros?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -246,6 +298,12 @@ verify group vm/101 (2 snapshots)
       <div class="lab-expect"><b>Resultado esperado:</b> Exibição do total de chunks, tamanho em disco e taxa de deduplicação.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O Garbage Collection Fase 1 varre os arquivos de manifesto (.fidx/.didx) e marca todos os chunks que ainda estão em uso ativo por backups válidos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Interromper o processo de Garbage Collection no meio, deixando o datastore em estado intermediário de verificação.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>o GC roda e termina, mas o espaço em disco não diminui como esperado</b> → chunks órfãos só são removidos depois da janela de carência (Grace Period, ~24h+5min) — se o GC anterior rodou há pouco tempo, espere o próximo ciclo, ou confira se ainda existe algum snapshot referenciando esses chunks.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Acompanhe o log da tarefa confirmando a quantidade de chunks órfãos removidos e espaço liberado.</div></div>
@@ -260,6 +318,12 @@ verify group vm/101 (2 snapshots)
       <div class="lab-expect"><b>Resultado esperado:</b> Job de verificação programado com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-manager verify-job recalcula os hashes SHA-256 de cada chunk armazenado no disco físico, detectando corrupção silenciosa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Não rodar Verify Jobs periodicamente, descobrindo que o backup está corrompido apenas no momento crítico de um desastre real.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"verify-job 'tank-verify' does not exist"</b> → o job precisa ser criado antes (via GUI ou <code>verify-job create</code>) — o comando <code>start</code> só dispara um job que já foi configurado, não cria um novo.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide que o relatório final acusa 100% de chunks íntegros com zero corrupção.</div></div>

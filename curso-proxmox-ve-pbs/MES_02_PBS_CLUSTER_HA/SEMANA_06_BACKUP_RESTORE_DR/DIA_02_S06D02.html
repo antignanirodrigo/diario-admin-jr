@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 1)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual dos três modos de vzdump usa Copy-on-Write do QEMU pra evitar downtime?<br>
+    <b>2.</b> Ontem você escolheu COMO capturar o backup sem derrubar o serviço. Hoje o servidor já caiu de verdade e o RTO contratado é de 15 minutos pra um disco de 2TB — um restore tradicional não cabe nesse tempo. O que muda no jeito de restaurar?
+  </div>
+  <div class="ans">
+    <b>1.</b> Snapshot.<br>
+    <b>2.</b> Em vez de esperar o disco inteiro (2TB) ser copiado pela rede antes de ligar a VM, o Live-Restore liga a VM em segundos e busca os blocos sob demanda, conforme o sistema operacional pede — o resto do disco continua chegando em segundo plano, sem bloquear o boot.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 1:</b> Você dominou os modos de geração de backup. Hoje você aprende a restaurar ambientes críticos instantaneamente: conhecendo a tecnologia de Live-Restore do Proxmox VE com PBS, que liga a máquina virtual em 2 segundos enquanto os gigabytes de disco são baixados em background.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado de emergência <b>#6002</b>: 'O servidor de banco de dados <b>VM 101</b> (disco de 2 Terabytes) sofreu corrupção de partição e está inoperante. O restore tradicional demoraria mais de 4 horas copiando 2TB pela rede, ultrapassando o RTO contratual de 15 minutos do cliente. O chamado exige: (1) Iniciar a restauração com o recurso <span class="hint" data-tip="Live-Restore: inicia a VM imediatamente servindo blocos sob demanda pela rede enquanto transfere o disco em segundo plano." onclick="openGlossary(0)">Live-Restore</span> a partir do PBS; (2) Entender como o QEMU prioriza a leitura de <span class="hint" data-tip="Blocos solicitados pelo SO da VM que são baixados com prioridade máxima imediata." onclick="openGlossary(1)">On-Demand Chunks</span>; (3) Validar o boot do sistema operacional em menos de 10 segundos; e (4) Acompanhar a conclusão do streaming em background.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6002</b></span>
+      <span><b>PRIORIDADE CRÍTICA</b></span>
+      <span>11:40</span>
+      <span>aberto por: monitoramento + cliente</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM 101 — banco de dados (2TB)</b> · serviço: restore de emergência</div>
+      <div class="msg">"Corrupção de partição, VM inoperante. Restore tradicional levaria mais de 4 horas — o contrato garante RTO de 15 minutos."</div>
+    </div>
+    <div class="ticket-foot">Copiar 2TB pela rede antes de ligar a VM não cabe no prazo. Existe um jeito de ligar a VM antes do disco estar 100% copiado?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -237,6 +289,12 @@ TASK OK (VM 100% autônoma no storage local)</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> Snapshot do PBS identificado com data e tamanho.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> A flag --live-restore 1 instrui o QEMU a ligar a máquina virtual imediatamente (em ~2 segundos), iniciando o boot enquanto os dados são baixados.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Aguardar horas para baixar um arquivo de backup de 1 TB em um incidente crítico quando o Live-Restore poderia colocar o serviço no ar instantaneamente.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>a VM liga rápido, mas trava no meio de uma operação alguns minutos depois</b> → o Live-Restore depende da conexão com o PBS estar saudável durante TODO o streaming em background — se a rede ou o storage do PBS cair no meio do processo, a VM trava esperando o bloco que falta. Não é falha do live-restore, é dependência ativa da fonte.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Acompanhe o boot da máquina virtual em menos de 3 segundos no console.</div></div>
@@ -244,6 +302,12 @@ TASK OK (VM 100% autônoma no storage local)</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> VM 101 removida do hypervisor.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O QEMU busca blocos de disco sob demanda pela rede conforme o sistema operacional requisita, transmitindo o restante do disco em background.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Executar Live-Restore através de links de rede lentos ou instáveis; se a rede cair durante a restauração ativa, a VM trava por erro de I/O.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>o terminal não responde logo após a VM ligar via live-restore</b> → normal nos primeiros segundos — o sistema operacional ainda está inicializando e o guest agent pode não estar pronto. Aguarde mais alguns segundos antes de considerar falha.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Monitore o streaming de dados dos chunks em background no log da tarefa.</div></div>

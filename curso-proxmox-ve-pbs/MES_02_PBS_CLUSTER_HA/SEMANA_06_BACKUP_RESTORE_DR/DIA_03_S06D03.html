@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, o Live-Restore ligava a VM inteira em quantos segundos, aproximadamente?<br>
+    <b>2.</b> Ontem o problema era restaurar a VM inteira rápido. Hoje o diretor financeiro só apagou UMA pasta dentro de uma VM de 800GB que está em produção, atendendo 50 pessoas. Por que ligar/restaurar a VM inteira seria um exagero aqui?
+  </div>
+  <div class="ans">
+    <b>1.</b> Cerca de 2 segundos.<br>
+    <b>2.</b> Porque restaurar a VM inteira significaria desligar ou sobrescrever um sistema que está em pleno uso por 50 funcionários, só pra recuperar uma pasta. O File-Level Restore monta o backup via FUSE e deixa você navegar e extrair só os arquivos específicos, sem tocar na VM real.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2:</b> Ontem você aprendeu a restaurar VMs inteiras em 2 segundos com Live-Restore. Hoje você domina a recuperação cirúrgica: aprendendo a abrir backups de 1 Terabyte e extrair uma única planilha do Excel ou arquivo de configuração deletado por engano em menos de 10 segundos.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#6003</b>: 'O diretor financeiro deletou acidentalmente a pasta <code>C:\Contratos\2026\</code> dentro da VM Windows <b>102</b>. A VM inteira tem 800GB de disco e está em plena produção atendendo 50 funcionários. Não podemos sobrescrever a VM nem desligá-la. O chamado exige: (1) Utilizar o recurso <span class="hint" data-tip="File-Level Restore: permite abrir o sistema de arquivos do backup e baixar arquivos individuais sem restaurar a VM." onclick="openGlossary(0)">File-Level Restore</span> do PBS/PVE; (2) Montar o sistema de arquivos do backup via <span class="hint" data-tip="Filesystem in Userspace: monta imagens de disco e índices .fidx diretamente no Linux sem emular hardware." onclick="openGlossary(1)">FUSE</span>; (3) Localizar a pasta deletada dentro da partição NTFS; e (4) Entregar os arquivos recuperados em menos de 5 minutos.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6003</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>13:20</span>
+      <span>aberto por: diretor financeiro</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM 102 — Windows, 800GB</b> · serviço: recuperação de arquivos</div>
+      <div class="msg">"Apaguei sem querer a pasta C:\Contratos\2026\. A VM não pode ser desligada, tem 50 pessoas usando agora."</div>
+    </div>
+    <div class="ticket-foot">Restaurar a VM inteira não é opção. Como você recupera só essa pasta, sem mexer no resto?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -261,6 +313,12 @@ $ ls -lh /tmp/contratos_recuperados/Contratos/2026/
       <div class="lab-expect"><b>Resultado esperado:</b> Visualização completa dos arquivos com tamanhos e permissões.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-file-restore extract extrai o arquivo específico diretamente para a pasta atual do terminal em menos de 1 segundo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Sobrescrever o arquivo de produção atual diretamente sem fazer uma cópia de segurança prévia (backup do arquivo modificado).</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>a tentação de sobrescrever o arquivo de produção diretamente com o caminho de destino</b> → o extract sempre grava primeiro num caminho local separado — compare com <code>diff</code> antes de aplicar por cima do arquivo real, nunca extraia direto sobre o arquivo em produção.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide o conteúdo do arquivo recuperado com o comando diff.</div></div>

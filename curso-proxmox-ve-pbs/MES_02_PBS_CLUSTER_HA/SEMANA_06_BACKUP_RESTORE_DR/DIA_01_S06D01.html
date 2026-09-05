@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 5, Semana 5)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Semana passada, qual diretiva de retenção mantinha 7 backups diários, 4 semanais e 12 mensais?<br>
+    <b>2.</b> A política GFS decide QUANTO TEMPO guardar cada backup. Hoje a pergunta é diferente: COMO cada backup é capturado — com a VM ligada ou desligada. Por que essa escolha pode custar 15 minutos de indisponibilidade num sistema 24/7?
+  </div>
+  <div class="ans">
+    <b>1.</b> <code>keep-daily=7, keep-weekly=4, keep-monthly=12</code>.<br>
+    <b>2.</b> Porque o modo <b>Stop</b> desliga a VM inteira antes de copiar o disco — é o mais seguro em consistência, mas gera downtime real. Para um e-commerce 24/7, o modo <b>Snapshot</b> (que usa Copy-on-Write do QEMU) evita esse desligamento, mantendo o serviço no ar durante o backup.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 5:</b> Você dominou o Proxmox Backup Server. Agora você projeta a estratégia de execução de backups no Proxmox VE: entendendo por que o modo Snapshot com QEMU Guest Agent entrega consistência sem downtime, e quando os modos Suspend ou Stop ainda são necessários.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#6001</b>: 'O agendador noturno de backups do Proxmox VE está causando 15 minutos de indisponibilidade em um e-commerce 24/7 porque a VM <b>100</b> foi configurada no modo de backup <span class="hint" data-tip="Desliga a VM completamente, copia o disco e liga a VM novamente (gera downtime severo)." onclick="openGlossary(0)">Stop</span>. O chamado exige: (1) Entender a diferença operacional entre os modos <span class="hint" data-tip="Modo corporativo padrão: realiza o backup com a VM ligada usando snapshots e fsfreeze sem downtime." onclick="openGlossary(1)">Snapshot</span>, <span class="hint" data-tip="Congela a execução da VM na RAM temporariamente durante o dump." onclick="openGlossary(2)">Suspend</span> e <b>Stop</b>; (2) Migrar o job para o modo <code>mode=snapshot</code> integrado ao PBS; (3) Auditar a consistência com o Guest Agent; e (4) Garantir 100% de disponibilidade durante a janela de backup.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6001</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>03:00</span>
+      <span>aberto por: monitoramento</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM 100 — e-commerce</b> · serviço: backup noturno</div>
+      <div class="msg">"O backup agendado está causando 15 minutos de indisponibilidade toda madrugada num sistema que precisa ficar no ar 24/7."</div>
+    </div>
+    <div class="ticket-foot">A VM está configurada no modo Stop. Qual outro modo evita esse downtime, e o que ele muda na consistência do backup?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -241,6 +293,12 @@ TASK OK (Downtime: 0 segundos!)</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> Visualização das linhas de agendamento cron do vzdump.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O modo Snapshot do vzdump executa o backup online da VM sem pausar os serviços, utilizando Copy-on-Write do QEMU para capturar o estado do disco.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Usar o modo Stop em servidores web 24/7 de alta audiência durante o expediente, desligando a VM e causando indisponibilidade para os usuários.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>o modo snapshot roda sem erro, mas o banco de dados dentro da VM Windows fica inconsistente depois do restore</b> → sem o QEMU Guest Agent instalado e habilitado na VM, o snapshot não consegue congelar as escritas do sistema de arquivos (fsfreeze) antes de capturar — instale o guest agent e habilite-o na configuração da VM antes de confiar nesse modo para bancos de dados.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute o backup de uma VM em modo Stop desligando para consistência absoluta.</div></div>
@@ -248,6 +306,12 @@ TASK OK (Downtime: 0 segundos!)</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> Backup executado com sucesso e zero indisponibilidade.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O modo Stop do vzdump desliga a máquina virtual antes de ler o disco, garantindo consistência absoluta para bancos de dados legados sem suporte a VSS/Guest Agent.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Usar o modo Snapshot em VMs com bancos de dados pesados sem o QEMU Guest Agent ativo, arriscando inconsistência de transações em memória.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>usar o modo stop "só pra garantir" numa VM que ninguém avisou que ia cair</b> → esse é exatamente o erro que gerou o ticket de hoje — confirme sempre a criticidade e a janela de manutenção da VM antes de escolher um modo que desliga o serviço.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Compare o tempo de execução e impacto de I/O registrado nos logs de cada modo.</div></div>

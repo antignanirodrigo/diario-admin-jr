@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual role específica você aplicou na ACL do datastore pra restringir o token de automação?<br>
+    <b>2.</b> Ontem o token controlava QUEM pode gravar backups. Hoje o problema é diferente: mesmo que alguém roube o servidor PBS inteiro, o que impede essa pessoa de LER o conteúdo dos backups?
+  </div>
+  <div class="ans">
+    <b>1.</b> DatastoreBackup.<br>
+    <b>2.</b> Criptografia client-side (AES-256-GCM): os dados são cifrados ainda no Proxmox VE, antes de saírem pela rede — o PBS armazena só chunks cifrados, sem nunca ter acesso à chave. Mesmo com controle total do servidor físico, um invasor não consegue ler um único byte sem a chave, que fica separada (e tem cópia impressa, a Paperkey).
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 3:</b> Você conectou o PVE ao PBS via API Tokens. Hoje você implementa a camada máxima de defesa: a Criptografia Client-Side (AES-256-GCM), garantindo que os blocos sejam cifrados na memória da VM antes de tocar a rede, de modo que nem mesmo o administrador do PBS consiga ler os dados sem a chave.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#5004</b>: 'A diretoria de compliance e a LGPD exigem que todos os backups de dados médicos e financeiros das VMs <b>101</b> e <b>102</b> sejam armazenados no PBS com <span class="hint" data-tip="Criptografia realizada no host Proxmox VE antes de enviar os chunks pela rede (Zero-Knowledge Storage)." onclick="openGlossary(0)">Criptografia Client-Side</span>. Mesmo se o servidor PBS for roubado ou comprometido por ransomware, os atacantes não devem conseguir ler um único byte. O chamado exige: (1) Gerar uma chave simétrica <span class="hint" data-tip="Algoritmo de cifragem autenticada de 256 bits com aceleração por hardware AES-NI." onclick="openGlossary(1)">AES-256-GCM</span> no PVE; (2) Gerar o backup da chave em formato impresso <span class="hint" data-tip="Versão em texto legível e QR-Code da chave criptográfica para recuperação em desastre total." onclick="openGlossary(2)">Paperkey</span>; (3) Vincular a chave na configuração do storage PBS; e (4) Testar o restore demonstrando que sem a chave os dados são ilegíveis.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5004</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>14:00</span>
+      <span>aberto por: diretoria de compliance / LGPD</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>VM 101 e VM 102</b> · serviço: backup — dados médicos e financeiros</div>
+      <div class="msg">"Esses backups precisam estar protegidos mesmo se o servidor PBS for roubado ou comprometido por ransomware. Nenhum byte pode ser legível sem autorização."</div>
+    </div>
+    <div class="ticket-foot">Onde exatamente a criptografia precisa acontecer pra isso ser verdade, mesmo com o PBS comprometido?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -254,6 +306,12 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
       <div class="lab-expect"><b>Resultado esperado:</b> Bloco de texto blindado <code>--- BEGIN PROXMOX BACKUP KEY ---</code> exibido.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando paperkey exporta a chave em formato de texto estruturado para ser impressa e guardada em cofre físico à prova de fogo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Guardar a paperkey em um arquivo de texto no próprio desktop ou na mesma VM que está sendo feito o backup.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>perder o arquivo da chave E não ter a Paperkey impressa em cofre físico</b> → os dados ficam permanentemente irrecuperáveis — não existe "esqueci minha senha" em criptografia client-side de verdade. É exatamente por isso que a Paperkey precisa de cópia física, fora do próprio servidor.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Vincule o arquivo de chave na configuração do storage PBS do Proxmox.</div></div>
@@ -261,6 +319,12 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
       <div class="lab-expect"><b>Resultado esperado:</b> Chave binária reconstruída a partir da entrada textual.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Associar a chave de criptografia na configuração do storage PBS no Proxmox VE garante que todos os backups daquele nó sejam cifrados automaticamente.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Misturar backups criptografados e não-criptografados no mesmo job sem documentar qual VM usa qual chave de restauração.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>restore falha com "decryption failed" ou "wrong encryption key"</b> → a chave usada no restore precisa ser EXATAMENTE a mesma usada no backup original. Trocar de nó Proxmox sem copiar o arquivo da chave junto é a causa mais comum desse erro.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute um backup criptografado e confirme que os blocos residem cifrados no PBS.</div></div>

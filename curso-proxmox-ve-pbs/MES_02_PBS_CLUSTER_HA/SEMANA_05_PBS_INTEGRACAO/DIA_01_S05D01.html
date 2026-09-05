@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot now"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Semana 4, Dia 5)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Semana passada, quais dois protocolos você usou para compartilhar storage bruto pela rede entre servidores?<br>
+    <b>2.</b> Aquele storage compartilhado guardava os discos das VMs em bruto. Hoje você conhece um servidor de backup dedicado que NÃO guarda os dados assim — o que ele guarda no lugar?
+  </div>
+  <div class="ans">
+    <b>1.</b> NFSv4 e SMB.<br>
+    <b>2.</b> Chunks — blocos dinâmicos de ~4MB identificados por hash SHA-256. É a diferença entre um storage de rede genérico (guarda o disco inteiro, do jeito que é) e o PBS (quebra tudo em pedaços e só guarda cada pedaço único uma vez, mesmo que venha de servidores diferentes).
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com a Semana 4:</b> Você dominou storages locais e de rede. Agora você entra no MÊS 2 conhecendo o Proxmox Backup Server (PBS): a solução empresarial escrita em Rust que substitui backups pesados tradicionais por deduplicação global baseada em chunks de 4MB.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#5001</b>: 'A infraestrutura corporativa possui 40 VMs Windows e Linux gerando mais de 5TB de dados por dia. O backup tradicional via vzdump está saturando a rede e consumindo 100TB de storage a cada duas semanas. O datacenter implantou um servidor dedicado com <span class="hint" data-tip="Servidor corporativo de backup em Rust com deduplicação, criptografia e verify jobs." onclick="openGlossary(0)">Proxmox Backup Server (PBS)</span>. O chamado exige: (1) Entender a mecânica do <span class="hint" data-tip="Algoritmo que fatia discos em pedaços dinâmicos de ~4MB identificados por hash SHA-256." onclick="openGlossary(1)">Content-Defined Chunking</span>; (2) Demonstrar como a <span class="hint" data-tip="Deduplicação onde chunks idênticos entre diferentes VMs são gravados apenas UMA vez no storage." onclick="openGlossary(2)">Deduplicação Global</span> reduz em 90% o espaço em disco; (3) Auditar a estrutura de diretórios em <code>.chunks/</code>; e (4) Validar a velocidade do backup incremental através do QEMU dirty-bitmap.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5001</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>08:30</span>
+      <span>aberto por: diretoria de TI</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>datacenter — 40 VMs</b> · serviço: backup corporativo</div>
+      <div class="msg">"O backup via vzdump está saturando a rede e consumindo 100TB a cada duas semanas. Chegou um PBS novo — preciso entender por que ele resolve isso antes de migrar tudo."</div>
+    </div>
+    <div class="ticket-foot">Antes de migrar 40 VMs pra esse novo servidor, o que exatamente ele faz diferente de um storage comum?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -244,6 +296,13 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
       <div class="lab-expect"><b>Resultado esperado:</b> Datastore principal listado com status ativo.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-client testa o fatiamento de dados em chunks dinâmicos de 4MB identificados por hash SHA-256.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Achar que o PBS gera arquivos .tar ou .vmdk tradicionais; o PBS armazena apenas blocos deduplicados na pasta .chunks/.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"Permission denied (os error 13)"</b> → rode o comando como root ou com um usuário que tenha permissão de leitura recursiva na árvore que está sendo salva — o client precisa ler cada arquivo pra fatiar em chunks.<br>
+          <b>"error trying to connect: ... certificate verify failed"</b> → em laboratório, adicione o fingerprint TLS do servidor PBS na configuração do repositório antes de tentar de novo — nunca ignore esse erro em produção, ele existe pra evitar conexão com um servidor falso.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Inspecione os chunks de 4MB gerados e armazenados no datastore do PBS.</div></div>
@@ -251,6 +310,12 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
       <div class="lab-expect"><b>Resultado esperado:</b> Visualização das subpastas organizadas por prefixo hexadecimal (00, 01, 02...).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> A deduplicação global no datastore reaproveita blocos idênticos de múltiplos servidores, economizando até 90% de espaço em disco.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Desativar o cache de dirty bitmaps nas VMs, forçando o cliente de backup a ler todo o disco virtual a cada ciclo incremental.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"No such file or directory"</b> → o datastore ainda não foi criado nesse caminho. Confirme o caminho real com <code>proxmox-backup-manager datastore list</code> antes de navegar até ele.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute um segundo backup incremental validando o reaproveitamento de blocos pelo dirty bitmap.</div></div>

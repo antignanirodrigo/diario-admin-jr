@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 3)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, qual protocolo o File-Level Restore usa pra montar o sistema de arquivos do backup sem ligar a VM?<br>
+    <b>2.</b> Até agora, todo backup ficava guardado num único servidor PBS. Hoje a regra 3-2-1 exige uma segunda cópia OFFSITE. O que muda em ter duas cópias em vez de uma, se as duas ficam no mesmo prédio?
+  </div>
+  <div class="ans">
+    <b>1.</b> FUSE.<br>
+    <b>2.</b> Nada — é exatamente por isso que "offsite" é a parte que importa: se as duas cópias estão no mesmo prédio, um incêndio, um roubo ou uma falha elétrica destrói as duas ao mesmo tempo. A regra 3-2-1 exige pelo menos uma cópia fisicamente em outro lugar, não só duas cópias quaisquer.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 3:</b> Você dominou as técnicas de restauração local. Hoje você protege a empresa contra a destruição física do datacenter: implementando a regra 3-2-1 de backup através de Sync Jobs remotos entre múltiplos servidores PBS com criptografia TLS e limitação de banda.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#6004</b>: 'Para atender às normas de Disaster Recovery e a <span class="hint" data-tip="3 cópias dos dados em 2 mídias diferentes, sendo 1 cópia obrigatoriamente fora do site (Offsite)." onclick="openGlossary(0)">Regra 3-2-1</span>, todos os backups do PBS Local (Matriz) devem ser sincronizados diariamente para um segundo servidor PBS Offsite (Nuvem/Filial em <b>198.51.100.50</b>). O link de internet possui 100Mbps e a sincronização não pode saturar a rede durante o horário comercial. O chamado exige: (1) Cadastrar o <span class="hint" data-tip="Conexão que define endereço, porta e credenciais do servidor PBS remoto." onclick="openGlossary(1)">Remote Endpoint</span> no PBS da Matriz; (2) Criar o <span class="hint" data-tip="Tarefa agendada que puxa apenas os chunks novos/modificados do datastore remoto via TLS." onclick="openGlossary(2)">Sync Job</span>; (3) Limitar a banda WAN com <span class="hint" data-tip="Controle de taxa máxima de transferência para não saturar a internet da empresa." onclick="openGlossary(3)">Rate Limiting (rate-in)</span>; e (4) Validar a integridade dos dados replicados.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#6004</b></span>
+      <span><b>PRIORIDADE MÉDIA</b></span>
+      <span>15:30</span>
+      <span>aberto por: diretoria de TI</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>PBS Matriz → PBS Offsite (198.51.100.50)</b> · serviço: replicação / regra 3-2-1</div>
+      <div class="msg">"Precisamos replicar os backups da Matriz para o servidor Offsite todo dia, sem saturar o link de 100Mbps durante o horário comercial."</div>
+    </div>
+    <div class="ticket-foot">Copiar tudo de novo todo dia não cabe no link. Como o PBS evita reenviar o que o outro lado já tem?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -256,6 +308,12 @@ Sync job finished successfully!</pre>
       <div class="lab-expect"><b>Resultado esperado:</b> Sync Job programado no agendador.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O Sync Job transfere exclusivamente os chunks novos que o servidor de destino ainda não possui, minimizando o uso do link de WAN.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Fazer cópias manuais de arquivos gigantes pela rede em vez de usar os Sync Jobs otimizados do PBS.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>o sync job foi criado mas nunca roda sozinho no horário esperado</b> → <code>create</code> só define o job — confirme se um <code>--schedule</code> foi configurado também (via GUI ou flag), do contrário ele só executa quando disparado manualmente com <code>sync-job run</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Dispare a sincronização manual e acompanhe o tráfego exclusivo de chunks novos.</div></div>

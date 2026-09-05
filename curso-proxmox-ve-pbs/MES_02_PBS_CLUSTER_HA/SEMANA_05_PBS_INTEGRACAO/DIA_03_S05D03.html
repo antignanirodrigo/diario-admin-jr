@@ -156,6 +156,34 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 [data-theme="light"] .testking-tag{background:#2563eb;color:#ffffff}
 [data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
 
+/* PADRAO-DIDATICO-L99 */
+.revisao{width:min(1180px,92vw);margin:10px auto 0;background:#1a1408;border:1px solid #7a5a12;border-left:5px solid var(--gold);border-radius:6px;padding:14px 18px;font-size:14.5px;color:#f4d98a}
+.revisao summary{cursor:pointer;font-weight:700;list-style:none}
+.revisao summary::-webkit-details-marker{display:none}
+.revisao summary::before{content:"\25B6 ";font-size:11px}
+.revisao[open] summary::before{content:"\25BC "}
+.revisao .ans{margin-top:10px;padding:10px 12px;background:#050910;border-left:3px solid var(--green);border-radius:0 4px 4px 0;color:#cfeaf5;font-weight:400}
+[data-theme="light"] .revisao{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+[data-theme="light"] .revisao .ans{background:#f0fdf4;color:#14532d}
+.ticket{background:#050910;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:6px;padding:0;margin:16px 0;overflow:hidden;font-family:Consolas,monospace}
+.ticket-head{background:#1b1117;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12.5px;color:#f4c6c9;display:flex;gap:16px;flex-wrap:wrap}
+.ticket-head b{color:var(--red)}
+.ticket-body{padding:16px;font-size:14px;color:var(--ink);line-height:1.6}
+.ticket-body .msg{color:#a8f5c6}
+.ticket-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+[data-theme="light"] .ticket{background:#fff}
+[data-theme="light"] .ticket-head{background:#fef2f2;color:#991b1b}
+[data-theme="light"] .ticket-body .msg{color:#065f46}
+.lab-fix{margin-top:8px;font-size:13px}
+.lab-fix summary{cursor:pointer;color:var(--gold);font-weight:700;list-style:none;padding:6px 0}
+.lab-fix summary::-webkit-details-marker{display:none}
+.lab-fix summary::before{content:"\1F527 "}
+.lab-fix .fix-body{padding:10px 12px;background:#1a1408;border-left:3px solid var(--gold);border-radius:0 4px 4px 0;color:#f4d98a}
+.lab-fix .fix-body b{color:var(--ink)}
+[data-theme="light"] .lab-fix .fix-body{background:#fffbeb;color:#78350f}
+[data-theme="light"] .lab-fix .fix-body b{color:#0f172a}
+.lab-setup{border-left-color:var(--purple)!important}
+.setup-tag{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:3px;margin-right:8px;vertical-align:middle}
 </style></head>
 <body>
 <header class='top'>
@@ -166,6 +194,18 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 <div class="progress">
   <div class="dot done"></div><div class="dot done"></div><div class="dot now"></div><div class="dot"></div><div class="dot"></div>
 </div>
+
+<details class="revisao">
+  <summary>Antes de começar — 20 segundos de memória (Dia 2)</summary>
+  <div style="margin-top:10px">
+    <b>1.</b> Ontem, quanto tempo de carência (Grace Period) o PBS espera antes de remover um chunk órfão de verdade?<br>
+    <b>2.</b> Ontem você garantiu que os DADOS já salvos estavam íntegros. Hoje o problema é anterior a isso: quem tem permissão pra GRAVAR novos dados no datastore?
+  </div>
+  <div class="ans">
+    <b>1.</b> 24 horas mais 5 minutos.<br>
+    <b>2.</b> Até agora a integração usaria a senha de root — acesso total, sem limite. Hoje você cria uma credencial específica (API Token com a role DatastoreBackup) que só pode gravar backups, nada além disso. É o princípio do menor privilégio aplicado à conexão entre servidores, não só a usuários humanos.
+  </div>
+</details>
 
 <div class="bridge">🔗 <b>Conecta com o Dia 2:</b> Você dominou a arquitetura e manutenção interna do PBS. Hoje você realiza a conexão oficial entre o hypervisor Proxmox VE e o PBS: criando usuários de serviço, gerando API Tokens dedicados com privilégio Datastore.Backup e validando o Fingerprint SHA-256 do certificado TLS.</div>
 
@@ -187,7 +227,19 @@ footer{margin-top:50px;padding:26px 4vw;background:#050607;color:var(--muted);te
 
 <section class='section'>
   <h2>1. O chamado</h2>
-  <div class='box'>Você recebeu o chamado <b>#5003</b>: 'A equipe de segurança proibiu o uso da senha de root do PBS na integração com os nós Proxmox VE. É obrigatório criar uma credencial de menor privilégio para automação. O servidor PBS reside no IP <b>192.168.1.200</b> com datastore <b>backup-pool</b>. O chamado exige: (1) Criar o usuário de serviço <code>backup-pve@pbs</code> e gerar um <span class="hint" data-tip="Token de API com segredo criptográfico alfanumérico que substitui senhas de usuário." onclick="openGlossary(0)">API Token (backup-token)</span>; (2) Conceder a role estrita <span class="hint" data-tip="Permissão que autoriza apenas gravação de backups e leitura de índices, sem permitir apagar datastores." onclick="openGlossary(1)">DatastoreBackup</span> na ACL do datastore; (3) Extrair o <span class="hint" data-tip="Hash SHA-256 do certificado SSL do PBS para validação TLS anti-Man-in-the-Middle." onclick="openGlossary(2)">SSL Fingerprint</span>; e (4) Cadastrar o storage no PVE com <code>pvesm add pbs</code>.'</div>
+  <div class="ticket">
+    <div class="ticket-head">
+      <span><b>#5003</b></span>
+      <span><b>PRIORIDADE ALTA</b></span>
+      <span>09:00</span>
+      <span>aberto por: equipe de segurança</span>
+    </div>
+    <div class="ticket-body">
+      <div>host: <b>192.168.1.200 (PBS)</b> · serviço: integração PVE ↔ PBS</div>
+      <div class="msg">"Proibido usar a senha de root do PBS na automação de backup. Precisamos de uma credencial de menor privilégio, e rápido."</div>
+    </div>
+    <div class="ticket-foot">Sem usar a senha de root, como o Proxmox VE consegue se autenticar no PBS pra gravar backups?</div>
+  </div>
   <p style="color:var(--muted);font-size:13.5px">💡 Passa o mouse nas palavras destacadas pra ver uma dica rápida — clica se quiser a explicação completa com analogia.</p>
 </section>
 
@@ -248,6 +300,12 @@ $ pvesm add pbs pbs-storage \
       <div class="lab-expect"><b>Resultado esperado:</b> Token ID e Secret exibidos no terminal.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Criar um API Token dedicado (ex: backup-bot@pbs!pve-token) no PBS permite autenticação programática sem expor a senha de root do servidor.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Usar o usuário 'root@pam' com senha mestra para autenticar hypervisors no PBS, violando o princípio do menor privilégio.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"user 'backup-bot@pbs' does not exist"</b> → o usuário de serviço precisa existir antes do token. Crie primeiro com <code>proxmox-backup-manager user create backup-bot@pbs</code>.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Atribua a ACL de backup exclusiva para o datastore desejado.</div></div>
@@ -270,6 +328,12 @@ $ pvesm add pbs pbs-storage \
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando pvesm add pbs valida a autenticação por token e fingerprint, ativando o storage de backup no datacenter em segundos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Errar a porta de rede do PBS (porta TCP 8007) ao adicionar o storage no PVE, gerando erros de timeout de conexão.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o resultado obtido diferir do esperado acima, este é o ponto onde o chat com o Sênior-IA vai abrir para diagnosticar o erro específico.</div>
+    
+      <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>
+        <div class="fix-body">
+          <b>"instance has an invalid fingerprint"</b> → copie o fingerprint exatamente como o <code>cert info</code> mostrou, sem espaços ou quebras de linha extras — um caractere fora do lugar já invalida o hash inteiro.
+        </div>
+      </details>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide o status ativo do storage PBS no datacenter com pvesm status.</div></div>
