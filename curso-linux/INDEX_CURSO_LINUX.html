@@ -1,0 +1,463 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Índice Linux Essencial | Diário de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Arial,sans-serif;letter-spacing:0}
+
+.top{position:sticky;top:0;z-index:10;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:15px;letter-spacing:.5px}
+.top nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.top nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:13.5px;transition:color .2s}
+.top nav a:hover{color:var(--cyan)}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1;transition:border-color .2s}
+.theme-toggle:hover{border-color:var(--gold)}
+
+.wrap{width:min(1320px,94vw);margin:auto}
+.index-hero{padding:54px max(4vw,20px) 30px;max-width:1080px;margin:auto;text-align:center}
+.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px;font-size:13px}
+.index-hero h1{font-size:clamp(32px,5.5vw,56px);line-height:1.08;margin:12px 0 16px;color:var(--ink);font-weight:900}
+.index-hero p{font-size:18px;color:var(--muted);max-width:820px;margin:0 auto 20px;line-height:1.55}
+
+.stats-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:24px}
+.stat-pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:10px 22px;font-weight:900;color:var(--gold);font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.stat-pill span{color:var(--muted);font-weight:400;margin-left:6px}
+
+.jumpbar{display:flex;justify-content:center;gap:10px;margin:28px auto 0;flex-wrap:wrap}
+.jumpbar a{background:var(--panel2);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:800;font-size:13.5px;padding:10px 20px;border-radius:8px;transition:all .2s}
+.jumpbar a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+
+.phase-block{padding:48px 0;border-top:1px solid var(--line)}
+.phase-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.phase-head h2{margin:0;font-size:28px;color:var(--gold);font-weight:900}
+.phase-tag{background:var(--gold);color:#050607;font-weight:900;font-size:12px;padding:4px 12px;border-radius:4px;white-space:nowrap;letter-spacing:.3px}
+.phase-desc{color:var(--muted);margin:0 0 28px;max-width:860px;font-size:15.5px;line-height:1.55}
+
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.week-card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);border-radius:8px;padding:20px 22px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s,border-color .2s}
+.week-card:hover{transform:translateY(-2px);border-color:var(--gold)}
+.week-card.milestone-week{border-left-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold), 0 4px 14px rgba(0,0,0,.2)}
+.week-card h3{margin:0;color:var(--gold);font-size:17.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:900}
+.milestone-badge{font-size:11px;background:#2563eb;color:#fff;padding:3px 9px;border-radius:4px;font-weight:900;letter-spacing:.4px}
+
+.day-list{list-style:none;margin:14px 0 0;padding:0}
+.day-list li{margin:0}
+.day-list a{display:block;padding:9px 0;color:var(--ink);text-decoration:none;font-size:14.5px;border-top:1px solid var(--line);transition:color .15s,padding-left .15s}
+.day-list li:first-child a{border-top:0}
+.day-list a:hover{color:var(--cyan);padding-left:4px}
+.day-list .sub{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-weight:400}
+
+.abc-intro{color:var(--muted);max-width:860px;font-size:15.5px;margin:0 0 22px;line-height:1.55}
+.abc-legend{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 30px}
+.abc-pill{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-size:13.5px;color:var(--muted);max-width:360px}
+.abc-badge{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex:none}
+.abc-badge.A{background:var(--green);color:#051018}
+.abc-badge.B{background:var(--cyan);color:#051018}
+.abc-badge.C{background:#475569;color:#fff}
+
+.cmd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.cmd-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px 22px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.cmd-card h3{margin:0 0 14px;color:var(--gold);font-size:16.5px;font-weight:900}
+.cmd-list{list-style:none;margin:0;padding:0}
+.cmd-list li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;max-width:100%}
+.cmd-list li:first-child{border-top:0}
+.cmd-list code{flex:0 1 auto;max-width:100%;font-family:Consolas,monospace;color:var(--cyan);font-weight:700;font-size:13px;word-break:break-word;white-space:normal}
+.cmd-list .note{flex:1 1 200px;min-width:150px;max-width:100%;color:var(--muted);font-size:13px;line-height:1.45}
+
+.prob-list{list-style:none;margin:0;padding:0}
+.prob-list li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.prob-list li:first-child{border-top:0}
+.prob-list a{color:var(--ink);text-decoration:none;flex:1;font-weight:600;transition:color .15s}
+.prob-list a:hover{color:var(--cyan)}
+.prob-list .where{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;font-weight:400}
+
+footer{margin-top:30px;padding:30px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13.5px;border-top:1px solid var(--line)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;--panel:#ffffff;--panel2:#f1f5f9;--line:#cbd5e1;--ink:#0f172a;--muted:#475569;
+  --gold:#1e40af;--cyan:#0284c7;--green:#16a34a;--red:#dc2626;--purple:#2563eb;
+}
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .stat-pill{background:var(--panel);border-color:var(--line);color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+[data-theme="light"] .stat-pill span{color:var(--muted)}
+[data-theme="light"] .jumpbar a{background:var(--panel);border-color:var(--line);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+[data-theme="light"] .jumpbar a:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .phase-head h2{color:var(--gold)}
+[data-theme="light"] .phase-tag{background:var(--gold);color:#ffffff}
+[data-theme="light"] .week-card{background:var(--panel);border-color:var(--line);border-left-color:var(--cyan);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+[data-theme="light"] .week-card:hover{border-color:var(--gold)}
+[data-theme="light"] .week-card.milestone-week{border-left-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold), 0 4px 12px rgba(0,0,0,.08)}
+[data-theme="light"] .week-card h3{color:var(--gold)}
+[data-theme="light"] .milestone-badge{background:#2563eb;color:#ffffff}
+[data-theme="light"] .day-list a{color:var(--ink);border-top-color:var(--line)}
+[data-theme="light"] .day-list a:hover{color:var(--cyan)}
+[data-theme="light"] .abc-pill{background:var(--panel);border-color:var(--line);color:var(--muted);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+[data-theme="light"] .abc-badge.C{background:#475569;color:#ffffff}
+[data-theme="light"] .cmd-card{background:var(--panel);border-color:var(--line);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+[data-theme="light"] .cmd-card h3{color:var(--gold)}
+[data-theme="light"] .cmd-list li{border-top-color:var(--line);color:var(--ink)}
+[data-theme="light"] .cmd-list code{color:var(--cyan)}
+[data-theme="light"] .prob-list li{border-top-color:var(--line)}
+[data-theme="light"] .prob-list a{color:var(--ink)}
+[data-theme="light"] .prob-list a:hover{color:var(--cyan)}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+@media(max-width:760px){
+  .top{position:static}
+  .week-grid{grid-template-columns:1fr}
+  .cmd-grid{grid-template-columns:1fr}
+  .index-hero h1{font-size:32px}
+}
+</style>
+<script>
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  if(next==='light'){document.documentElement.setAttribute('data-theme','light');}
+  else{document.documentElement.removeAttribute('data-theme');}
+  try{localStorage.setItem('admin-jr-theme',next);}catch(e){}
+}
+</script>
+</head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | LINUX ESSENCIAL</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav>
+    <a href='#mod1'>Módulo 1 — Fundamentos</a>
+    <a href='#mod2'>Módulo 2 — Storage & Processos</a>
+    <a href='#mod3'>Módulo 3 — Automação & Boot</a>
+    <a href='#referencia'>Curva ABC Comandos</a>
+    <a href='#referencia-problemas'>Curva ABC Problemas</a>
+  </nav>
+</header>
+
+<section class='index-hero'>
+  <div class='eyebrow'>Fase 1 — Formação Sistemista Júnior</div>
+  <h1>Linux Essencial</h1>
+  <p>Grade completa de 12 semanas / 60 dias, do primeiro acesso SSH observando sem tocar até reparar um boot quebrado sozinho — em quadrinhos, com laboratório guiado, decodificador de conceitos e certificação TestKing.</p>
+  <div class="stats-row">
+    <div class="stat-pill">12 <span>semanas</span></div>
+    <div class="stat-pill">60 <span>aulas completas</span></div>
+    <div class="stat-pill">3 <span>módulos</span></div>
+  </div>
+  <div class="jumpbar">
+    <a href="#mod1">Ir pro Módulo 1 — Fundamentos</a>
+    <a href="#mod2">Ir pro Módulo 2 — Storage & Processos</a>
+    <a href="#mod3">Ir pro Módulo 3 — Automação & Boot</a>
+    <a href="#referencia">📊 Curva ABC de Comandos</a>
+    <a href="#referencia-problemas">🚨 Curva ABC de Problemas</a>
+  </div>
+</section>
+
+<div class="wrap">
+
+<section class='phase-block' id='mod1'>
+  <div class="phase-head">
+    <h2>Módulo 1 — Fundamentos: Acesso, Permissões e Diagnóstico Básico</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · Observar antes de tocar</span>
+  </div>
+  <p class="phase-desc">Do primeiro acesso SSH sem mexer em nada até a primeira mudança real com aprovação — identidade, navegação, permissões, ferramentas de busca e os primeiros logs e históricos de sistema.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 1 — Primeiro Acesso e Observação</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_01/DIA_01_SSH_PRIMEIRO_ACESSO.html">Dia 1 — Primeiro Acesso SSH<span class="sub">observar antes de tocar</span></a></li>
+        <li><a href="SEMANA_01/DIA_02_IDENTIDADE_AMBIENTE.html">Dia 2 — Identidade e Ambiente<span class="sub">quem eu sou, onde estou</span></a></li>
+        <li><a href="SEMANA_01/DIA_03_NAVEGACAO_ARQUIVOS.html">Dia 3 — Navegar e Ler o Sistema de Arquivos<span class="sub">pwd, ls, cd, cat, less, tail -f</span></a></li>
+        <li><a href="SEMANA_01/DIA_04_DISCO_PROCESSOS.html">Dia 4 — Espaço em Disco e Processos<span class="sub">df, du, ps, top</span></a></li>
+        <li><a href="SEMANA_01/DIA_05_EDITOR_STATUS.html">Dia 5 — Editor de Texto e Status<span class="sub">nano, vim, systemctl status</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 2 — Primeiras Mudanças Reais</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_02/DIA_01_SYSTEMCTL_SUPERVISIONADO.html">Dia 1 — systemctl com Aprovação<span class="sub">sua primeira mudança real</span></a></li>
+        <li><a href="SEMANA_02/DIA_02_CHMOD_CHOWN_BASICO.html">Dia 2 — chmod/chown Básico<span class="sub">ajustar só o necessário</span></a></li>
+        <li><a href="SEMANA_02/DIA_03_GREP_FIND.html">Dia 3 — grep e find<span class="sub">dois problemas diferentes</span></a></li>
+        <li><a href="SEMANA_02/DIA_04_CP_MV_RM_SEGURO.html">Dia 4 — cp, mv, rm com Segurança + tar/gzip<span class="sub">backup antes do comando destrutivo</span></a></li>
+        <li><a href="SEMANA_02/DIA_05_REDE_AGENDAMENTO_LEITURA.html">Dia 5 — Rede e Agendamento — Só Leitura<span class="sub">ip a, ip route, crontab -l</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 3 — Diagnóstico e Logs</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_03/DIA_01_TOP_HTOP.html">Dia 1 — top e htop<span class="sub">ler a carga antes de agir</span></a></li>
+        <li><a href="SEMANA_03/DIA_02_JOURNALCTL.html">Dia 2 — journalctl<span class="sub">log primeiro, restart depois</span></a></li>
+        <li><a href="SEMANA_03/DIA_03_SYSLOG_LOGROTATE.html">Dia 3 — Syslog Clássico e logrotate<span class="sub">rotação, não apagar no escuro</span></a></li>
+        <li><a href="SEMANA_03/DIA_04_DMESG_KERNEL.html">Dia 4 — dmesg<span class="sub">quando o kernel fala</span></a></li>
+        <li><a href="SEMANA_03/DIA_05_LAST_LASTLOG_AUDITD.html">Dia 5 — last, lastlog, auditd<span class="sub">quem entrou, quando</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 4 — Histórico, Pacotes e Usuários <span class="milestone-badge">MÓDULO 1 FINAL</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_04/DIA_01_SAR_HISTORICO.html">Dia 1 — sar<span class="sub">o histórico que o top nunca mostrou</span></a></li>
+        <li><a href="SEMANA_04/DIA_02_CORRELACAO_DOIS_SERVIDORES.html">Dia 2 — Correlacionando Logs entre Dois Servidores<span class="sub">alinhe relógios, compare evidências</span></a></li>
+        <li><a href="SEMANA_04/DIA_03_GESTAO_PACOTES.html">Dia 3 — Gestão de Pacotes<span class="sub">apt/dnf com critério</span></a></li>
+        <li><a href="SEMANA_04/DIA_04_GESTAO_USUARIOS.html">Dia 4 — Gestão de Usuários<span class="sub">useradd, usermod e o perigo do -G</span></a></li>
+        <li><a href="SEMANA_04/DIA_05_DIAGNOSTICO_COMBINADO.html">Dia 5 — Diagnóstico Combinado<span class="sub">lento e estranho ao mesmo tempo</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class='phase-block' id='mod2'>
+  <div class="phase-head">
+    <h2>Módulo 2 — Storage, LVM e Controle de Processos</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · Performance, backup e texto</span>
+  </div>
+  <p class="phase-desc">Métricas históricas de performance (vmstat/iostat/mpstat), LVM do zero até expansão a quente, RAID e backup real testado, controle fino de processos e as ferramentas clássicas de processamento de texto do Unix.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 5 — Performance e Storage</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_05/DIA_01_VMSTAT.html">Dia 1 — vmstat<span class="sub">memória e swap além do top</span></a></li>
+        <li><a href="SEMANA_05/DIA_02_IOSTAT.html">Dia 2 — iostat<span class="sub">disco lento não é disco cheio</span></a></li>
+        <li><a href="SEMANA_05/DIA_03_MPSTAT.html">Dia 3 — mpstat<span class="sub">um núcleo gritando sozinho</span></a></li>
+        <li><a href="SEMANA_05/DIA_04_DISCOS_PARTICOES.html">Dia 4 — Discos e Partições<span class="sub">mapa antes da viagem</span></a></li>
+        <li><a href="SEMANA_05/DIA_05_LVM_INTRO.html">Dia 5 — Introdução ao LVM<span class="sub">por que ele existe</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 6 — LVM, RAID e Backup</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_06/DIA_01_LVEXTEND.html">Dia 1 — lvextend<span class="sub">expandir disco sem desligar nada</span></a></li>
+        <li><a href="SEMANA_06/DIA_02_LVCREATE.html">Dia 2 — Criando um Logical Volume do Zero<span class="sub">criar é fácil, persistir é profissional</span></a></li>
+        <li><a href="SEMANA_06/DIA_03_RAID_CONCEITUAL.html">Dia 3 — RAID<span class="sub">redundância não é backup</span></a></li>
+        <li><a href="SEMANA_06/DIA_04_RSYNC_BACKUP.html">Dia 4 — rsync<span class="sub">backup de verdade, com cuidado</span></a></li>
+        <li><a href="SEMANA_06/DIA_05_RESTORE_VALIDACAO.html">Dia 5 — Restaurar de Verdade<span class="sub">backup não testado não é backup</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 7 — Controle de Processos</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_07/DIA_01_KILL_SIGNALS.html">Dia 1 — kill e Sinais<span class="sub">SIGTERM não é SIGKILL</span></a></li>
+        <li><a href="SEMANA_07/DIA_02_NICE_RENICE.html">Dia 2 — nice e renice<span class="sub">prioridade sem travar tudo</span></a></li>
+        <li><a href="SEMANA_07/DIA_03_BACKGROUND_NOHUP.html">Dia 3 — Jobs em Background<span class="sub">&, nohup, disown</span></a></li>
+        <li><a href="SEMANA_07/DIA_04_TMUX.html">Dia 4 — tmux<span class="sub">sessão persistente de verdade</span></a></li>
+        <li><a href="SEMANA_07/DIA_05_PS_PROC.html">Dia 5 — ps Avançado e /proc<span class="sub">o processo por dentro</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 8 — Processamento de Texto <span class="milestone-badge">MÓDULO 2 FINAL</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_08/DIA_01_CUT_SORT_UNIQ.html">Dia 1 — cut, sort, uniq<span class="sub">dados em ordem</span></a></li>
+        <li><a href="SEMANA_08/DIA_02_SED.html">Dia 2 — sed<span class="sub">alterar texto sem estragar</span></a></li>
+        <li><a href="SEMANA_08/DIA_03_AWK_BASICO.html">Dia 3 — awk<span class="sub">campos, filtros e somas</span></a></li>
+        <li><a href="SEMANA_08/DIA_04_PIPES_REDIRECIONAMENTO.html">Dia 4 — Pipes, tee e Redirecionamento<span class="sub">o que você viu precisa ser provado depois</span></a></li>
+        <li><a href="SEMANA_08/DIA_05_AMBIENTE_SHELL.html">Dia 5 — Ambiente de Shell<span class="sub">PATH, alias, .bashrc</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class='phase-block' id='mod3'>
+  <div class="phase-head">
+    <h2>Módulo 3 — Automação e Boot/Recuperação</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · Scripting e Disaster Recovery</span>
+  </div>
+  <p class="phase-desc">Do primeiro script bash até automação idempotente e agendada, e depois a etapa mais temida da carreira: entender o boot passo a passo e reparar sozinho GRUB quebrado, senha root perdida, fstab errado e kernel panic.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 9 — Scripting Shell</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_09/DIA_01_PRIMEIRO_SCRIPT.html">Dia 1 — Primeiro Script<span class="sub">shebang, variáveis, chmod +x</span></a></li>
+        <li><a href="SEMANA_09/DIA_02_CONDICIONAIS_IF_TEST.html">Dia 2 — Condicionais: if e test<span class="sub">variável sem aspas é risco</span></a></li>
+        <li><a href="SEMANA_09/DIA_03_LOOPS_DRYRUN.html">Dia 3 — Loops<span class="sub">dry-run antes de executar</span></a></li>
+        <li><a href="SEMANA_09/DIA_04_FUNCOES_ARGUMENTOS.html">Dia 4 — Funções<span class="sub">reuso sem repetir código</span></a></li>
+        <li><a href="SEMANA_09/DIA_05_SET_E_TRATAMENTO_ERRO.html">Dia 5 — set -e<span class="sub">falhar alto</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 10 — Automação Profissional</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_10/DIA_01_BACKUP_TAR_RSYNC.html">Dia 1 — Backup Automatizado<span class="sub">tar + rsync com verificação</span></a></li>
+        <li><a href="SEMANA_10/DIA_02_HEALTHCHECK.html">Dia 2 — Healthcheck<span class="sub">não perder falhas</span></a></li>
+        <li><a href="SEMANA_10/DIA_03_CRON_PATH.html">Dia 3 — Cron e PATH<span class="sub">tarefa sem log é chute</span></a></li>
+        <li><a href="SEMANA_10/DIA_04_ENV_CONFIG_EXTERNO.html">Dia 4 — Configuração Externa<span class="sub">segredo fora do script</span></a></li>
+        <li><a href="SEMANA_10/DIA_05_IDEMPOTENCIA_REVISAO.html">Dia 5 — Idempotência<span class="sub">rodar de novo não pode multiplicar o erro</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 11 — Boot e Recuperação I</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_11/DIA_01_PROCESSO_DE_BOOT.html">Dia 1 — Processo de Boot<span class="sub">visão geral, por etapa</span></a></li>
+        <li><a href="SEMANA_11/DIA_02_GRUB_EDICAO_TEMPORARIA.html">Dia 2 — GRUB: Edição Temporária vs Permanente<span class="sub">teste com 'e' antes de mudar de verdade</span></a></li>
+        <li><a href="SEMANA_11/DIA_03_MODO_RESCUE.html">Dia 3 — Modo Rescue<span class="sub">oficina de conserto, não produção</span></a></li>
+        <li><a href="SEMANA_11/DIA_04_INITRAMFS.html">Dia 4 — Initramfs<span class="sub">a etapa exata onde a raiz não foi achada</span></a></li>
+        <li><a href="SEMANA_11/DIA_05_SYSTEMD_TARGETS.html">Dia 5 — Systemd Targets<span class="sub">isolate muda o estado real do sistema</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 12 — Boot e Recuperação II <span class="milestone-badge">FORMAÇÃO COMPLETA</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_12/DIA_01_RESET_SENHA_ROOT.html">Dia 1 — Reset de Senha Root<span class="sub">root sem rw não salva mudança</span></a></li>
+        <li><a href="SEMANA_12/DIA_02_FSTAB_QUEBRADO.html">Dia 2 — Fstab Quebrado<span class="sub">compare o UUID antes do reboot</span></a></li>
+        <li><a href="SEMANA_12/DIA_03_GRUB_REPARO_LIVE_MEDIA.html">Dia 3 — GRUB: Reparo via Live Media<span class="sub">confirme com lsblk antes de executar</span></a></li>
+        <li><a href="SEMANA_12/DIA_04_KERNEL_ANTERIOR.html">Dia 4 — Voltar pro Kernel Anterior<span class="sub">ponte de retorno, não solução mágica</span></a></li>
+        <li><a href="SEMANA_12/DIA_05_MISSAO_FINAL_FASE1.html">Dia 5 — Missão Final da Fase 1<span class="sub">evidência, etapa, causa, correção, validação</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO A: CURVA ABC DE COMANDOS -->
+<section class='phase-block' id='referencia'>
+  <div class="phase-head">
+    <h2>📊 Referência Rápida — Curva ABC de Comandos Linux</h2>
+  </div>
+  <p class="abc-intro">Classificação dos comandos ensinados no curso pela frequência e impacto real no dia a dia de um sistemista júnior:</p>
+
+  <div class="abc-legend">
+    <div class="abc-pill"><span class="abc-badge A">A</span> <b>Essencial (80% do dia a dia):</b> Comandos de observação, diagnóstico e mudança rotineira.</div>
+    <div class="abc-pill"><span class="abc-badge B">B</span> <b>Regular (15% da operação):</b> Configuração, manutenção programada e automação.</div>
+    <div class="abc-pill"><span class="abc-badge C">C</span> <b>Especializado (5% de crise):</b> Recuperação de boot, RAID, restore e reparo profundo.</div>
+  </div>
+
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <h3>🖥️ Observação e Diagnóstico</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>top / htop</code><span class="note">Carga de CPU e memória em tempo real</span></li>
+        <li><span class="abc-badge A">A</span><code>ps aux --sort=-%mem</code><span class="note">Lista processos ordenados por consumo</span></li>
+        <li><span class="abc-badge A">A</span><code>df -hT / du -sh</code><span class="note">Espaço em disco por filesystem e por diretório</span></li>
+        <li><span class="abc-badge A">A</span><code>journalctl -u &lt;serviço&gt; -f</code><span class="note">Log de um serviço específico, ao vivo</span></li>
+        <li><span class="abc-badge B">B</span><code>dmesg -T | tail</code><span class="note">Mensagens do kernel com timestamp legível</span></li>
+        <li><span class="abc-badge B">B</span><code>last -a / lastlog</code><span class="note">Histórico e último login de cada usuário</span></li>
+        <li><span class="abc-badge C">C</span><code>sar -u / -r / -b</code><span class="note">Histórico de CPU, memória e I/O coletado antes do incidente</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>📁 Arquivos e Permissões</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>ls -la / cd / pwd</code><span class="note">Navegação básica do sistema de arquivos</span></li>
+        <li><span class="abc-badge A">A</span><code>cp / mv / rm -i</code><span class="note">Copiar, mover, remover com confirmação</span></li>
+        <li><span class="abc-badge A">A</span><code>chmod / chown</code><span class="note">Permissão e dono — sempre o mínimo necessário</span></li>
+        <li><span class="abc-badge A">A</span><code>grep -r / find -name</code><span class="note">Buscar dentro de arquivos vs buscar arquivos</span></li>
+        <li><span class="abc-badge B">B</span><code>tar -czvf / gzip</code><span class="note">Compactação antes de mover ou apagar</span></li>
+        <li><span class="abc-badge C">C</span><code>find -type f -exec chmod {} \;</code><span class="note">Correção retroativa de permissões em massa</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>⚙️ Processos e Controle</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>kill -15 / kill -9</code><span class="note">SIGTERM primeiro, SIGKILL só se ignorado</span></li>
+        <li><span class="abc-badge A">A</span><code>systemctl status / restart</code><span class="note">Status → aprovação → restart → validação</span></li>
+        <li><span class="abc-badge B">B</span><code>nice / renice</code><span class="note">Ajusta prioridade sem matar o processo</span></li>
+        <li><span class="abc-badge B">B</span><code>nohup ... &amp;</code><span class="note">Sobrevive ao fechamento da sessão</span></li>
+        <li><span class="abc-badge B">B</span><code>tmux new / attach</code><span class="note">Sessão persistente recuperável depois</span></li>
+        <li><span class="abc-badge C">C</span><code>cat /proc/&lt;pid&gt;/status</code><span class="note">Quando ps não basta, o kernel por dentro</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>💾 Storage e LVM</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>lsblk / blkid</code><span class="note">Mapa de discos e UUIDs antes de qualquer mudança</span></li>
+        <li><span class="abc-badge B">B</span><code>mount / mount -a</code><span class="note">Monta e valida contra o /etc/fstab</span></li>
+        <li><span class="abc-badge B">B</span><code>lvcreate / lvextend</code><span class="note">Cria e expande volume lógico a quente</span></li>
+        <li><span class="abc-badge B">B</span><code>resize2fs / xfs_growfs</code><span class="note">Expande o filesystem depois do LV</span></li>
+        <li><span class="abc-badge C">C</span><code>mdadm --detail</code><span class="note">Status de array RAID e disco degradado</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🔧 Texto e Pipelines</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>grep / sort / uniq -c</code><span class="note">Filtrar, ordenar e contar ocorrências</span></li>
+        <li><span class="abc-badge B">B</span><code>sed -i 's/.../.../ '</code><span class="note">Substituição em massa, sempre com backup antes</span></li>
+        <li><span class="abc-badge B">B</span><code>awk '{print $1}'</code><span class="note">Filtro por coluna e cálculo</span></li>
+        <li><span class="abc-badge B">B</span><code>cut -d: -f1 / tee</code><span class="note">Recorta campo, duplica saída pra arquivo e tela</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>📜 Backup e Automação</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>rsync -avz --dry-run</code><span class="note">Simula antes de sincronizar de verdade</span></li>
+        <li><span class="abc-badge B">B</span><code>crontab -l / -e</code><span class="note">Tarefa agendada — sempre com log e PATH explícito</span></li>
+        <li><span class="abc-badge B">B</span><code>set -euo pipefail</code><span class="note">Script falha alto em vez de continuar quebrado</span></li>
+        <li><span class="abc-badge C">C</span><code>rsync --delete / restore</code><span class="note">Sincronização destrutiva — só depois de validar dry-run</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🥾 Boot e Recuperação</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge B">B</span><code>systemctl isolate rescue.target</code><span class="note">Muda estado real — nunca via SSH</span></li>
+        <li><span class="abc-badge C">C</span><code>mount -o remount,rw /</code><span class="note">Raiz precisa virar rw antes de gravar senha nova</span></li>
+        <li><span class="abc-badge C">C</span><code>grub-install /dev/sda</code><span class="note">Sempre no disco inteiro, nunca numa partição</span></li>
+        <li><span class="abc-badge C">C</span><code>lvm vgscan / vgchange -ay</code><span class="note">Reativa volume group visto como inativo no initramfs</span></li>
+        <li><span class="abc-badge C">C</span><code>sed -i fstab (corrigir UUID)</code><span class="note">Corrige montagem quebrada antes do reboot</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO B: CURVA ABC DE PROBLEMAS -->
+<section class='phase-block' id='referencia-problemas'>
+  <div class="phase-head">
+    <h2>🚨 Curva ABC de Problemas e Procedimentos Operacionais</h2>
+  </div>
+  <p class="abc-intro">Guia rápido de incidentes ensinados no curso — clique para abrir o procedimento na aula exata:</p>
+
+  <ul class="prob-list">
+    <li><span class="abc-badge A">A</span><a href="SEMANA_01/DIA_01_SSH_PRIMEIRO_ACESSO.html">Servidor recém-transferido, ninguém sabe o que roda nele — levantamento sem tocar em nada<span class="where">Semana 1 · Dia 1 — Primeiro Acesso SSH</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_01/DIA_04_DISCO_PROCESSOS.html">Disco enchendo e processo consumindo memória ao mesmo tempo — qual observar primeiro<span class="where">Semana 1 · Dia 4 — Espaço em Disco e Processos</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_02/DIA_01_SYSTEMCTL_SUPERVISIONADO.html">Primeira mudança real num serviço de produção, com aprovação explícita antes do restart<span class="where">Semana 2 · Dia 1 — systemctl Supervisionado</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_02/DIA_02_CHMOD_CHOWN_BASICO.html">Aplicação não consegue gravar em log — reflexo de chmod 777 em vez do dono e permissão corretos<span class="where">Semana 2 · Dia 2 — chmod/chown Básico</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_02/DIA_04_CP_MV_RM_SEGURO.html">Comando destrutivo prestes a rodar sem backup nem confirmação do diretório atual<span class="where">Semana 2 · Dia 4 — cp, mv, rm com Segurança</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_03/DIA_01_TOP_HTOP.html">Ticket de "aplicação lenta" com o dedo já digitando restart, sem checar quem consome CPU<span class="where">Semana 3 · Dia 1 — top e htop</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_03/DIA_02_JOURNALCTL.html">Serviço em failed — reiniciar de novo apagaria a única pista do motivo real<span class="where">Semana 3 · Dia 2 — journalctl</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_03/DIA_03_SYSLOG_LOGROTATE.html">/var/log em 98% — apagar o arquivo aberto não libera o espaço de verdade<span class="where">Semana 3 · Dia 3 — Syslog e logrotate</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_03/DIA_04_DMESG_KERNEL.html">Servidor reiniciou sozinho de madrugada, app não registrou erro nenhum — culpa é do kernel<span class="where">Semana 3 · Dia 4 — dmesg</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_03/DIA_05_LAST_LASTLOG_AUDITD.html">"Quem acessou este servidor?" exige cruzar 3 fontes, não confiar numa só<span class="where">Semana 3 · Dia 5 — last/lastlog/auditd</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_04/DIA_01_SAR_HISTORICO.html">Colega pergunta sobre um pico de ontem às 15h — sem histórico coletado, não há resposta<span class="where">Semana 4 · Dia 1 — sar</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_04/DIA_03_GESTAO_PACOTES.html">Pedido de "instalar uma ferramenta" quase virou upgrade do sistema inteiro<span class="where">Semana 4 · Dia 3 — Gestão de Pacotes</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_04/DIA_04_GESTAO_USUARIOS.html">usermod -G sem -a apagou silenciosamente todos os grupos secundários do usuário<span class="where">Semana 4 · Dia 4 — Gestão de Usuários</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_04/DIA_05_DIAGNOSTICO_COMBINADO.html">Servidor lento E login desconhecido no mesmo chamado — raramente é coincidência<span class="where">Semana 4 · Dia 5 — Diagnóstico Combinado</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_05/DIA_02_IOSTAT.html">CPU parece normal mas a aplicação trava — a causa está na latência do disco<span class="where">Semana 5 · Dia 2 — iostat</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_05/DIA_05_LVM_INTRO.html">Partição fixa esgotou o espaço — sem LVM, expandir exigiria desligar tudo<span class="where">Semana 5 · Dia 5 — Introdução ao LVM</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_06/DIA_01_LVEXTEND.html">Disco cheio em produção — expandir o LV sem desligar nada, e validar o filesystem depois<span class="where">Semana 6 · Dia 1 — lvextend</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_06/DIA_03_RAID_CONCEITUAL.html">Disco falhou mas o serviço continuou no ar — RAID salvou a disponibilidade, não os dados antigos<span class="where">Semana 6 · Dia 3 — RAID</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_06/DIA_04_RSYNC_BACKUP.html">Rodar rsync --delete sem --dry-run antes é o tipo de erro que apaga o que devia proteger<span class="where">Semana 6 · Dia 4 — rsync</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_06/DIA_05_RESTORE_VALIDACAO.html">Backup existe há meses mas nunca foi restaurado — só descobre que falha na hora da crise<span class="where">Semana 6 · Dia 5 — Restore e Validação</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_07/DIA_01_KILL_SIGNALS.html">Processo travado — SIGKILL direto sem tentar SIGTERM primeiro tira a chance de encerrar limpo<span class="where">Semana 7 · Dia 1 — kill e Sinais</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_07/DIA_03_BACKGROUND_NOHUP.html">Processo em & morreu quando a sessão SSH caiu, sem nohup nem disown<span class="where">Semana 7 · Dia 3 — Background e nohup</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_07/DIA_04_TMUX.html">Tarefa longa rodando direto no terminal, sem tmux — uma queda de conexão perde tudo<span class="where">Semana 7 · Dia 4 — tmux</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_08/DIA_02_SED.html">Substituição em massa com sed sem gerar prévia nem guardar caminho de volta<span class="where">Semana 8 · Dia 2 — sed</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_09/DIA_02_CONDICIONAIS_IF_TEST.html">Variável sem aspas num if — um espaço no valor quebra a lógica inteira do script<span class="where">Semana 9 · Dia 2 — Condicionais</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_09/DIA_03_LOOPS_DRYRUN.html">Loop destrutivo prestes a rodar em produção sem um dry-run mostrando o que faria antes<span class="where">Semana 9 · Dia 3 — Loops e Dry-Run</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_09/DIA_05_SET_E_TRATAMENTO_ERRO.html">Script de automação continuou rodando depois de um erro, porque ninguém colocou set -e<span class="where">Semana 9 · Dia 5 — set -e</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_10/DIA_02_HEALTHCHECK.html">Healthcheck que só reporta sucesso escondeu uma falha antiga que já estava lá<span class="where">Semana 10 · Dia 2 — Healthcheck</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_10/DIA_03_CRON_PATH.html">Cron falhando silenciosamente porque o PATH do cron não é o mesmo do terminal interativo<span class="where">Semana 10 · Dia 3 — Cron e PATH</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_10/DIA_04_ENV_CONFIG_EXTERNO.html">Segredo (senha, token) hardcoded direto no script, versionado no histórico do git<span class="where">Semana 10 · Dia 4 — Configuração Externa</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_10/DIA_05_IDEMPOTENCIA_REVISAO.html">Rodar o mesmo script de automação duas vezes duplicou o efeito em vez de repetir o resultado<span class="where">Semana 10 · Dia 5 — Idempotência</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_11/DIA_01_PROCESSO_DE_BOOT.html">Boot lento sem saber em qual das seis etapas está o gargalo — qualquer correção vira chute<span class="where">Semana 11 · Dia 1 — Processo de Boot</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_11/DIA_03_MODO_RESCUE.html">Servidor caiu em modo rescue sozinho depois de reboot — nginx e rede parecem "quebrados", mas é normal ali<span class="where">Semana 11 · Dia 3 — Modo Rescue</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_11/DIA_04_INITRAMFS.html">"Gave up waiting for root device" — o sistema nem chegou a carregar o real ainda<span class="where">Semana 11 · Dia 4 — Initramfs</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_11/DIA_05_SYSTEMD_TARGETS.html">systemctl isolate rescue.target via SSH derrubou a própria sessão usada pra rodar o comando<span class="where">Semana 11 · Dia 5 — Systemd Targets</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_12/DIA_01_RESET_SENHA_ROOT.html">passwd root falha com "Authentication token manipulation error" — raiz ainda está em modo ro<span class="where">Semana 12 · Dia 1 — Reset de Senha Root</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_12/DIA_02_FSTAB_QUEBRADO.html">Boot cai em manutenção pedindo senha de root — UUID errado no /etc/fstab<span class="where">Semana 12 · Dia 2 — Fstab Quebrado</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_12/DIA_03_GRUB_REPARO_LIVE_MEDIA.html">Tela mostra só grub rescue&gt;, sem menu — GRUB corrompido, reparo via mídia live<span class="where">Semana 12 · Dia 3 — GRUB via Live Media</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_12/DIA_04_KERNEL_ANTERIOR.html">Kernel panic logo após atualização — a saída está no menu Advanced options do GRUB<span class="where">Semana 12 · Dia 4 — Voltar pro Kernel Anterior</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_12/DIA_05_MISSAO_FINAL_FASE1.html">03:00, servidor fora do ar após reboot agendado — aplique o método completo sozinho<span class="where">Semana 12 · Dia 5 — Missão Final da Fase 1</span></a></li>
+  </ul>
+</section>
+
+</div>
+
+<footer>
+  DIARIO DE UM ADMIN JR. — FORMAÇÃO LINUX ESSENCIAL | 2026
+</footer>
+</body></html>

@@ -1,0 +1,460 @@
+<!doctype html><html lang='pt-BR'><head><script>(function(){try{if(localStorage.getItem('admin-jr-theme')==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()</script><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Índice Redes & TCP/IP | Diário de um Admin Jr.</title><style>
+:root{--bg:#080c12;--panel:#111925;--panel2:#172233;--line:#344762;--ink:#f4f7fb;--muted:#b7c2d0;--gold:#f6b91a;--cyan:#36c9e8;--green:#35d07f;--red:#ff5d68;--purple:#2563eb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Arial,sans-serif;letter-spacing:0}
+
+.top{position:sticky;top:0;z-index:10;background:#050607;border-bottom:3px solid var(--gold);padding:12px 4vw;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:900;color:var(--gold);font-size:15px;letter-spacing:.5px}
+.top nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.top nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:13.5px;transition:color .2s}
+.top nav a:hover{color:var(--cyan)}
+
+.theme-toggle{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:17px;width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;line-height:1;transition:border-color .2s}
+.theme-toggle:hover{border-color:var(--gold)}
+
+.wrap{width:min(1320px,94vw);margin:auto}
+.index-hero{padding:54px max(4vw,20px) 30px;max-width:1080px;margin:auto;text-align:center}
+.eyebrow{color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px;font-size:13px}
+.index-hero h1{font-size:clamp(32px,5.5vw,56px);line-height:1.08;margin:12px 0 16px;color:var(--ink);font-weight:900}
+.index-hero p{font-size:18px;color:var(--muted);max-width:820px;margin:0 auto 20px;line-height:1.55}
+
+.stats-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:24px}
+.stat-pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:10px 22px;font-weight:900;color:var(--gold);font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.stat-pill span{color:var(--muted);font-weight:400;margin-left:6px}
+
+.jumpbar{display:flex;justify-content:center;gap:10px;margin:28px auto 0;flex-wrap:wrap}
+.jumpbar a{background:var(--panel2);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:800;font-size:13.5px;padding:10px 20px;border-radius:8px;transition:all .2s}
+.jumpbar a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+
+.phase-block{padding:48px 0;border-top:1px solid var(--line)}
+.phase-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.phase-head h2{margin:0;font-size:28px;color:var(--gold);font-weight:900}
+.phase-tag{background:var(--gold);color:#050607;font-weight:900;font-size:12px;padding:4px 12px;border-radius:4px;white-space:nowrap;letter-spacing:.3px}
+.phase-desc{color:var(--muted);margin:0 0 28px;max-width:860px;font-size:15.5px;line-height:1.55}
+
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.week-card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--cyan);border-radius:8px;padding:20px 22px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s,border-color .2s}
+.week-card:hover{transform:translateY(-2px);border-color:var(--gold)}
+.week-card.milestone-week{border-left-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold), 0 4px 14px rgba(0,0,0,.2)}
+.week-card h3{margin:0;color:var(--gold);font-size:17.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:900}
+.milestone-badge{font-size:11px;background:#2563eb;color:#fff;padding:3px 9px;border-radius:4px;font-weight:900;letter-spacing:.4px}
+
+.day-list{list-style:none;margin:14px 0 0;padding:0}
+.day-list li{margin:0}
+.day-list a{display:block;padding:9px 0;color:var(--ink);text-decoration:none;font-size:14.5px;border-top:1px solid var(--line);transition:color .15s,padding-left .15s}
+.day-list li:first-child a{border-top:0}
+.day-list a:hover{color:var(--cyan);padding-left:4px}
+.day-list .sub{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-weight:400}
+
+.abc-intro{color:var(--muted);max-width:860px;font-size:15.5px;margin:0 0 22px;line-height:1.55}
+.abc-legend{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 30px}
+.abc-pill{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-size:13.5px;color:var(--muted);max-width:360px}
+.abc-badge{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex:none}
+.abc-badge.A{background:var(--green);color:#051018}
+.abc-badge.B{background:var(--cyan);color:#051018}
+.abc-badge.C{background:#475569;color:#fff}
+
+.cmd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.cmd-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px 22px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.cmd-card h3{margin:0 0 14px;color:var(--gold);font-size:16.5px;font-weight:900}
+.cmd-list{list-style:none;margin:0;padding:0}
+.cmd-list li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;max-width:100%}
+.cmd-list li:first-child{border-top:0}
+.cmd-list code{flex:0 1 auto;max-width:100%;font-family:Consolas,monospace;color:var(--cyan);font-weight:700;font-size:13px;word-break:break-word;white-space:normal}
+.cmd-list .note{flex:1 1 200px;min-width:150px;max-width:100%;color:var(--muted);font-size:13px;line-height:1.45}
+
+.prob-list{list-style:none;margin:0;padding:0}
+.prob-list li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.prob-list li:first-child{border-top:0}
+.prob-list a{color:var(--ink);text-decoration:none;flex:1;font-weight:600;transition:color .15s}
+.prob-list a:hover{color:var(--cyan)}
+.prob-list .where{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;font-weight:400}
+
+footer{margin-top:30px;padding:30px 4vw;background:#050607;color:var(--muted);text-align:center;font-size:13.5px;border-top:1px solid var(--line)}
+
+[data-theme="light"]{
+  --bg:#f8fafc;--panel:#ffffff;--panel2:#f1f5f9;--line:#cbd5e1;--ink:#0f172a;--muted:#475569;
+  --gold:#1e40af;--cyan:#0284c7;--green:#16a34a;--red:#dc2626;--purple:#2563eb;
+}
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .top{background:#ffffff;border-bottom:3px solid var(--gold)}
+[data-theme="light"] .brand{color:var(--gold)}
+[data-theme="light"] .top nav a{color:var(--ink)}
+[data-theme="light"] .top nav a:hover{color:var(--cyan)}
+[data-theme="light"] .stat-pill{background:var(--panel);border-color:var(--line);color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+[data-theme="light"] .stat-pill span{color:var(--muted)}
+[data-theme="light"] .jumpbar a{background:var(--panel);border-color:var(--line);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+[data-theme="light"] .jumpbar a:hover{border-color:var(--cyan);color:var(--cyan)}
+[data-theme="light"] .phase-head h2{color:var(--gold)}
+[data-theme="light"] .phase-tag{background:var(--gold);color:#ffffff}
+[data-theme="light"] .week-card{background:var(--panel);border-color:var(--line);border-left-color:var(--cyan);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+[data-theme="light"] .week-card:hover{border-color:var(--gold)}
+[data-theme="light"] .week-card.milestone-week{border-left-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold), 0 4px 12px rgba(0,0,0,.08)}
+[data-theme="light"] .week-card h3{color:var(--gold)}
+[data-theme="light"] .milestone-badge{background:#2563eb;color:#ffffff}
+[data-theme="light"] .day-list a{color:var(--ink);border-top-color:var(--line)}
+[data-theme="light"] .day-list a:hover{color:var(--cyan)}
+[data-theme="light"] .abc-pill{background:var(--panel);border-color:var(--line);color:var(--muted);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+[data-theme="light"] .abc-badge.C{background:#475569;color:#ffffff}
+[data-theme="light"] .cmd-card{background:var(--panel);border-color:var(--line);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+[data-theme="light"] .cmd-card h3{color:var(--gold)}
+[data-theme="light"] .cmd-list li{border-top-color:var(--line);color:var(--ink)}
+[data-theme="light"] .cmd-list code{color:var(--cyan)}
+[data-theme="light"] .prob-list li{border-top-color:var(--line)}
+[data-theme="light"] .prob-list a{color:var(--ink)}
+[data-theme="light"] .prob-list a:hover{color:var(--cyan)}
+[data-theme="light"] footer{background:var(--panel2);border-top:1px solid var(--line);color:var(--muted)}
+
+@media(max-width:760px){
+  .top{position:static}
+  .week-grid{grid-template-columns:1fr}
+  .cmd-grid{grid-template-columns:1fr}
+  .index-hero h1{font-size:32px}
+}
+</style>
+<script>
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  if(next==='light'){document.documentElement.setAttribute('data-theme','light');}
+  else{document.documentElement.removeAttribute('data-theme');}
+  try{localStorage.setItem('admin-jr-theme',next);}catch(e){}
+}
+</script>
+</head>
+<body>
+<header class='top'>
+  <div class='brand'>DIARIO DE UM ADMIN JR. | REDES & TCP/IP</div>
+  <button class='theme-toggle' onclick='toggleTheme()' aria-label='Alternar tema claro/escuro' title='Alternar tema claro/escuro'>🌓</button>
+  <nav>
+    <a href='#mod1'>Módulo 1 — Conectividade e Acesso</a>
+    <a href='#mod2'>Módulo 2 — NAT, VPN & Tráfego</a>
+    <a href='#mod3'>Módulo 3 — Compartilhamento & Diagnóstico</a>
+    <a href='#referencia'>Curva ABC Comandos</a>
+    <a href='#referencia-problemas'>Curva ABC Problemas</a>
+  </nav>
+</header>
+
+<section class='index-hero'>
+  <div class='eyebrow'>Fase 2 — Formação Sistemista Júnior</div>
+  <h1>Redes & TCP/IP</h1>
+  <p>Grade completa de 12 semanas / 60 dias, do modelo TCP/IP e diagnóstico por camada até VPN WireGuard, VLAN, NFS/Samba e o relatório final de um incidente combinado — em quadrinhos, com laboratório guiado e certificação TestKing.</p>
+  <div class="stats-row">
+    <div class="stat-pill">12 <span>semanas</span></div>
+    <div class="stat-pill">60 <span>aulas completas</span></div>
+    <div class="stat-pill">3 <span>módulos</span></div>
+  </div>
+  <div class="jumpbar">
+    <a href="#mod1">Ir pro Módulo 1 — Conectividade e Acesso</a>
+    <a href="#mod2">Ir pro Módulo 2 — NAT, VPN & Tráfego</a>
+    <a href="#mod3">Ir pro Módulo 3 — Compartilhamento & Diagnóstico</a>
+    <a href="#referencia">📊 Curva ABC de Comandos</a>
+    <a href="#referencia-problemas">🚨 Curva ABC de Problemas</a>
+  </div>
+</section>
+
+<div class="wrap">
+
+<section class='phase-block' id='mod1'>
+  <div class="phase-head">
+    <h2>Módulo 1 — Conectividade, DNS/DHCP, Firewall e Acesso Seguro</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · Diagnóstico por camada</span>
+  </div>
+  <p class="phase-desc">Do modelo TCP/IP e IP/CIDR até nftables sem se trancar fora por SSH, e o hardening de chaves e acesso remoto — fechando com a missão integradora que junta DNS, DHCP, firewall e SSH num incidente só.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 13 — TCP/IP e Diagnóstico Básico</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_13/DIA_01_MODELO_TCPIP.html">Dia 1 — Modelo TCP/IP<span class="sub">descubra onde o pacote para</span></a></li>
+        <li><a href="SEMANA_13/DIA_02_IP_CIDR_SUBREDE.html">Dia 2 — IP e CIDR<span class="sub">quem está perto, quem precisa de rota</span></a></li>
+        <li><a href="SEMANA_13/DIA_03_PING_ICMP.html">Dia 3 — Ping e ICMP<span class="sub">vivo não é aplicação viva</span></a></li>
+        <li><a href="SEMANA_13/DIA_04_PORTAS_SOCKETS_SS.html">Dia 4 — Portas e Sockets<span class="sub">ss mostra quem escuta</span></a></li>
+        <li><a href="SEMANA_13/DIA_05_TRACEROUTE_MTR.html">Dia 5 — Traceroute e MTR<span class="sub">salto, perda, latência, evidência</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 14 — DNS e DHCP</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_14/DIA_01_DNS_CONCEITUAL.html">Dia 1 — DNS Conceitual<span class="sub">cadeia de perguntas até a resposta</span></a></li>
+        <li><a href="SEMANA_14/DIA_02_DNS_TTL_CACHE.html">Dia 2 — DNS: TTL e Cache<span class="sub">confirme antes de alterar de novo</span></a></li>
+        <li><a href="SEMANA_14/DIA_03_HOSTS_RESOLVCONF.html">Dia 3 — /etc/hosts<span class="sub">o atalho que engana o DNS</span></a></li>
+        <li><a href="SEMANA_14/DIA_04_DHCP_DORA.html">Dia 4 — DHCP e D.O.R.A.<span class="sub">em qual etapa a conversa parou</span></a></li>
+        <li><a href="SEMANA_14/DIA_05_DHCP_LEASE_RENOVACAO.html">Dia 5 — DHCP: Lease e Renovação<span class="sub">valide gateway depois do IP</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 15 — Firewall e nftables</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_15/DIA_01_FIREWALL_STATEFUL_TRAVAR_SSH.html">Dia 1 — Firewall Stateful<span class="sub">não se tranque fora</span></a></li>
+        <li><a href="SEMANA_15/DIA_02_NFTABLES_BASICO_ROLLBACK.html">Dia 2 — nftables<span class="sub">listar, backup, rollback</span></a></li>
+        <li><a href="SEMANA_15/DIA_03_SERVICO_OU_FIREWALL.html">Dia 3 — Serviço ou Firewall?<span class="sub">pergunte à camada certa</span></a></li>
+        <li><a href="SEMANA_15/DIA_04_ORDEM_REGRAS_FIREWALL.html">Dia 4 — A Primeira Regra que Casa Vence<span class="sub">ordem, condição, ação</span></a></li>
+        <li><a href="SEMANA_15/DIA_05_TESTE_SEGURO_SEGUNDA_SESSAO.html">Dia 5 — Teste Seguro com Segunda Sessão<span class="sub">prove o novo acesso antes de fechar o antigo</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 16 — SSH e Missão Integradora <span class="milestone-badge">MÓDULO 1 FINAL</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_16/DIA_01_CHAVES_SSH_KEYGEN.html">Dia 1 — Chaves SSH<span class="sub">privada não se compartilha</span></a></li>
+        <li><a href="SEMANA_16/DIA_02_SSH_CONFIG_PROXYJUMP.html">Dia 2 — SSH Config e ProxyJump<span class="sub">atalho que não burla processo</span></a></li>
+        <li><a href="SEMANA_16/DIA_03_HARDENING_SSH_PERMITROOTLOGIN.html">Dia 3 — SSH Hardening<span class="sub">segurança sem caos</span></a></li>
+        <li><a href="SEMANA_16/DIA_04_DIAGNOSTICO_CAMADAS.html">Dia 4 — Diagnóstico em Camadas<span class="sub">pular etapa cria conclusão falsa</span></a></li>
+        <li><a href="SEMANA_16/DIA_05_MISSAO_INTEGRADORA_FASE2.html">Dia 5 — Missão Integradora<span class="sub">DNS, DHCP, firewall e SSH juntos</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class='phase-block' id='mod2'>
+  <div class="phase-head">
+    <h2>Módulo 2 — NAT, VPN WireGuard e Análise de Tráfego</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · Tradução de endereço e túneis</span>
+  </div>
+  <p class="phase-desc">Como um IP público atende muitas máquinas privadas, como abrir um túnel seguro com WireGuard, e como ler o tráfego real na rede com tcpdump — do handshake TCP à captura salva em arquivo como evidência.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 17 — NAT</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_17/DIA_01_NAT_CONCEITO.html">Dia 1 — NAT<span class="sub">um IP público, muitos privados</span></a></li>
+        <li><a href="SEMANA_17/DIA_02_SNAT_MASQUERADE.html">Dia 2 — SNAT/Masquerade<span class="sub">uma regra pra rede inteira</span></a></li>
+        <li><a href="SEMANA_17/DIA_03_DNAT_PORT_FORWARDING.html">Dia 3 — DNAT: Port Forwarding<span class="sub">tradução não é permissão</span></a></li>
+        <li><a href="SEMANA_17/DIA_04_NAT_OU_FIREWALL.html">Dia 4 — NAT ou Firewall?<span class="sub">compare os dois separadamente</span></a></li>
+        <li><a href="SEMANA_17/DIA_05_TESTE_PONTA_A_PONTA.html">Dia 5 — Teste de Dentro e de Fora<span class="sub">valide pelo caminho real do usuário</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 18 — VPN WireGuard</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_18/DIA_01_VPN_CONCEITO_TUNEL.html">Dia 1 — VPN<span class="sub">o que protege, o que não protege</span></a></li>
+        <li><a href="SEMANA_18/DIA_02_WIREGUARD_CHAVES_PEER.html">Dia 2 — WireGuard: Chaves e Peers<span class="sub">confiança começa na chave pública</span></a></li>
+        <li><a href="SEMANA_18/DIA_03_PRIMEIRO_TUNEL_WIREGUARD.html">Dia 3 — Primeiro Túnel WireGuard<span class="sub">quem tem IP dinâmico é quem liga</span></a></li>
+        <li><a href="SEMANA_18/DIA_04_ALLOWEDIPS_ROTA.html">Dia 4 — AllowedIPs é Rota e Filtro<span class="sub">decide o que sai e o que entra</span></a></li>
+        <li><a href="SEMANA_18/DIA_05_HANDSHAKE_SEM_TRAFEGO.html">Dia 5 — Handshake OK, Tráfego Não<span class="sub">autenticar é uma coisa, rotear é outra</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 19 — tcpdump e Análise de Pacotes</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_19/DIA_01_TCPDUMP_PRIMEIRA_CAPTURA.html">Dia 1 — tcpdump: Primeira Captura<span class="sub">ver o pacote de verdade</span></a></li>
+        <li><a href="SEMANA_19/DIA_02_TCPDUMP_FILTRO_HOST_PORTA.html">Dia 2 — Filtro por Host e Porta<span class="sub">apontar pro que interessa</span></a></li>
+        <li><a href="SEMANA_19/DIA_03_HANDSHAKE_TCP_LEITURA.html">Dia 3 — Lendo o Handshake TCP<span class="sub">três pacotes, a história inteira</span></a></li>
+        <li><a href="SEMANA_19/DIA_04_TCPDUMP_SALVAR_ARQUIVO.html">Dia 4 — Salvando Captura em Arquivo<span class="sub">evidência, não só lembrança</span></a></li>
+        <li><a href="SEMANA_19/DIA_05_INVESTIGACAO_PACOTE_CHEGA.html">Dia 5 — Investigação: o Pacote Chega?<span class="sub">capturar no ponto certo</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 20 — VLAN <span class="milestone-badge">MÓDULO 2 FINAL</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_20/DIA_01_VLAN_CONCEITO.html">Dia 1 — VLAN: o Conceito<span class="sub">mesmo switch não é mesma rede lógica</span></a></li>
+        <li><a href="SEMANA_20/DIA_02_VLAN_TAGGING_TRUNK_ACCESS.html">Dia 2 — Tagging 802.1Q<span class="sub">trunk e access</span></a></li>
+        <li><a href="SEMANA_20/DIA_03_VLAN_INTERFACE_LINUX.html">Dia 3 — VLAN numa Interface Linux<span class="sub">uma placa, várias identidades</span></a></li>
+        <li><a href="SEMANA_20/DIA_04_ISOLAMENTO_ENTRE_VLANS.html">Dia 4 — Validando Isolamento entre VLANs<span class="sub">ping falhando pode ser sucesso</span></a></li>
+        <li><a href="SEMANA_20/DIA_05_DIAGNOSTICO_VLANS_MESMO_SWITCH.html">Dia 5 — Diagnóstico: VLANs Vazando<span class="sub">uma linha de config esquecida</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class='phase-block' id='mod3'>
+  <div class="phase-head">
+    <h2>Módulo 3 — Compartilhamento de Arquivos e Diagnóstico Integrado</h2>
+    <span class="phase-tag">4 semanas · 20 aulas · NFS, Samba e o incidente final</span>
+  </div>
+  <p class="phase-desc">Compartilhar diretórios entre Linux (NFS) e com Windows (Samba), automatizar healthcheck e backup resiliente a queda de rede, e fechar a Fase 2 com um incidente real que combina três causas ao mesmo tempo.</p>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <h3>Semana 21 — NFS</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_21/DIA_01_NFS_CONCEITO.html">Dia 1 — NFS: o Conceito<span class="sub">diretório remoto que parece local</span></a></li>
+        <li><a href="SEMANA_21/DIA_02_NFS_EXPORTS_PERMISSOES.html">Dia 2 — NFS: Exports e Permissões<span class="sub">montar e depois fazer são decisões separadas</span></a></li>
+        <li><a href="SEMANA_21/DIA_03_NFS_MOUNT_UID_GID.html">Dia 3 — UID e GID entre Máquinas<span class="sub">números precisam bater</span></a></li>
+        <li><a href="SEMANA_21/DIA_04_NFS_FSTAB_NOFAIL.html">Dia 4 — NFS no fstab<span class="sub">_netdev e nofail</span></a></li>
+        <li><a href="SEMANA_21/DIA_05_NFS_DIAGNOSTICO_ESCRITA.html">Dia 5 — Diagnóstico: Escrita Falha<span class="sub">soma de várias camadas</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 22 — Samba</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_22/DIA_01_SAMBA_CONCEITO.html">Dia 1 — Samba: o Conceito<span class="sub">o idioma que o Windows já fala</span></a></li>
+        <li><a href="SEMANA_22/DIA_02_SAMBA_SMBCONF_BASICO.html">Dia 2 — smb.conf Básico<span class="sub">servidor geral e cada share</span></a></li>
+        <li><a href="SEMANA_22/DIA_03_SAMBA_SMBPASSWD.html">Dia 3 — smbpasswd<span class="sub">existir no Linux não basta</span></a></li>
+        <li><a href="SEMANA_22/DIA_04_SAMBA_PERMISSOES_COMBINADAS.html">Dia 4 — Permissões Combinadas<span class="sub">read only não garante legibilidade</span></a></li>
+        <li><a href="SEMANA_22/DIA_05_SAMBA_DIAGNOSTICO_ARQUIVOS.html">Dia 5 — Correção Retroativa de Arquivos<span class="sub">arquivo e pasta pedem regra diferente</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card">
+      <h3>Semana 23 — Automação e Plantão</h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_23/DIA_01_DNS_FIREWALL_COMBINADOS.html">Dia 1 — DNS ou Firewall?<span class="sub">nunca misture os dois testes</span></a></li>
+        <li><a href="SEMANA_23/DIA_02_PROCESSO_E_REDE_JUNTOS.html">Dia 2 — Processo e Rede Juntos<span class="sub">rodando e respondendo são coisas diferentes</span></a></li>
+        <li><a href="SEMANA_23/DIA_03_HEALTHCHECK_REDE_BASH.html">Dia 3 — Healthcheck de Rede em Bash<span class="sub">um teste falhar não trava os outros</span></a></li>
+        <li><a href="SEMANA_23/DIA_04_BACKUP_RSYNC_QUEDA_REDE.html">Dia 4 — Backup Rsync e Queda de Rede<span class="sub">--partial evita recomeçar do zero</span></a></li>
+        <li><a href="SEMANA_23/DIA_05_CHECKLIST_ADMIN_PLANTAO.html">Dia 5 — Checklist do Admin de Plantão<span class="sub">documente enquanto investiga</span></a></li>
+      </ol>
+    </div>
+    <div class="week-card milestone-week">
+      <h3>Semana 24 — Missão Final <span class="milestone-badge">FORMAÇÃO COMPLETA</span></h3>
+      <ol class="day-list">
+        <li><a href="SEMANA_24/DIA_01_MISSAO_FINAL_ACESSO_EXTERNO_FORA.html">Dia 1 — Acesso Externo Fora do Ar<span class="sub">confirme o que está e não está quebrado</span></a></li>
+        <li><a href="SEMANA_24/DIA_02_TRES_CAUSAS_MESMO_INCIDENTE.html">Dia 2 — Três Causas, Mesmo Incidente<span class="sub">pode haver mais de uma ao mesmo tempo</span></a></li>
+        <li><a href="SEMANA_24/DIA_03_CORRIGIR_EM_ORDEM_VALIDAR_PASSO.html">Dia 3 — Corrigir em Ordem<span class="sub">validar cada passo, não pular</span></a></li>
+        <li><a href="SEMANA_24/DIA_04_VALIDACAO_PONTA_A_PONTA.html">Dia 4 — Validação Ponta a Ponta<span class="sub">cada camada passar não garante o caminho todo</span></a></li>
+        <li><a href="SEMANA_24/DIA_05_RELATORIO_FINAL_INCIDENTE.html">Dia 5 — Relatório Final<span class="sub">o valor real está em prevenir o próximo</span></a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO A: CURVA ABC DE COMANDOS -->
+<section class='phase-block' id='referencia'>
+  <div class="phase-head">
+    <h2>📊 Referência Rápida — Curva ABC de Comandos de Redes</h2>
+  </div>
+  <p class="abc-intro">Classificação dos comandos ensinados no curso pela frequência e impacto real no diagnóstico de rede do dia a dia:</p>
+
+  <div class="abc-legend">
+    <div class="abc-pill"><span class="abc-badge A">A</span> <b>Essencial (80% do dia a dia):</b> Diagnóstico de camada, conectividade e acesso remoto.</div>
+    <div class="abc-pill"><span class="abc-badge B">B</span> <b>Regular (15% da operação):</b> Configuração de firewall, NAT, VPN e compartilhamento.</div>
+    <div class="abc-pill"><span class="abc-badge C">C</span> <b>Especializado (5% de crise):</b> Captura de pacotes, VLAN vazando, diagnóstico combinado.</div>
+  </div>
+
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <h3>🌐 Diagnóstico de Camada</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>ping -c 4 &lt;host&gt;</code><span class="note">Confirma que o host responde no nível IP</span></li>
+        <li><span class="abc-badge A">A</span><code>ip a / ip route</code><span class="note">Endereço, máscara e rota configurados na interface</span></li>
+        <li><span class="abc-badge A">A</span><code>ss -tlnp</code><span class="note">Quem está escutando em qual porta</span></li>
+        <li><span class="abc-badge B">B</span><code>mtr &lt;host&gt;</code><span class="note">Traceroute + perda + latência por salto, ao vivo</span></li>
+        <li><span class="abc-badge B">B</span><code>nc -zv &lt;host&gt; &lt;porta&gt;</code><span class="note">Testa se o caminho até a porta realmente responde</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🧭 DNS e DHCP</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>dig / nslookup &lt;host&gt;</code><span class="note">Consulta DNS direta, sem cache local</span></li>
+        <li><span class="abc-badge B">B</span><code>resolvectl status</code><span class="note">Servidor DNS e cache em uso agora</span></li>
+        <li><span class="abc-badge B">B</span><code>cat /etc/hosts</code><span class="note">Atalho local que pode mascarar o DNS real</span></li>
+        <li><span class="abc-badge B">B</span><code>journalctl -u dhcpcd -f</code><span class="note">Acompanha a negociação D.O.R.A. ao vivo</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🔥 Firewall (nftables)</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>nft list ruleset</code><span class="note">Lê as regras ativas antes de mudar qualquer coisa</span></li>
+        <li><span class="abc-badge B">B</span><code>nft -f backup.nft</code><span class="note">Restaura backup — a rede de segurança do rollback</span></li>
+        <li><span class="abc-badge B">B</span><code>nft add rule ... ct state established,related accept</code><span class="note">Sempre libera a própria sessão antes de restringir o resto</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🔑 SSH e Acesso Remoto</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge A">A</span><code>ssh-keygen -t ed25519</code><span class="note">Gera par de chaves — a privada nunca sai da máquina</span></li>
+        <li><span class="abc-badge B">B</span><code>ssh -J &lt;jump&gt; &lt;destino&gt;</code><span class="note">ProxyJump, salta por um host intermediário</span></li>
+        <li><span class="abc-badge B">B</span><code>PermitRootLogin no</code><span class="note">Diretiva de hardening no sshd_config</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🔀 NAT</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge B">B</span><code>nft ... masquerade</code><span class="note">SNAT dinâmico — uma regra pra toda a rede de saída</span></li>
+        <li><span class="abc-badge B">B</span><code>nft ... dnat to &lt;ip&gt;:&lt;porta&gt;</code><span class="note">Port forwarding — tradução, não permissão</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🔒 VPN WireGuard</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge B">B</span><code>wg genkey / pubkey</code><span class="note">Gera o par de chaves do peer</span></li>
+        <li><span class="abc-badge A">A</span><code>wg-quick up / down</code><span class="note">Sobe e derruba o túnel</span></li>
+        <li><span class="abc-badge B">B</span><code>wg show</code><span class="note">Handshake e tráfego real — confirma se está passando dado</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>📡 Captura de Pacotes</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge C">C</span><code>tcpdump -i &lt;iface&gt; -n</code><span class="note">Captura ao vivo, sem resolver nomes</span></li>
+        <li><span class="abc-badge C">C</span><code>tcpdump host X and port Y</code><span class="note">Filtra só o que interessa</span></li>
+        <li><span class="abc-badge C">C</span><code>tcpdump -w arquivo.pcap</code><span class="note">Salva a captura como evidência real</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>🏷️ VLAN</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge C">C</span><code>ip link add link eth0 name eth0.10 type vlan id 10</code><span class="note">Cria subinterface marcada com a tag 802.1Q</span></li>
+        <li><span class="abc-badge C">C</span><code>bridge vlan show</code><span class="note">Audita quais VLANs cada porta do switch aceita</span></li>
+      </ul>
+    </div>
+
+    <div class="cmd-card">
+      <h3>📂 NFS e Samba</h3>
+      <ul class="cmd-list">
+        <li><span class="abc-badge B">B</span><code>exportfs -ra / showmount -e</code><span class="note">Aplica e audita os exports do NFS</span></li>
+        <li><span class="abc-badge B">B</span><code>mount -t nfs &lt;host&gt;:/caminho /mnt</code><span class="note">Monta o compartilhamento remoto</span></li>
+        <li><span class="abc-badge B">B</span><code>smbpasswd -a &lt;user&gt; / testparm</code><span class="note">Credencial Samba e validação do smb.conf</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO B: CURVA ABC DE PROBLEMAS -->
+<section class='phase-block' id='referencia-problemas'>
+  <div class="phase-head">
+    <h2>🚨 Curva ABC de Problemas e Procedimentos Operacionais</h2>
+  </div>
+  <p class="abc-intro">Guia rápido de incidentes de rede ensinados no curso — clique para abrir o procedimento na aula exata:</p>
+
+  <ul class="prob-list">
+    <li><span class="abc-badge A">A</span><a href="SEMANA_13/DIA_01_MODELO_TCPIP.html">"Não conecta" sem saber em qual camada o pacote realmente para<span class="where">Semana 13 · Dia 1 — Modelo TCP/IP</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_13/DIA_03_PING_ICMP.html">Ping respondendo, mas a aplicação continua fora do ar — ping vivo não é aplicação viva<span class="where">Semana 13 · Dia 3 — Ping e ICMP</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_13/DIA_05_TRACEROUTE_MTR.html">"Está lento" sem nenhuma evidência de salto, perda ou latência real<span class="where">Semana 13 · Dia 5 — Traceroute e MTR</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_14/DIA_02_DNS_TTL_CACHE.html">Alterou o DNS mas a mudança não aparece — provavelmente é cache, não erro de config<span class="where">Semana 14 · Dia 2 — DNS TTL e Cache</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_14/DIA_03_HOSTS_RESOLVCONF.html">Só uma máquina "vê diferente" — suspeite de um atalho local em /etc/hosts primeiro<span class="where">Semana 14 · Dia 3 — /etc/hosts</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_14/DIA_04_DHCP_DORA.html">Máquina sem IP — descobrir em qual das 4 etapas do D.O.R.A. a conversa parou<span class="where">Semana 14 · Dia 4 — DHCP D.O.R.A.</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_15/DIA_01_FIREWALL_STATEFUL_TRAVAR_SSH.html">Regra de firewall prestes a bloquear o próprio acesso remoto usado pra aplicá-la<span class="where">Semana 15 · Dia 1 — Firewall Stateful</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_15/DIA_02_NFTABLES_BASICO_ROLLBACK.html">Regra nova de nftables aplicada sem backup nem rollback testado antes<span class="where">Semana 15 · Dia 2 — nftables Rollback</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_15/DIA_03_SERVICO_OU_FIREWALL.html">Derrubar o firewall inteiro "só pra ver" em vez de perguntar à camada certa<span class="where">Semana 15 · Dia 3 — Serviço ou Firewall</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_15/DIA_04_ORDEM_REGRAS_FIREWALL.html">Regra de liberação escrita depois de uma regra de bloqueio que já casa antes<span class="where">Semana 15 · Dia 4 — Ordem das Regras</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_15/DIA_05_TESTE_SEGURO_SEGUNDA_SESSAO.html">Fechar a sessão antiga antes de provar que o novo acesso realmente funciona<span class="where">Semana 15 · Dia 5 — Teste com Segunda Sessão</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_16/DIA_03_HARDENING_SSH_PERMITROOTLOGIN.html">Hardening de SSH aplicado sem confirmar que a operação normal continua funcionando<span class="where">Semana 16 · Dia 3 — SSH Hardening</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_16/DIA_04_DIAGNOSTICO_CAMADAS.html">Pular direto pra "deve ser o firewall" sem confirmar as camadas anteriores primeiro<span class="where">Semana 16 · Dia 4 — Diagnóstico em Camadas</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_16/DIA_05_MISSAO_INTEGRADORA_FASE2.html">Incidente que mistura DNS, DHCP, firewall e SSH — parar cedo demais deixa causa sem explicar<span class="where">Semana 16 · Dia 5 — Missão Integradora</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_17/DIA_02_SNAT_MASQUERADE.html">Uma regra de SNAT por máquina, em vez de uma regra só cobrindo a rede inteira<span class="where">Semana 17 · Dia 2 — SNAT/Masquerade</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_17/DIA_03_DNAT_PORT_FORWARDING.html">Port forwarding configurado mas o serviço continua inacessível — falta a permissão, não só a tradução<span class="where">Semana 17 · Dia 3 — DNAT</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_17/DIA_04_NAT_OU_FIREWALL.html">Timeout externo sem saber se a causa é NAT ou firewall — compare os dois separado<span class="where">Semana 17 · Dia 4 — NAT ou Firewall</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_18/DIA_03_PRIMEIRO_TUNEL_WIREGUARD.html">Os dois peers de WireGuard tentando ligar ao mesmo tempo, sem saber quem espera e quem chama<span class="where">Semana 18 · Dia 3 — Primeiro Túnel WireGuard</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_18/DIA_05_HANDSHAKE_SEM_TRAFEGO.html">Handshake do WireGuard funcionando, mas nenhum tráfego passa pelo túnel<span class="where">Semana 18 · Dia 5 — Handshake OK, Tráfego Não</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_19/DIA_01_TCPDUMP_PRIMEIRA_CAPTURA.html">Suposição sobre o que passa na rede em vez de capturar o pacote de verdade<span class="where">Semana 19 · Dia 1 — tcpdump Primeira Captura</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_19/DIA_05_INVESTIGACAO_PACOTE_CHEGA.html">Capturar no ponto errado da rede — metade da resposta já se perde aí<span class="where">Semana 19 · Dia 5 — Investigação: o Pacote Chega?</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_20/DIA_01_VLAN_CONCEITO.html">Achar que estar no mesmo switch físico significa estar na mesma rede lógica<span class="where">Semana 20 · Dia 1 — VLAN Conceito</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_20/DIA_05_DIAGNOSTICO_VLANS_MESMO_SWITCH.html">VLANs vazando entre si — a causa quase sempre é uma linha de configuração esquecida<span class="where">Semana 20 · Dia 5 — Diagnóstico VLANs Vazando</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_21/DIA_03_NFS_MOUNT_UID_GID.html">Arquivo criado no NFS aparece com dono errado — NFS transmite números, não nomes<span class="where">Semana 21 · Dia 3 — UID e GID no NFS</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_21/DIA_04_NFS_FSTAB_NOFAIL.html">Mount NFS no fstab travando o boot inteiro esperando uma rede que ainda não chegou<span class="where">Semana 21 · Dia 4 — NFS fstab nofail</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_21/DIA_05_NFS_DIAGNOSTICO_ESCRITA.html">Escrita negada no NFS — o motivo é a soma de várias camadas de permissão, não uma só<span class="where">Semana 21 · Dia 5 — Diagnóstico de Escrita NFS</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_22/DIA_03_SAMBA_SMBPASSWD.html">Usuário existe no Linux mas não consegue logar no compartilhamento Samba<span class="where">Semana 22 · Dia 3 — smbpasswd</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_22/DIA_05_SAMBA_DIAGNOSTICO_ARQUIVOS.html">Arquivos antigos com permissão errada exigindo correção retroativa em massa<span class="where">Semana 22 · Dia 5 — Correção Retroativa de Arquivos</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_23/DIA_01_DNS_FIREWALL_COMBINADOS.html">Um único sintoma que parece DNS mas pode ser firewall — nunca misture os dois testes<span class="where">Semana 23 · Dia 1 — DNS ou Firewall</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_23/DIA_04_BACKUP_RSYNC_QUEDA_REDE.html">Backup de 1 hora recomeça do zero por causa de uma queda de rede no minuto 59<span class="where">Semana 23 · Dia 4 — Backup Rsync e Queda de Rede</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_24/DIA_01_MISSAO_FINAL_ACESSO_EXTERNO_FORA.html">Acesso externo fora do ar — confirmar exatamente o que está e não está quebrado antes de agir<span class="where">Semana 24 · Dia 1 — Acesso Externo Fora do Ar</span></a></li>
+    <li><span class="abc-badge C">C</span><a href="SEMANA_24/DIA_02_TRES_CAUSAS_MESMO_INCIDENTE.html">Achar UM problema e parar, quando na verdade existem três causas ao mesmo tempo<span class="where">Semana 24 · Dia 2 — Três Causas, Mesmo Incidente</span></a></li>
+    <li><span class="abc-badge B">B</span><a href="SEMANA_24/DIA_04_VALIDACAO_PONTA_A_PONTA.html">Cada camada passando no próprio teste, mas o caminho inteiro ainda não funciona<span class="where">Semana 24 · Dia 4 — Validação Ponta a Ponta</span></a></li>
+    <li><span class="abc-badge A">A</span><a href="SEMANA_24/DIA_05_RELATORIO_FINAL_INCIDENTE.html">Relatório que só descreve o passado, sem nada que previna o próximo incidente igual<span class="where">Semana 24 · Dia 5 — Relatório Final</span></a></li>
+  </ul>
+</section>
+
+</div>
+
+<footer>
+  DIARIO DE UM ADMIN JR. — FORMAÇÃO REDES & TCP/IP | 2026
+</footer>
+</body></html>
