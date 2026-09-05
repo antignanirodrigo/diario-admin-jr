@@ -323,6 +323,12 @@ network: OK</pre>
       <div class="lab-cmd">ALERT! /dev/mapper/vg_data-lv_var does not exist.
 Dropping to a shell!
 (initramfs) _</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa mensagem</summary>
+        <dl class="flag-list">
+          <dt>ALERT! /dev/mapper/vg_data-lv_var does not exist.</dt><dd>Nomeia o dispositivo mapeado exato que o initramfs esperava montar e não encontrou — aqui, um volume LVM diferente do caso da Semana 11 (vg_data em vez de vg_root).</dd>
+          <dt>Dropping to a shell!</dt><dd>O initramfs abre uma shell mínima de emergência com as ferramentas (lvm incluído) necessárias para investigar e corrigir, sem precisar de mídia externa.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> boot trava em initramfs, com a mensagem de volume não encontrado.</div>
       <div class="lab-why"><b>Por quê:</b> reproduzir o cenário controlado antes do incidente real é o que transforma teoria das 12 semanas em reflexo pronto pra usar sob pressão.</div>
     </li>
@@ -330,6 +336,12 @@ Dropping to a shell!
       <div class="lab-text"><b>Ação:</b> aplique o método completo: console, identificar etapa, identificar subsistema, sem pular nenhuma etapa.</div></div>
       <div class="lab-cmd">(initramfs) lvm lvscan
   inactive          '/dev/vg_data/lv_var' [80.00 GiB] inherit</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>lvm lvscan</dt><dd>Varre e lista os volumes lógicos (LVs) conhecidos pelo LVM, junto com seu estado atual.</dd>
+          <dt>inactive</dt><dd>O volume existe e tem os dados intactos — só não está ATIVADO neste boot. Não é o mesmo que 'ausente' ou 'corrompido', é só destravar que falta.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> etapa (initramfs) e subsistema (LVM) documentados antes de qualquer correção.</div>
       <div class="lab-warn"><b>Cilada comum:</b> sob pressão de um alerta às 3 da manhã, pular direto pra "vou tentar alguma coisa" — o método existe justamente pra funcionar quando a pressa aperta mais.</div>
     </li>
@@ -357,6 +369,12 @@ disk: OK
 service: OK
 process: OK
 network: OK</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>./healthcheck.sh</dt><dd>Executa um script local de validação — o './' indica que o script está no diretório atual, não em um caminho do PATH do sistema.</dd>
+          <dt>disk / service / process / network: OK</dt><dd>As quatro checagens do método de validação completa: cada uma precisa retornar OK antes do incidente ser considerado encerrado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> disk OK, service OK, process OK, network OK.</div>
     
       <details class="lab-fix"><summary>Se o seu resultado foi diferente</summary>

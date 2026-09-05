@@ -348,6 +348,12 @@ Sync job finished successfully!</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Dispare a sincronização manual e acompanhe o tráfego exclusivo de chunks novos.</div></div>
       <div class="lab-cmd">proxmox-backup-manager sync-job run sync-remote-tank</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sync-job run</dt><dd>Dispara manualmente (fora do agendamento) um sync-job já configurado, iniciando a sincronização imediatamente.</dd>
+          <dt>sync-remote-tank</dt><dd>O nome do sync-job a disparar, criado no passo anterior, com o remote e o limite de banda já definidos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Sincronização de chunks em andamento.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> A flag --rate-in limita a largura de banda utilizada pela sincronização, impedindo que o tráfego de backup sature o link de Internet da empresa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Rodar sync jobs sem controle de banda durante o horário comercial, degradando o acesso à Internet de todos os colaboradores.</div>
@@ -355,6 +361,12 @@ Sync job finished successfully!</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Inspecione o datastore remoto confirmando a presença da réplica 3-2-1 offsite.</div></div>
       <div class="lab-cmd">proxmox-backup-manager datastore status tank-offsite</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>datastore status</dt><dd>Consulta o estado atual de um datastore — espaço usado e livre.</dd>
+          <dt>tank-offsite</dt><dd>O datastore de destino da réplica, no PBS remoto — consultado aqui para confirmar que a sincronização realmente chegou e ocupou espaço nele.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Deduplicação de tráfego comprovada com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Validar o status Quorum e saúde do datastore remoto confirma que a segunda cópia de segurança está 100% pronta para contingência.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Esquecer de monitorar o espaço em disco do PBS remoto, descobrindo que as sincronizações falharam há semanas por falta de storage.</div>

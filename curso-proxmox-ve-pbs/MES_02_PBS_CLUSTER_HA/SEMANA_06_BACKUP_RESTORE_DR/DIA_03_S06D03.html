@@ -324,6 +324,14 @@ $ ls -lh /tmp/contratos_recuperados/Contratos/2026/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Navegue pela estrutura de pastas da VM sem precisar ligá-la.</div></div>
       <div class="lab-cmd">proxmox-file-restore list pbs-backup vm/100/2026-09-01T10:00:00Z drive-scsi0.img.fidx /etc/nginx/</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-file-restore list</dt><dd>Lista o conteúdo de um caminho específico dentro de um backup, montando a árvore de arquivos via FUSE, sem restaurar nem ligar a VM inteira.</dd>
+          <dt>pbs-backup vm/100/2026-09-01T10:00:00Z</dt><dd>O storage e o snapshot exato a explorar.</dd>
+          <dt>drive-scsi0.img.fidx</dt><dd>O disco virtual específico dentro do backup — uma VM pode ter vários discos, cada um com seu índice próprio.</dd>
+          <dt>/etc/nginx/</dt><dd>O subcaminho, dentro desse disco, a navegar — aqui, já descendo um nível a partir do /etc/ visto no passo anterior.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Janela modal do explorador de arquivos aberta em segundos.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Navegar pelas pastas com proxmox-file-restore list exibe caminhos e permissões dos arquivos salvos no snapshot do PBS.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Tentar abrir backups com criptografia client-side sem fornecer o arquivo de chave de descriptografia.</div>
@@ -352,6 +360,13 @@ $ ls -lh /tmp/contratos_recuperados/Contratos/2026/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide o conteúdo do arquivo recuperado com o comando diff.</div></div>
       <div class="lab-cmd">diff -u ./nginx_recuperado.conf /etc/nginx/nginx.conf</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>diff -u</dt><dd>Compara dois arquivos linha a linha e mostra as diferenças em formato unificado (-u), com contexto ao redor de cada mudança.</dd>
+          <dt>./nginx_recuperado.conf</dt><dd>O arquivo extraído do backup, na pasta atual — a versão candidata a ser restaurada.</dd>
+          <dt>/etc/nginx/nginx.conf</dt><dd>O arquivo em produção atual — comparar antes de sobrescrever evita aplicar uma versão errada por engano.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Arquivo baixado com sucesso na máquina do administrador.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Validar o conteúdo do arquivo recuperado com diff ou cat confirma a integridade da versão antes de aplicar a correção no serviço.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Restaurar a versão errada do arquivo por não checar a data e hora do snapshot no catálogo do PBS.</div>

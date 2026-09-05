@@ -334,12 +334,25 @@ New password:
 Retype new password:
 passwd: Authentication token manipulation error
 passwd: password unchanged</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse erro</summary>
+        <dl class="flag-list">
+          <dt>passwd root</dt><dd>Tenta trocar a senha do usuário root — pede a nova senha duas vezes para confirmação.</dd>
+          <dt>Authentication token manipulation error</dt><dd>Erro genérico do PAM indicando que a gravação em /etc/shadow falhou — nesse ponto do boot mínimo, a causa mais comum é a raiz estar montada como somente-leitura (ro).</dd>
+          <dt>password unchanged</dt><dd>Confirma que nada foi de fato alterado — a tentativa falhou por completo, sem efeito colateral.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Authentication token manipulation error / password unchanged.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> rode mount | grep ' / ' e confirme que a raiz está ro.</div></div>
       <div class="lab-cmd"># mount | grep ' / '
 /dev/mapper/vg_root-lv_root on / type ext4 (ro,relatime)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>mount | grep ' / '</dt><dd>Lista todos os pontos montados e filtra só a linha da raiz — usado aqui para CONFIRMAR a suspeita levantada pelo erro do passwd.</dd>
+          <dt>(ro,relatime)</dt><dd>A opção 'ro' (read-only) é a causa raiz: /etc/shadow não pode ser gravado enquanto a raiz estiver assim.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> saída mostrando (ro,relatime) ou similar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver o erro do passwd e tentar de novo com outra senha, achando que o problema é a senha escolhida — o erro é sobre gravação, não sobre a senha em si.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a raiz já aparecer como rw e passwd ainda falhar, este é o ponto onde o chat com o Sênior-IA vai ajudar a investigar outra causa.</div>
@@ -373,6 +386,13 @@ New password:
 Retype new password:
 passwd: password updated successfully
 # reboot</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>passwd root (2ª tentativa)</dt><dd>Repetido depois do remount,rw — dessa vez a gravação em /etc/shadow é permitida.</dd>
+          <dt>password updated successfully</dt><dd>Confirma que a senha foi de fato alterada em disco.</dd>
+          <dt>reboot</dt><dd>Reinicia o sistema normalmente, saindo do modo de usuário único, para validar o login completo com a nova senha.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> login limpo com a nova senha, reproduzindo o painel 6 da prancha de hoje.</div>
     </li>
   </ol>

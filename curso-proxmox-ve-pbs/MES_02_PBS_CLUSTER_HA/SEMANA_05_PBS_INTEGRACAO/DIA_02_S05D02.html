@@ -328,6 +328,12 @@ verify group vm/101 (2 snapshots)
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Acompanhe o log da tarefa confirmando a quantidade de chunks órfãos removidos e espaço liberado.</div></div>
       <div class="lab-cmd">proxmox-backup-manager task log &lt;task_id&gt;</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager task log</dt><dd>Exibe o log detalhado, linha a linha, de uma tarefa assíncrona do PBS já disparada (como o garbage collection do passo anterior).</dd>
+          <dt>&lt;task_id&gt;</dt><dd>Identificador único da tarefa (UPID), retornado quando a tarefa foi iniciada — precisa ser substituído pelo valor real, não digitado literalmente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Execução limpa das fases 1 (Mark) e 2 (Sweep).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O Garbage Collection Fase 2 remove os chunks órfãos que não foram referenciados e que ultrapassaram a janela de carência de segurança (24 horas).</div>
       <div class="lab-warn"><b>Cilada comum:</b> Achar que o espaço em disco é liberado no segundo em que um backup é deletado; o espaço só é recuperado após o término da Fase 2 do GC.</div>
@@ -335,6 +341,12 @@ verify group vm/101 (2 snapshots)
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Dispare o Verify Job para recalcular os hashes SHA-256 de todos os chunks.</div></div>
       <div class="lab-cmd">proxmox-backup-manager verify-job start tank-verify</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager verify-job start</dt><dd>Dispara manualmente (fora do agendamento) um job de verificação já configurado, que recalcula os hashes SHA-256 dos chunks para detectar corrupção silenciosa.</dd>
+          <dt>tank-verify</dt><dd>O nome do verify-job disparado — precisa já existir, criado previamente (via GUI ou verify-job create).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Job de verificação programado com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O comando proxmox-backup-manager verify-job recalcula os hashes SHA-256 de cada chunk armazenado no disco físico, detectando corrupção silenciosa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Não rodar Verify Jobs periodicamente, descobrindo que o backup está corrompido apenas no momento crítico de um desastre real.</div>

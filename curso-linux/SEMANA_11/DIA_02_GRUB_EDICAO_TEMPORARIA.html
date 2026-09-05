@@ -314,6 +314,13 @@ root=/dev/mapper/vg_root-lv_root ro quiet
       <div class="lab-cmd">(no menu do GRUB, tecla 'e')
 linux /boot/vmlinuz-6.1.0-21-amd64 root=/dev/mapper/vg_root-lv_root ro quiet
 initrd /boot/initrd.img-6.1.0-21-amd64</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa tela de edição</summary>
+        <dl class="flag-list">
+          <dt>linux /boot/vmlinuz-...</dt><dd>A linha que carrega o kernel: caminho do arquivo de imagem do kernel seguido dos parâmetros de boot (root=, ro, quiet).</dd>
+          <dt>initrd /boot/initrd.img-...</dt><dd>A linha que carrega a imagem do initramfs correspondente — precisa ser da mesma versão do kernel selecionado, senão o boot falha.</dd>
+          <dt>tecla 'e'</dt><dd>Abre essa tela de edição só para a entrada selecionada, só para este boot — nada em disco é alterado ao entrar aqui.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> tela de edição mostrando a linha linux e initrd da entrada.</div>
       <div class="lab-why"><b>Por quê:</b> essa tela edita só a cópia carregada em memória pra esse boot — nada em disco é tocado ainda.</div>
     
@@ -341,6 +348,12 @@ initrd /boot/initrd.img-6.1.0-21-amd64</div>
       <div class="lab-text"><b>Ação:</b> rode cat /proc/cmdline e confirme que o parâmetro temporário está presente.</div></div>
       <div class="lab-cmd">$ cat /proc/cmdline
 BOOT_IMAGE=/boot/vmlinuz-6.1.0-21-amd64 root=/dev/mapper/vg_root-lv_root ro quiet systemd.unit=rescue.target</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cat</dt><dd>Imprime o conteúdo de um arquivo no terminal.</dd>
+          <dt>/proc/cmdline</dt><dd>Arquivo virtual do kernel (pseudo-filesystem /proc) que mostra exatamente com quais parâmetros o kernel ATUAL foi inicializado — a fonte de verdade para confirmar se uma edição no GRUB realmente foi aplicada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> systemd.unit=rescue.target aparece na saída.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se o parâmetro não aparecer no cmdline, este é o ponto onde o chat com o Sênior-IA vai ajudar a diagnosticar a edição do menu.</div>
     </li>
@@ -350,6 +363,12 @@ BOOT_IMAGE=/boot/vmlinuz-6.1.0-21-amd64 root=/dev/mapper/vg_root-lv_root ro quie
 [...]
 $ cat /proc/cmdline
 BOOT_IMAGE=/boot/vmlinuz-6.1.0-21-amd64 root=/dev/mapper/vg_root-lv_root ro quiet</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>sudo reboot</dt><dd>Reinicia o sistema normalmente, sem passar pelo menu de edição do GRUB — usa a entrada padrão salva em disco, sem nenhum parâmetro temporário.</dd>
+          <dt>cat /proc/cmdline (2ª vez)</dt><dd>Repetir a leitura depois do reboot normal serve de prova: se o parâmetro temporário (systemd.unit=rescue.target) sumir da saída, confirma que a edição de fato não persistiu.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> systemd.unit=rescue.target não aparece mais — a edição era temporária.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir "o teste funcionou" com "a mudança está aplicada" — o teste no menu prova que o parâmetro funciona, mas não persiste sozinho.</div>
     </li>

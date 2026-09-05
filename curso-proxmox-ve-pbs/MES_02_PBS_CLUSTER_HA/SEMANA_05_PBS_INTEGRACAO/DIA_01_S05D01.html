@@ -328,6 +328,13 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Inspecione os chunks de 4MB gerados e armazenados no datastore do PBS.</div></div>
       <div class="lab-cmd">ls -lh /tank-backup/.chunks/ | head -10</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ls -lh</dt><dd>Lista o conteúdo do diretório com tamanhos legíveis por humano (-h, ex: 4.1M em vez de bytes).</dd>
+          <dt>/tank-backup/.chunks/</dt><dd>A pasta interna do datastore do PBS onde os blocos de dados deduplicados (chunks) são fisicamente armazenados, organizados em subpastas por prefixo hexadecimal do hash.</dd>
+          <dt>| head -10</dt><dd>Mostra só as 10 primeiras linhas — a pasta de chunks de um datastore em produção pode ter centenas de milhares de arquivos.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Visualização das subpastas organizadas por prefixo hexadecimal (00, 01, 02...).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> A deduplicação global no datastore reaproveita blocos idênticos de múltiplos servidores, economizando até 90% de espaço em disco.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Desativar o cache de dirty bitmaps nas VMs, forçando o cliente de backup a ler todo o disco virtual a cada ciclo incremental.</div>
@@ -341,6 +348,13 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute um segundo backup incremental validando o reaproveitamento de blocos pelo dirty bitmap.</div></div>
       <div class="lab-cmd">proxmox-backup-client backup root.pxar:/ --repository admin@pbs:tank-backup</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando (2º backup, incremental)</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-client backup</dt><dd>O mesmo comando do primeiro backup, disparado de novo — o cliente recalcula os hashes de cada bloco antes de enviar.</dd>
+          <dt>root.pxar:/</dt><dd>Mesmo arquivo de origem: a raiz do sistema de arquivos.</dd>
+          <dt>--repository admin@pbs:tank-backup</dt><dd>Mesmo destino do backup anterior — é essa repetição para o mesmo datastore que permite ao dirty bitmap e à deduplicação reconhecerem os blocos já enviados e pular a maior parte da transferência.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Exibição dos pacotes oficiais do PBS compilados em Rust.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O recurso de QEMU Dirty Bitmap mantém na memória do hypervisor apenas os setores modificados, permitindo backups incrementais em segundos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Reiniciar a VM logo antes do backup; reiniciar a VM reseta o dirty bitmap em RAM, forçando uma leitura completa do disco no próximo ciclo.</div>
@@ -348,6 +362,12 @@ $ ls -lh /tank/backup-pbs/vm/100/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Consulte o fator de deduplicação (Deduplication Factor) atingido no datastore.</div></div>
       <div class="lab-cmd">proxmox-backup-manager datastore status tank-backup</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager datastore status</dt><dd>Consulta o estado atual de um datastore do PBS: espaço usado, espaço livre, e a taxa de deduplicação alcançada.</dd>
+          <dt>tank-backup</dt><dd>O datastore consultado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Taxa de deduplicação reportando fator de economia de espaço (ex: 8.4x).</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Medir o fator de deduplicação (Deduplication Factor) comprova a eficiência do PBS em relação a storages legados.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Colocar o datastore do PBS em discos de alta latência mecânicos sem cache SSD, sofrendo lentidão extrema na busca de hashes SHA-256.</div>

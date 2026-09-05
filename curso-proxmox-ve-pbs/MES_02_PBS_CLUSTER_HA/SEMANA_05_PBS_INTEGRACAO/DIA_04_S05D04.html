@@ -342,6 +342,13 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Vincule o arquivo de chave na configuração do storage PBS do Proxmox.</div></div>
       <div class="lab-cmd">pvesm set pbs-backup --encryption-key /etc/pve/priv/storage/pbs-key.json</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>pvesm set</dt><dd>Altera a configuração de um storage já existente no Proxmox VE.</dd>
+          <dt>pbs-backup</dt><dd>O storage PBS alvo da alteração.</dd>
+          <dt>--encryption-key /etc/pve/priv/storage/pbs-key.json</dt><dd>Associa a chave de criptografia client-side gerada anteriormente a este storage — a partir daqui, todo backup enviado por esse storage é cifrado automaticamente antes de sair do hypervisor.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Chave binária reconstruída a partir da entrada textual.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Associar a chave de criptografia na configuração do storage PBS no Proxmox VE garante que todos os backups daquele nó sejam cifrados automaticamente.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Misturar backups criptografados e não-criptografados no mesmo job sem documentar qual VM usa qual chave de restauração.</div>
@@ -355,6 +362,13 @@ $ ls -lh /tank/backup-pbs/vm/101/2026-09-01T15:00:00Z/
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Execute um backup criptografado e confirme que os blocos residem cifrados no PBS.</div></div>
       <div class="lab-cmd">vzdump 100 --storage pbs-backup --mode snapshot</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>vzdump 100</dt><dd>Dispara o backup da VM de ID 100.</dd>
+          <dt>--storage pbs-backup</dt><dd>Usa o storage PBS já vinculado à chave de criptografia — o backup resultante sai cifrado.</dd>
+          <dt>--mode snapshot</dt><dd>Executa com a VM ligada, sem indisponibilidade, usando Copy-on-Write do QEMU.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Validação criptográfica idêntica.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Simular a restauração com e sem a chave comprova que o PBS não consegue ler nem inspecionar o conteúdo dos blocos protegidos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Achar que o administrador do PBS tem acesso aos dados dos usuários em datastores com criptografia client-side ativa.</div>

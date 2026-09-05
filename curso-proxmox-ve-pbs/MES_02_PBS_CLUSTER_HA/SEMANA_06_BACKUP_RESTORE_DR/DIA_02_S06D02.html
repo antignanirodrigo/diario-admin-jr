@@ -320,6 +320,12 @@ TASK OK (VM 100% autônoma no storage local)</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Acompanhe o boot da máquina virtual em menos de 3 segundos no console.</div></div>
       <div class="lab-cmd">qm terminal 110</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>qm terminal</dt><dd>Abre um console de texto (serial) direto para dentro de uma VM, sem precisar de VNC/SPICE — útil para acompanhar o boot em tempo real logo após um live-restore.</dd>
+          <dt>110</dt><dd>O ID da VM recém-restaurada a acompanhar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> VM 101 removida do hypervisor.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O QEMU busca blocos de disco sob demanda pela rede conforme o sistema operacional requisita, transmitindo o restante do disco em background.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Executar Live-Restore através de links de rede lentos ou instáveis; se a rede cair durante a restauração ativa, a VM trava por erro de I/O.</div>
@@ -333,6 +339,12 @@ TASK OK (VM 100% autônoma no storage local)</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Monitore o streaming de dados dos chunks em background no log da tarefa.</div></div>
       <div class="lab-cmd">tail -f /var/log/pve/tasks/active</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>tail -f</dt><dd>Mostra as últimas linhas de um arquivo e continua acompanhando em tempo real conforme novas linhas são escritas (follow).</dd>
+          <dt>/var/log/pve/tasks/active</dt><dd>Arquivo de log do Proxmox VE que lista as tarefas em andamento — permite acompanhar o progresso do streaming em background do live-restore.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> VM 101 ligada e respondendo em menos de 3 segundos!</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Acompanhar o progresso da restauração em background no log de tarefas confirma a conclusão da sincronização total do volume.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Desligar ou reiniciar o nó do Proxmox enquanto o processo de streaming do Live-Restore ainda estiver em andamento.</div>
@@ -340,6 +352,12 @@ TASK OK (VM 100% autônoma no storage local)</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide a integridade do sistema operacional e acesso dos usuários durante o streaming.</div></div>
       <div class="lab-cmd">qm guest cmd 110 ping</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>qm guest cmd</dt><dd>Envia um comando ao QEMU Guest Agent instalado dentro da VM, sem precisar de rede SSH configurada.</dd>
+          <dt>110 ping</dt><dd>Testa se o guest agent da VM 110 está respondendo — confirma que o sistema operacional convidado já inicializou o suficiente para processar comandos, mesmo com o disco ainda sendo restaurado em segundo plano.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Prompt de login ativo e serviços operacionais.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Validar o acesso dos usuários ao serviço logo após o boot comprova a redução drástica do RTO (Recovery Time Objective) de horas para segundos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Não avisar a equipe que a performance de disco da VM pode ficar reduzida durante os primeiros minutos de streaming ativo.</div>

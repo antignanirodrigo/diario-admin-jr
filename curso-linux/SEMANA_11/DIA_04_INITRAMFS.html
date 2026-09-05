@@ -315,6 +315,13 @@ control
 ALERT! /dev/mapper/vg_root-lv_root does not exist.
 Dropping to a shell!
 (initramfs) _</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar essa mensagem</summary>
+        <dl class="flag-list">
+          <dt>Gave up waiting for root device.</dt><dd>O initramfs esperou um tempo limite pelo dispositivo configurado como raiz e desistiu — sinal de que o dispositivo não apareceu a tempo (ou nunca vai aparecer, se estiver inativo).</dd>
+          <dt>ALERT! /dev/mapper/... does not exist.</dt><dd>Nomeia EXATAMENTE o dispositivo mapeado (aqui, um volume LVM) que não foi encontrado — a pista central para saber onde procurar.</dd>
+          <dt>Dropping to a shell!</dt><dd>Em vez de travar sem explicação, o initramfs abre uma shell mínima de emergência, com ferramentas básicas (incluindo lvm) para investigar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> mensagem "Gave up waiting for root device" seguida de prompt (initramfs).</div>
       <div class="lab-why"><b>Por quê:</b> a mensagem completa já nomeia o dispositivo exato que faltou — ler ela inteira antes de reagir economiza etapas de investigação.</div>
     </li>
@@ -322,6 +329,12 @@ Dropping to a shell!
       <div class="lab-text"><b>Ação:</b> no prompt initramfs, rode ls /dev/mapper e observe que só control aparece.</div></div>
       <div class="lab-cmd">(initramfs) ls /dev/mapper
 control</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ls /dev/mapper</dt><dd>Lista os dispositivos de mapeamento (device-mapper) atualmente reconhecidos pelo kernel — LVM usa esse mecanismo para expor volumes lógicos.</dd>
+          <dt>control</dt><dd>Único arquivo presente: é o nó de controle interno do device-mapper, não um volume de dados — confirma que nenhum volume real (como vg_root-lv_root) foi ativado ainda.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> confirma que o volume real não está mapeado/ativo ainda.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>

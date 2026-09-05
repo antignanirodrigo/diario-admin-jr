@@ -344,6 +344,13 @@ TASK OK (Downtime: 0 segundos!)</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Compare o tempo de execução e impacto de I/O registrado nos logs de cada modo.</div></div>
       <div class="lab-cmd">journalctl -u pvedaemon -n 30 --no-pager</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>journalctl -u pvedaemon</dt><dd>Filtra os logs do systemd só para a unidade pvedaemon — o daemon do Proxmox VE que executa tarefas como o vzdump.</dd>
+          <dt>-n 30</dt><dd>Mostra só as últimas 30 linhas, em vez do histórico completo.</dd>
+          <dt>--no-pager</dt><dd>Imprime a saída direto no terminal, sem abrir um paginador interativo (como less) — útil em scripts ou quando se quer rolar a saída livremente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Mensagens de congelamento e liberação atômica registradas.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> O modo Suspend congela brevemente a VM na memória RAM, grava o snapshot e retoma a execução em poucos segundos.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Usar modo Suspend em VMs com conexões de rede sensíveis a timeout, derrubando sessões de usuários durante a pausa.</div>
@@ -351,6 +358,11 @@ TASK OK (Downtime: 0 segundos!)</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Configure um job agendado de backup no /etc/pve/vzdump.cron com modo Snapshot.</div></div>
       <div class="lab-cmd">cat /etc/pve/vzdump.cron</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cat /etc/pve/vzdump.cron</dt><dd>Mostra o conteúdo do arquivo de agendamento oficial de backups do Proxmox VE — cada linha define quais VMs, em qual horário e com qual modo (snapshot/stop/suspend) são copiadas automaticamente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Snapshot listado com manifesto .fidx íntegro.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Comparar o tempo de execução e impacto de I/O entre os 3 modos permite escolher a estratégia correta para cada perfil de servidor.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Adotar a mesma política de backup para todas as VMs do datacenter sem avaliar criticidade e tolerância a pausas.</div>

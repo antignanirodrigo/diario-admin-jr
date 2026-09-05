@@ -334,6 +334,12 @@ May 25 08:10:03 app-01 systemd[1]: Reached target Local File Systems.</div>
       <div class="lab-cmd">$ systemd-analyze
 Startup finished in 4.1s (kernel) + 18.7s (userspace) = 22.8s
 graphical.target reached after 18.7s in userspace</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemd-analyze</dt><dd>Sem subcomando, mostra o resumo do tempo total de boot — quanto o kernel levou para carregar e quanto o userspace (systemd + serviços) levou até o alvo final.</dd>
+          <dt>Startup finished in Xs (kernel) + Ys (userspace)</dt><dd>Formato fixo da saída: a primeira parcela é o tempo de firmware+kernel até o systemd assumir; a segunda é o tempo do systemd até o sistema ficar pronto.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> algo como Startup finished in Xs (kernel) + Ys (userspace).</div>
       <div class="lab-why"><b>Por quê:</b> separar kernel de userspace já diz em qual metade do boot procurar — kernel lento é hardware/firmware, userspace lento é serviço.</div>
     </li>

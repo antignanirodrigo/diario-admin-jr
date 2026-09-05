@@ -314,6 +314,12 @@ lab-vm-console
       <div class="lab-text"><b>Ação:</b> rode systemctl get-default numa VM de laboratório e anote o target padrão.</div></div>
       <div class="lab-cmd">$ systemctl get-default
 multi-user.target</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl get-default</dt><dd>Lê o link simbólico /etc/systemd/system/default.target e mostra qual target o systemd tenta alcançar por padrão no boot — operação de leitura, zero risco.</dd>
+          <dt>multi-user.target</dt><dd>Resultado típico de servidor: modo texto completo, com rede e serviços, sem interface gráfica.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> geralmente multi-user.target ou graphical.target.</div>
       <div class="lab-why"><b>Por quê:</b> get-default só lê o link simbólico de configuração — zero risco, é o primeiro comando seguro de rodar em qualquer lugar.</div>
     </li>
@@ -339,6 +345,13 @@ multi-user.target  loaded active active Multi-User System</div>
 # systemctl status ssh
 ○ ssh.service - OpenBSD Secure Shell server
    Active: inactive (dead)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>systemctl isolate</dt><dd>Muda o estado atual do sistema para o target indicado, PARANDO qualquer unidade que não faça parte dele — mais brusco que 'start', por isso arriscado via SSH (pode derrubar a própria sessão).</dd>
+          <dt>rescue.target</dt><dd>O alvo: modo mínimo, sem rede nem serviços de aplicação — inclui ssh.service entre os que são parados.</dd>
+          <dt>systemctl status ssh (depois)</dt><dd>Confirma o efeito do isolate: o serviço aparece inactive (dead), porque não faz parte do rescue.target.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ssh.service aparece inactive (dead) — comportamento esperado do rescue.target.</div>
       <div class="lab-warn"><b>Cilada comum:</b> rodar esse mesmo comando via SSH "só pra ver" — nesse exato momento a sessão SSH cai, e você perde o acesso que estava usando pra testar.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se você acidentalmente rodar isolate via SSH e perder a sessão, este é o ponto onde o chat com o Sênior-IA vai ajudar a planejar a recuperação via console.</div>

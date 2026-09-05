@@ -312,6 +312,13 @@ lo    UNKNOWN    127.0.0.1/8 ::1/128</pre>
 ○ nginx.service - A high performance web server
    Loaded: loaded (/lib/systemd/system/nginx.service; enabled)
    Active: inactive (dead)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl status</dt><dd>Mostra o estado atual de uma unidade do systemd: se está carregada, ativa, e as últimas linhas de log relacionadas.</dd>
+          <dt>nginx</dt><dd>A unidade consultada — aqui, um serviço de aplicação comum, que não sobe no rescue.target.</dd>
+          <dt>Active: inactive (dead)</dt><dd>Resultado esperado dentro do rescue.target: o serviço está configurado (enabled) mas não foi iniciado, porque o target mínimo não inclui serviços de aplicação.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> serviço aparece inactive (dead) — comportamento esperado, não um erro.</div>
       <div class="lab-why"><b>Por quê:</b> rescue.target sobe só o essencial — nenhum serviço de aplicação é iniciado ali, isso não é falha.</div>
     </li>
@@ -348,6 +355,13 @@ UUID=a1b2c3d4-... /data ext4 defaults 0 2
 $ lsblk -f
 NAME             FSTYPE UUID
 sdb1             ext4   e5f6g7h8-...</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>mount | grep ' / '</dt><dd>Lista tudo que está montado e filtra só a linha da raiz — confirma o dispositivo real e as opções (rw/ro) da montagem atual.</dd>
+          <dt>cat /etc/fstab | grep data</dt><dd>Mostra a linha do fstab que deveria montar /data — o UUID que o sistema ESPERA encontrar no boot.</dd>
+          <dt>lsblk -f</dt><dd>Lista os discos e partições com seus sistemas de arquivo e UUIDs reais — a fonte da verdade para comparar com o que o fstab espera.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> diferença identificada entre o que o fstab espera e o que realmente existe.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir "vejo o disco no lsblk" com "o fstab está correto" — o disco pode existir com um UUID diferente do que o fstab espera, e é exatamente essa comparação que revela o problema.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se a comparação não revelar uma causa clara, este é o ponto onde o chat com o Sênior-IA vai ajudar a interpretar a saída.</div>

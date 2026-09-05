@@ -321,6 +321,12 @@ NAME   SIZE TYPE MOUNTPOINTS
 sda     80G disk
 ├─sda1 512M part /boot/efi
 └─sda2 79.5G part /</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>lsblk</dt><dd>Lista os blocos de dispositivo (discos e partições) em formato de árvore, com tamanho, tipo e ponto de montagem — a única fonte confiável para identificar qual é o disco inteiro e quais são partições, sem assumir de memória.</dd>
+          <dt>sda / sda1 / sda2</dt><dd>sda é o disco inteiro (80G); sda1 e sda2 são partições dentro dele — grub-install precisa apontar sempre para o disco (sda), nunca para uma partição.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> disco inteiro e partições listados com clareza, ex: sda, sda1, sda2.</div>
       <div class="lab-why"><b>Por quê:</b> lsblk é a única fonte confiável de qual dispositivo é o disco inteiro e quais são partições — nunca assumir de memória.</div>
     </li>
@@ -328,6 +334,12 @@ sda     80G disk
       <div class="lab-text"><b>Ação:</b> monte a partição raiz em /mnt e a EFI em /mnt/boot/efi (se aplicável ao seu layout).</div></div>
       <div class="lab-cmd">$ mount /dev/sda2 /mnt
 $ mount /dev/sda1 /mnt/boot/efi</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>mount /dev/sda2 /mnt</dt><dd>Monta a partição raiz do sistema instalado (identificada no lsblk) em /mnt — a base para o chroot mais adiante.</dd>
+          <dt>mount /dev/sda1 /mnt/boot/efi</dt><dd>Monta a partição EFI dentro da raiz recém-montada, no mesmo caminho que ela ocupa no sistema real — necessário em sistemas com boot UEFI antes de rodar grub-install.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ambas montadas sem erro.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
@@ -379,6 +391,13 @@ Found linux image: /boot/vmlinuz-6.1.0-21-amd64</div>
       <div class="lab-cmd"># exit
 $ umount /mnt/sys /mnt/proc /mnt/dev /mnt/boot/efi /mnt
 $ reboot</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esses comandos</summary>
+        <dl class="flag-list">
+          <dt>exit</dt><dd>Sai do ambiente chroot, voltando ao shell do live media.</dd>
+          <dt>umount ... (em ordem)</dt><dd>Desmonta tudo na ordem inversa do que foi montado — sys, proc, dev primeiro, depois boot/efi e por último a raiz (/mnt) — montagens 'filhas' sempre são desfeitas antes da 'mãe'.</dd>
+          <dt>reboot</dt><dd>Reinicia para sair do live media e validar que o GRUB reinstalado realmente funciona no boot real do disco.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> menu do GRUB aparece normalmente e o sistema inicia, reproduzindo o painel 6 da prancha de hoje.</div>
     </li>
   </ol>

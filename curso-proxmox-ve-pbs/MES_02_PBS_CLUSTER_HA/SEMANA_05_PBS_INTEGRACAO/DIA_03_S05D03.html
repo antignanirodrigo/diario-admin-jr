@@ -331,6 +331,14 @@ $ pvesm add pbs pbs-storage \
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Atribua a ACL de backup exclusiva para o datastore desejado.</div></div>
       <div class="lab-cmd">proxmox-backup-manager acl update /datastore/tank-backup DatastoreBackup --auth-id backup-bot@pbs!pve-token</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>acl update</dt><dd>Atribui (ou atualiza) uma permissão de controle de acesso (ACL) no PBS.</dd>
+          <dt>/datastore/tank-backup</dt><dd>O caminho do objeto ao qual a permissão se aplica — aqui, restrita a um único datastore, não ao servidor inteiro.</dd>
+          <dt>DatastoreBackup</dt><dd>O papel (role) concedido: permissão apenas para operações de backup nesse datastore, sem acesso de administração.</dd>
+          <dt>--auth-id backup-bot@pbs!pve-token</dt><dd>A identidade que recebe a permissão — aqui, um token de API de uma conta de serviço, não uma conta pessoal.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ACL aplicada com sucesso.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Atribuir a permissão 'DatastoreBackup' restrita apenas ao datastore específico impede que o token acesse ou delete backups de outros setores.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Dar permissão de 'Admin' global no PBS para tokens de hypervisor, permitindo que um nó comprometido delete backups de outros servidores.</div>
@@ -338,6 +346,12 @@ $ pvesm add pbs pbs-storage \
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Extraia o Fingerprint SHA-256 do certificado TLS do PBS.</div></div>
       <div class="lab-cmd">proxmox-backup-manager cert info | grep Fingerprint</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>proxmox-backup-manager cert info</dt><dd>Mostra os detalhes do certificado TLS atual do servidor PBS.</dd>
+          <dt>| grep Fingerprint</dt><dd>Filtra a saída só para a linha com a impressão digital (fingerprint) SHA-256 do certificado — valor necessário para o Proxmox VE confiar na conexão sem precisar de uma CA reconhecida.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Hash hexadecimal de 32 bytes copiado.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Extrair o Fingerprint SHA-256 do certificado TLS do PBS com cert info permite o pinning criptográfico da conexão no Proxmox VE.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Conectar o PVE ao PBS sem colar o Fingerprint TLS em redes não confiáveis, abrindo brecha para ataques de Man-in-the-Middle.</div>
@@ -369,6 +383,11 @@ $ pvesm add pbs pbs-storage \
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text"><b>Ação:</b> Valide o status ativo do storage PBS no datacenter com pvesm status.</div></div>
       <div class="lab-cmd">pvesm status</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>pvesm status</dt><dd>Lista todos os storages configurados no Proxmox VE (locais e remotos, incluindo PBS) com seu status atual (active/inactive) e espaço disponível.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Status 'active' confirmando autenticação e telemetria de Terabytes livres.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> Validar a presença do storage com status ativo na interface web conclui a integração segura entre hypervisor e backup server.</div>
       <div class="lab-warn"><b>Cilada comum:</b> Não testar um backup de teste logo após o pareamento para validar se as permissões de gravação foram concedidas corretamente.</div>

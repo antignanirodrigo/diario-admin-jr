@@ -316,6 +316,13 @@ $ systemctl --failed
       <div class="lab-cmd">Advanced options for Debian GNU/Linux
   Linux 6.1.0-10-amd64 (recovery mode)
 > Linux 6.1.0-9-amd64 (recovery mode)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse menu</summary>
+        <dl class="flag-list">
+          <dt>Advanced options for Debian GNU/Linux</dt><dd>Submenu do GRUB que lista TODAS as versões de kernel instaladas, não só a mais recente — a 'rota de fuga' fica aqui.</dd>
+          <dt>Linux 6.1.0-10-amd64</dt><dd>A versão mais nova, instalada por último — a suspeita de causar o problema.</dd>
+          <dt>> Linux 6.1.0-9-amd64</dt><dd>A versão anterior, selecionada (indicada pelo '>') para o boot de teste — ainda presente no disco porque o gerenciador de pacotes não remove kernels antigos automaticamente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> pelo menos duas versões de kernel listadas, se houver mais de uma instalada.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar visualmente que a "rota de fuga" existe antes de precisar dela é parte de conhecer o ambiente.</div>
     
@@ -329,6 +336,11 @@ $ systemctl --failed
       <div class="lab-text"><b>Ação:</b> selecione uma versão específica e, após o boot, confirme com uname -r.</div></div>
       <div class="lab-cmd">$ uname -r
 6.1.0-9-amd64</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>uname -r</dt><dd>Mostra a versão (release) do kernel que está REALMENTE rodando neste boot — a forma de confirmar que a seleção no menu do GRUB funcionou como esperado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> versão exibida corresponde à selecionada no menu.</div>
     </li>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
@@ -336,6 +348,12 @@ $ systemctl --failed
       <div class="lab-cmd">$ dpkg -l | grep linux-image
 ii  linux-image-6.1.0-9-amd64   6.1.0-9
 ii  linux-image-6.1.0-10-amd64  6.1.0-10</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dpkg -l</dt><dd>Lista todos os pacotes instalados no sistema, com seu estado (ii = instalado e configurado corretamente).</dd>
+          <dt>| grep linux-image</dt><dd>Filtra a lista só para os pacotes de imagem de kernel — mostra exatamente quais versões estão disponíveis para segurar (hold) ou remover.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> lista com as versões disponíveis, confirmando quais podem ser seguradas com hold.</div>
       <div class="mentor-slot">🧑‍🏫 <b>Aqui entra o Mentor (em breve):</b> se só houver uma versão de kernel instalada (sem fallback disponível), este é o ponto onde o chat com o Sênior-IA vai ajudar a planejar uma estratégia de recuperação alternativa.</div>
     </li>
