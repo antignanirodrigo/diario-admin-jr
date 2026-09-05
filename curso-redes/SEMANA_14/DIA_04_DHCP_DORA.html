@@ -312,6 +312,12 @@ No DHCPOFFER received</pre>
       <div class="lab-text">Ação: confirme a camada física e o endereço IP na interface principal.</div></div>
       <div class="lab-cmd">$ ip link show eth0
 $ ip -4 addr show eth0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip link show eth0</dt><dd>Mostra o estado da interface (UP/DOWN) — a camada física/link.</dd>
+          <dt>ip -4 addr show eth0</dt><dd>Mostra só os endereços IPv4 (-4) configurados na interface — aqui usado para confirmar se há IP obtido via DHCP.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> link UP e um endereço IPv4 configurado (cenário normal).</div>
       <div class="lab-why"><b>Por quê:</b> essa é a linha de base — sem ela, você não sabe diferenciar o cenário normal do cenário com falha que vem a seguir.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular direto pra investigar DHCP sem confirmar antes que o link está mesmo UP.</div>
@@ -342,6 +348,13 @@ $ sudo dhclient -r eth0 &amp;&amp; sudo dhclient eth0</div>
       <div class="lab-text">Ação: confirme que o link continua UP mesmo sem IP.</div></div>
       <div class="lab-cmd">$ nmcli device status
 $ journalctl -u NetworkManager --since "2 min ago" | grep DHCP</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nmcli device status</dt><dd>Mostra o estado geral de cada interface gerenciada pelo NetworkManager (connected, disconnected, etc.).</dd>
+          <dt>journalctl -u NetworkManager --since "2 min ago"</dt><dd>Filtra o log do systemd só para o serviço NetworkManager (-u), limitando aos últimos 2 minutos — evita rolar um log inteiro em busca do evento recente.</dd>
+          <dt>| grep DHCP</dt><dd>Isola, dentro desse log, só as linhas relacionadas à negociação DHCP (Discover, Offer, Request, Ack).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> connected no nmcli, mas sem IP; log mostrando Discover sem Offer.</div>
       <div class="lab-why"><b>Por quê:</b> ver "connected" e "sem IP" juntos é o que prova, na prática, que link UP e IP obtido são coisas independentes.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ler só "connected" no nmcli e concluir que está tudo certo, sem checar o IP de fato.</div>
@@ -351,6 +364,12 @@ $ journalctl -u NetworkManager --since "2 min ago" | grep DHCP</div>
       <div class="lab-text">Ação: reative o DHCP e solicite o lease de novo.</div></div>
       <div class="lab-cmd">$ sudo systemctl start isc-dhcp-server
 $ sudo dhclient eth0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>systemctl start isc-dhcp-server</dt><dd>Reativa o serviço de servidor DHCP, desligado de propósito no passo anterior para simular a falha.</dd>
+          <dt>dhclient eth0</dt><dd>Solicita um novo lease de IP na interface — dispara o ciclo Discover/Offer/Request/Ack completo.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> Discover, Offer, Request, Ack completos; IP configurado.</div>
       <div class="lab-why"><b>Por quê:</b> ver o ciclo completo funcionando depois de tê-lo visto falhar é o que fixa as quatro etapas na prática, não só na teoria.</div>
       <div class="lab-warn"><b>Cilada comum:</b> não confirmar o IP final com ip -4 addr show — o serviço pode estar rodando sem o cliente ter completado a negociação.</div>

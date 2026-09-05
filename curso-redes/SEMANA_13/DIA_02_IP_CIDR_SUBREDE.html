@@ -338,6 +338,13 @@ $ ip -br addr</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: rode ping entre as duas VMs pra confirmar na prática.</div></div>
       <div class="lab-cmd">vm-a$ ping -c 4 192.168.10.40</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ping</dt><dd>Envia pacotes ICMP Echo Request ao destino e espera a resposta (Echo Reply) — testa alcançabilidade na camada de rede.</dd>
+          <dt>-c 4</dt><dd>Limita o teste a 4 pacotes e depois para sozinho — sem essa flag, o ping do Linux roda indefinidamente até ser interrompido com Ctrl+C.</dd>
+          <dt>192.168.10.40</dt><dd>IP de destino — a VM B, configurada na mesma sub-rede /24 que a VM A.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> 0% de perda de pacotes.</div>
       <div class="lab-why"><b>Por quê:</b> o ping é a segunda evidência — cálculo teórico batendo com teste prático é o que fecha a confirmação, não um ou outro isolado.</div>
       <div class="lab-warn"><b>Cilada comum:</b> um firewall bloqueando ICMP pode dar falso negativo — se o ping falhar mas o cálculo bateu, verifique regras de firewall antes de assumir que a rede está errada.</div>
@@ -353,6 +360,13 @@ $ ip -br addr</div>
       <div class="lab-text">Ação: reconfigure uma VM para uma sub-rede diferente e recalcule.</div></div>
       <div class="lab-cmd">vm-b$ ip addr add 192.168.20.30/24 dev ens160
 # 192.168.20.30 AND 255.255.255.0 = 192.168.20.0</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip addr add</dt><dd>Adiciona um endereço IP a uma interface — revisado no primeiro passo de hoje.</dd>
+          <dt>192.168.20.30/24</dt><dd>Novo IP com máscara /24, propositalmente numa sub-rede diferente (192.168.20.0) da usada no primeiro teste.</dd>
+          <dt>dev ens160</dt><dd>Interface onde o endereço é aplicado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> 192.168.20.0/24 — rede diferente da primeira VM.</div>
       <div class="lab-why"><b>Por quê:</b> ver o caso "rede diferente" lado a lado com o caso "mesma rede" é o que fixa a diferença — não basta ler a teoria uma vez.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de remover o IP antigo antes de adicionar o novo — a VM pode ficar com dois IPs simultâneos e mascarar o teste.</div>
@@ -371,6 +385,13 @@ $ ip -br addr</div>
 vm-b$ sudo ip addr del 192.168.10.40/24 dev ens160
 vm-b$ sudo ip addr del 192.168.20.30/24 dev ens160
 $ ip -br addr</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar este cenário</summary>
+        <dl class="flag-list">
+          <dt>ip addr del</dt><dd>Remove um endereço IP de uma interface — o oposto exato de ip addr add, usado aqui para desfazer os IPs de teste.</dd>
+          <dt>192.168.10.15/24 dev ens160</dt><dd>Endereço, máscara e interface exatos precisam bater com o que foi adicionado — o ip addr del exige essa combinação completa para funcionar.</dd>
+          <dt>ip -br addr</dt><dd>Confirma, em formato resumido, que nenhum dos três IPs de teste sobrou nas interfaces.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> nenhum dos três IPs de teste aparece mais em <code>ip -br addr</code> — cada VM volta a mostrar só o IP original dela.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> como esses endereços não foram gravados em nenhum arquivo de configuração, eles só sumiriam no próximo reboot — remover manualmente fecha o laboratório sem depender de reiniciar a VM.</div>
       <div class="lab-warn"><b>Cilada comum:</b> tentar remover um endereço que nunca foi adicionado com sucesso (por causa de um erro anterior) — o <code>ip addr del</code> nesse caso retorna erro; confira com <code>ip -br addr</code> antes de assumir que sobrou algo.</div>

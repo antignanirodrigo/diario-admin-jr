@@ -327,6 +327,13 @@ www.empresa.local.   300  IN  CNAME  app.empresa.local.
       <div class="lab-text">Ação: configure um servidor DNS local simples com uma zona de teste, se disponível.</div></div>
       <div class="lab-cmd"># exemplo com dnsmasq: adicionar em /etc/dnsmasq.conf
 address=/app.empresa.local/192.168.10.50</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esta linha de configuração</summary>
+        <dl class="flag-list">
+          <dt>address=/domínio/IP</dt><dd>Sintaxe do dnsmasq para mapear um nome diretamente a um endereço IP — funciona como uma zona DNS mínima, sem precisar de um servidor autoritativo completo.</dd>
+          <dt>/app.empresa.local/</dt><dd>O nome que a zona de teste vai resolver — as barras delimitam o domínio na sintaxe do dnsmasq.</dd>
+          <dt>192.168.10.50</dt><dd>O IP que será retornado para esse nome.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> zona respondendo a consultas locais.</div>
       <div class="lab-why"><b>Por quê:</b> montar sua própria zona de teste é o que transforma o conceito de "servidor autoritativo" em algo concreto que você controla.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de reiniciar o serviço dnsmasq depois de editar a config — a mudança não entra em vigor sozinha.</div>
@@ -335,6 +342,12 @@ address=/app.empresa.local/192.168.10.50</div>
       <div class="lab-text">Ação: adicione um CNAME apontando para o registro A e teste com dig.</div></div>
       <div class="lab-cmd">$ dig www.empresa.local CNAME
 $ dig www.empresa.local A</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>dig ... CNAME</dt><dd>Consulta especificamente o registro CNAME do nome — mostra se ele é um apelido apontando para outro nome, sem seguir a cadeia até o IP final.</dd>
+          <dt>dig ... A</dt><dd>Consulta o registro A do mesmo nome — aqui o dig segue a cadeia do CNAME e retorna o IP final associado.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> dig mostra o CNAME e, seguindo a cadeia, o IP final.</div>
       <div class="lab-why"><b>Por quê:</b> ver o resolvedor seguir o apelido até o IP final, na prática, fixa a diferença entre CNAME (aponta pra nome) e A (aponta pra IP).</div>
       <div class="lab-warn"><b>Cilada comum:</b> criar um CNAME apontando pra outro CNAME em cadeia longa — funciona, mas complica o diagnóstico e é evitado em produção.</div>
@@ -369,6 +382,13 @@ $ dig @192.168.10.20 app.empresa.local A</div>
       <div class="lab-cmd">$ sudo sed -i '/app.empresa.local/d' /etc/dnsmasq.conf
 $ sudo systemctl restart dnsmasq
 $ dig @127.0.0.1 app.empresa.local A +short</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar este cenário</summary>
+        <dl class="flag-list">
+          <dt>sed -i '/app.empresa.local/d' arquivo</dt><dd>Remove, diretamente no arquivo (-i), toda linha que contém o padrão indicado — aqui apaga a linha de zona de teste adicionada no laboratório.</dd>
+          <dt>systemctl restart dnsmasq</dt><dd>Recarrega o serviço para que a remoção na configuração entre em vigor — editar o arquivo sozinho não é suficiente.</dd>
+          <dt>dig @127.0.0.1 ... +short</dt><dd>Consulta o próprio resolvedor local (@127.0.0.1) e mostra só o resultado essencial (+short) — confirma que a zona de teste não responde mais.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a última consulta não retorna mais nenhum IP pra esse nome — a zona de teste foi removida e o dnsmasq voltou ao estado anterior à aula.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> uma zona de teste esquecida é exatamente o tipo de "atalho local esquecido" que a Semana 14 vai explorar em detalhe no Dia 3 — fechar o ciclo hoje evita criar esse problema sem querer.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer de reiniciar o dnsmasq depois do <code>sed</code> — a edição no arquivo não entra em vigor sozinha, o serviço precisa recarregar a configuração.</div>

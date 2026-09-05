@@ -319,6 +319,14 @@ $ hostname -I
     HostName IP_DO_BASTION
     User adminjr
     IdentityFile ~/.ssh/id_ed25519</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar este bloco de configuração</summary>
+        <dl class="flag-list">
+          <dt>Host bastion</dt><dd>Define um alias — a partir de agora, ssh bastion usa toda a configuração abaixo, sem precisar digitar IP, usuário ou caminho da chave.</dd>
+          <dt>HostName IP_DO_BASTION</dt><dd>O endereço real do servidor bastion, o único ponto exposto da rede interna.</dd>
+          <dt>User adminjr</dt><dd>Usuário usado automaticamente nessa conexão, sem precisar digitar usuario@host.</dd>
+          <dt>IdentityFile ~/.ssh/id_ed25519</dt><dd>Caminho da chave privada usada para autenticar nesse host — necessário quando você tem mais de uma chave e precisa indicar qual usar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> ssh bastion funciona sem digitar o IP.</div>
       <div class="lab-why"><b>Por quê:</b> esse primeiro bloco é a base — todo o resto depende de referenciar corretamente esse alias.</div>
       <div class="lab-warn"><b>Cilada comum:</b> errar a indentação do arquivo — ~/.ssh/config é sensível a isso, cada diretiva precisa estar indentada sob seu Host.</div>
@@ -349,6 +357,11 @@ $ hostname -I
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: teste o acesso usando só o alias.</div></div>
       <div class="lab-cmd">$ ssh srv-interno</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh srv-interno</dt><dd>Um único comando que aciona a cadeia inteira: conecta primeiro no bastion (via ProxyJump, definido na configuração) e, através dele, chega ao servidor interno — sem digitar dois SSH separados.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> login direto no servidor interno, com um único comando.</div>
       <div class="lab-why"><b>Por quê:</b> ver o comando único funcionar é a prova de que a cadeia bastion → interno está correta, sem precisar digitar dois SSH separados.</div>
       <div class="lab-warn"><b>Cilada comum:</b> testar sem ter configurado a chave (IdentityFile) no bloco bastion — o ProxyJump falha silenciosamente se a autenticação no meio do caminho não funcionar.</div>
@@ -357,6 +370,11 @@ $ hostname -I
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme que realmente chegou no destino certo.</div></div>
       <div class="lab-cmd">$ hostname -I</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>hostname -I</dt><dd>Mostra o(s) endereço(s) IP da máquina onde o comando é executado — usado aqui para confirmar que a sessão SSH realmente chegou no servidor interno, não ficou presa no bastion.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> IP correto do servidor interno, confirmando o caminho completo.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar o destino real evita o mesmo erro do colega da história — achar que está num servidor quando na verdade está em outro.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confiar só no prompt do terminal (que mostra o hostname configurado) sem confirmar com um comando — prompts podem estar desatualizados ou customizados.</div>

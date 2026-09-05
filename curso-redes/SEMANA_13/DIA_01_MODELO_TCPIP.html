@@ -320,6 +320,13 @@ LISTEN   0        128        0.0.0.0:22</pre>
       <div class="lab-cmd">$ sudo python3 -m http.server 80 &amp;
 $ echo "PID do servidor de teste: $!"
 $ sudo kill $!          # derruba de propósito — reproduz o "site indisponível" do chamado</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar este cenário</summary>
+        <dl class="flag-list">
+          <dt>python3 -m http.server 80 &</dt><dd>Sobe um servidor HTTP simples embutido no Python, escutando na porta 80, em segundo plano (o &amp; solta o prompt de volta) — só para ter algo real respondendo antes de derrubar de propósito.</dd>
+          <dt>$!</dt><dd>Variável especial do shell: guarda o PID do último processo colocado em segundo plano — é assim que você recupera o identificador do servidor de teste.</dd>
+          <dt>sudo kill $!</dt><dd>Envia o sinal padrão (SIGTERM) ao processo com esse PID, encerrando o servidor de teste de propósito — reproduz o sintoma "site indisponível" do chamado #5842.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> o servidor de teste sobe, você anota o PID, e o <code>kill</code> derruba ele de propósito. A partir daqui, a porta 80 não responde mais — exatamente o sintoma do chamado #5842.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> reproduzir o "site fora do ar" na sua própria VM é o que transforma o passeio pelas quatro camadas em diagnóstico de verdade: você vai encontrar a camada de aplicação quebrada com as próprias mãos, não só ler sobre isso.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fazer isso numa VM de produção ou numa máquina compartilhada. <b>Só em VM descartável</b> — e anote o PID, ele não serve mais depois que você mata o processo.</div>
@@ -334,6 +341,12 @@ $ sudo kill $!          # derruba de propósito — reproduz o "site indisponív
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme a camada de enlace na VM de laboratório.</div></div>
       <div class="lab-cmd">$ ip -br link</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip link</dt><dd>Mostra as interfaces de rede da máquina e seu estado administrativo (UP/DOWN) — a camada de enlace do modelo TCP/IP.</dd>
+          <dt>-br</dt><dd>Modo brief: uma linha resumida por interface, com estado e MAC, em vez da saída longa padrão.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> interface listada como UP, com endereço MAC visível.</div>
       <div class="lab-why"><b>Por quê:</b> se a interface não estiver UP, nenhuma camada acima dela pode funcionar — é sempre o primeiro ponto a confirmar.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confundir interface "UP" (administrativamente ligada) com "conectada" — cabo desconectado ainda pode mostrar UP dependendo do driver.</div>
@@ -384,6 +397,12 @@ $ sudo kill $!          # derruba de propósito — reproduz o "site indisponív
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: instale (ou simule) um serviço web simples e confirme a camada de aplicação.</div></div>
       <div class="lab-cmd">$ ss -tln | grep :80</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ss -tln</dt><dd>Lista sockets TCP (-t) em modo listening (-l), com portas numéricas (-n) — revisado mais adiante nesta mesma aula.</dd>
+          <dt>| grep :80</dt><dd>Filtra a saída de ss, mostrando só a linha da porta 80 — isola o serviço que interessa no meio de uma lista maior.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> porta 80 (ou a porta do serviço) aparecendo em LISTEN.</div>
       <div class="lab-why"><b>Por quê:</b> essa é a última camada — só faz sentido testá-la depois das três anteriores confirmadas, senão você não sabe se o erro é dela ou de baixo.</div>
       <div class="lab-warn"><b>Cilada comum:</b> reiniciar o serviço sem antes confirmar se ele nunca subiu, ou se subiu e caiu — os logs (<code>journalctl -u nginx</code>) dizem qual dos dois é.</div>
@@ -402,6 +421,12 @@ $ sudo kill $!          # derruba de propósito — reproduz o "site indisponív
       <div class="lab-text"><span class="setup-tag">CENÁRIO</span><b>Ação:</b> Suba o serviço de novo e confirme que as quatro camadas voltaram a responder — sem isso, a VM fica com a porta 80 morta pra sempre.</div></div>
       <div class="lab-cmd">$ sudo python3 -m http.server 80 &amp;
 $ ss -tln | grep :80</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar este cenário</summary>
+        <dl class="flag-list">
+          <dt>sudo python3 -m http.server 80 &</dt><dd>Sobe o servidor de teste de novo, em segundo plano — restaura o estado anterior ao incidente simulado no início do laboratório.</dd>
+          <dt>ss -tln | grep :80</dt><dd>Confirma que a porta 80 voltou a aparecer em LISTEN — validação de que a camada de aplicação está de volta, fechando o ciclo criar-sintoma → diagnosticar → restaurar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect lab-setup"><b>Resultado esperado:</b> a porta 80 volta a aparecer em LISTEN — o mesmo diagnóstico de hoje, agora confirmando a recuperação em vez do incidente.</div>
       <div class="lab-why"><b>Por que fizemos isso:</b> fechar o ciclo criar-sintoma → diagnosticar → restaurar é o que garante que a VM sai da aula exatamente como entrou, sem processo órfão escutando ou porta presa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o servidor de teste rodando em segundo plano depois da aula — ele fica ocupando a porta 80 e confunde o próximo laboratório que você fizer nessa mesma VM.</div>

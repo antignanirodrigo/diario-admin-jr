@@ -331,6 +331,12 @@ $ ss -tlnp | grep 8080</div>
       <div class="lab-text">Ação: aplique um firewall com policy drop sem regra pra essa porta e teste o acesso remoto.</div></div>
       <div class="lab-cmd">$ sudo nft add rule inet filter input drop
 $ nc -zv 127.0.0.1 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft add rule inet filter input drop</dt><dd>Adiciona uma regra que descarta TODO tráfego de entrada, sem exceção de porta — reproduz de propósito o cenário de firewall bloqueando um serviço saudável.</dd>
+          <dt>nc -zv 127.0.0.1 8080</dt><dd>Testa a mesma porta que estava funcionando antes — agora deve dar timeout, mesmo com o serviço continuando saudável.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> timeout, mesmo com o serviço saudável e escutando.</div>
       <div class="lab-why"><b>Por quê:</b> ver o timeout acontecer com o serviço confirmadamente saudável é o que prova, na prática, que as duas causas (serviço, firewall) são independentes.</div>
       <div class="lab-warn"><b>Cilada comum:</b> ver o timeout e concluir "o serviço caiu" sem checar de novo com ss — o serviço nunca parou, só o caminho até ele foi bloqueado.</div>
@@ -344,6 +350,11 @@ $ nc -zv 127.0.0.1 8080</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: sem desligar o firewall, confirme a ausência da regra específica.</div></div>
       <div class="lab-cmd">$ sudo nft list ruleset</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft list ruleset</dt><dd>Lista o ruleset completo sem alterar nada — confirma a policy drop e a ausência de uma regra de accept para a porta, sem precisar desligar o firewall para checar.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> policy drop confirmado, nenhuma regra de accept pra essa porta.</div>
       <div class="lab-why"><b>Por quê:</b> essa é a segunda pergunta respondida sem tocar na proteção — a evidência completa (serviço OK + porta bloqueada) já isola a causa exata.</div>
       <div class="lab-warn"><b>Cilada comum:</b> sentir a tentação de "só desligar rapidinho pra confirmar" — resista; o nft list já responde tudo que você precisa saber.</div>
@@ -353,6 +364,12 @@ $ nc -zv 127.0.0.1 8080</div>
       <div class="lab-text">Ação: adicione a regra específica e teste de novo.</div></div>
       <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 accept
 $ nc -zv 127.0.0.1 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft add rule ... tcp dport 8080 accept</dt><dd>Adiciona a regra específica que faltava — a correção exata para a causa identificada, sem abrir mais portas do que o necessário.</dd>
+          <dt>nc -zv 127.0.0.1 8080</dt><dd>Reteste da porta, confirmando succeeded após a regra correta ser aplicada.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> succeeded, confirmando a correção precisa.</div>
       <div class="lab-why"><b>Por quê:</b> a correção específica resolve exatamente a causa identificada, sem ter exposto nenhuma outra porta durante o diagnóstico.</div>
       <div class="lab-warn"><b>Cilada comum:</b> adicionar uma regra ampla demais (ex: liberar todas as portas) "pra garantir" — sempre a regra mais específica possível.</div>

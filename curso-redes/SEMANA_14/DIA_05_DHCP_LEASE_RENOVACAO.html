@@ -320,6 +320,12 @@ $ ping -c 2 192.168.10.1
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: observe o histórico de negociações DHCP no log.</div></div>
       <div class="lab-cmd">$ journalctl -u NetworkManager | grep DHCP</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>journalctl -u NetworkManager</dt><dd>Filtra o log do systemd só para o serviço NetworkManager.</dd>
+          <dt>| grep DHCP</dt><dd>Isola as linhas de negociação DHCP no log, mostrando o histórico de tentativas Discover/Offer/Request/Ack.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> sequência Discover/Offer/Request/Ack visível para leases bem-sucedidos.</div>
       <div class="lab-why"><b>Por quê:</b> conhecer a sequência normal é o que permite reconhecer rápido quando ela para no meio.</div>
       <div class="lab-warn"><b>Cilada comum:</b> olhar só a última linha do log e perder o contexto de quantas tentativas de Discover já aconteceram.</div>
@@ -356,6 +362,12 @@ $ sudo dhclient -v eth0</div>
       <div class="lab-text">Ação: confirme o IP recebido e valide a conectividade real.</div></div>
       <div class="lab-cmd">$ ip -4 addr show eth0
 $ ping -c 2 192.168.10.1</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ip -4 addr show eth0</dt><dd>Confirma o endereço IPv4 obtido via DHCP na interface.</dd>
+          <dt>ping -c 2 192.168.10.1</dt><dd>Testa conectividade real até o gateway (2 pacotes) — valida que o IP recebido realmente funciona na rede, não só que existe um número atribuído.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> IP configurado e ping ao gateway com 0% de perda.</div>
       <div class="lab-why"><b>Por quê:</b> essa validação final é o que separa "recebi um número" de "a rede realmente funciona pra esse dispositivo".</div>
       <div class="lab-warn"><b>Cilada comum:</b> fechar o chamado assim que o IP aparecer, sem testar o gateway — o IP pode estar certo e ainda assim não haver rota funcional.</div>

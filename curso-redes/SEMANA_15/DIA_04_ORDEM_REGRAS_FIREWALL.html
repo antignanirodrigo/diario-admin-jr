@@ -335,6 +335,11 @@ $ sudo nft -a list chain inet filter input</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: teste o acesso de uma origem NÃO listada na regra específica.</div></div>
       <div class="lab-cmd">$ ssh admin@IP_DA_VM   # de uma origem diferente de 192.168.10.20</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh admin@IP_DA_VM</dt><dd>Tenta conectar de um IP de origem NÃO listado na regra restritiva — o teste que revela se a regra genérica (avaliada antes) está mascarando a específica.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> conexão bem-sucedida, mesmo de origem não autorizada — confirma a armadilha.</div>
       <div class="lab-why"><b>Por quê:</b> ver a falha acontecer na prática, com a regra "certa" presente, é o que prova que ordem importa mais do que existência da regra.</div>
       <div class="lab-warn"><b>Cilada comum:</b> testar só da origem autorizada e concluir que "está tudo certo" — sem testar de fora, a mascaração passa despercebida.</div>
@@ -358,6 +363,13 @@ $ sudo nft delete rule inet filter input handle N</div>
       <div class="lab-text">Ação: insira a específica na posição 0 e adicione um drop explícito depois.</div></div>
       <div class="lab-cmd">$ sudo nft insert rule inet filter input position 0 ip saddr 192.168.10.20 tcp dport 22 accept
 $ sudo nft add rule inet filter input tcp dport 22 drop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft insert rule ... position 0</dt><dd>Insere a regra especificamente na posição 0 (o topo) da chain — garante que ela seja avaliada ANTES de qualquer outra, corrigindo o problema de ordem.</dd>
+          <dt>ip saddr 192.168.10.20 tcp dport 22 accept</dt><dd>Condição restritiva: só aceita SSH vindo exatamente desse IP de origem.</dd>
+          <dt>nft add rule ... tcp dport 22 drop</dt><dd>Adicionada por último, essa regra descarta qualquer outra tentativa de SSH que não tenha casado com a regra restritiva acima — fecha o comportamento pretendido explicitamente.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> chain reordenada, específica agora avaliada primeiro.</div>
       <div class="lab-why"><b>Por quê:</b> o drop explícito depois da específica fecha o comportamento pretendido — qualquer outra origem em SSH é rejeitada, não só "não aceita por acaso".</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer o drop explícito e confiar só na policy padrão da chain — funciona, mas fica menos legível pra quem revisar depois.</div>

@@ -340,6 +340,11 @@ $ ssh admin@IP_DA_VM   # sessão B (janela 2)</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: na sessão A, confirme o IP de origem antes de aplicar qualquer regra.</div></div>
       <div class="lab-cmd">$ echo $SSH_CONNECTION</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>echo $SSH_CONNECTION</dt><dd>Mostra uma variável de ambiente que o SSH define automaticamente na sessão: IP e porta de origem, IP e porta de destino — usada aqui para confirmar o IP exato antes de restringir o firewall a ele.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> IP de origem correto identificado e anotado.</div>
       <div class="lab-why"><b>Por quê:</b> confirmar o IP na hora evita restringir SSH pro IP errado — um erro de digitação aqui é o mesmo lockout, só com outra causa.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar um IP "de memória" em vez de confirmar com o comando — VPNs e redes com NAT podem mudar o IP de origem visto pelo servidor.</div>
@@ -354,6 +359,13 @@ $ ssh admin@IP_DA_VM   # sessão B (janela 2)</div>
       <div class="lab-text">Ação: aplique a regra na sessão A, mantendo a B intocada.</div></div>
       <div class="lab-cmd">$ sudo nft insert rule inet filter input position 0 ip saddr SEU_IP tcp dport 22 accept
 $ sudo nft add rule inet filter input tcp dport 22 drop</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft insert rule ... position 0</dt><dd>Insere a regra restritiva no topo da chain, garantindo que seja avaliada primeiro.</dd>
+          <dt>ip saddr SEU_IP tcp dport 22 accept</dt><dd>Libera SSH só para o IP confirmado no passo anterior com echo $SSH_CONNECTION.</dd>
+          <dt>nft add rule ... tcp dport 22 drop</dt><dd>Bloqueia explicitamente qualquer outra origem tentando SSH, aplicado na sessão A enquanto a sessão B permanece de reserva.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> regra aplicada, sessão B continua respondendo normalmente.</div>
       <div class="lab-why"><b>Por quê:</b> aplicar na sessão A e testar na B (ou numa terceira) é o que garante um teste independente, não viciado pela sessão que já estava aberta.</div>
       <div class="lab-warn"><b>Cilada comum:</b> usar a própria sessão A pra "confirmar que ainda funciona" — ela já está estabelecida (ESTABLISHED), então não prova nada sobre conexões NOVAS.</div>
@@ -363,6 +375,12 @@ $ sudo nft add rule inet filter input tcp dport 22 drop</div>
       <div class="lab-text">Ação: abra uma NOVA tentativa de conexão simulando cliente autorizado e não autorizado.</div></div>
       <div class="lab-cmd">$ ssh admin@IP_DA_VM   # de origem autorizada
 $ ssh admin@IP_DA_VM   # de outra origem (não autorizada)</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh admin@IP_DA_VM (origem autorizada)</dt><dd>Nova tentativa de conexão do IP liberado pela regra — deve conectar normalmente.</dd>
+          <dt>ssh admin@IP_DA_VM (outra origem)</dt><dd>Mesma tentativa, de um IP diferente — deve receber timeout, confirmando que o bloqueio funciona para quem não está na lista.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> autorizado conecta normalmente, não autorizado recebe timeout.</div>
       <div class="lab-why"><b>Por quê:</b> uma conexão nova de verdade é o único teste que prova que a regra funciona pra futuras sessões, não só pras já existentes.</div>
       <div class="lab-warn"><b>Cilada comum:</b> pular o teste do lado "não autorizado" achando que só o lado autorizado já é suficiente pra validar.</div>

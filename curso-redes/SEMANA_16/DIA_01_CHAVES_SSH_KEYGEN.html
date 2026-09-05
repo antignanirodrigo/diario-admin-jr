@@ -330,6 +330,12 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme as permissões dos dois arquivos.</div></div>
       <div class="lab-cmd">$ ls -l ~/.ssh/id_ed25519*</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ls -l</dt><dd>Lista os arquivos com detalhes, incluindo permissões — usado aqui para conferir se a chave privada está protegida (600).</dd>
+          <dt>~/.ssh/id_ed25519*</dt><dd>Padrão de nome que casa com os dois arquivos gerados pelo ssh-keygen: a chave privada (id_ed25519) e a pública (id_ed25519.pub).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> -rw------- na privada (600), -rw-r--r-- na pública.</div>
       <div class="lab-why"><b>Por quê:</b> permissões erradas na privada (legível por outros usuários) fazem o próprio SSH recusar usá-la — é uma proteção embutida.</div>
       <div class="lab-warn"><b>Cilada comum:</b> copiar a chave privada entre máquinas com scp/rsync sem preservar permissões, e depois perder tempo descobrindo por que o SSH recusa a chave.</div>
@@ -343,6 +349,12 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: instale a chave pública num destino de teste.</div></div>
       <div class="lab-cmd">$ ssh-copy-id adminjr@IP_DA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh-copy-id</dt><dd>Instala a chave pública no arquivo authorized_keys do servidor remoto, criando o diretório .ssh e ajustando as permissões automaticamente — mais seguro que copiar manualmente com scp.</dd>
+          <dt>adminjr@IP_DA_VM</dt><dd>Usuário e host de destino — a instalação pede a senha uma última vez, para autenticar essa cópia inicial.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> "Number of key(s) added: 1".</div>
       <div class="lab-why"><b>Por quê:</b> ssh-copy-id cuida de criar o diretório .ssh e ajustar permissões no destino automaticamente — mais seguro que copiar manualmente.</div>
       <div class="lab-warn"><b>Cilada comum:</b> tentar copiar a chave PRIVADA por engano com scp — releia o nome do arquivo (sem .pub) antes de confirmar qualquer cópia.</div>
@@ -351,6 +363,11 @@ $ sed -i '/old-key-comment/d' ~/.ssh/authorized_keys</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: teste o login sem senha.</div></div>
       <div class="lab-cmd">$ ssh adminjr@IP_DA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh adminjr@IP_DA_VM</dt><dd>Testa o login de fato — se a chave pública foi instalada corretamente, a conexão completa sem pedir senha.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> login direto, sem prompt de senha.</div>
       <div class="lab-why"><b>Por quê:</b> testar o login antes de considerar "concluído" é o que confirma que a instalação realmente funcionou, não só que o comando não deu erro.</div>
       <div class="lab-warn"><b>Cilada comum:</b> considerar a tarefa pronta só porque ssh-copy-id não mostrou erro — sempre teste o login de fato.</div>

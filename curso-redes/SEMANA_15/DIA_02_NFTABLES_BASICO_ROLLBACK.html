@@ -316,6 +316,12 @@ $ sudo nft list chain inet filter input
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: salve o ruleset atual num arquivo de backup com data no nome.</div></div>
       <div class="lab-cmd">$ sudo nft list ruleset > /root/nftables_backup_$(date +%F).nft</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft list ruleset</dt><dd>Lista TODAS as tables, chains e regras configuradas no momento — o estado completo do firewall.</dd>
+          <dt>> /root/nftables_backup_$(date +%F).nft</dt><dd>Redireciona essa saída para um arquivo, cujo nome inclui a data atual via $(date +%F) — cria um backup identificável e versionado por dia.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> arquivo criado com o conteúdo completo do ruleset atual.</div>
       <div class="lab-why"><b>Por quê:</b> o backup precisa vir sempre antes da mudança — depois é tarde demais pra capturar o estado original.</div>
       <div class="lab-warn"><b>Cilada comum:</b> não confirmar que o arquivo foi realmente criado (cat no arquivo) antes de seguir em frente.</div>
@@ -330,6 +336,12 @@ $ sudo nft list chain inet filter input
       <div class="lab-text">Ação: adicione uma regra pequena de teste e valide.</div></div>
       <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 accept
 $ nc -zv 127.0.0.1 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft add rule ... tcp dport 8080 accept</dt><dd>Adiciona uma regra pequena e isolada de teste — fácil de identificar e reverter.</dd>
+          <dt>nc -zv 127.0.0.1 8080</dt><dd>Confirma que a porta liberada aceita conexão, validando a mudança antes de testar o rollback.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> conexão succeeded na porta recém-liberada.</div>
       <div class="lab-why"><b>Por quê:</b> validar a mudança antes de testar o rollback confirma que você está revertendo algo que realmente funcionava.</div>
       <div class="lab-warn"><b>Cilada comum:</b> adicionar mais de uma regra "já que estou aqui" — mudanças pequenas e isoladas são mais fáceis de validar e reverter.</div>
@@ -353,6 +365,12 @@ $ sudo nft list chain inet filter input</div>
       <div class="lab-text">Ação: reaplique a mudança de teste e confirme de novo.</div></div>
       <div class="lab-cmd">$ sudo nft add rule inet filter input tcp dport 8080 accept
 $ nc -zv 127.0.0.1 8080</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft add rule ... tcp dport 8080 accept</dt><dd>Adiciona uma regra pequena e isolada de teste — fácil de identificar e reverter.</dd>
+          <dt>nc -zv 127.0.0.1 8080</dt><dd>Confirma que a porta liberada aceita conexão, validando a mudança antes de testar o rollback.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> regra de volta, porta acessível novamente.</div>
       <div class="lab-why"><b>Por quê:</b> reaplicar depois de provar o rollback é o que fecha o ciclo — mudança, teste, rollback provado, mudança de novo com confiança.</div>
       <div class="lab-warn"><b>Cilada comum:</b> deixar a regra de teste em produção depois do laboratório — sempre limpe o que foi adicionado só pra teste.</div>

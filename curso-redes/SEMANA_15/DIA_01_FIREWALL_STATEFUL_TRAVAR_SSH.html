@@ -314,6 +314,12 @@ admin@srv-app-01:~$ [OK, sem lockout]</pre>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: com acesso via CONSOLE (não SSH), observe a chain input atual.</div></div>
       <div class="lab-cmd">$ sudo nft list chain inet filter input</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft list chain</dt><dd>Mostra as regras atuais de uma chain específica do nftables, sem alterar nada — comando de leitura, seguro para rodar antes de qualquer mudança.</dd>
+          <dt>inet filter input</dt><dd>Localização da chain: table inet (IPv4+IPv6), chain input (tráfego destinado à própria máquina).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> chain vazia ou com policy accept (estado inicial seguro).</div>
       <div class="lab-why"><b>Por quê:</b> começar por console, não SSH, é o que te protege de um lockout durante o próprio laboratório.</div>
       <div class="lab-warn"><b>Cilada comum:</b> fazer esse laboratório inteiro só por SSH, sem console de backup — é exatamente o risco que a aula ensina a evitar.</div>
@@ -337,6 +343,11 @@ $ sudo nft add rule inet filter input drop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: abra uma NOVA sessão SSH pra testar se a regra realmente permite conexões novas.</div></div>
       <div class="lab-cmd">$ ssh admin@IP_DA_VM</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>ssh admin@IP_DA_VM</dt><dd>Abre uma conexão SSH NOVA (não reaproveita nenhuma sessão existente) — o único jeito de testar de verdade se a regra recém-criada permite conexões NEW.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> nova sessão conecta normalmente, sem timeout.</div>
       <div class="lab-why"><b>Por quê:</b> testar com uma sessão NOVA (não a do console já aberto) é a única forma de validar que a regra funciona pra uma conexão NEW de verdade.</div>
       <div class="lab-warn"><b>Cilada comum:</b> confiar só na sessão de console já aberta e assumir que SSH também funciona — sessões diferentes, estados diferentes.</div>
@@ -351,6 +362,12 @@ $ sudo nft add rule inet filter input drop</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confira os contadores de pacotes/bytes de cada regra.</div></div>
       <div class="lab-cmd">$ sudo nft list chain inet filter input</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>nft list chain</dt><dd>Mostra as regras atuais de uma chain específica do nftables, sem alterar nada — comando de leitura, seguro para rodar antes de qualquer mudança.</dd>
+          <dt>inet filter input</dt><dd>Localização da chain: table inet (IPv4+IPv6), chain input (tráfego destinado à própria máquina).</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> contadores diferentes de zero nas regras de SSH e established/related.</div>
       <div class="lab-why"><b>Por quê:</b> contador subindo prova que ESSA regra específica é a responsável pelo tráfego passando, não uma coincidência de outra condição.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que "SSH funcionou, então a regra está certa" sem checar o contador — pode ter sido outra regra (ou nenhuma) que deixou passar.</div>

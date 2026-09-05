@@ -312,6 +312,12 @@ $ getent hosts app.intra.example
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: adicione uma entrada errada em /etc/hosts para um nome que também existe no DNS.</div></div>
       <div class="lab-cmd">$ echo "192.168.10.99  app.intra.example" | sudo tee -a /etc/hosts</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>echo "IP nome"</dt><dd>Gera a linha de texto no formato que /etc/hosts espera: endereço seguido do nome.</dd>
+          <dt>| sudo tee -a /etc/hosts</dt><dd>Envia essa linha para o final (-a, append) do arquivo /etc/hosts, usando sudo — o tee é necessário aqui porque um simples >> com sudo não teria permissão de escrita no arquivo protegido.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> resolução local criada, diferente do DNS real.</div>
       <div class="lab-why"><b>Por quê:</b> reproduzir a divergência de propósito é o que te deixa reconhecer o padrão da próxima vez que vir um caso real.</div>
       <div class="lab-warn"><b>Cilada comum:</b> esquecer que essa entrada de teste fica lá depois do laboratório — sempre limpe /etc/hosts ao final.</div>
@@ -333,6 +339,12 @@ $ dig app.intra.example A +short</div>
     <li><div class="lab-row"><div class="lab-box" onclick="toggleLab(this)"></div>
       <div class="lab-text">Ação: confirme a ordem de resolução configurada.</div></div>
       <div class="lab-cmd">$ grep '^hosts:' /etc/nsswitch.conf</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>grep '^hosts:'</dt><dd>Procura, no início da linha (^), a diretiva hosts: dentro do arquivo — mostra a ordem configurada de resolução de nomes (ex: files antes de dns).</dd>
+          <dt>/etc/nsswitch.conf</dt><dd>Arquivo que define, para várias funções do sistema, em que ordem as fontes de dados são consultadas — aqui, especificamente para resolução de nomes.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> hosts: files dns (ou ordem equivalente confirmando a prioridade local).</div>
       <div class="lab-why"><b>Por quê:</b> confirmar a ordem antes de agir evita assumir "files vem primeiro" quando, numa configuração não-padrão, pode ser o contrário.</div>
       <div class="lab-warn"><b>Cilada comum:</b> assumir que todo sistema Linux tem a mesma ordem em nsswitch.conf — sempre confira, não presuma.</div>
@@ -349,6 +361,13 @@ $ dig app.intra.example A +short</div>
       <div class="lab-cmd">$ sudo cp /etc/hosts /etc/hosts.bak
 $ sudo sed -i '/app.intra.example/d' /etc/hosts
 $ getent hosts app.intra.example</div>
+      <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
+        <dl class="flag-list">
+          <dt>cp /etc/hosts /etc/hosts.bak</dt><dd>Faz uma cópia de segurança do arquivo antes de editar — o caminho de volta imediato caso a remoção afete mais do que deveria.</dd>
+          <dt>sed -i '/app.intra.example/d' /etc/hosts</dt><dd>Remove, diretamente no arquivo, a linha de teste adicionada — mesma sintaxe de remoção por padrão revisada nesta semana.</dd>
+          <dt>getent hosts</dt><dd>Consulta a resolução final do sistema, seguindo a ordem do nsswitch.conf — usado aqui para validar que a remoção funcionou.</dd>
+        </dl>
+      </details>
       <div class="lab-expect"><b>Resultado esperado:</b> getent hosts agora retorna o mesmo IP que o dig.</div>
       <div class="lab-why"><b>Por quê:</b> o backup antes de editar é o que te dá um caminho de volta imediato se a remoção afetar algo além da linha de teste.</div>
       <div class="lab-warn"><b>Cilada comum:</b> remover a linha errada com sed sem antes confirmar com grep quais linhas seriam afetadas.</div>
