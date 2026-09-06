@@ -324,6 +324,7 @@ Connection to 192.168.10.50 8080 port [tcp/*] succeeded!</pre>
 $ ss -tlnp | grep 8080</div>
       <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
         <dl class="flag-list">
+          <dt>-m</dt><dd>Flag do Python: roda um módulo da biblioteca padrão como se fosse um script — em vez de precisar apontar pro caminho de um arquivo .py.</dd>
           <dt>python3 -m http.server 8080</dt><dd>Sobe um servidor HTTP simples na porta 8080, só pra ter um serviço real escutando durante o laboratório.</dd>
           <dt>ss -tlnp | grep 8080</dt><dd>Confirma a PRIMEIRA pergunta do diagnóstico (revisada da Semana 13): o serviço está mesmo escutando nessa porta, localmente, antes de suspeitar do firewall.</dd>
         </dl>

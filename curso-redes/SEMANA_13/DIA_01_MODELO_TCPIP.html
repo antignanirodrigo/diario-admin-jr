@@ -327,6 +327,7 @@ $ echo "PID do servidor de teste: $!"
 $ sudo kill $!          # derruba de propósito — reproduz o "site indisponível" do chamado</div>
       <details class="cmd-explain"><summary>🔍 Detalhar este cenário</summary>
         <dl class="flag-list">
+          <dt>-m</dt><dd>Flag do Python: roda um módulo da biblioteca padrão como se fosse um script — em vez de precisar apontar pro caminho de um arquivo .py.</dd>
           <dt>python3 -m http.server 80 &</dt><dd>Sobe um servidor HTTP simples embutido no Python, escutando na porta 80, em segundo plano (o &amp; solta o prompt de volta) — só para ter algo real respondendo antes de derrubar de propósito.</dd>
           <dt>$!</dt><dd>Variável especial do shell: guarda o PID do último processo colocado em segundo plano — é assim que você recupera o identificador do servidor de teste.</dd>
           <dt>sudo kill $!</dt><dd>Envia o sinal padrão (SIGTERM) ao processo com esse PID, encerrando o servidor de teste de propósito — reproduz o sintoma "site indisponível" do chamado #5842.</dd>

@@ -321,6 +321,7 @@ table inet filter {
 $ ss -tlnp | grep ':8080'</div>
       <details class="cmd-explain"><summary>🔍 Detalhar esse comando</summary>
         <dl class="flag-list">
+          <dt>-m</dt><dd>Flag do Python: roda um módulo da biblioteca padrão como se fosse um script — em vez de precisar apontar pro caminho de um arquivo .py.</dd>
           <dt>python3 -m http.server 8080 &</dt><dd>Sobe um servidor HTTP simples na porta 8080, em segundo plano, só para ter um serviço real escutando durante o laboratório.</dd>
           <dt>ss -tlnp | grep ':8080'</dt><dd>Confirma localmente que a porta 8080 está em LISTEN, com o processo associado — a linha de base antes do teste remoto.</dd>
         </dl>
